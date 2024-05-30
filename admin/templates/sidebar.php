@@ -57,7 +57,7 @@ $current_page = PageName();
                 </div>
             </div>
             <ul class="nav nav-primary">
-                <li class="nav-item <?= $current_page=='dashboard.php' || $current_page=='resident_info.php' || $current_page=='purok_info.php'  ? 'active' : null ?>">
+                <li class="nav-item <?= $current_page=='dashboard.php'? 'active' : null ?>">
                     <a href="dashboard.php" >
                         <i class="fas fa-home"></i>
                         <p>Dashboard</p>
@@ -69,43 +69,49 @@ $current_page = PageName();
                     </span>
                     <h4 class="text-section">Menu</h4>
                 </li>
-                <li class="nav-item <?= $current_page=='officials.php' ? 'active' : null ?>">
-                    <a href="officials.php">
+                <li class="nav-item <?= $current_page=='educass.php' ? 'active' : null ?>">
+                    <a href="educass.php">
                         <i class="fas fa-user-tie"></i>
-                        <p>Brgy Officials and Staff</p>
+                        <p>Educational Aids</p>
                     </a>
                 </li>
-                <li class="nav-item <?= $current_page=='resident.php' || $current_page=='generate_resident.php' ? 'active' : null ?>">
-                    <a href="resident.php">
+                <li class="nav-item <?= $current_page=='announcement.php' || $current_page=='generate_resident.php' ? 'active' : null ?>">
+                    <a href="announcement.php">
                         <i class="icon-people"></i>
-                        <p>Resident Information</p>
+                        <p>Announcement</p>
                     </a>
                 </li>
-                <li class="nav-item <?= $current_page=='resident_certification.php' || $current_page=='generate_brgy_cert.php' ? 'active' : null ?>">
-                    <a href="resident_certification.php">
+                <li class="nav-item <?= $current_page=='concerns.php'  ? 'active' : null ?>">
+                    <a href="concerns.php">
                         <i class="icon-badge"></i>
-                        <p>Barangay Certificates</p>
+                        <p>Concerns</p>
                     </a>
                 </li>
-                <li class="nav-item <?= $current_page=='resident_indigency.php' || $current_page=='generate_indi_cert.php' ? 'active' : null ?>">
-                    <a href="resident_indigency.php">
+                <li class="nav-item <?= $current_page=='messages.php'  ? 'active' : null ?>">
+                    <a href="messages.php">
                         <i class="icon-docs"></i>
-                        <p>Certificate of Indigency</p>
+                        <p>Messages</p>
                     </a>
                 </li>
-                <li class="nav-item <?= $current_page=='business_permit.php' || $current_page=='generate_business_permit.php' ? 'active' : null ?>">
-                    <a href="business_permit.php">
+                <li class="nav-item <?= $current_page=='staff.php'  ? 'active' : null ?>">
+                    <a href="staff.php">
+                        <i class="icon-docs"></i>
+                        <p>staff</p>
+                    </a>
+                </li>
+                <li class="nav-item <?= $current_page=='applicants.php'  ? 'active' : null ?>">
+                    <a href="applicants.php">
                         <i class="icon-doc"></i>
-                        <p>Brgy Business Clearance</p>
+                        <p>Applicants</p>
                     </a>
                 </li>
-                <li class="nav-item <?= $current_page=='blotter.php' || $current_page=='generate_blotter_report.php'  ? 'active' : null ?>">
-                    <a href="blotter.php">
+                <li class="nav-item <?= $current_page=='reports.php' ? 'active' : null ?>">
+                    <a href="reports.php">
                         <i class="icon-layers"></i>
-                        <p>Blotter Records</p>
+                        <p>Reports</p>
                     </a>
                 </li>
-                <?php if(isset($_SESSION['username']) && $_SESSION['role']=='staff'): ?>
+                <?php if(isset($_SESSION['username']) && $_SESSION['role']=='admin'): ?>
                     <li class="nav-section">
                         <span class="sidebar-mini-icon">
                             <i class="fa fa-ellipsis-h"></i>
@@ -119,7 +125,7 @@ $current_page = PageName();
                         </a>
                     </li>
                 <?php endif ?>
-                <?php if(isset($_SESSION['username']) && $_SESSION['role']=='administrator'): ?>
+                <?php if(isset($_SESSION['username']) && $_SESSION['role']=='admin'): ?>
                 <li class="nav-item <?= $current_page=='revenue.php' ? 'active' : null ?>">
                     <a href="revenue.php">
                         <i class="fas fa-dollar-sign"></i>
@@ -166,7 +172,7 @@ $current_page = PageName();
                                 </a>
                             </li>
                             
-                            <?php if($_SESSION['role']=='staff'):?>
+                            <?php if($_SESSION['role']=='admin'):?>
                                 <li>
                                     <a href="#support" data-toggle="modal">
                                         <span class="sub-item">Support</span>

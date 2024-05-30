@@ -77,11 +77,11 @@ if (strlen($_SESSION['id'] == 0)) {
 
 		<div class="main-panel">
 			<div class="content">
-				<div class="panel-header bg-primary-gradient">
+				<div class="panel-header bg-transparent">
 					<div class="page-inner">
 						<div class="d-flex align-items-left align-items-md-center flex-column flex-md-row">
 							<div>
-								<h2 class="text-white fw-bold">Admin Dashboard</h2>
+								<h2 class="text-black fw-bold">Admin Dashboard</h2>
 							</div>
 						</div>
 					</div>
