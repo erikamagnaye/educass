@@ -1,0 +1,62 @@
+<?php 
+	session_start(); 
+	if(isset($_SESSION['username'])){
+		header('Location: dashboard.php');
+	}
+?>
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <?php include 'templates/header.php' ?>
+	<title>Login </title>
+	<link rel="stylesheet" href="vendors/simple-line-icons/css/simple-line-icons.css">
+    <link rel="stylesheet" href="vendors/flag-icon-css/css/flag-icon.min.css">
+    <link rel="stylesheet" href="vendors/css/vendor.bundle.base.css">
+
+</head>
+<body class="login">
+<?php include 'templates/loading_screen.php' ?>
+	<div class="wrapper wrapper-login">
+        
+		<div class="container container-login animated fadeIn">
+            <?php if(isset($_SESSION['message'])): ?>
+                <div class="alert alert-<?= $_SESSION['success']; ?> <?= $_SESSION['success']=='danger' ? 'bg-danger text-light' : null ?>" role="alert">
+                    <?= $_SESSION['message']; ?>
+                </div>
+            <?php unset($_SESSION['message']); ?>
+            <?php endif ?>
+			<h3 class="text-center">Admin Login </h3>
+			<div class="login-form">
+                <form method="POST" action="model/login.php">
+				<div class="form-group form-floating-label">
+					<input id="username" name="username" type="text" class="form-control input-border-bottom" required>
+					<label for="username" class="placeholder" value="<?php if (isset($_COOKIE["username"])) { echo $_COOKIE["username"];} ?>">Username</label>
+				</div>
+				<div class="form-group form-floating-label">
+					<input id="password" name="password" type="password" class="form-control input-border-bottom" required>
+					<label for="password" class="placeholder"value="<?php if (isset($_COOKIE["password"])) { echo $_COOKIE["password"]; } ?>">Password</label>
+					<span toggle="#password" class="fa fa-fw fa-eye field-icon toggle-password"></span>
+				</div>
+				 <div class="my-2 d-flex justify-content-between align-items-center">
+                      <!--  <div class="form-check">
+                       
+							<input type="checkbox" id="remember" class="form-check-input" name="remember" <?php if (isset($_COOKIE['username'])) { ?> checked <?php } ?> /> Remember me
+                            </label>
+
+                        </div> -->
+                                    <a href="forgot-password.php" class="auth-link text-black">Forgot password?</a>
+                                </div><br>
+				<div class="form-action mb-3">
+                    <button type="submit" class="btn btn-primary btn-rounded btn-login">Login</button>
+				</div>
+                </form>
+			</div>
+		</div>
+	</div>
+	<?php include 'templates/footer.php' ?>
+	<script src="vendors/js/vendor.bundle.base.js"></script>
+  
+    <script src="js/off-canvas.js"></script>
+    <script src="js/misc.js"></script>
+</body>
+</html>
