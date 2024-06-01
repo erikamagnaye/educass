@@ -6,14 +6,26 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>Homepage</title>
     <link rel="stylesheet" href="style.css" />
+ <style>
+  h1{
+    text-align: center;
+    font-family: Arial, Helvetica, sans-serif;
+  }
+  p{
+    text-align: center;
+  }
+  .text{
+    text-align: justify;
+  }
+ </style>
   </head>
   <body>
     <main>
-      <div class="big-wrapper light">
+      <div class="big-wrapper dark">
         <img src="./img/shape.png" alt="" class="shape" />
 
         <header>
-          <div class="container">
+          <div class="container" >
             <div class="logo">
               <img src="./img/saq.png" alt="Logo" />
               <h3>Educational Assistance</h3>
@@ -28,6 +40,7 @@
                 <li><a href="login.php" class="btn">Login</a></li>
               </ul>
             </div>
+            
 
             <div class="overlay"></div>
 
@@ -41,11 +54,13 @@
           <div class="container">
             <div class="left">
               <div class="big-title">
-                <h1>Educational Assistance </h1>
+                <p>Welcome to</p>
+                <h1 >Educational Assistance </h1>
                 <h1>Application System for SAQ</h1>
               </div>
               <p class="text">
-                Apply educational assistance online without strruggle using the web based system dedicated for residents of San Antonio, Quezon.
+                Apply educational assistance online without strruggle using the web based system dedicated for residents of San Antonio, Quezon. <br>
+                let's go!
               </p>
               <div class="cta">
                <!-- <a href="#" class="btn">Get started</a> -->

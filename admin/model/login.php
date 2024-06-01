@@ -19,7 +19,7 @@
 				$_SESSION['role'] = $row['position'];
 				$_SESSION['avatar'] = $row['image'];
 
-				/* if (!empty($_POST["remember"])) {
+				/*if (!empty($_POST["remember"])) {
 					//COOKIES for email
 					setcookie("username", $_POST["username"], time() + (10 * 365 * 24 * 60 * 60));
 					//COOKIES for password

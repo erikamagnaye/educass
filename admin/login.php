@@ -12,9 +12,19 @@
 	<link rel="stylesheet" href="vendors/simple-line-icons/css/simple-line-icons.css">
     <link rel="stylesheet" href="vendors/flag-icon-css/css/flag-icon.min.css">
     <link rel="stylesheet" href="vendors/css/vendor.bundle.base.css">
-
+	<style>
+        body.login {
+            background: url('admin/assets/img/saqbound.jpg') no-repeat center center fixed; 
+            background-size: cover;
+        }
+        .container-login {
+            background-color: rgba(255, 255, 255, 0.8); /* Optional: Adds a slight white overlay for readability */
+            border-radius: 10px;
+            padding: 20px;
+        }
+    </style>
 </head>
-<body class="login">
+<body class="login" >
 <?php include 'templates/loading_screen.php' ?>
 	<div class="wrapper wrapper-login">
         
@@ -38,17 +48,18 @@
 					<span toggle="#password" class="fa fa-fw fa-eye field-icon toggle-password"></span>
 				</div>
 				 <div class="my-2 d-flex justify-content-between align-items-center">
-                      <!--  <div class="form-check">
+                      
                        
-							<input type="checkbox" id="remember" class="form-check-input" name="remember" <?php if (isset($_COOKIE['username'])) { ?> checked <?php } ?> /> Remember me
-                            </label>
+						<!--	<input type="checkbox"  name="remember"<?php //if (isset($_COOKIE['username'])) { ?> checked <?php //} ?> /> Remember me
+			-->
 
-                        </div> -->
+                       
                                     <a href="forgot-password.php" class="auth-link text-black">Forgot password?</a>
                                 </div><br>
 				<div class="form-action mb-3">
                     <button type="submit" class="btn btn-primary btn-rounded btn-login">Login</button>
 				</div>
+				
                 </form>
 			</div>
 		</div>

@@ -1,3 +1,4 @@
+
 <?php
 session_start();
 error_reporting(0);
@@ -5,7 +6,7 @@ error_reporting(0);
 $servername = "localhost";
 $username = "root";
 $password = "";
-$dbname = "abms";
+$dbname = "educass";
 
 // Create connection
 $conn = new mysqli($servername, $username, $password, $dbname);
@@ -33,7 +34,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
         exit();
     } else {
         // Authentication failed, redirect to login page with error message
-        header("Location: index.php?error=1");
+        header("Location: home.php?error=1");
         exit();
     }
 }
@@ -98,7 +99,7 @@ $conn->close();
 
 <body>
 <div class="container" id="loginForm" >
-<form method="POST" action="index.php">
+<form method="POST" action="login.php">
   <div class="mb-3">
     <label for="exampleInputEmail1" class="form-label">Email address</label>
     <input type="email" name="email" class="form-control" id="exampleInputEmail1">
