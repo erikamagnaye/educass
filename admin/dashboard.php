@@ -10,11 +10,8 @@ if (strlen($_SESSION['id'] == 0)) {
 }
 
 
-	/*$query = "SELECT * FROM tblresident WHERE resident_type=1";
-    $result = $conn->query($query);
-	$total = $result->num_rows;
 
-	$query1 = "SELECT * FROM tblresident WHERE gender='Male' AND resident_type=1";
+	/*$query1 = "SELECT * FROM tblresident WHERE gender='Male' AND resident_type=1";
     $result1 = $conn->query($query1);
 	$male = $result1->num_rows;
 
@@ -54,6 +51,75 @@ if (strlen($_SESSION['id'] == 0)) {
 				$role = $row['position'];
 			}
 			}
+
+			
+	$query = "SELECT * FROM application join `educ aids` on `application`.`educid`=`educ aids`.`educid` order by `educ aids`.educid desc limit 1";
+    $result = $conn->query($query);
+	$totalapp = $result->num_rows;
+
+	$query = "SELECT * FROM application join `educ aids` on `application`.`educid`=`educ aids`.`educid` WHERE application.status ='Pending' order by `educ aids`.educid desc ";
+    $result2 = $conn->query($query);
+	$pending = $result2->num_rows;
+
+	$query = "SELECT * FROM application join `educ aids` on `application`.`educid`=`educ aids`.`educid` WHERE application.status ='Approved' order by `educ aids`.educid desc  ";
+    $result3 = $conn->query($query);
+	$approved = $result3->num_rows;
+
+	$query = "SELECT * FROM application join `educ aids` on `application`.`educid`=`educ aids`.`educid` WHERE application.status ='Rejected' order by `educ aids`.educid desc ";
+    $result4 = $conn->query($query);
+	$rejected = $result4->num_rows;
+
+	// Initialize variables with default values
+$sy = 'N/A';
+$sem = 'N/A';
+
+	$query1 		= "SELECT * FROM `educ aids` ORDER BY educid DESC LIMIT 1;";
+	$result5 	= $conn->query($query1);
+	
+	if($result5->num_rows){
+		while ($row = $result5->fetch_assoc()) {
+			$sem = $row['sem'];
+			$sy = $row['sy'];
+			
+		}
+		}
+
+		// Retrieve data from database  THIS IS FOR PIE CHART FOR APPLICANTS PER BRGY
+
+// Fetch the most recent educational assistance ID based on the date
+$query1 = "SELECT educid, sem, sy FROM `educ aids` ORDER BY `date` DESC LIMIT 1";
+$result1 = mysqli_query($conn, $query1);
+$latest_educid = null;
+$sem = '';
+$sy = '';
+
+if ($result1 && mysqli_num_rows($result1) > 0) {
+    $row = mysqli_fetch_assoc($result1);
+    $latest_educid = $row['educid'];
+    $sem = $row['sem'];
+    $sy = $row['sy'];
+}
+
+if ($latest_educid) {
+    // Retrieve data from the database for the most recent educational assistance
+    $sql = "SELECT student.brgy, COUNT(*) AS count 
+            FROM student 
+            JOIN application ON student.studid = application.studid
+            JOIN `educ aids` ON application.educid = `educ aids`.educid 
+            WHERE `educ aids`.educid = '$latest_educid' 
+            GROUP BY student.brgy 
+            ORDER BY brgy ASC";
+    
+    $result = mysqli_query($conn, $sql);
+
+    $dataArray = array();
+    $dataArray[] = ['Barangay', 'Number of Applicants'];
+
+    // Format data for Google Charts
+    while ($row = mysqli_fetch_assoc($result)) {
+        $dataArray[] = [$row['brgy'], (int)$row['count']];
+    }
+}
 ?>
 
 
@@ -62,6 +128,29 @@ if (strlen($_SESSION['id'] == 0)) {
 <head>
 	<?php include 'templates/header.php' ?>
 	<title>Admin Dashboard</title>
+	<script type="text/javascript" src="https://www.gstatic.com/charts/loader.js"></script>
+	<script type="text/javascript">
+        // Load the Visualization API and the corechart package
+        google.charts.load('current', {'packages':['corechart']});
+
+        // Set a callback to run when the Google Visualization API is loaded
+        google.charts.setOnLoadCallback(drawChart);
+
+        function drawChart() {
+            // Create the data table
+            var data = google.visualization.arrayToDataTable(<?= json_encode($dataArray) ?>);
+
+            // Set chart options
+            var options = {
+                title: 'Number of Applicants per Barangay',
+                is3D: true
+            };
+
+            // Instantiate and draw the chart, passing in some options
+            var chart = new google.visualization.PieChart(document.getElementById('piechart'));
+            chart.draw(data, options);
+        }
+    </script>
 </head>
 <body>
 	<?php include 'templates/loading_screen.php' ?>
@@ -82,9 +171,13 @@ if (strlen($_SESSION['id'] == 0)) {
 						<div class="d-flex align-items-left align-items-md-center flex-column flex-md-row">
 							<div>
 								<h2 class="text-black fw-bold">Admin Dashboard</h2>
+								<div > <hr>
+								<h4 class="text-black fw-regular ">Educational Assistance for SY: <?= $sy ?> for <?= $sem ?>  Report</h4>
+							</div>
 							</div>
 						</div>
 					</div>
+				
 				</div>
 				<div class="page-inner mt--2">
 					<?php if(isset($_SESSION['message'])): ?>
@@ -94,227 +187,101 @@ if (strlen($_SESSION['id'] == 0)) {
 						<?php unset($_SESSION['message']); ?>
 						<?php endif ?>
 					<div class="row">
-						<div class="col-md-4">
-							<div class="card card-stats card-primary card-round">
-								<div class="card-body">
-									<div class="row">
-										<div class="col-3">
-											<div class="icon-big text-center">
-												<i class="flaticon-users"></i>
-											</div>
-										</div>
-										<div class="col-3 col-stats">
-										</div>
-										<div class="col-6 col-stats">
-											<div class="numbers mt-4">
-												<h2 class="fw-bold text-uppercase">Population</h2>
-												<h3 class="fw-bold text-uppercase"></h3>
-											</div>
-										</div>
-									</div>
-								</div>
-								<div class="card-body">
-									<a href="resident_info.php?state=all" class="card-link text-light">Total Population </a>
-								</div>
-							</div>
-						</div>
-						<div class="col-md-4">
-							<div class="card card-stats card-secondary card-round">
-								<div class="card-body">
-									<div class="row">
-										<div class="col-3">
-											<div class="icon-big text-center">
-												<i class="flaticon-user"></i>
-											</div>
-										</div>
-										<div class="col-3 col-stats">
-										</div>
-										<div class="col-6 col-stats">
-											<div class="numbers mt-4">
-												<h2 class="fw-bold text-uppercase">Male</h2>
-												<h3 class="fw-bold"></h3>
-											</div>
-										</div>
-									</div>
-								</div>
-								<div class="card-body">
-									<a href="resident_info.php?state=male" class="card-link text-light">Total Male </a>
-								</div>
-							</div>
-						</div>
-						<div class="col-md-4">
-							<div class="card card-stats card-warning card-round">
-								<div class="card-body">
-									<div class="row">
-										<div class="col-3">
-											<div class="icon-big text-center">
-												<i class="icon-user-female"></i>
-											</div>
-										</div>
-										<div class="col-3 col-stats">
-										</div>
-										<div class="col-6 col-stats">
-											<div class="numbers mt-4">
-												<h2 class="fw-bold text-uppercase">Female</h2>
-												<h3 class="fw-bold text-uppercase"></h3>
-											</div>
-										</div>
-									</div>
-								</div>
-								<div class="card-body">
-									<a href="resident_info.php?state=female" class="card-link text-light">Total Female </a>
-								</div>
-							</div>
-						</div>
+					<div class="col-md-3">
+                <div class="card card-stats card-primary card-round">
+                    <div class="card-body">
+                        <div class="row">
+                            <div class="col-12 ">
+                                <div class="icon-big text-center">
+                                    <i class="flaticon-users"></i>
+                                </div>
+                            </div>
+                            <div class="col-12 ">
+                                <div class="numbers mt-2">
+                                    <h6 class="fw-bold text-uppercase text-center"><?= $totalapp ?> Applicants</h6>
+									<a href="resident_info.php?state=all" class="card-link text-light" style="text-align: left;">view</a>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                   
+                </div>
+            </div>
+			<div class="col-md-3">
+                <div class="card card-stats card-warning card-round">
+                    <div class="card-body">
+                        <div class="row">
+                            <div class="col-12 ">
+                                <div class="icon-big text-center">
+                                    <i class="flaticon-users"></i>
+                                </div>
+                            </div>
+                            <div class="col-12 ">
+                                <div class="numbers mt-2">
+                                    <h6 class="fw-bold text-uppercase text-center"><?= $pending ?> Pending</h6>
+									<a href="resident_info.php?state=all" class="card-link text-light" style="text-align: left;">view</a>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                   
+                </div>
+            </div>
+						
+			<div class="col-md-3">
+                <div class="card card-stats card-secondary card-round">
+                    <div class="card-body">
+                        <div class="row">
+                            <div class="col-12 ">
+                                <div class="icon-big text-center">
+                                    <i class="flaticon-users"></i>
+                                </div>
+                            </div>
+                            <div class="col-12 ">
+                                <div class="numbers mt-2">
+                                    <h6 class="fw-bold text-uppercase text-center"><?= $approved ?> Approved</h6>
+									<a href="resident_info.php?state=all" class="card-link text-light" style="text-align: left;">view</a>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                   
+                </div>
+            </div>
+			<div class="col-md-3">
+                <div class="card card-stats card-danger card-round">
+                    <div class="card-body">
+                        <div class="row">
+                            <div class="col-12 ">
+                                <div class="icon-big text-center">
+                                    <i class="flaticon-users"></i>
+                                </div>
+                            </div>
+                            <div class="col-12 ">
+                                <div class="numbers mt-2">
+                                    <h6 class="fw-bold text-uppercase text-center"><?= $rejected ?> Rejected</h6>
+									<a href="resident_info.php?state=all" class="card-link text-light" style="text-align: left;">view</a>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                   
+                </div>
+            </div>
 					</div>
-					<?php if(isset($_SESSION['username']) && $_SESSION['role']=='admin'):?>
 					<div class="row">
-						<div class="col-md-4">
-							<div class="card card-stats card-success card-round">
-								<div class="card-body">
-									<div class="row">
-										<div class="col-3">
-											<div class="icon-big text-center">
-												<i class="fas fa-fingerprint"></i>
-											</div>
-										</div>
-										<div class="col-3 col-stats">
-										</div>
-										<div class="col-6 col-stats">
-											<div class="numbers mt-4">
-												<h2 class="fw-bold text-uppercase">Voters</h2>
-												<h3 class="fw-bold text-uppercase"></h3>
-											</div>
-										</div>
-									</div>
-								</div>
-								<div class="card-body">
-									<a href="resident_info.php?state=voters" class="card-link text-light">Total Voters </a>
-								</div>
-							</div>
-						</div>
-						<div class="col-md-4">
-							<div class="card card-stats card-info card-round">
-								<div class="card-body">
-									<div class="row">
-										<div class="col-3">
-											<div class="icon-big text-center">
-												<i class="flaticon-users"></i>
-											</div>
-										</div>
-										<div class="col-3 col-stats">
-										</div>
-										<div class="col-6 col-stats">
-											<div class="numbers mt-4">
-												<h2 class="fw-bold text-uppercase">Non Voters</h2>
-												<h3 class="fw-bold text-uppercase"></h3>
-											</div>
-										</div>
-									</div>
-								</div>
-								<div class="card-body">
-									<a href="resident_info.php?state=non_voters" class="card-link text-light">Total Non Voters </a>
-								</div>
-							</div>
-						</div>
-						<div class="col-md-4">
-							<div class="card card-stats card-round" style="background-color:#a349a3; color:#fff">
-								<div class="card-body">
-									<div class="row">
-										<div class="col-3">
-											<div class="icon-big text-center">
-												<i class="fas fa-list"></i>
-											</div>
-										</div>
-										<div class="col-3 col-stats">
-										</div>
-										<div class="col-6 col-stats">
-											<div class="numbers mt-4">
-												<h2 class="fw-bold text-uppercase">Precinct Number</h2>
-												<h3 class="fw-bold"></h3>
-											</div>
-										</div>
-									</div>
-								</div>
-								<div class="card-body">
-									<a href="purok_info.php?state=precinct" class="card-link text-light">Precint Information</a>
-								</div>
-							</div>
-						</div>
-						<div class="col-md-4">
-							<div class="card card-stats card-round" style="background-color:#880a14; color:#fff">
-								<div class="card-body">
-									<div class="row">
-										<div class="col-3">
-											<div class="icon-big text-center">
-												<i class="icon-direction"></i>
-											</div>
-										</div>
-										<div class="col-3 col-stats">
-										</div>
-										<div class="col-6 col-stats">
-											<div class="numbers mt-4">
-												<h2 class="fw-bold text-uppercase">Purok Number</h2>
-												<h3 class="fw-bold text-uppercase"></h3>
-											</div>
-										</div>
-									</div>
-								</div>
-								<div class="card-body">
-									<a href="purok_info.php?state=purok" class="card-link text-light">Purok Information</a>
-								</div>
-							</div>
-						</div>
-						<div class="col-md-4">
-							<div class="card card-stats card-round card-danger">
-								<div class="card-body">
-									<div class="row">
-										<div class="col-3">
-											<div class="icon-big text-center">
-												<i class="icon-layers"></i>
-											</div>
-										</div>
-										<div class="col-3 col-stats">
-										</div>
-										<div class="col-6 col-stats">
-											<div class="numbers mt-4">
-												<h2 class="fw-bold text-uppercase">Blotter</h2>
-												<h3 class="fw-bold text-uppercase"></h3>
-											</div>
-										</div>
-									</div>
-								</div>
-								<div class="card-body">
-									<a href="blotter.php" class="card-link text-light">Blotter Information</a>
-								</div>
-							</div>
-						</div>
-						<div class="col-md-4">
-							<div class="card card-stats card-round" style="background-color:#3E9C35; color:#fff">
-								<div class="card-body">
-									<div class="row">
-										<div class="col-3">
-											<div class="icon-big text-center">
-												<i class="fas fa-dollar-sign"></i>
-											</div>
-										</div>
-										<div class="col-3 col-stats">
-										</div>
-										<div class="col-6 col-stats">
-											<div class="numbers mt-4">
-												<h2 class="fw-bold text-uppercase">Revenue - by day</h2>
-												<h3 class="fw-bold text-uppercase">P </h3>
-											</div>
-										</div>
-									</div>
-								</div>
-								<div class="card-body">
-									<a href="revenue.php" class="card-link text-light">All Revenues</a>
-								</div>
-							</div>
-						</div>
-					</div>
-					<?php endif ?>
+        <div class="col-md-8 offset-md-4">
+            <div class="card">
+                <div class="card-header">
+                    Applicants Per Barangay
+                </div>
+                <div class="card-body">
+                    <div id="piechart_3d" style="width: 100%; height: 450px;"></div>
+                </div>
+            </div>
+        </div>
+    </div>
+				
 					<div class="row">
 						<div class="col-md-12">
 							<div class="card">
@@ -324,16 +291,32 @@ if (strlen($_SESSION['id'] == 0)) {
 									</div>
 								</div>
 								<div class="card-body">
-									<p><?= !empty($db_txt) ? $db_txt : 'Lorem ipsum dolor sit amet, consectetur adipiscing elit. Pellentesque in ipsum id orci porta dapibus. Donec rutrum congue leo eget malesuada. Curabitur arcu erat, accumsan id imperdiet et, porttitor at sem. Quisque velit nisi, pretium ut lacinia in, elementum id enim.' ?></p>
-									<div class="text-center">
-										<img class="img-fluid" src="<?= !empty($db_img) ? 'assets/uploads/'.$db_img : 'assets/img/bg-abstract.png' ?>" />
-									</div>
+								<div class="container-fluid mt-5">
+   
+
+</div>
 								</div>
 							</div>
 						</div>
 					</div>
 				</div>
 			</div>
+			<script type="text/javascript">
+    google.charts.load("current", {packages:["corechart"]});
+    google.charts.setOnLoadCallback(drawChart);
+
+    function drawChart() {
+        var data = google.visualization.arrayToDataTable(<?php echo json_encode($dataArray); ?>);
+
+        var options = {
+            title: 'Applicants Per Barangay',
+            is3D: true,
+        };
+
+        var chart = new google.visualization.PieChart(document.getElementById('piechart_3d'));
+        chart.draw(data, options);
+    }
+</script>
 			<!-- Main Footer -->
 			<?php include 'templates/main-footer.php' ?>
 			<!-- End Main Footer -->

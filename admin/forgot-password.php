@@ -47,6 +47,13 @@ if (isset($_POST['reset'])) {
     <link rel="stylesheet" href="vendors/simple-line-icons/css/simple-line-icons.css">
     <link rel="stylesheet" href="vendors/flag-icon-css/css/flag-icon.min.css">
     <link rel="stylesheet" href="vendors/css/vendor.bundle.base.css">
+<style>
+        body.login {
+    background: url('assets/img/saqbound.jpg') no-repeat center center fixed; 
+    background-size: cover;
+  
+}
+</style>
 </head>
 <body class="login">
 <?php include 'templates/loading_screen.php' ?>
