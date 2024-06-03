@@ -1,1 +1,1 @@
-# IntegratedBMS
+# Educass
