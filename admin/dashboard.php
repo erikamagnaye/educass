@@ -151,6 +151,9 @@ if ($latest_educid) {
             chart.draw(data, options);
         }
     </script>
+	<style>
+	
+	</style>
 </head>
 <body>
 	<?php include 'templates/loading_screen.php' ?>
@@ -171,6 +174,23 @@ if ($latest_educid) {
 						<div class="d-flex align-items-left align-items-md-center flex-column flex-md-row">
 							<div>
 								<h2 class="text-black fw-bold">Admin Dashboard</h2>
+								<?php if(isset($_SESSION['message'])): ?>
+							<div class="alert alert-<?= $_SESSION['success']; ?> <?= $_SESSION['success']=='danger' ? 'bg-danger text-light' : null ?>" role="alert">
+								<?php echo $_SESSION['message']; ?>
+							</div>
+						<?php unset($_SESSION['message']); ?>
+						<?php endif ?>
+								<div > <hr>
+								<h4 class="text-black fw-regular ">Cute ko</h4>
+								<div class="btn-container">
+    <a href="#" class="btn"><i class="fas fa-user icon" style="margin-right: 8px;"> </i><?= $totalapp ?>  Verified  Account </a>
+    <a href="#" class="btn"><i class="fas fa-users icon" style="margin-right: 8px;"></i><?= $totalapp ?>  Not Verified  Account </a>
+	<a href="#" class="btn"><i class="fas fa-users icon" style="margin-right: 8px;"></i><?= $totalapp ?>  Complaints/ Concerns </a>
+	<a href="#" class="btn"><i class="fas fa-users icon" style="margin-right: 8px;"></i><?= $totalapp ?>  staff </a>
+	<a href="#" class="btn"><i class="fas fa-users icon" style="margin-right: 8px;"></i><?= $totalapp ?>  Educational Assistance Provided </a>
+</div>
+
+
 								<div > <hr>
 								<h4 class="text-black fw-regular ">Educational Assistance for SY: <?= $sy ?> for <?= $sem ?>  Report</h4>
 							</div>
@@ -180,12 +200,7 @@ if ($latest_educid) {
 				
 				</div>
 				<div class="page-inner mt--2">
-					<?php if(isset($_SESSION['message'])): ?>
-							<div class="alert alert-<?= $_SESSION['success']; ?> <?= $_SESSION['success']=='danger' ? 'bg-danger text-light' : null ?>" role="alert">
-								<?php echo $_SESSION['message']; ?>
-							</div>
-						<?php unset($_SESSION['message']); ?>
-						<?php endif ?>
+				
 					<div class="row">
 					<div class="col-md-3">
                 <div class="card card-stats card-primary card-round">
@@ -270,7 +285,7 @@ if ($latest_educid) {
             </div>
 					</div>
 					<div class="row">
-        <div class="col-md-8 offset-md-4">
+        <div class="col-md-6 offset-md-4">
             <div class="card">
                 <div class="card-header">
                     Applicants Per Barangay
@@ -281,6 +296,7 @@ if ($latest_educid) {
             </div>
         </div>
     </div>
+	
 				
 					<div class="row">
 						<div class="col-md-12">

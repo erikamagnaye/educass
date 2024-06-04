@@ -5,7 +5,7 @@
     <div class="logo-header" data-background-color="green">
         
         <a href="dashboard.php" class="logo">
-            <img src="assets/img/logo.png" alt="navbar brand" class="navbar-brand"> <span class="text-light ml-2 fw-bold" style="font-size:20px">EAAS SAQ</span>
+            <img src="assets/img/logo.png" alt="navbar brand" class="navbar-brand" style="height: 45px; width: 45px;"> <span class="text-light ml-2 fw-bold" style="font-size:20px">EAAS SAQ</span>
         </a>
         <button class="navbar-toggler sidenav-toggler ml-auto" type="button" data-toggle="collapse" data-target="collapse" aria-expanded="false" aria-label="Toggle navigation">
             <span class="navbar-toggler-icon">

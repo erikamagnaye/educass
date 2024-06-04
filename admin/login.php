@@ -40,16 +40,16 @@
 			<div class="login-form">
                 <form method="POST" action="model/login.php">
 					<div class="form-group form-floating-label">
-						<input id="username" name="username" type="text" class="form-control input-border-bottom" required value="<?php if (isset($_COOKIE["username"])) { echo $_COOKIE["username"];} ?>">
+						<input id="username" name="username" type="text" class="form-control input-border-bottom" required >
 						<label for="username" class="placeholder">Username</label>
 					</div>
 					<div class="form-group form-floating-label">
-						<input id="password" name="password" type="password" class="form-control input-border-bottom" required value="<?php if (isset($_COOKIE["password"])) { echo $_COOKIE["password"]; } ?>">
+						<input id="password" name="password" type="password" class="form-control input-border-bottom" required >
 						<label for="password" class="placeholder">Password</label>
 						<span toggle="#password" class="fa fa-fw fa-eye field-icon toggle-password"></span>
 					</div>
 					<div class="my-2 d-flex justify-content-between align-items-center">
-						<input type="checkbox" name="remember" <?php if (isset($_COOKIE['username'])) { ?> checked <?php } ?> /> Remember me
+						<!-- <input type="checkbox" name="remember" <?php if (isset($_COOKIE['username'])) { ?> checked <?php } ?> /> Remember me -->
 						<a href="forgot-password.php" class="auth-link text-black">Forgot password?</a>
 					</div><br>
 					<div class="form-action mb-3">

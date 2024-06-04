@@ -32,7 +32,7 @@
 						setcookie("password", "");
 					}
 				}
-				*/
+			*/
 			}
 
 			$_SESSION['message'] = 'You have successfull logged in to Educational Assistance System!';
