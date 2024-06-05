@@ -125,7 +125,7 @@
     </div>
 </div>
 
-<!-- Modal -->
+<!-- Modal  TO CHANGE PASSWORD-->
 <div class="modal fade" id="changepass" tabindex="-1" role="dialog" aria-labelledby="myLargeModalLabel" aria-hidden="true">
     <div class="modal-dialog" role="document">
         <div class="modal-content">

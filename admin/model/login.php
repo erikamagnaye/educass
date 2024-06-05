@@ -11,7 +11,7 @@
 		$query 		= "SELECT * FROM `admin` join staff on staff.staffid=admin.empid WHERE username = '$username' AND password = '$password' and position= 'admin'";
 		
 		$result 	= $conn->query($query);
-		
+		//
 		if($result->num_rows){
 			while ($row = $result->fetch_assoc()) {
 				$_SESSION['id'] = $row['adminid'];

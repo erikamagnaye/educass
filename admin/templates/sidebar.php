@@ -7,7 +7,12 @@ if (strlen($_SESSION['id'] == 0)){
 $id = $_SESSION['id'] ;
 		$query 		= "SELECT * FROM `admin` join staff on staff.staffid=admin.empid WHERE adminid= '$id'";
 		$result 	= $conn->query($query);
-		
+        
+        if (!$result) {
+            // Display SQL error for debugging
+            echo "Error: " . $conn->error;
+            exit();
+        }		
 		if($result->num_rows){
 			while ($row = $result->fetch_assoc()) {
 				$adminid = $row['adminid'];
@@ -38,7 +43,8 @@ $current_page = PageName();
                         <span>
                             <?php echo ucfirst($username); ?>
                             <span class="user-level"><?php echo ucfirst($role); ?></span>
-                            <?= $role == 'admin' ? '<span class="caret"></span>' : null ?> 
+                            <span class="caret"></span>
+                          
                         </span>
                     </a>
                     <div class="clearfix"></div>
@@ -69,7 +75,7 @@ $current_page = PageName();
                     </span>
                     <h4 class="text-section">Menu</h4>
                 </li>
-                <li class="nav-item <?= $current_page=='educass.php' ? 'active' : null ?>">
+                <li class="nav-item <?= $current_page=='educass.php' || $current_page=='edit_educ.php' ? 'active' : null ?>">
                     <a href="educass.php">
                         <i class="fas fa-user-tie"></i>
                         <p>Educational Aids</p>

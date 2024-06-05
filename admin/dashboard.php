@@ -9,36 +9,6 @@ if (strlen($_SESSION['id'] == 0)) {
     exit();
 }
 
-
-
-	/*$query1 = "SELECT * FROM tblresident WHERE gender='Male' AND resident_type=1";
-    $result1 = $conn->query($query1);
-	$male = $result1->num_rows;
-
-	$query2 = "SELECT * FROM tblresident WHERE gender='Female' AND resident_type=1";
-    $result2 = $conn->query($query2);
-	$female = $result2->num_rows;
-
-	$query3 = "SELECT * FROM tblresident WHERE voterstatus='Yes' AND resident_type=1";
-    $result3 = $conn->query($query3);
-	$totalvoters = $result3->num_rows;
-
-	$query4 = "SELECT * FROM tblresident WHERE voterstatus='No' AND resident_type=1";
-	$non = $conn->query($query4)->num_rows;
-
-	$query5 = "SELECT * FROM tblpurok";
-	$purok = $conn->query($query5)->num_rows;
-
-	$query6 = "SELECT * FROM tblprecinct";
-	$precinct = $conn->query($query6)->num_rows;
-
-	$query7 = "SELECT * FROM tblblotter";
-	$blotter = $conn->query($query7)->num_rows;
-
-	$date = date('Y-m-d'); 
-	$query8 = "SELECT SUM(amounts) as am FROM tblpayments WHERE `date`='$date'";
-	$revenue = $conn->query($query8)->fetch_assoc();
-	*/
 	else {
 		$id = $_SESSION['id'] ;
 		$query 		= "SELECT * FROM `admin` join staff on staff.staffid=admin.empid WHERE adminid= '$id'";

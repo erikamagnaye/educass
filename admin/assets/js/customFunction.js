@@ -35,24 +35,56 @@ function editPrecinct(that){
     $('#details').val(details);
     $('#precinct_id').val(id);
 }
-
-function editOfficial(that){
+/*
+function editeducass(that){
     id = $(that).attr('data-id');
-    na = $(that).attr('data-name');
-    chair = $(that).attr('data-chair');
-    pos = $(that).attr('data-pos');
-    start = $(that).attr('data-start');
-    end = $(that).attr('data-end');
+    title = $(that).attr('data-title');
+    sem = $(that).attr('data-sem');
+    sy = $(that).attr('data-sy');
     status = $(that).attr('data-status');
+    end = $(that).attr('data-end');
+    start = $(that).attr('data-start');
+    min_grade = $(that).attr('data-min_grade');
+    date = $(that).attr('data-dates');
     
-    $('#off_id').val(id);
-    $('#name').val(na);
-    $('#chair').val(chair);
-    $('#position').val(pos);
-    $('#start').val(start);
-    $('#end').val(end);
-    $('#status').val(status);
+    $('#educid').val(id);
+    $('#title').val(title);
+    $('#semester').val(sem);
+    $('#syear').val(sy);
+    $('#stat').val(status);
+    $('#dateend').val(end);
+    $('#datestart').val(start);
+    $('#grade').val(min_grade);
+    $('#datepost').val(date);
 }
+*/
+function editeducass(that) {
+    // Retrieve the data attributes from the clicked element
+    var educid = $(that).attr('data-educid');
+    var title = $(that).attr('data-title');
+    var sem = $(that).attr('data-sem');
+    var sy = $(that).attr('data-sy');
+    var status = $(that).attr('data-status');
+    var end = $(that).attr('data-end');
+    var start = $(that).attr('data-start');
+    var min_grade = $(that).attr('data-min_grade');
+    var date = $(that).attr('data-date');
+    
+    // Populate the modal fields with the retrieved data
+    $('#educid').val(educid);
+    $('#title').val(title);
+    $('#sem').val(sem);
+    $('#sy').val(sy);
+    $('#status').val(status);
+    $('#end').val(end);
+    $('#start').val(start);
+    $('#min_grade').val(min_grade);
+    $('#date').val(date);
+    
+    // Open the modal
+    $('#edit').modal('show');
+}
+
 
 function editResident(that){
     id          = $(that).attr('data-id');
