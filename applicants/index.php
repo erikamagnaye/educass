@@ -6,6 +6,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>Homepage</title>
     <link rel="stylesheet" href="style.css" />
+    <link rel="icon" href="assets/img/logo.png" type="image/x-icon"/>   <!-- THIS IS THE CODE TO DISPLAY AN ICON IN THE BROWASER TAB-->
  <style>
   h1{
     text-align: center;
@@ -36,7 +37,7 @@
                 <li><a href="index.php">Home</a></li>
                 <li><a href="about.php">About</a></li>
                 <li><a href="proc.php">Procedure</a></li>
-                <li><a href="contact.php">Contact</a></li>
+                <li><a href="contact.php">Contact Us</a></li>
                 <li><a href="login.php" class="btn">Login</a></li>
               </ul>
             </div>

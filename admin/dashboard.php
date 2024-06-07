@@ -22,22 +22,27 @@ if (strlen($_SESSION['id'] == 0)) {
 			}
 			}
 
-			
+		//all applicants for recent assistance	
 	$query = "SELECT * FROM application join `educ aids` on `application`.`educid`=`educ aids`.`educid` order by `educ aids`.educid desc limit 1";
     $result = $conn->query($query);
 	$totalapp = $result->num_rows;
-
+        //pending applicants    
 	$query = "SELECT * FROM application join `educ aids` on `application`.`educid`=`educ aids`.`educid` WHERE application.status ='Pending' order by `educ aids`.educid desc ";
     $result2 = $conn->query($query);
 	$pending = $result2->num_rows;
-
+        //approved applicants    
 	$query = "SELECT * FROM application join `educ aids` on `application`.`educid`=`educ aids`.`educid` WHERE application.status ='Approved' order by `educ aids`.educid desc  ";
     $result3 = $conn->query($query);
 	$approved = $result3->num_rows;
-
+            //rejected applicants
 	$query = "SELECT * FROM application join `educ aids` on `application`.`educid`=`educ aids`.`educid` WHERE application.status ='Rejected' order by `educ aids`.educid desc ";
     $result4 = $conn->query($query);
 	$rejected = $result4->num_rows;
+    	//all educ assistance	provided
+	$query6 = "SELECT * FROM `educ aids`";
+    $result6 = $conn->query($query6);
+	$totaleduc = $result6->num_rows;
+
 
 	// Initialize variables with default values
 $sy = 'N/A';
@@ -98,6 +103,7 @@ if ($latest_educid) {
 <head>
 	<?php include 'templates/header.php' ?>
 	<title>Admin Dashboard</title>
+    <link rel="icon" href="assets/img/logo.png" type="image/x-icon"/>   <!-- THIS IS THE CODE TO DISPLAY AN ICON IN THE BROWASER TAB-->
 	<script type="text/javascript" src="https://www.gstatic.com/charts/loader.js"></script>
 	<script type="text/javascript">
         // Load the Visualization API and the corechart package
@@ -157,7 +163,7 @@ if ($latest_educid) {
     <a href="#" class="btn"><i class="fas fa-users icon" style="margin-right: 8px;"></i><?= $totalapp ?>  Not Verified  Account </a>
 	<a href="#" class="btn"><i class="fas fa-users icon" style="margin-right: 8px;"></i><?= $totalapp ?>  Complaints/ Concerns </a>
 	<a href="#" class="btn"><i class="fas fa-users icon" style="margin-right: 8px;"></i><?= $totalapp ?>  staff </a>
-	<a href="#" class="btn"><i class="fas fa-users icon" style="margin-right: 8px;"></i><?= $totalapp ?>  Educational Assistance Provided </a>
+	<a href="#" class="btn"><i class="fas fa-users icon" style="margin-right: 8px;"></i><?= $totaleduc ?>  Educational Assistance Provided </a>
 </div>
 
 
@@ -273,7 +279,7 @@ if ($latest_educid) {
 							<div class="card">
 								<div class="card-header">
 									<div class="card-head-row">
-										<div class="card-title fw-bold">LGU Mission Statement</div>
+										<div class="card-title fw-bold">waiting</div>
 									</div>
 								</div>
 								<div class="card-body">

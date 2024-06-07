@@ -70,14 +70,17 @@ if (strlen($_SESSION['id'] == 0)) {
 								<div class="card-header">
 									<div class="card-head-row">
 										<div class="card-title">Educational Assistance Provided</div>
-										<div class="card-tools">
-												<a href="#add" data-toggle="modal" class="btn btn-info btn-border btn-round btn-sm">
-													<i class="fa fa-plus"></i>
-													Print
-												</a>
-											</div>
+										
 											<div class="card-tools">
-												<a href="#add" data-toggle="modal" class="btn btn-info btn-border btn-round btn-sm">
+                                            <a href="viewprinteduc.php" class="btn btn-success btn-border btn-round btn-sm" title="view and print">
+												<i class="fa fa-eye"></i>
+												View
+											</a>
+                                            <a href="model/export_educprovided_csv.php" class="btn btn-danger btn-border btn-round btn-sm" title="Download">
+												<i class="fa fa-file"></i>
+												Export CSV
+											</a>
+												<a href="#add" data-toggle="modal" class="btn btn-info btn-border btn-round btn-sm" title="Post Assistance">
 													<i class="fa fa-plus"></i>
 													Post New assistance
 												</a>
