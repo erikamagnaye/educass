@@ -198,7 +198,7 @@ $(".toggle-password").click(function() {
 
 
 Webcam.set({
-    height: 250,
+    height: 100,
     image_format: 'jpeg',
     jpeg_quality: 90
 });

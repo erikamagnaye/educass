@@ -1,438 +1,321 @@
+
+<?php include 'server/server.php' ?>
+<?php 
+session_start(); 
+error_reporting(E_ALL);
+ini_set('display_errors', 1);
+if (strlen($_SESSION['id'] == 0)) {
+	header('location:login.php');
+    exit();
+}
+
+	else {
+		$id = $_SESSION['id'] ;
+		$query 		= "SELECT * FROM `student`  WHERE studid= '$id'";
+		$result 	= $conn->query($query);
+		
+		if($result->num_rows){
+			while ($row = $result->fetch_assoc()) {
+				$studid = $row['studid'];
+				$name = $row['firstname'];
+				//$role = $row['position'];
+			}
+			}
+
+		//all applicants for recent assistance	
+	$query = "SELECT * FROM application join `educ aids` on `application`.`educid`=`educ aids`.`educid` order by `educ aids`.educid desc limit 1";
+    $result = $conn->query($query);
+	$totalapp = $result->num_rows;
+        //pending applicants    
+	$query = "SELECT * FROM application join `educ aids` on `application`.`educid`=`educ aids`.`educid` WHERE application.status ='Pending' order by `educ aids`.educid desc ";
+    $result2 = $conn->query($query);
+	$pending = $result2->num_rows;
+        //approved applicants    
+	$query = "SELECT * FROM application join `educ aids` on `application`.`educid`=`educ aids`.`educid` WHERE application.status ='Approved' order by `educ aids`.educid desc  ";
+    $result3 = $conn->query($query);
+	$approved = $result3->num_rows;
+            //rejected applicants
+	$query = "SELECT * FROM application join `educ aids` on `application`.`educid`=`educ aids`.`educid` WHERE application.status ='Rejected' order by `educ aids`.educid desc ";
+    $result4 = $conn->query($query);
+	$rejected = $result4->num_rows;
+    	//all educ assistance	provided
+	$query6 = "SELECT * FROM `educ aids`";
+    $result6 = $conn->query($query6);
+	$totaleduc = $result6->num_rows;
+
+
+	// Initialize variables with default values
+$sy = 'N/A';
+$sem = 'N/A';
+
+	$query1 		= "SELECT * FROM `educ aids` ORDER BY educid DESC LIMIT 1;";
+	$result5 	= $conn->query($query1);
+	
+	if($result5->num_rows){
+		while ($row = $result5->fetch_assoc()) {
+			$sem = $row['sem'];
+			$sy = $row['sy'];
+			
+		}
+		}
+
+		// Retrieve data from database  THIS IS FOR PIE CHART FOR APPLICANTS PER BRGY
+
+// Fetch the most recent educational assistance ID based on the date
+$query1 = "SELECT educid, sem, sy FROM `educ aids` ORDER BY `date` DESC LIMIT 1";
+$result1 = mysqli_query($conn, $query1);
+$latest_educid = null;
+$sem = '';
+$sy = '';
+
+if ($result1 && mysqli_num_rows($result1) > 0) {
+    $row = mysqli_fetch_assoc($result1);
+    $latest_educid = $row['educid'];
+    $sem = $row['sem'];
+    $sy = $row['sy'];
+}
+
+if ($latest_educid) {
+    // Retrieve data from the database for the most recent educational assistance
+    $sql = "SELECT student.brgy, COUNT(*) AS count 
+            FROM student 
+            JOIN application ON student.studid = application.studid
+            JOIN `educ aids` ON application.educid = `educ aids`.educid 
+            WHERE `educ aids`.educid = '$latest_educid' 
+            GROUP BY student.brgy 
+            ORDER BY brgy ASC";
+    
+    $result = mysqli_query($conn, $sql);
+
+    $dataArray = array();
+    $dataArray[] = ['Barangay', 'Number of Applicants'];
+
+    // Format data for Google Charts
+    while ($row = mysqli_fetch_assoc($result)) {
+        $dataArray[] = [$row['brgy'], (int)$row['count']];
+    }
+}
+?>
+
+
 <!DOCTYPE html>
-
 <html lang="en">
-  <head>
-    <meta charset="utf-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1" />
-    <!-- Boxicons CSS -->
-    <link href="https://unpkg.com/boxicons@2.1.4/css/boxicons.min.css" rel="stylesheet" />
-    <title>dashboard</title>
-    <link rel="stylesheet" href="style.css" />
-    <style>
+<head>
+	<?php include 'templates/header.php' ?>
+	<title>Admin Dashboard</title>
+    <link rel="icon" href="assets/img/logo.png" type="image/x-icon"/>   <!-- THIS IS THE CODE TO DISPLAY AN ICON IN THE BROWASER TAB-->
+	<script type="text/javascript" src="https://www.gstatic.com/charts/loader.js"></script>
+	<script type="text/javascript">
+        // Load the Visualization API and the corechart package
+        google.charts.load('current', {'packages':['corechart']});
 
-        /* Import Google font - Poppins */
-@import url("https://fonts.googleapis.com/css2?family=Poppins:wght@200;300;400;500;600;700&display=swap");
-* {
-  margin: 0;
-  padding: 0;
-  box-sizing: border-box;
-  font-family: "Poppins", sans-serif;
-}
-:root {
-  --white-color: #fff;
-  --blue-color: #4070f4;
-  --grey-color: #707070;
-  --grey-color-light: #aaa;
-}
-body {
-  background-color: #e7f2fd;
-  transition: all 0.5s ease;
-}
-body.dark {
-  background-color: #333;
-}
-body.dark {
-  --white-color: #333;
-  --blue-color: #fff;
-  --grey-color: #f2f2f2;
-  --grey-color-light: #aaa;
-}
+        // Set a callback to run when the Google Visualization API is loaded
+        google.charts.setOnLoadCallback(drawChart);
 
-/* navbar */
-.navbar {
-  position: fixed;
-  top: 0;
-  width: 100%;
-  left: 0;
-  background-color: var(--white-color);
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-  padding: 15px 30px;
-  z-index: 1000;
-  box-shadow: 0 0 2px var(--grey-color-light);
-}
-.logo_item {
-  display: flex;
-  align-items: center;
-  column-gap: 10px;
-  font-size: 22px;
-  font-weight: 500;
-  color: var(--blue-color);
-}
-.navbar img {
-  width: 35px;
-  height: 35px;
-  border-radius: 50%;
-}
-.search_bar {
-  height: 47px;
-  max-width: 430px;
-  width: 100%;
-}
-.search_bar input {
-  height: 100%;
-  width: 100%;
-  border-radius: 25px;
-  font-size: 18px;
-  outline: none;
-  background-color: var(--white-color);
-  color: var(--grey-color);
-  border: 1px solid var(--grey-color-light);
-  padding: 0 20px;
-}
-.navbar_content {
-  display: flex;
-  align-items: center;
-  column-gap: 25px;
-}
-.navbar_content i {
-  cursor: pointer;
-  font-size: 20px;
-  color: var(--grey-color);
-}
+        function drawChart() {
+            // Create the data table
+            var data = google.visualization.arrayToDataTable(<?= json_encode($dataArray) ?>);
 
-/* sidebar */
-.sidebar {
-  background-color: var(--white-color);
-  width: 260px;
-  position: fixed;
-  top: 0;
-  left: 0;
-  height: 100%;
-  padding: 80px 20px;
-  z-index: 100;
-  overflow-y: scroll;
-  box-shadow: 0 0 1px var(--grey-color-light);
-  transition: all 0.5s ease;
-}
-.sidebar.close {
-  padding: 60px 0;
-  width: 80px;
-}
-.sidebar::-webkit-scrollbar {
-  display: none;
-}
-.menu_content {
-  position: relative;
-}
-.menu_title {
-  margin: 15px 0;
-  padding: 0 20px;
-  font-size: 18px;
-}
-.sidebar.close .menu_title {
-  padding: 6px 30px;
-}
-.menu_title::before {
-  color: var(--grey-color);
-  white-space: nowrap;
-}
-.menu_dahsboard::before {
-  content: "Dashboard";
-}
-.menu_editor::before {
-  content: "Editor";
-}
-.menu_setting::before {
-  content: "Setting";
-}
-.sidebar.close .menu_title::before {
-  content: "";
-  position: absolute;
-  height: 2px;
-  width: 18px;
-  border-radius: 12px;
-  background: var(--grey-color-light);
-}
-.menu_items {
-  padding: 0;
-  list-style: none;
-}
-.navlink_icon {
-  position: relative;
-  font-size: 22px;
-  min-width: 50px;
-  line-height: 40px;
-  display: inline-block;
-  text-align: center;
-  border-radius: 6px;
-}
-.navlink_icon::before {
-  content: "";
-  position: absolute;
-  height: 100%;
-  width: calc(100% + 100px);
-  left: -20px;
-}
-.navlink_icon:hover {
-  background: var(--blue-color);
-}
-.sidebar .nav_link {
-  display: flex;
-  align-items: center;
-  width: 100%;
-  padding: 4px 15px;
-  border-radius: 8px;
-  text-decoration: none;
-  color: var(--grey-color);
-  white-space: nowrap;
-}
-.sidebar.close .navlink {
-  display: none;
-}
-.nav_link:hover {
-  color: var(--white-color);
-  background: var(--blue-color);
-}
-.sidebar.close .nav_link:hover {
-  background: var(--white-color);
-}
-.submenu_item {
-  cursor: pointer;
-}
-.submenu {
-  display: none;
-}
-.submenu_item .arrow-left {
-  position: absolute;
-  right: 10px;
-  display: inline-block;
-  margin-right: auto;
-}
-.sidebar.close .submenu {
-  display: none;
-}
-.show_submenu ~ .submenu {
-  display: block;
-}
-.show_submenu .arrow-left {
-  transform: rotate(90deg);
-}
-.submenu .sublink {
-  padding: 15px 15px 15px 52px;
-}
-.bottom_content {
-  position: fixed;
-  bottom: 60px;
-  left: 0;
-  width: 260px;
-  cursor: pointer;
-  transition: all 0.5s ease;
-}
-.bottom {
-  position: absolute;
-  display: flex;
-  align-items: center;
-  left: 0;
-  justify-content: space-around;
-  padding: 18px 0;
-  text-align: center;
-  width: 100%;
-  color: var(--grey-color);
-  border-top: 1px solid var(--grey-color-light);
-  background-color: var(--white-color);
-}
-.bottom i {
-  font-size: 20px;
-}
-.bottom span {
-  font-size: 18px;
-}
-.sidebar.close .bottom_content {
-  width: 50px;
-  left: 15px;
-}
-.sidebar.close .bottom span {
-  display: none;
-}
-.sidebar.hoverable .collapse_sidebar {
-  display: none;
-}
-#sidebarOpen {
-  display: none;
-}
-@media screen and (max-width: 768px) {
-  #sidebarOpen {
-    font-size: 25px;
-    display: block;
-    margin-right: 10px;
-    cursor: pointer;
-    color: var(--grey-color);
-  }
-  .sidebar.close {
-    left: -100%;
-  }
-  .search_bar {
-    display: none;
-  }
-  .sidebar.close .bottom_content {
-    left: -100%;
-  }
-}
-    </style>
-  </head>
-  <body>
-    <!-- navbar -->
-    <nav class="navbar">
-      <div class="logo_item">
-        <i class="bx bx-menu" id="sidebarOpen"></i>
-        <img src="bmslogo.PNG" alt="bms"></i>BMS
-      </div>
+            // Set chart options
+            var options = {
+                title: 'Number of Applicants per Barangay',
+                is3D: true
+            };
 
-      <div class="search_bar">
-        <input type="text" placeholder="Search" />
-      </div>
-
-      <div class="navbar_content">
-        <i class="bi bi-grid"></i>
-        <i class='bx bx-sun' id="darkLight"></i>
-        <i class='bx bx-bell' ></i>
-      <!--  <img src="images/profile.jpg" alt="" class="profile" />   -->
-      </div>
-    </nav>
-
-    <!-- sidebar -->
-    <nav class="sidebar">
-      <div class="menu_content">
-        <ul class="menu_items">
-          <div class="menu_title menu_dahsboard"></div>
-          <!-- duplicate or remove this li tag if you want to add or remove navlink with submenu -->
-          <!-- start -->
-          <li class="item">
-            <a href="home.php" class="nav_link">
-              <span class="navlink_icon">
-                <i class="bx bx-cloud-upload"></i>
-              </span>
-              <span class="navlink">Home</span>
-            </a>
-          </li>
-          <li class="item">
-            <a href="#" class="nav_link">
-              <span class="navlink_icon">
-                <i class="bx bx-cloud-upload"></i>
-              </span>
-              <span class="navlink">Officials</span>
-            </a>
-          </li>
-          <li class="item">
-            <div href="#" class="nav_link submenu_item">
-              <span class="navlink_icon">
-                <i class="bx bx-home-alt"></i>
-              </span>
-              <span class="navlink">Activities</span>
-              <i class="bx bx-chevron-right arrow-left"></i>
-            </div>
-
-            <ul class="menu_items submenu">
-              <a href="#" class="nav_link sublink">Get Certificate</a>
-              <a href="#" class="nav_link sublink">File Complaint</a>
-            
-            </ul>
-          </li>
-       
-          <!-- end -->
-
-          <!-- duplicate this li tag if you want to add or remove  navlink with submenu -->
-          <!-- start -->
-          <li class="item">
-            <div href="#" class="nav_link submenu_item">
-              <span class="navlink_icon">
-                <i class="bx bx-grid-alt"></i>
-              </span>
-              <span class="navlink">Transactions</span>
-              <i class="bx bx-chevron-right arrow-left"></i>
-            </div>
-
-            <ul class="menu_items submenu">
-              <a href="#" class="nav_link sublink">certificate</a>
-              <a href="#" class="nav_link sublink">complaints</a>
-            
-            </ul>
-          </li>
-          <!-- end -->
-          <li class="item">
-            <a href="#" class="nav_link">
-              <span class="navlink_icon">
-                <i class="bx bx-cloud-upload"></i>
-              </span>
-              <span class="navlink">Profile</span>
-            </a>
-          </li>
-        </ul>
-      
-     
-
-        <!-- Sidebar Open / Close -->
-        <div class="bottom_content">
-          <div class="bottom expand_sidebar">
-            <span> Expand</span>
-            <i class='bx bx-log-in' ></i>
-          </div>
-          <div class="bottom collapse_sidebar">
-            <span> Collapse</span>
-            <i class='bx bx-log-out'></i>
-          </div>
-        </div>
-      </div>
-    </nav>
-    <!-- JavaScript -->
-    <script src="script.js"></script>
-    <script>
- const body = document.querySelector("body");
-const darkLight = document.querySelector("#darkLight");
-const sidebar = document.querySelector(".sidebar");
-const submenuItems = document.querySelectorAll(".submenu_item");
-const sidebarOpen = document.querySelector("#sidebarOpen");
-const sidebarClose = document.querySelector(".collapse_sidebar");
-const sidebarExpand = document.querySelector(".expand_sidebar");
-sidebarOpen.addEventListener("click", () => sidebar.classList.toggle("close"));
-
-sidebarClose.addEventListener("click", () => {
-  sidebar.classList.add("close", "hoverable");
-});
-sidebarExpand.addEventListener("click", () => {
-  sidebar.classList.remove("close", "hoverable");
-});
-
-sidebar.addEventListener("mouseenter", () => {
-  if (sidebar.classList.contains("hoverable")) {
-    sidebar.classList.remove("close");
-  }
-});
-sidebar.addEventListener("mouseleave", () => {
-  if (sidebar.classList.contains("hoverable")) {
-    sidebar.classList.add("close");
-  }
-});
-
-darkLight.addEventListener("click", () => {
-  body.classList.toggle("dark");
-  if (body.classList.contains("dark")) {
-    document.setI
-    darkLight.classList.replace("bx-sun", "bx-moon");
-  } else {
-    darkLight.classList.replace("bx-moon", "bx-sun");
-  }
-});
-
-submenuItems.forEach((item, index) => {
-  item.addEventListener("click", () => {
-    item.classList.toggle("show_submenu");
-    submenuItems.forEach((item2, index2) => {
-      if (index !== index2) {
-        item2.classList.remove("show_submenu");
-      }
-    });
-  });
-});
-
-if (window.innerWidth < 768) {
-  sidebar.classList.add("close");
-} else {
-  sidebar.classList.remove("close");
-}
-
+            // Instantiate and draw the chart, passing in some options
+            var chart = new google.visualization.PieChart(document.getElementById('piechart'));
+            chart.draw(data, options);
+        }
     </script>
-  </body>
-</html>
+	<style>
+	
+	</style>
+</head>
+<body>
+	<?php include 'templates/loading_screen.php' ?>
+
+	<div class="wrapper">
+		<!-- Main Header -->
+		<?php include 'templates/main-header.php' ?>
+		<!-- End Main Header -->
+
+		<!-- Sidebar -->
+		<?php include 'templates/sidebar.php' ?>
+		<!-- End Sidebar -->
+
+		<div class="main-panel">
+			<div class="content">
+				<div class="panel-header bg-transparent">
+					<div class="page-inner">
+						<div class="d-flex align-items-left align-items-md-center flex-column flex-md-row">
+							<div>
+								<h2 class="text-black fw-bold"> Dashboard</h2>
+								<?php if(isset($_SESSION['message'])): ?>
+							<div class="alert alert-<?= $_SESSION['success']; ?> <?= $_SESSION['success']=='danger' ? 'bg-danger text-light' : null ?>" role="alert">
+								<?php echo $_SESSION['message']; ?>
+							</div>
+						<?php unset($_SESSION['message']); ?>
+						<?php endif ?>
+								<div > <hr>
+								<h4 class="text-black fw-regular ">Cute ko</h4>
+								<div class="btn-container">
+    <a href="#" class="btn"><i class="fas fa-user icon" style="margin-right: 8px;"> </i><?= $totalapp ?>  Verified  Account </a>
+    <a href="#" class="btn"><i class="fas fa-users icon" style="margin-right: 8px;"></i><?= $totalapp ?>  Not Verified  Account </a>
+	<a href="#" class="btn"><i class="fas fa-users icon" style="margin-right: 8px;"></i><?= $totalapp ?>  Complaints/ Concerns </a>
+	<a href="#" class="btn"><i class="fas fa-users icon" style="margin-right: 8px;"></i><?= $totalapp ?>  staff </a>
+	<a href="#" class="btn"><i class="fas fa-users icon" style="margin-right: 8px;"></i><?= $totaleduc ?>  Educational Assistance Provided </a>
+</div>
+
+
+								<div > <hr>
+								<h4 class="text-black fw-regular ">Educational Assistance for SY: <?= $sy ?> for <?= $sem ?>  Report</h4>
+							</div>
+							</div>
+						</div>
+					</div>
+				
+				</div>
+				<div class="page-inner mt--2">
+				
+					<div class="row">
+					<div class="col-md-3">
+                <div class="card card-stats card-primary card-round">
+                    <div class="card-body">
+                        <div class="row">
+                            <div class="col-12 ">
+                                <div class="icon-big text-center">
+                                    <i class="flaticon-users"></i>
+                                </div>
+                            </div>
+                            <div class="col-12 ">
+                                <div class="numbers mt-2">
+                                    <h6 class="fw-bold text-uppercase text-center"><?= $totalapp ?> Applicants</h6>
+									<a href="resident_info.php?state=all" class="card-link text-light" style="text-align: left;">view</a>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                   
+                </div>
+            </div>
+			<div class="col-md-3">
+                <div class="card card-stats card-warning card-round">
+                    <div class="card-body">
+                        <div class="row">
+                            <div class="col-12 ">
+                                <div class="icon-big text-center">
+                                    <i class="flaticon-users"></i>
+                                </div>
+                            </div>
+                            <div class="col-12 ">
+                                <div class="numbers mt-2">
+                                    <h6 class="fw-bold text-uppercase text-center"><?= $pending ?> Pending</h6>
+									<a href="resident_info.php?state=all" class="card-link text-light" style="text-align: left;">view</a>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                   
+                </div>
+            </div>
+						
+			<div class="col-md-3">
+                <div class="card card-stats card-secondary card-round">
+                    <div class="card-body">
+                        <div class="row">
+                            <div class="col-12 ">
+                                <div class="icon-big text-center">
+                                    <i class="flaticon-users"></i>
+                                </div>
+                            </div>
+                            <div class="col-12 ">
+                                <div class="numbers mt-2">
+                                    <h6 class="fw-bold text-uppercase text-center"><?= $approved ?> Approved</h6>
+									<a href="resident_info.php?state=all" class="card-link text-light" style="text-align: left;">view</a>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                   
+                </div>
+            </div>
+			<div class="col-md-3">
+                <div class="card card-stats card-danger card-round">
+                    <div class="card-body">
+                        <div class="row">
+                            <div class="col-12 ">
+                                <div class="icon-big text-center">
+                                    <i class="flaticon-users"></i>
+                                </div>
+                            </div>
+                            <div class="col-12 ">
+                                <div class="numbers mt-2">
+                                    <h6 class="fw-bold text-uppercase text-center"><?= $rejected ?> Rejected</h6>
+									<a href="resident_info.php?state=all" class="card-link text-light" style="text-align: left;">view</a>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                   
+                </div>
+            </div>
+					</div>
+					<div class="row">
+        <div class="col-md-6 offset-md-4">
+            <div class="card">
+                <div class="card-header">
+                    Applicants Per Barangay
+                </div>
+                <div class="card-body">
+                    <div id="piechart_3d" style="width: 100%; height: 450px;"></div>
+                </div>
+            </div>
+        </div>
+    </div>
+	
+				
+					<div class="row">
+						<div class="col-md-12">
+							<div class="card">
+								<div class="card-header">
+									<div class="card-head-row">
+										<div class="card-title fw-bold">waiting</div>
+									</div>
+								</div>
+								<div class="card-body">
+								<div class="container-fluid mt-5">
+   
+
+</div>
+								</div>
+							</div>
+						</div>
+					</div>
+				</div>
+			</div>
+			<script type="text/javascript">
+    google.charts.load("current", {packages:["corechart"]});
+    google.charts.setOnLoadCallback(drawChart);
+
+    function drawChart() {
+        var data = google.visualization.arrayToDataTable(<?php echo json_encode($dataArray); ?>);
+
+        var options = {
+            title: 'Applicants Per Barangay',
+            is3D: true,
+        };
+
+        var chart = new google.visualization.PieChart(document.getElementById('piechart_3d'));
+        chart.draw(data, options);
+    }
+</script>
+			<!-- Main Footer -->
+			<?php include 'templates/main-footer.php' ?>
+			<!-- End Main Footer -->
+			
+		</div>
+		
+	</div>
+	<?php include 'templates/footer.php' ?>
+</body>
+</html><?php }?>

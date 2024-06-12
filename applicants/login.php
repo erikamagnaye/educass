@@ -1,6 +1,6 @@
 <?php 
 	session_start(); 
-	if(isset($_SESSION['username'])){
+	if(isset($_SESSION['name'])){
 		header('Location: dashboard.php');
 	}
 ?>
@@ -51,10 +51,15 @@
 					</div>
 					<div class="my-2 d-flex justify-content-between align-items-center">
                     <a href="createacc.php" class="auth-link text-black"> Create Account</a>
-						<a href="forgot-password.php" class="auth-link text-black">Forgot password?</a>
+						<a href="forgot-pass.php" class="auth-link text-black">Forgot password?</a>
 					</div><br>
 					<div class="form-action mb-3">
 						<button type="submit" class="btn btn-primary btn-rounded btn-login">Login</button>
+                        <br>
+                     	</div>
+                         <div class=" align-items-center text-center">
+                    <a href="index.php" class="auth-link text-red" style="color: red;"> Cancel</a>
+						
 					</div>
                 </form>
 			</div>

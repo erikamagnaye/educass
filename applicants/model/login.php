@@ -6,7 +6,7 @@
    //$password	= sha1($conn->real_escape_string($_POST['password']));
    $password = md5($_POST['password']);
 
-
+//
 	if($email != '' AND $password != ''){
 		$query 		= "SELECT * FROM `student`  WHERE email = '$email' AND password = '$password' ";
 		
@@ -14,7 +14,7 @@
 		//
 		if($result->num_rows){
 			while ($row = $result->fetch_assoc()) {
-				$_SESSION['id'] = $row['studidid'];
+				$_SESSION['id'] = $row['studid'];
 				$_SESSION['name'] = $row['firstname'];
 				$_SESSION['email'] = $row['email'];
 				$_SESSION['avatar'] = $row['picture'];
@@ -28,12 +28,12 @@
             header('location: ../dashboard.php');
 
 		}else{
-			$_SESSION['message'] = 'Username or password is incorrect!';
+			$_SESSION['message'] = 'Invalid Credentials!';
 			$_SESSION['success'] = 'danger';
             header('location: ../login.php');
 		}
 	}else{
-		$_SESSION['message'] = 'Username or password is empty!';
+		$_SESSION['message'] = 'email or password is empty!';
 		$_SESSION['success'] = 'danger';
         header('location: ../login.php');
 	}
