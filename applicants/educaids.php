@@ -9,39 +9,10 @@ if (strlen($_SESSION['id'] == 0)) {
 	header('location:login.php');
     exit();
 }
-// staet of code to digitally update status of educ assistance
-$currentDate = date('Y-m-d');
-$newStatus = 'Closed'; // The status you want to set when the end date is reached
-
-// Select all entries with a due date less than the current date
-$selectQuery = "SELECT educid FROM `educ aids` WHERE `end` < ?";
-$stmtSelect = $conn->prepare($selectQuery);
-$stmtSelect->bind_param("s", $currentDate);
-$stmtSelect->execute();
-$result = $stmtSelect->get_result();
-
-// Update the status of each entry found
-if ($result->num_rows > 0) {
-    $updateQuery = "UPDATE `educ aids` SET `status` = ? WHERE educid = ?";
-    $stmtUpdate = $conn->prepare($updateQuery);
-
-    while ($row = $result->fetch_assoc()) {
-        $id = $row['educid'];
-        $stmtUpdate->bind_param("si", $newStatus, $id);
-        $stmtUpdate->execute();
-    }
-
-    $stmtUpdate->close();
-    //echo "Statuses updated successfully.";
-}// else {
-   // echo "No records to update.";
-//}
-
-$stmtSelect->close();
 
 
 
-//end of code to update educ ass digitally
+
 
 ?>
 <!DOCTYPE html>
@@ -49,9 +20,60 @@ $stmtSelect->close();
 <head>
 	<?php include 'templates/header.php' ?>
 	<title>Educational Assistance</title>
-   
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
 
+<style>
+ /* Default font size for body */
+.content h2{
+    font-size: 20px;
+}
 
+        /* Font size for small devices (phones, less than 600px) */
+        @media (max-width: 600px) {
+       
+            .card-title, h2, .table th, .table td {
+                font-size: 9px;
+            }
+            .btn {
+                font-size: 9px;
+            }
+        }
+
+        /* Font size for medium devices (tablets, 600px and up) */
+        @media (min-width: 600px) and (max-width: 768px) {
+          
+            .card-title, h2, .table th, .table td {
+                font-size: 12px;
+            }
+            .btn {
+                font-size: 12px;
+            }
+        }
+
+        /* Font size for large devices (desktops, 768px and up) */
+        @media (min-width: 768px) and (max-width: 992px) {
+            body {
+                font-size: 16px;
+            }
+            .card-title, h2, .table th, .table td {
+                font-size: 14px;
+            }
+            .btn {
+                font-size: 14px;
+            }
+        }
+
+        /* Font size for extra large devices (large desktops, 992px and up) */
+        @media (min-width: 992px) {
+         
+            .card-title, h2, .table th, .table td {
+                font-size: 14px;
+            }
+            .btn {
+                font-size: 14px;
+            }
+        }
+</style>
 </head>
 <body>
 	<?//php include 'templates/loading_screen.php' ?>
@@ -101,29 +123,16 @@ $stmtSelect->close();
 							<div class="card">
 								<div class="card-header">
 									<div class="card-head-row">
-										<div class="card-title">Educational Assistance Provided</div>
+										<div class="card-title">Available Educational Assistance </div>
 										
-											<div class="card-tools">
-                                            <a href="viewprinteduc.php" class="btn btn-success btn-border btn-round btn-sm" title="view and print">
-												<i class="fa fa-eye"></i>
-												View
-											</a>
-                                            <a href="model/export_educprovided_csv.php" class="btn btn-danger btn-border btn-round btn-sm" title="Download">
-												<i class="fa fa-file"></i>
-												Export CSV
-											</a>
-												<a href="#add" data-toggle="modal" class="btn btn-info btn-border btn-round btn-sm" title="Post Assistance">
-													<i class="fa fa-plus"></i>
-													Post New assistance
-												</a>
-											</div>
+									
 									
 									</div>
 								</div>
 								<div class="card-body">
 									<div class="table-responsive">
 										<table class="table table-striped">
-											<thead>
+											<!--<thead>
 												<tr>
 													<th scope="col">Title</th>
 													<th scope="col">Semester</th>
@@ -132,10 +141,10 @@ $stmtSelect->close();
 													<th>Action</th>
 													
 												</tr>
-											</thead>
+											</thead>  -->
 											<tbody>
                           <?php 
-                                    $query = "SELECT * FROM `educ aids` order by `date` desc"; // SQL query to fetch all table data
+                                    $query = "SELECT * FROM `educ aids` where status = 'Open' order by `date` desc"; // SQL query to fetch all table data
                                     $view_data = mysqli_query($conn, $query); // sending the query to the database
 
                                     // displaying all the data retrieved from the database using while loop
@@ -152,27 +161,13 @@ $stmtSelect->close();
                                     ?>
                                   <tr>
                                         <td class="text-uppercase"><?php echo htmlspecialchars($title); ?></td>
-                                        <td><?php echo htmlspecialchars($sem); ?></td>
-                                        <td><?php echo htmlspecialchars($sy); ?></td>
-                                        <td><?php echo htmlspecialchars($status); ?></td>
+                                        <td><?php echo htmlspecialchars($sem);?> SY: <?php echo htmlspecialchars($sy); ?></td>
+                                         <td>Until <?php echo htmlspecialchars($end); ?></td>
                                         <td>
-                                            <a type="button" href="edit_educ.php?update&educid=<?php echo $educid; ?>"   class="btn btn-link btn-success" 
-                                                title="Edit Data">
-                                                <i class="fa fa-edit"></i>
-
-                                            </a>
-                                                <a type="button" href="javascript:void(0);" 
-                                                onclick="confirmDeletion(<?php echo $educid; ?>)" 
-                                                class="btn btn-link btn-danger" title="Remove">
-                                                <i class="fa fa-times"></i>
-                                                </a>
-                                                <script>
-                                                    function confirmDeletion(educid) {
-                                                        if (confirm('Are you sure you want to delete this record?')) {
-                                                            window.location.href = 'remove_educass.php?deleteid=' + educid + '&confirm=true';
-                                                        }
-                                                    }
-                                                    </script>
+                                        <a href="apply_educ.php?educid=<?php echo $educid; ?>" class="btn btn-success btn-circle">
+                                                    <i class="fa fa-check"></i> Apply
+                                                    </a>
+                                            
                                         </td>
                                     </tr>
                                     <?php } ?>
@@ -185,6 +180,70 @@ $stmtSelect->close();
 								</div>
 							</div>
 						</div>
+<!-- PREVIOUS EDUC ASS -->
+<div class="col-md-12">
+						
+                        <div class="card">
+                            <div class="card-header">
+                                <div class="card-head-row">
+                                    <div class="card-title">Previous Educational Assistance </div>
+                                    
+                                
+                                
+                                </div>
+                            </div>
+                            <div class="card-body">
+                                <div class="table-responsive">
+                                    <table class="table table-striped">
+                                        <!--<thead>
+                                            <tr>
+                                                <th scope="col">Title</th>
+                                                <th scope="col">Semester</th>
+                                                <th scope="col">School Year</th>
+                                                <th>Status</th>
+                                                <th>Action</th>
+                                                
+                                            </tr>
+                                        </thead>  -->
+                                        <tbody>
+                      <?php 
+                                $query = "SELECT * FROM `educ aids` where status = 'Closed' order by `date` desc"; // SQL query to fetch all table data
+                                $view_data = mysqli_query($conn, $query); // sending the query to the database
+
+                                // displaying all the data retrieved from the database using while loop
+                                while ($row = mysqli_fetch_assoc($view_data)) {
+                                    $educid = $row['educid'];                
+                                    $title = $row['educname'];        
+                                    $sem = $row['sem'];         
+                                    $sy = $row['sy'];  
+                                    $status = $row['status'];           
+                                    $start = $row['start'];        
+                                    $end = $row['end'];         
+                                    $date = $row['date'];  
+                                    $min_grade = $row['min_grade'];  
+                                ?>
+                              <tr>
+                                    <td class="text-uppercase"><?php echo htmlspecialchars($title); ?></td>
+                                    <td><?php echo htmlspecialchars($sem);?> SY: <?php echo htmlspecialchars($sy); ?></td>
+                                    <td> Until <?php echo htmlspecialchars($end); ?></td>
+                                    <td>
+                                    <a  class="btn btn-danger btn-circle text-white">
+                                                <i class="fa fa-times"></i> Closed
+                                                </a>
+                                        
+                                    </td>
+                                </tr>
+                                <?php } ?>
+
+</tbody>
+
+                                    
+                                    </table>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
 					</div>
 				</div>
 			</div>

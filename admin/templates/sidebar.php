@@ -3,7 +3,7 @@ if (strlen($_SESSION['id'] == 0)){
 	header('location:login.php');
     exit();
 }
-
+else {
 $id = $_SESSION['id'] ;
 		$query 		= "SELECT * FROM `admin` join staff on staff.staffid=admin.empid WHERE adminid= '$id'";
 		$result 	= $conn->query($query);
@@ -213,4 +213,4 @@ $current_page = PageName();
             </ul>
         </div>
     </div>
-</div>
+</div><?php }?>

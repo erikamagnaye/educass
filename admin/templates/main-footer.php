@@ -1,3 +1,12 @@
+<?php 
+if (strlen($_SESSION['id'] == 0)) {
+	header('location:login.php');
+    exit();
+}
+else {
+    ?>
+
+
 <footer class="footer text-center">
     <div class="container-fluid">
         <div class="copyright ml-auto">
@@ -234,4 +243,4 @@
             </form>
         </div>
     </div>
-</div>
+</div><?php }?>

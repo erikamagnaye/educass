@@ -1,5 +1,11 @@
-<?php //include 'model/fetch_brgy_info.php' ?>
+<?php //include 'model/fetch_brgy_info.php' 
 
+if (strlen($_SESSION['id'] == 0)) {
+	header('location:login.php');
+    exit();
+}
+
+else { ?>
 <div class="main-header">
     <!-- Logo Header -->
     <div class="logo-header" data-background-color="green">
@@ -47,4 +53,4 @@
         </div>
     </nav>
     <!-- End Navbar -->
-</div>
+</div> <?php }?>

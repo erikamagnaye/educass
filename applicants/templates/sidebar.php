@@ -1,9 +1,11 @@
 <?php // function to get the current page name
-if (strlen($_SESSION['id'] == 0)){
+
+if (strlen($_SESSION['id'] == 0)) {
 	header('location:login.php');
     exit();
 }
 
+else{
 $id = $_SESSION['id'] ;
 		$query 		= "SELECT * FROM `student` WHERE studid= '$id'";
 		$result 	= $conn->query($query);
@@ -21,7 +23,7 @@ $id = $_SESSION['id'] ;
 				//$role = $row['position'];
 			}
 			}
-function PageName() {
+function PageName() { //return the file name of the current PHP script, without the directory path.
   return substr( $_SERVER["SCRIPT_NAME"], strrpos($_SERVER["SCRIPT_NAME"],"/") +1);
 }
 
@@ -33,9 +35,9 @@ $current_page = PageName();
             <div class="user">
                 <div class="avatar-sm float-left mr-2">
                     <?php if(!empty($_SESSION['avatar'])): ?>
-                        <img src="<?= preg_match('/data:image/i', $_SESSION['avatar']) ? $_SESSION['avatar'] : 'assets/uploads/avatar/'.$_SESSION['avatar'] ?>" alt="..." class="avatar-img rounded-circle">
+                        <img src="<?= preg_match('/data:image/i', $_SESSION['avatar']) ? $_SESSION['avatar'] : 'assets/uploads/applicant_Profile/'.$_SESSION['avatar'] ?>" alt="..." class="avatar-img rounded-circle">
                     <?php else: ?>
-                        <img src="assets/img/person.png" alt="..." class="avatar-img rounded-circle">
+                        <img src="assets/img/logo.png" alt="..." class="avatar-img rounded-circle">
                     <?php endif ?>
                    
                 </div>
@@ -76,8 +78,8 @@ $current_page = PageName();
                     </span>
                     <h4 class="text-section">Menu</h4>
                 </li>
-                <li class="nav-item <?= $current_page=='educass.php' || $current_page=='viewprinteduc.php' ? 'active' : null ?>">
-                    <a href="educass.php">
+                <li class="nav-item <?= $current_page=='educaids.php' || $current_page=='viewprinteduc.php' ? 'active' : null ?>">
+                    <a href="educaids.php">
                         <i class="fas fa-user-tie"></i>
                         <p>Educational Aids</p>
                     </a>
@@ -103,25 +105,14 @@ $current_page = PageName();
                 <li class="nav-item <?= $current_page=='staff.php'  ? 'active' : null ?>">
                     <a href="staff.php">
                         <i class="icon-docs"></i>
-                        <p>staff</p>
+                        <p>Profile</p>
                     </a>
                 </li>
-                <li class="nav-item <?= $current_page=='applicants.php'  ? 'active' : null ?>">
-                    <a href="applicants.php">
-                        <i class="icon-doc"></i>
-                        <p>Applicants</p>
-                    </a>
-                </li>
-                <li class="nav-item <?= $current_page=='reports.php' ? 'active' : null ?>">
-                    <a href="reports.php">
-                        <i class="icon-layers"></i>
-                        <p>Reports</p>
-                    </a>
-                </li>
+               
               
               
                 
             </ul>
         </div>
     </div>
-</div>
+</div><?php }?>

@@ -1,7 +1,7 @@
-<footer class="footer">
+<footer class="footer text-center">
     <div class="container-fluid">
         <div class="copyright ml-auto">
-            2021 &copy Barangay Management System
+            2024 &copy Web-Based Educational Assistance Application System for San Antonio, Quezon
         </div>				
     </div>
 </footer>
@@ -125,7 +125,7 @@
     </div>
 </div>
 
-<!-- Modal -->
+<!-- Modal  TO CHANGE PASSWORD-->
 <div class="modal fade" id="changepass" tabindex="-1" role="dialog" aria-labelledby="myLargeModalLabel" aria-hidden="true">
     <div class="modal-dialog" role="document">
         <div class="modal-content">
@@ -137,10 +137,11 @@
             </div>
             <div class="modal-body">
                 <form method="POST" action="model/change_password.php">
-                    <div class="form-group">
+                 <!--   <div class="form-group">
                         <label>Username</label>
                         <input type="text" class="form-control" placeholder="Enter Name" readonly name="username" value="<?= $_SESSION['username'] ?>" required >
-                    </div>
+                    </div> 
+-->
                     <div class="form-group form-floating-label">
                         <label>Current Password</label>
                         <input type="password" id="cur_pass" class="form-control" placeholder="Enter Current Password" name="cur_pass" required >
@@ -192,12 +193,12 @@
         </div>
     </div>
 </div>
- <!-- Modal -->
+ <!-- EDIT PROFILE Modal -->
  <div class="modal fade" id="edit_profile" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
     <div class="modal-dialog" role="document">
         <div class="modal-content">
             <div class="modal-header">
-                <h5 class="modal-title" id="exampleModalLabel">Create System User</h5>
+                <h5 class="modal-title" id="exampleModalLabel">Edit Profile Picture</h5>
                 <button type="button" class="close" data-dismiss="modal" aria-label="Close">
                     <span aria-hidden="true">&times;</span>
                 </button>
@@ -210,7 +211,7 @@
                             <?php if(empty($_SESSION['avatar'])): ?>
                                 <img src="assets/img/person.png" alt="..." class="img img-fluid" width="250" >
                             <?php else: ?>
-                                <img src="<?= preg_match('/data:image/i', $_SESSION['avatar']) ? $_SESSION['avatar'] : 'assets/uploads/avatar/'.$_SESSION['avatar'] ?>" alt="..." class="img img-fluid" width="250" >
+                                <img src="<?= preg_match('/data:image/i', $_SESSION['avatar']) ? $_SESSION['avatar'] : 'assets/uploads/applicant_profile/'.$_SESSION['avatar'] ?>" alt="..." class="img img-fluid" width="250" >
                             <?php endif ?>
                         </div>
                         <div class="form-group d-flex justify-content-center">
