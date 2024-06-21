@@ -9,6 +9,7 @@ if (strlen($_SESSION['id'] == 0)) {
 	header('location:login.php');
     exit();
 }
+else {
 // staet of code to digitally update status of educ assistance
 $currentDate = date('Y-m-d');
 $newStatus = 'Closed'; // The status you want to set when the end date is reached
@@ -318,4 +319,4 @@ $stmtSelect->close();
 	<?php include 'templates/footer.php' ?>
    
 </body>
-</html>
+</html><?php }?>

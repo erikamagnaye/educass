@@ -167,7 +167,7 @@ label {
               
                             <form method="POST" action=" " enctype="multipart/form-data">
                             <input type="hidden" name="size" value="1000000">
-                          <!--   <div class="row">
+                          <!-- --  <div class="row">
                               <div class="col-md-4">
                                     <div style="width: 200px; height: 150;" class="text-center" id="my_camera">
                                         <img src="assets/img/person.png" alt="..." class="img img-fluid circle-img" width="200" height="150" >
