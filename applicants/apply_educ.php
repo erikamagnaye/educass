@@ -20,7 +20,8 @@ if (strlen($_SESSION['id'] == 0)) {
 <head>
 	<?php include 'templates/header.php' ?>
 	<title>Educational Assistance</title>
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+   <!-- <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css"> -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.1.1/css/all.min.css" />
 
 <style>
  /* Default font size for body */
@@ -242,24 +243,32 @@ select.list-dt:focus {
 }
 
 /*Icons in the ProgressBar*/
-#progressbar #account:before {
-    font-family: FontAwesome;
-    content: "\f023";
-}
-
-#progressbar #personal:before {
+#progressbar #information:before {
     font-family: FontAwesome;
     content: "\f007";
 }
 
-#progressbar #payment:before {
+#progressbar #course:before {
     font-family: FontAwesome;
-    content: "\f09d";
+    content: "\f19d";
+}
+
+#progressbar #grades:before {
+    font-family: FontAwesome;
+    content: "\f559";
+}
+#progressbar #parents:before {
+    font-family: FontAwesome;
+    content: "\f0c0";
+}
+#progressbar #requirements:before {
+    font-family: FontAwesome;
+    content: "\f15c";
 }
 
 #progressbar #confirm:before {
     font-family: FontAwesome;
-    content: "\f00c";
+    content: "\f46c";
 }
 
 /*ProgressBar before any progress*/
@@ -365,23 +374,7 @@ button {
 					</div>
 				</div>
 				<div class="page-inner">
-					<?php if(isset($_SESSION['message'])): ?>
-							<div class="alert alert-<?php echo $_SESSION['success']; ?> <?= $_SESSION['success']=='danger' ? 'bg-danger text-light' : null ?>" role="alert">
-								<?php echo $_SESSION['message']; ?>
-							</div>
-                            <!-- MESSAGE WHEN DATA IS INSERTED __-->
-                            
-                            <?php 
-                            /*if (isset($_SESSION['message']) && $_SESSION['message'] != ''){ ?>                                                         ?>
-                      <!--  <div class="alert alert-success alert-dismissible fade show" role="alert">
-                        <strong>Hello!</strong><?//php echo $_SESSION['message']; ?>
-                        <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
-                        </div> -->
-                            
-						<?php unset($_SESSION['message']);  //}*/ ?> 
-                       
-
-						<?php endif ?>
+				
 					<div class="row mt--2">
 						
 						<div class="col-md-12">
@@ -408,11 +401,11 @@ button {
                         <form id="msform">
                             <!-- progressbar -->
                             <ul id="progressbar">
-                                <li class="active" id="account"><strong>Information</strong></li>
-                                <li id="personal"><strong>Course</strong></li>
-                                <li id="payment"><strong>Grades</strong></li>
-								<li id="personal"><strong>Parents</strong></li>
-                                <li id="payment"><strong>Requirements</strong></li>
+                                <li class="active" id="information"><strong>Information</strong></li>
+                                <li id="course"><strong>Course</strong></li>
+                                <li id="grades"><strong>Grades</strong></li>
+								<li id="parents"><strong>Parents</strong></li>
+                                <li id="requirements"><strong>Requirements</strong></li>
                                 <li id="confirm"><strong>Finish</strong></li>
                             </ul>
                             <!-- fieldsets -->
@@ -517,7 +510,10 @@ button {
                                         </div>
                                     </div>
 								</div>
-                                <input type="button" name="next" class="next action-button" value="Next Step"/>
+                               
+                               
+                                <a  class="next action-button btn btn-primary btn-circle "  name="next"><i class="fa-solid fa-forward"></i> Next
+                                 </a>
                             </fieldset>
                             <fieldset>
                                 <div class="form-card">
@@ -545,9 +541,12 @@ button {
                                         </div>
                                     </div>
 								 </div>
-								
-                                <input type="button" name="previous" class="previous action-button-previous" value="Previous"/>
-                                <input type="button" name="next" class="next action-button" value="Next Step"/>
+							
+
+                                <a  class="previous action-button-previous btn btn-warning btn-circle "  name="previous"><i class="fa-solid fa-backward"></i> Back
+                                 </a>
+                                 <a  class="next action-button btn btn-primary btn-circle "  name="next"><i class="fa-solid fa-forward"></i> Next
+                                 </a>
                             </fieldset>
                             <fieldset>
                                 <div class="form-card" style="background-color:#F7F9F2;">
@@ -565,8 +564,13 @@ button {
                                   
                                 </div>
                               
-								<input type="button" name="previous" class="previous action-button-previous" value="Previous"/>
+							<!--	<input type="button" name="previous" class="previous action-button-previous" value="Previous"/>
                                 <input type="button" name="make_payment" class="next action-button" value="Next Step"/>
+-->
+                                <a  class="previous action-button-previous btn btn-warning btn-circle "  name="previous"><i class="fa-solid fa-backward"></i> Back
+                                 </a>
+                                 <a  class="next action-button btn btn-primary btn-circle "  name="grades"><i class="fa-solid fa-forward"></i> Next
+                                 </a>
                             </fieldset>
                             <fieldset>
                                 <div class="form-card">
@@ -628,8 +632,13 @@ button {
                                     </div>
                                 </div>
 
-								<input type="button" name="previous" class="previous action-button-previous" value="Previous"/>
+							<!--	<input type="button" name="previous" class="previous action-button-previous" value="Previous"/>
                                 <input type="button" name="make_payment" class="next action-button" value="Next Step"/>
+                            -->
+                                <a  class="previous action-button-previous btn btn-warning btn-circle "  name="previous"><i class="fa-solid fa-backward"></i> Back
+                                 </a>
+                                 <a  class="next action-button btn btn-primary btn-circle "  name="parents"><i class="fa-solid fa-forward"></i> Next
+                                 </a>
                             </fieldset>
                             <fieldset>
                                 <div class="form-card" style="background-color:#F7F9F2;">
@@ -663,20 +672,29 @@ button {
                                   
                                 </div>
 
-								<input type="button" name="previous" class="previous action-button-previous" value="Previous"/>
+							<!--	<input type="button" name="previous" class="previous action-button-previous" value="Previous"/>
                                 <input type="button" name="make_payment" class="next action-button" value="Next Step"/>
+-->
+                                <a  class="previous action-button-previous btn btn-warning btn-circle "  name="previous"><i class="fa-solid fa-backward"></i> Back
+                                 </a>
+                                 <a  class="next action-button btn btn-primary btn-circle "  name="requirements"><i class="fa-solid fa-forward"></i> Next
+                                 </a>
                             </fieldset>
                             <fieldset>
                                 <div class="form-card">
                                     <h2 class="fs-title text-center">Finish !</h2>
                                     <br><br>
                                     <div class="row justify-content-center">
-                                        <p>I hereby certify that all information and requirements submitted in this application are true and correct</p>
+                                        <p>I hereby certify that all information and requirements submitted in this application are true and correct otherwise it will be disregarded</p>
                                     </div>
                                     <br><br>
                               
                                 </div>
-                                <input type="button" name="previous" class="previous action-button-previous" value="Previous"/>
+                            <!--    <input type="button" name="previous" class="previous action-button-previous" value="Previous"/>
+                            -->
+                                <a  class="previous action-button-previous btn btn-warning btn-circle "  name="previous"><i class="fa-solid fa-backward"></i> Back
+                                 </a>
+                                
                                 <a href="apply_educ.php?educid=<?php echo $educid; ?>" class="btn btn-success btn-circle">
                                                     <i class="fa fa-check"></i> Submit
                                                     </a>
@@ -710,6 +728,7 @@ button {
 		
 	</div>
 	<?php include 'templates/footer.php' ?>
+   
 	<script>
     $(document).ready(function(){
     

@@ -9,6 +9,35 @@ if (strlen($_SESSION['id'] == 0)) {
 	header('location:login.php');
     exit();
 }
+else {
+    $currentDate = date('Y-m-d');
+    $newStatus = 'Closed'; // The status you want to set when the end date is reached
+    
+    // Select all entries with a due date less than the current date
+    $selectQuery = "SELECT educid FROM `educ aids` WHERE `end` < ?";
+    $stmtSelect = $conn->prepare($selectQuery);
+    $stmtSelect->bind_param("s", $currentDate);
+    $stmtSelect->execute();
+    $result = $stmtSelect->get_result();
+    
+    // Update the status of each entry found
+    if ($result->num_rows > 0) {
+        $updateQuery = "UPDATE `educ aids` SET `status` = ? WHERE educid = ?";
+        $stmtUpdate = $conn->prepare($updateQuery);
+    
+        while ($row = $result->fetch_assoc()) {
+            $id = $row['educid'];
+            $stmtUpdate->bind_param("si", $newStatus, $id);
+            $stmtUpdate->execute();
+        }
+    
+        $stmtUpdate->close();
+        //echo "Statuses updated successfully.";
+    }// else {
+       // echo "No records to update.";
+    //}
+    
+    $stmtSelect->close();
 
 
 
@@ -377,4 +406,4 @@ if (strlen($_SESSION['id'] == 0)) {
 	<?php include 'templates/footer.php' ?>
    
 </body>
-</html>
+</html><?php }?>
