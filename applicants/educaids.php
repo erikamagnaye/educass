@@ -102,6 +102,57 @@ else {
                 font-size: 14px;
             }
         }
+        /* Add this to your CSS file */
+
+/* For small cellphone sizes (max-width: 320px) */
+@media (max-width: 320px) {
+  .table-responsive {
+    overflow-x: auto; /* Add horizontal scrolling if table is too wide */
+  }
+  .table-responsive table {
+    margin-right: 2px; /* Reduce margin right to 5px */
+  }
+}
+
+/* For medium cellphone sizes (max-width: 480px) */
+@media (max-width: 480px) {
+  .table-responsive {
+    overflow-x: auto; /* Add horizontal scrolling if table is too wide */
+  }
+  .table-responsive table {
+    margin-right: 2px; /* Reduce margin right to 10px */
+  }
+}
+
+/* For large cellphone sizes (max-width: 640px) */
+@media (max-width: 640px) {
+  .table-responsive {
+    overflow-x: auto; /* Add horizontal scrolling if table is too wide */
+  }
+  .table-responsive table {
+    margin-right: 4px; /* Reduce margin right to 15px */
+  }
+}
+
+/* For tablet sizes (max-width: 768px) */
+@media (max-width: 768px) {
+  .table-responsive {
+    overflow-x: auto; /* Add horizontal scrolling if table is too wide */
+  }
+  .table-responsive table {
+    margin-right: 5px; /* Reduce margin right to 20px */
+  }
+}
+
+/* For desktop sizes (min-width: 992px) */
+@media (min-width: 992px) {
+  .table-responsive {
+    overflow-x: hidden; /* Remove horizontal scrolling */
+  }
+  .table-responsive table {
+    margin-right:5px; /* Reset margin right to 30px */
+  }
+}
 </style>
 </head>
 <body>
@@ -161,16 +212,16 @@ else {
 								<div class="card-body">
 									<div class="table-responsive">
 										<table class="table table-striped">
-											<!--<thead>
+										<thead>
 												<tr>
-													<th scope="col">Title</th>
+													<th scope="col">Assistance</th>
 													<th scope="col">Semester</th>
-													<th scope="col">School Year</th>
+													<th scope="col">Due</th>
 													<th>Status</th>
-													<th>Action</th>
+													
 													
 												</tr>
-											</thead>  -->
+											</thead> 
 											<tbody>
                           <?php 
                                     $query = "SELECT * FROM `educ aids` where status = 'Open' order by `date` desc"; // SQL query to fetch all table data
@@ -189,11 +240,11 @@ else {
                                         $min_grade = $row['min_grade'];  
                                     ?>
                                   <tr>
-                                        <td class="text-uppercase"><?php echo htmlspecialchars($title); ?></td>
-                                        <td><?php echo htmlspecialchars($sem);?> SY: <?php echo htmlspecialchars($sy); ?></td>
-                                         <td>Until <?php echo htmlspecialchars($end); ?></td>
+                                        <td><?php echo htmlspecialchars($title); ?></td>
+                                        <td><?php echo htmlspecialchars($sem);?></td>
+                                         <td><?php echo htmlspecialchars($end); ?></td>
                                         <td>
-                                        <a href="apply_educ.php?educid=<?php echo $educid; ?>" class="btn btn-success btn-circle">
+                                        <a href="apply_educ.php?educid=<?php echo $educid; ?>" class="btn btn-success btn-circle" style="margin: 1px;">
                                                     <i class="fa fa-check"></i> Apply
                                                     </a>
                                             
@@ -224,16 +275,16 @@ else {
                             <div class="card-body">
                                 <div class="table-responsive">
                                     <table class="table table-striped">
-                                        <!--<thead>
-                                            <tr>
-                                                <th scope="col">Title</th>
-                                                <th scope="col">Semester</th>
-                                                <th scope="col">School Year</th>
-                                                <th>Status</th>
-                                                <th>Action</th>
-                                                
-                                            </tr>
-                                        </thead>  -->
+                                       <thead>
+                                           <tr>
+													<th scope="col">Assistance</th>
+													<th scope="col">Semester</th>
+													<th scope="col">Due</th>
+													<th>Status</th>
+													
+													
+												</tr>
+                                        </thead>  
                                         <tbody>
                       <?php 
                                 $query = "SELECT * FROM `educ aids` where status = 'Closed' order by `date` desc"; // SQL query to fetch all table data
@@ -252,13 +303,13 @@ else {
                                     $min_grade = $row['min_grade'];  
                                 ?>
                               <tr>
-                                    <td class="text-uppercase"><?php echo htmlspecialchars($title); ?></td>
-                                    <td><?php echo htmlspecialchars($sem);?> SY: <?php echo htmlspecialchars($sy); ?></td>
-                                    <td> Until <?php echo htmlspecialchars($end); ?></td>
-                                    <td>
-                                    <a  class="btn btn-danger btn-circle text-white">
-                                                <i class="fa fa-times"></i> Closed
-                                                </a>
+                                    <td><?php echo htmlspecialchars($title); ?></td>
+                                    <td><?php echo htmlspecialchars($sem);?></td>
+                                    <td><?php echo htmlspecialchars($end); ?></td>
+                                    <td style="color: red;">Closed
+                                     <!-- <a  class="btn btn-danger btn-circle text-white">
+                                              <i class="fa fa-times"></i>  Closed
+                                                </a>-->
                                         
                                     </td>
                                 </tr>

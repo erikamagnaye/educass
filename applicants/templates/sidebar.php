@@ -68,7 +68,7 @@ $current_page = PageName();
             <ul class="nav nav-primary">
                 <li class="nav-item <?= $current_page=='dashboard.php'? 'active' : null ?>">
                     <a href="dashboard.php" >
-                        <i class="fas fa-home"></i>
+                        <i class="fa fa-dashboard"></i>
                         <p>Dashboard</p>
                     </a>
                 </li>
@@ -80,13 +80,13 @@ $current_page = PageName();
                 </li>
                 <li class="nav-item <?= $current_page=='educaids.php' || $current_page=='viewprinteduc.php' ? 'active' : null ?>">
                     <a href="educaids.php">
-                        <i class="fas fa-user-tie"></i>
+                        <i class="fa fa-graduation-cap"></i>
                         <p>Educational Aids</p>
                     </a>
                 </li>
                 <li class="nav-item <?= $current_page=='announcement.php' || $current_page=='generate_resident.php' ? 'active' : null ?>">
                     <a href="announcement.php">
-                        <i class="icon-people"></i>
+                        <i class="fa fa-bullhorn"></i>
                         <p>Announcement</p>
                     </a>
                 </li>
@@ -98,17 +98,22 @@ $current_page = PageName();
                 </li>
                 <li class="nav-item <?= $current_page=='messages.php'  ? 'active' : null ?>">
                     <a href="messages.php">
-                        <i class="icon-docs"></i>
+                        <i class="fa fa-comments"></i>
                         <p>Messages</p>
                     </a>
                 </li>
                 <li class="nav-item <?= $current_page=='staff.php'  ? 'active' : null ?>">
                     <a href="staff.php">
-                        <i class="icon-docs"></i>
+                        <i class="fas fa-user-tie"></i>
                         <p>Profile</p>
                     </a>
                 </li>
-               
+                <li class="nav-item ">
+                    <a href="logout.php">
+                        <i class="fa fa-power-off"></i>
+                        <p>Logout</p>
+                    </a>
+                </li>
               
               
                 

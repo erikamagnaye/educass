@@ -113,7 +113,7 @@ if (strlen($_SESSION['id'] == 0)) {
     <a href="#" class="btn"><i class="fas fa-users icon" style="margin-right: 8px;"></i><?= $pending ?>  Pending </a>
 	<a href="#" class="btn"><i class="fas fa-users icon" style="margin-right: 8px;"></i><?= $approved ?>  Approved </a>
 	<a href="#" class="btn"><i class="fas fa-users icon" style="margin-right: 8px;"></i><?= $rejected ?>  Rejected </a>
-	<a href="#" class="btn"><i class="fas fa-users icon" style="margin-right: 8px;"></i><?= $totaleduc ?>  Educational Assistance Provided </a>
+	<a href="#" class="btn"><i class="fas fa-users icon" style="margin-right: 8px;"></i><?= $totaleduc ?>  Educational Assistance </a>
 	<a href="#" class="btn"><i class="fas fa-users icon" style="margin-right: 8px;"></i><?= $totalconcerns ?>  Complaints </a>
 
 </div>

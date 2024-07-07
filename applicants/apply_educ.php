@@ -10,10 +10,31 @@ if (strlen($_SESSION['id'] == 0)) {
     exit();
 }
 
+else {
+//we need to retrieve existing information of the students so they won't have to input their info again
+$studid = $_SESSION['id'];
+$query = "SELECT * FROM `student` where studid= $studid"; // SQL query to fetch all table data
+$student_data = mysqli_query($conn, $query); // sending the query to the database
 
-
-
-
+// displaying all the data retrieved from the database using while loop
+while ($row = mysqli_fetch_assoc($stedent_data)) {
+               
+    $lastname = $row['educname'];        
+    $firstname = $row['sem'];         
+    $midname = $row['sy'];  
+    $email = $row['status'];           
+    $birthday = $row['start'];        
+    $contact_no = $row['end'];         
+    $brgy = $row['date'];  
+    $municipality = $row['min_grade']; 
+    $province = $row['sem'];         
+    $street_name = $row['sy'];  
+    $gender = $row['status'];           
+    $citizenship = $row['start'];        
+    $religion = $row['end'];         
+    $age = $row['date'];  
+    $civilstatus = $row['min_grade']; 
+}
 ?>
 <!DOCTYPE html>
 <html lang="en">
@@ -143,8 +164,8 @@ html {
     margin-top: 2px;
     width: 100%;
     box-sizing: border-box;
-    font-family: montserrat;
-    color: #2C3E50;
+    font-family: 'Times New Roman', Times, serif;
+    color: black;
     font-size: 16px;
     letter-spacing: 1px;
 }
@@ -157,6 +178,8 @@ html {
     font-weight: bold;
     border-bottom: 2px solid skyblue;
     outline-width: 0;
+
+    
 }
 
 /*Blue Buttons*/
@@ -270,7 +293,12 @@ select.list-dt:focus {
     font-family: FontAwesome;
     content: "\f46c";
 }
-
+/* Apply smaller font size on smaller screen sizes */
+@media (max-width: 768px) {
+    #progressbar:before {
+        font-size: 6px;
+    }
+}
 /*ProgressBar before any progress*/
 #progressbar li:before {
     width: 50px;
@@ -347,7 +375,23 @@ button {
   margin-top: 10px;
   
 }
+
+
 /* end... this is for input fields of Grades*/
+/* this is for the input field with select options*/
+.form-control {
+  border: none;
+  border-bottom: 1px solid #ccc; /* adjust the color and thickness as needed */
+  border-radius: 0;
+  box-shadow: none;
+  height: 40px; /* add this to make input fields consistent height */
+  padding: 10px;
+}
+
+select.form-control {
+  height: 40px; /* add this to make select options consistent height */
+  padding: 10px;
+}
 </style>
 </head>
 <body>
@@ -381,8 +425,8 @@ button {
 						
 							<div class="card">
 								<div class="card-header">
-									<div class="card-head-row">
-										<div class="card-title">Available Educational Assistance </div>
+									<div class="card-head-row text-center">
+                                    <h2 class="text-center"><strong>Submit Application </strong></h2>
 										
 									
 									
@@ -394,7 +438,7 @@ button {
   
         
             
-                <h2 class="text-center"><strong>Submit Application </strong></h2>
+                
                 <p class="text-center">Fill out all field and ensure integrity of information</p>
                 <div class="row">
                     <div class="col-md-12 mx-0">
@@ -413,7 +457,7 @@ button {
                                 <div class="form-card" style="background-color:#F7F9F2;">
                                     <h2 class="fs-title">Personal Information</h2>
                                  <!--   <input type="email" name="email" placeholder="Email Id"/> -->
-                                   	<div class="row">
+                                   	<div class="row ">
                                         <div class="col-md-4">
                                                 <input type="text" class="form-control" placeholder="Enter Firstname" name="fname" required>
                                         </div>
@@ -439,9 +483,9 @@ button {
                                         <div class="col-md-4">                                  
                                                 <input type="number" class="form-control" placeholder="Enter Age" min="1" name="age" required>                                           
                                             </div>
-                                            <div class="col-md-4">
+                                            <div class="col-md-4 mb-2" >
                                                 
-                                                <select class="form-control" name="cstatus" required>
+                                                <select class="form-control form-control-sm" name="cstatus" required>
                                                     <option disabled selected>Select Civil Status</option>
                                                     <option value="Single">Single</option>
                                                     <option value="Married">Married</option>
@@ -449,9 +493,9 @@ button {
                                                 </select>
                                            
                                         </div>
-                                        <div class="col-md-4">
+                                        <div class="col-md-4 mb-2">
                                             
-                                                <select class="form-control" required name="gender">
+                                                <select class="form-control form-control-sm" required name="gender">
                                                     <option disabled selected value="">Select Gender</option>
                                                     <option value="Male">Male</option>
                                                     <option value="Female">Female</option>
@@ -467,9 +511,9 @@ button {
                                      
                                         </div>
                                       
-                                        <div class="col-md-4">
+                                        <div class="col-md-4 mb-2">
                                             
-                                                <select class="form-control vstatus" required name="vstatus">
+                                                <select class="form-control form-control-sm vstatus" required name="vstatus">
                                                     <option disabled selected>Select Barangay</option>
                                                     <option value="Arawan">Arawan</option>
                                                     <option value="Baging Niing">Bagong Niing</option>
@@ -594,7 +638,7 @@ button {
                                                 <input type="text" class="form-control" placeholder="Educational Attainment" name="bplace" required>                                       
                                         </div>
                                         <div class="col-md-4">                                       
-                                        <select class="form-control" name="fstatus" required>
+                                        <select class="form-control form-control-sm" name="fstatus" required>
                                                     <option disabled selected>Select Status</option>
                                                     <option value="Alive">Alive</option>
                                                     <option value="Deceased">Deceased</option>
@@ -622,7 +666,7 @@ button {
                                                 <input type="text" class="form-control" placeholder="Educational Attainment" name="bplace" required>                                       
                                         </div>
                                         <div class="col-md-4">                                       
-                                        <select class="form-control" name="fstatus" required>
+                                        <select class="form-control form-control-sm" name="fstatus" required>
                                                     <option disabled selected>Select Status</option>
                                                     <option value="Alive">Alive</option>
                                                     <option value="Deceased">Deceased</option>
@@ -837,4 +881,4 @@ addButton.addEventListener('click', function() {
 });
 </script>
 </body>
-</html>
+</html><?php }?>
