@@ -32,7 +32,7 @@ else { ?>
         
         <div class="container-fluid"><span class="text-light ml-2 fw-medium" style="font-size:15px">Educational Assistance Application System for San Antonio, Quezon</span>
             <ul class="navbar-nav topbar-nav ml-md-auto align-items-center">
-                <li class="nav-item dropdown hidden-caret">
+           <!--     <li class="nav-item dropdown hidden-caret">
                     <a class="nav-link dropdown-toggle" href="#" id="messageDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
                         <i class="icon-settings"></i>
                     </a>
@@ -42,13 +42,13 @@ else { ?>
 
 
                             <?php //if(isset($_SESSION['role'])):?>
-                            <!--    <a class="see-all" href="logout.php">Sign Out<i class="icon-logout"></i> </a>
+                             <a class="see-all" href="logout.php">Sign Out<i class="icon-logout"></i> </a>
                             <?php //else: ?>
-                                <a class="see-all" href="login.php">Sign In<i class="icon-login"></i> </a>  -->
+                                <a class="see-all" href="login.php">Sign In<i class="icon-login"></i> </a>  
                             <?php //endif ?>
                         </li>
                     </ul>
-                </li>
+                </li> -->
             </ul>
         </div>
     </nav>
