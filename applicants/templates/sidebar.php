@@ -69,7 +69,7 @@ $current_page = PageName();
             <ul class="nav nav-primary">
                 <li class="nav-item <?= $current_page=='dashboard.php'? 'active' : null ?>">
                     <a href="dashboard.php" >
-                        <i class="fa fa-dashboard"></i>
+                        <i class="fas fa-tachometer-alt"></i>
                         <p>Dashboard</p>
                     </a>
                 </li>
@@ -95,7 +95,7 @@ $current_page = PageName();
                 </li>
                 <li class="nav-item <?= $current_page=='concerns.php'  ? 'active' : null ?>">
                     <a href="concerns.php">
-                        <i class="icon-badge"></i>
+                        <i class="icon-docs"></i>
                         <p>Concerns</p>
                     </a>
                 </li>

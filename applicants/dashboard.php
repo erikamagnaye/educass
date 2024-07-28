@@ -339,6 +339,28 @@ h5 {
 							</div>
 						</div>
 					</div>
+
+                    <div class="row">
+						<div class="col-md-12">
+							<div class="card">
+								<div class="card-header">
+									<div class="card-head-row">
+										<div class="card-title fw">template</div>
+									</div>
+								</div>
+								<div class="card-body col-md-12">
+								<div class="container-fluid mt-5">
+
+
+
+
+</div>
+								</div>
+							</div>
+						</div>
+					</div>
+
+
 				</div>
 			</div>
 			<script type="text/javascript">

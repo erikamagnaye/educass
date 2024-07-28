@@ -42,7 +42,23 @@ if (strlen($_SESSION['id'] == 0)) {
 	$query6 = "SELECT * FROM `educ aids`";
     $result6 = $conn->query($query6);
 	$totaleduc = $result6->num_rows;
-
+//all staff
+    $staff = "SELECT COUNT(*) FROM staff";
+    $resultstaff= $conn->query($staff);
+    $staffcount = $resultstaff->num_rows;
+//verified account
+$verified = "SELECT COUNT(*) FROM student WHERE accstatus ='Verified'";
+$resultvacc= $conn->query($verified);
+$vacc = $resultvacc->num_rows;
+//not verified account
+$notverified = "SELECT COUNT(*) FROM student WHERE accstatus = '' OR accstatus IS NULL";
+$resultnotvacc= $conn->query($notverified);
+$notvacc = $resultnotvacc->num_rows;
+//all complaints
+$allcomplaints = "SELECT COUNT(*) as total FROM concerns";
+$resultcomp = $conn->query($allcomplaints);
+$row = $resultcomp->fetch_assoc();
+$complaints = $row["total"];
 
 	// Initialize variables with default values
 $sy = 'N/A';
@@ -95,6 +111,9 @@ if ($latest_educid) {
         $dataArray[] = [$row['brgy'], (int)$row['count']];
     }
 }
+
+
+
 ?>
 
 
@@ -129,6 +148,102 @@ if ($latest_educid) {
     </script>
 	<style>
 	
+.dashboard {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+    gap: 20px;
+}
+
+.card {
+    background: #ffffff;
+    border-radius: 10px;
+    box-shadow: 0 4px 8px rgba(0,0,0,0.1);
+    padding: 5px;
+    text-align: center;
+	display: flex;
+    flex-direction: column;
+
+}
+
+.card-icon {
+    font-size: 20px;
+    color: #4CAF50;
+}
+
+h5 {
+    margin: 10px 0 10px;
+	word-wrap: break-word;
+    overflow-wrap: break-word;
+	word-break: break-all;
+}
+/* Small screens (max-width: 768px) */
+@media (max-width: 768px) {
+    .dashboard {
+        grid-template-columns: repeat(auto-fill, minmax(150px, 1fr));
+    }
+    .card {
+        padding: 5px;
+		display: flex;
+    flex-direction: column;
+
+    text-align: center;
+    }
+    .card-icon {
+        font-size: 14px;
+    }
+    h5 {
+        font-size: 14px;
+		overflow-wrap: break-word; /* Add this line to break long text */
+		word-wrap: break-word;
+		word-break: break-all;
+    }
+}
+
+/* Extra small screens (max-width: 480px) */
+@media (max-width: 480px) {
+    .dashboard {
+        grid-template-columns: repeat(auto-fill, minmax(100px, 1fr));
+    }
+    .card {
+        padding: 2px;
+		display: flex;
+    flex-direction: column;
+
+    text-align: center;
+    }
+    .card-icon {
+        font-size: 12px;
+    }
+    h5 {
+        font-size: 12px;
+		overflow-wrap: break-word; /* Add this line to break long text */
+		word-wrap: break-word;
+		word-break: break-all;
+    }
+}
+
+/* Extra extra small screens (max-width: 320px) */
+@media (max-width: 320px) {
+    .dashboard {
+        grid-template-columns: repeat(auto-fill, minmax(80px, 1fr));
+    }
+    .card {
+        padding: 1px;
+		display: flex;
+    flex-direction: column;
+
+    text-align: center;
+    }
+    .card-icon {
+        font-size: 10px;
+    }
+    h5 {
+        font-size: 10px;
+		overflow-wrap: break-word; /* Add this line to break long text */
+		word-wrap: break-word;
+		word-break: break-all;
+    }
+}
 	</style>
 </head>
 <body>
@@ -144,40 +259,80 @@ if ($latest_educid) {
 		<!-- End Sidebar -->
 
 		<div class="main-panel">
-			<div class="content">
-				<div class="panel-header bg-transparent">
-					<div class="page-inner">
+        <div class="content">
+        <div class="page-inner">
 						<div class="d-flex align-items-left align-items-md-center flex-column flex-md-row">
 							<div>
 								<h2 class="text-black fw-bold">Admin Dashboard</h2>
-								<?php if(isset($_SESSION['message'])): ?>
-							<div class="alert alert-<?= $_SESSION['success']; ?> <?= $_SESSION['success']=='danger' ? 'bg-danger text-light' : null ?>" role="alert">
-								<?php echo $_SESSION['message']; ?>
-							</div>
-						<?php unset($_SESSION['message']); ?>
-						<?php endif ?>
-								<div > <hr>
-								<h4 class="text-black fw-regular ">Cute ko</h4>
-								<div class="btn-container">
-    <a href="#" class="btn"><i class="fas fa-user icon" style="margin-right: 8px;"> </i><?= $totalapp ?>  Verified  Account </a>
-    <a href="#" class="btn"><i class="fas fa-users icon" style="margin-right: 8px;"></i><?= $totalapp ?>  Not Verified  Account </a>
-	<a href="#" class="btn"><i class="fas fa-users icon" style="margin-right: 8px;"></i><?= $totalapp ?>  Complaints/ Concerns </a>
-	<a href="#" class="btn"><i class="fas fa-users icon" style="margin-right: 8px;"></i><?= $totalapp ?>  staff </a>
-	<a href="#" class="btn"><i class="fas fa-users icon" style="margin-right: 8px;"></i><?= $totaleduc ?>  Educational Assistance Provided </a>
-</div>
-
-
-								<div > <hr>
-								<h4 class="text-black fw-regular ">Educational Assistance for SY: <?= $sy ?> for <?= $sem ?>  Report</h4>
-							</div>
-							</div>
+				
+							
 						</div>
+						
 					</div>
 				
 				</div>
+
 				<div class="page-inner mt--2">
-				
+                <div class="row">
+						<div class="col-md-12">
+                        <div class="card">
+                        <div class="card-header card-header-border">
+									<div class="card-head-row">
+										<div class="card-title fw">EUCATIONAL ASSISTANCE APPLICATION SYSTEM</div>
+									</div>
+								</div>
+								<div class="card-body col-md-12">
+								<div class="container-fluid mt-5">
+
+	
+
+<div class="dashboard">
+        <div class="card">
+            <div class="card-icon"><i class="fas fa-user"></i></div>
+          <a href="applications.php" class="btn">  <h5><?= $vacc ?> <br>Verified Account</h5></a>
+          
+        </div>
+        <div class="card">
+            <div class="card-icon"><i class="fas fa-chart-line"></i></div>
+			<a href="applications.php" class="btn"><h5><?= $notvacc ?> <br>Not Verified Account</h5></a>
+         
+        </div>
+        <div class="card">
+            <div class="card-icon"><i class="fas fa-cogs"></i></div>
+			<a href="applications.php" class="btn"><h5><?= $complaints ?> <br>Complaints</h5></a>
+     
+        </div>
+        <div class="card">
+            <div class="card-icon"><i class="fas fa-comments"></i></div>
+			<a href="applications.php" class="btn"> <h5><?=$staffcount?><br> staff</h5></a>
+           
+        </div> <div class="card">
+            <div class="card-icon"><i class="fas fa-comments"></i></div>
+			<a href="educaids.php" class="btn"> <h5><?=$totaleduc?><br> Educational Assistance</h5></a>      
+        </div>
+	
+    </div>
+
+
+</div>
+								</div>
+                                </div>
+						</div>
+					</div>
+    
+
+
 					<div class="row">
+						<div class="col-md-12">
+							<div class="card">
+								<div class="card-header">
+									<div class="card-head-row">
+										<div class="card-title fw-regular">Educational Assistance for SY: <?= $sy ?> for <?= $sem ?>  Report</div>
+									</div>
+								</div>
+								<div class="card-body">
+								<div class="container-fluid mt-5">
+                                <div class="row">
 					<div class="col-md-3">
                 <div class="card card-stats card-primary card-round">
                     <div class="card-body">
@@ -260,6 +415,13 @@ if ($latest_educid) {
                 </div>
             </div>
 					</div>
+
+</div>
+								</div>
+							</div>
+						</div>
+					</div>
+				
 					<div class="row">
         <div class="col-md-6 offset-md-4">
             <div class="card">
@@ -273,26 +435,10 @@ if ($latest_educid) {
         </div>
     </div>
 	
-				
-					<div class="row">
-						<div class="col-md-12">
-							<div class="card">
-								<div class="card-header">
-									<div class="card-head-row">
-										<div class="card-title fw-bold">waiting</div>
-									</div>
-								</div>
-								<div class="card-body">
-								<div class="container-fluid mt-5">
-   
-
-</div>
-								</div>
-							</div>
-						</div>
-					</div>
+  
 				</div>
 			</div>
+            
 			<script type="text/javascript">
     google.charts.load("current", {packages:["corechart"]});
     google.charts.setOnLoadCallback(drawChart);
