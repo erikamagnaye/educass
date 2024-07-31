@@ -176,6 +176,9 @@ h5 {
     overflow-wrap: break-word;
 	word-break: break-all;
 }
+.card-title {
+    font-size: 18px; 
+}
 /* Small screens (max-width: 768px) */
 @media (max-width: 768px) {
     .dashboard {
@@ -196,6 +199,9 @@ h5 {
 		overflow-wrap: break-word; /* Add this line to break long text */
 		word-wrap: break-word;
 		word-break: break-all;
+    }
+    .card-title{
+        font-size: 12px;
     }
 }
 
@@ -220,6 +226,9 @@ h5 {
 		word-wrap: break-word;
 		word-break: break-all;
     }
+    .card-title {
+        font-size: 10px;
+    }
 }
 
 /* Extra extra small screens (max-width: 320px) */
@@ -242,6 +251,9 @@ h5 {
 		overflow-wrap: break-word; /* Add this line to break long text */
 		word-wrap: break-word;
 		word-break: break-all;
+    }
+    .card-title {
+        font-size: 10px;
     }
 }
 	</style>
@@ -276,9 +288,9 @@ h5 {
                 <div class="row">
 						<div class="col-md-12">
                         <div class="card">
-                        <div class="card-header card-header-border">
+                        <div class="card-header card-header-border bg-success" style="border-radius: 8px;">
 									<div class="card-head-row">
-										<div class="card-title fw">EUCATIONAL ASSISTANCE APPLICATION SYSTEM</div>
+										<div class="card-title fw" style=" color: #ffffff;">EUCATIONAL ASSISTANCE APPLICATION SYSTEM</div>
 									</div>
 								</div>
 								<div class="card-body col-md-12">
@@ -325,9 +337,9 @@ h5 {
 					<div class="row">
 						<div class="col-md-12">
 							<div class="card">
-								<div class="card-header">
+								<div class="card-header bg-success" style="border-radius: 8px;">
 									<div class="card-head-row">
-										<div class="card-title fw-regular">Educational Assistance for SY: <?= $sy ?> for <?= $sem ?>  Report</div>
+										<div class="card-title fw-regular " style="color:#ffffff">Educational Assistance for SY: <?= $sy ?> for <?= $sem ?>  Report</div>
 									</div>
 								</div>
 								<div class="card-body">

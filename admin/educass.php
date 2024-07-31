@@ -50,7 +50,7 @@ $stmtSelect->close();
 <head>
 	<?php include 'templates/header.php' ?>
 	<title>Educational Assistance</title>
-   
+    <link rel="stylesheet" type="text/css" href="https://cdn.datatables.net/2.1.2/css/dataTables.bootstrap5.min.css"/>
 
 
 </head>
@@ -78,23 +78,7 @@ $stmtSelect->close();
 					</div>
 				</div>
 				<div class="page-inner">
-					<?php if(isset($_SESSION['message'])): ?>
-							<div class="alert alert-<?php echo $_SESSION['success']; ?> <?= $_SESSION['success']=='danger' ? 'bg-danger text-light' : null ?>" role="alert">
-								<?php echo $_SESSION['message']; ?>
-							</div>
-                            <!-- MESSAGE WHEN DATA IS INSERTED __-->
-                            
-                            <?php 
-                            /*if (isset($_SESSION['message']) && $_SESSION['message'] != ''){ ?>                                                         ?>
-                      <!--  <div class="alert alert-success alert-dismissible fade show" role="alert">
-                        <strong>Hello!</strong><?//php echo $_SESSION['message']; ?>
-                        <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
-                        </div> -->
-                            
-						<?php unset($_SESSION['message']);  //}*/ ?> 
-                       
-
-						<?php endif ?>
+				
 					<div class="row mt--2">
 						
 						<div class="col-md-12">
@@ -123,7 +107,44 @@ $stmtSelect->close();
 								</div>
 								<div class="card-body">
 									<div class="table-responsive">
-										<table class="table table-striped">
+
+	<!-- MANUAL SEARCH .....ETO YUNG MAY CLEAR OPTION
+	<div class="row">
+<div class="col-md-12">
+<form method="GET">
+<div class="input-group mb-3">
+<input type="text" class="form-control" name="search" placeholder="Search..." value="<?//php echo isset($_GET['search']) ? $_GET['search'] : ''; ?>">
+<div class="input-group-append">
+<button class="btn btn-primary" type="submit">Search</button>
+<?//php if (isset($_GET['search']) && $_GET['search'] != ''): ?>
+<a href="<?//php echo $_SERVER['PHP_SELF']; ?>" class="btn btn-secondary">Clear</a>
+<?//php endif; ?>
+</div>
+</div>
+</form>
+</div>
+</div> -->
+
+
+<!--  <div class="row">
+<div class="col-md-6">
+<div class="dataTables_length" id="dataTable_length">
+<label>Show 
+<select name="dataTable_length" aria-controls="dataTable" class="custom-select custom-select-sm form-control form-control-sm">
+<option value="10">10</option>
+<option value="25">25</option>
+<option value="50">50</option>
+<option value="100">100</option>
+</select> entries
+</label>
+</div>
+</div>
+<div class="col-md-6">
+<input type="text" id="search-input" class="form-control" placeholder="Search...">
+<div id="search-results"></div>
+</div>
+</div>-->
+										<table id="dataTable" class="table table-striped">
 											<thead>
 												<tr>
 													<th scope="col">Title</th>
@@ -136,6 +157,12 @@ $stmtSelect->close();
 											</thead>
 											<tbody>
                           <?php 
+                         // if (isset($_GET['search'])) {
+                          //  $search = $_GET['search'];
+                          //  $query = "SELECT * FROM `educ aids` WHERE `educname` LIKE '%$search%' OR `sem` LIKE '%$search%' OR `sy` LIKE '%$search%' order by `date` desc";
+                      //  } else {
+                           // $query = "SELECT * FROM `educ aids` order by `date` desc";
+                       // }
                                     $query = "SELECT * FROM `educ aids` order by `date` desc"; // SQL query to fetch all table data
                                     $view_data = mysqli_query($conn, $query); // sending the query to the database
 
@@ -317,6 +344,46 @@ $stmtSelect->close();
 		
 	</div>
 	<?php include 'templates/footer.php' ?>
-   
+    <script>
+        //this can be remove because search is still working without it
+    $(document).ready(function() {
+        $('#search-input').on('keyup', function() {
+            var searchQuery = $(this).val();
+            if (searchQuery != '') {
+                $.ajax({
+                    type: 'POST',
+                    url: 'live_search.php',
+                    data: {search: searchQuery},
+                    success: function(data) {
+                        $('#search-results').html(data);
+                    }
+                });
+            } else {
+                $('#search-results').html('');
+            }
+        });
+    });
+
+    //CODE FOR DATATABLES THAT SORT AND SEARCH DATA
+    $(document).ready(function() {
+        $('#dataTable').DataTable({
+            "ordering": true,
+            "lengthMenu": [[10, 25, 50, 100], [10, 25, 50, 100]],
+            "language": {
+                "search": "_INPUT_",
+                "searchPlaceholder": "Search here"
+            },
+            "columns": [
+                {"title": "Title", "data": "title", "orderable": true},
+                {"title": "Semester", "data": "semester", "orderable": true},
+                {"title": "School Year", "data": "school_year", "orderable": true},
+                {"title": "Status", "data": "status", "orderable": true},
+                {"title": "Action", "data": "action", "orderable": true}
+            ]
+        });
+    });
+</script>
+<script type="text/javascript" src="https://cdn.datatables.net/2.1.2/js/dataTables.min.js"></script>
+<script type="text/javascript" src="https://cdn.datatables.net/2.1.2/js/dataTables.bootstrap5.min.js"></script>
 </body>
 </html><?php }?>
