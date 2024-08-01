@@ -1,413 +1,323 @@
 <?php include 'server/server.php' ?>
 
-<?php 
+<?php
 
-session_start(); 
+session_start();
 error_reporting(E_ALL);
 ini_set('display_errors', 1);
 if (strlen($_SESSION['id'] == 0)) {
-	header('location:login.php');
+    header('location:login.php');
     exit();
-}
-else {
-// staet of code to digitally update status of educ assistance
-$currentDate = date('Y-m-d');
-$newStatus = 'Closed'; // The status you want to set when the end date is reached
+} else {
+    // staet of code to digitally update status of educ assistance
+    $currentDate = date('Y-m-d');
+    $newStatus = 'Closed'; // The status you want to set when the end date is reached
 
-// Select all entries with a due date less than the current date
-$selectQuery = "SELECT educid FROM `educ aids` WHERE `end` < ?";
-$stmtSelect = $conn->prepare($selectQuery);
-$stmtSelect->bind_param("s", $currentDate);
-$stmtSelect->execute();
-$result = $stmtSelect->get_result();
+    // Select all entries with a due date less than the current date
+    $selectQuery = "SELECT educid FROM `educ aids` WHERE `end` < ?";
+    $stmtSelect = $conn->prepare($selectQuery);
+    $stmtSelect->bind_param("s", $currentDate);
+    $stmtSelect->execute();
+    $result = $stmtSelect->get_result();
 
-// Update the status of each entry found
-if ($result->num_rows > 0) {
-    $updateQuery = "UPDATE `educ aids` SET `status` = ? WHERE educid = ?";
-    $stmtUpdate = $conn->prepare($updateQuery);
+    // Update the status of each entry found
+    if ($result->num_rows > 0) {
+        $updateQuery = "UPDATE `educ aids` SET `status` = ? WHERE educid = ?";
+        $stmtUpdate = $conn->prepare($updateQuery);
 
-    while ($row = $result->fetch_assoc()) {
-        $id = $row['educid'];
-        $stmtUpdate->bind_param("si", $newStatus, $id);
-        $stmtUpdate->execute();
-    }
+        while ($row = $result->fetch_assoc()) {
+            $id = $row['educid'];
+            $stmtUpdate->bind_param("si", $newStatus, $id);
+            $stmtUpdate->execute();
+        }
 
-    $stmtUpdate->close();
-    //echo "Statuses updated successfully.";
-}// else {
-   // echo "No records to update.";
-//}
+        $stmtUpdate->close();
+        //echo "Statuses updated successfully.";
+    } // else {
+    // echo "No records to update.";
+    //}
 
-$stmtSelect->close();
-
+    $stmtSelect->close();
 
 
-//end of code to update educ ass digitally
+
+    //end of code to update educ ass digitally
 
 ?>
-<!DOCTYPE html>
-<html lang="en">
-<head>
-	<?php include 'templates/header.php' ?>
-	<title>Educational Assistance</title>
-    <link rel="stylesheet" type="text/css" href="https://cdn.datatables.net/2.1.2/css/dataTables.bootstrap5.min.css">
-    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11.12.3/dist/sweetalert2.all.min.js"></script>
-<link href="https://cdn.jsdelivr.net/npm/sweetalert2@11.12.3/dist/sweetalert2.min.css" rel="stylesheet">
-<style>
+    <!DOCTYPE html>
+    <html lang="en">
+
+    <head>
+        <?php include 'templates/header.php' ?>
+        <title>Educational Assistance</title>
+        <link rel="stylesheet" type="text/css" href="https://cdn.datatables.net/2.1.2/css/dataTables.bootstrap5.min.css">
+        <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11.12.3/dist/sweetalert2.all.min.js"></script>
+        <link href="https://cdn.jsdelivr.net/npm/sweetalert2@11.12.3/dist/sweetalert2.min.css" rel="stylesheet">
+        <style>
 
 
-</style>
+        </style>
 
-</head>
-<body>
-	<?//php include 'templates/loading_screen.php' ?>
+    </head>
 
-	<div class="wrapper">
-		<!-- Main Header -->
-		<?php include 'templates/main-header.php' ?>
-		<!-- End Main Header -->
+    <body>
+        <? //php include 'templates/loading_screen.php' 
+        ?>
 
-		<!-- Sidebar -->
-		<?php include 'templates/sidebar.php' ?>
-		<!-- End Sidebar -->
- 
-		<div class="main-panel">
-			<div class="content">
-				<div class="panel-header ">
-					<div class="page-inner">
-						<div class="d-flex align-items-left align-items-md-center flex-column flex-md-row">
-							<div>
-								<h2 class="text-black fw-bold">Municipal Office Staff</h2>
-							</div>
-						</div>
-					</div>
-				</div>
-				<div class="page-inner">
-					
-					<div class="row mt--2">
-						
-						<div class="col-md-12">
-						
-							<div class="card">
-								<div class="card-header">
-									<div class="card-head-row">
-										<div class="card-title">Staff</div>
-										
-											<div class="card-tools">
-                                            <a href="viewstaff.php" class="btn btn-success btn-border btn-round btn-sm" title="view and print">
-												<i class="fa fa-eye"></i>
-												View
-											</a>
-                                            <a href="model/export_educprovided_csv.php" class="btn btn-danger btn-border btn-round btn-sm" title="Download">
-												<i class="fa fa-file"></i>
-												Export CSV
-											</a>
-												<a href="#add" data-toggle="modal" class="btn btn-info btn-border btn-round btn-sm" title="Post Assistance">
-													<i class="fa fa-plus"></i>
-													Add Staff
-												</a>
-											</div>
-									
-									</div>
-								</div>
-								<div class="card-body">
-									<div class="table-responsive">
-										<table id="myTable" class="table table-striped">
-											<thead>
-												<tr>
-													<th scope="col">Staff</th>
-													<th scope="col">Position</th>
-													<th scope="col">Address</th>
-													<th scope="col">Gender</th>
-													<th scope="col">Action</th>
-													
-												</tr>
-											</thead>
-											<tbody>
-                          <?php 
-                                    $query = "SELECT * FROM `staff` order by `lastname` asc"; // SQL query to fetch all table data
-                                    $view_data = mysqli_query($conn, $query); // sending the query to the database
+        <div class="wrapper">
+            <!-- Main Header -->
+            <?php include 'templates/main-header.php' ?>
+            <!-- End Main Header -->
 
-                                    // displaying all the data retrieved from the database using while loop
-                                    while ($row = mysqli_fetch_assoc($view_data)) {
-                                        $staffid = $row['staffid'];                
-                                        $lastname = $row['lastname'];        
-                                        $firstname = $row['firstname'];         
-                                        $email = $row['email'];  
-                                        $contact_no = $row['contact_no'];           
-                                        $age = $row['age'];        
-                                        $birthday = $row['birthday'];         
-                                        $address = $row['address'];  
-                                        $position = $row['position'];  
-                                        $gender = $row['gender']; 
+            <!-- Sidebar -->
+            <?php include 'templates/sidebar.php' ?>
+            <!-- End Sidebar -->
 
-                                        $fullname = $lastname . ', ' . $firstname; 
-                                    ?>
-                                  <tr>
-                                        <td><?php echo htmlspecialchars($fullname); ?></td>
-                                        <td><?php echo htmlspecialchars($position); ?></td>
-                                        <td><?php echo htmlspecialchars($address); ?></td>
-                                        <td><?php echo htmlspecialchars($gender); ?></td>
-                                        <td>
-                                            <a type="button" href="edit_educ.php?update&educid=<?php echo $educid; ?>"   class="btn btn-link btn-success" 
-                                                title="Edit Data">
-                                                <i class="fa fa-edit"></i>
+            <div class="main-panel">
+                <div class="content">
+                    <div class="panel-header ">
+                        <div class="page-inner">
+                            <div class="d-flex align-items-left align-items-md-center flex-column flex-md-row">
+                                <div>
+                                    <h2 class="text-black fw-bold">Municipal Office Staff</h2>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="page-inner">
 
-                                            </a>
-                                                <a type="button" href="javascript:void(0);" 
-                                                onclick="confirmDeletion(<?php echo $educid; ?>)" 
-                                                class="btn btn-link btn-danger" title="Remove">
-                                                <i class="fa fa-times"></i>
+                        <div class="row mt--2">
+
+                            <div class="col-md-12">
+
+                                <div class="card">
+                                    <div class="card-header">
+                                        <div class="card-head-row">
+                                            <div class="card-title">Staff</div>
+
+                                            <div class="card-tools">
+                                                <a href="viewstaff.php" class="btn btn-success btn-border btn-round btn-sm" title="view and print">
+                                                    <i class="fa fa-eye"></i>
+                                                    View
                                                 </a>
-                                                <script>
-                                                    function confirmDeletion(educid) {
-                                                        if (confirm('Are you sure you want to delete this record?')) {
-                                                            window.location.href = 'remove_educass.php?deleteid=' + educid + '&confirm=true';
-                                                        }
-                                                    }
-                                                    </script>
-                                        </td>
-                                    </tr>
-                                    <?php } ?>
-
-</tbody>
-
-										
-										</table>
-									</div>
-								</div>
-							</div>
-						</div>
-					</div>
-                    
-				</div>
-
-                
-                <div class="page-inner">
-					
-					<div class="row mt--2">
-						
-						<div class="col-md-12">
-						
-							<div class="card">
-								<div class="card-header">
-									<div class="card-head-row">
-										<div class="card-title">Sangguniang Kabataan (SK) </div>
-										
-											<div class="card-tools">
-                                            <a href="viewstaff.php" class="btn btn-success btn-border btn-round btn-sm" title="view and print">
-												<i class="fa fa-eye"></i>
-												View
-											</a>
-                                            <a href="model/export_educprovided_csv.php" class="btn btn-danger btn-border btn-round btn-sm" title="Download">
-												<i class="fa fa-file"></i>
-												Export CSV
-											</a>
-												<a href="#add" data-toggle="modal" class="btn btn-info btn-border btn-round btn-sm" title="Post Assistance">
-													<i class="fa fa-plus"></i>
-													Add Staff
-												</a>
-											</div>
-									
-									</div>
-								</div>
-								<div class="card-body">
-									<div class="table-responsive">
-										<table id="myTable" class="table table-striped">
-											<thead>
-												<tr>
-													<th scope="col">Staff</th>
-													<th scope="col">Position</th>
-													<th scope="col">Address</th>
-													<th scope="col">Gender</th>
-													<th scope="col">Action</th>
-													
-												</tr>
-											</thead>
-											<tbody>
-                          <?php 
-                                    $query = "SELECT * FROM `staff` order by `lastname` asc"; // SQL query to fetch all table data
-                                    $view_data = mysqli_query($conn, $query); // sending the query to the database
-
-                                    // displaying all the data retrieved from the database using while loop
-                                    while ($row = mysqli_fetch_assoc($view_data)) {
-                                        $staffid = $row['staffid'];                
-                                        $lastname = $row['lastname'];        
-                                        $firstname = $row['firstname'];         
-                                        $email = $row['email'];  
-                                        $contact_no = $row['contact_no'];           
-                                        $age = $row['age'];        
-                                        $birthday = $row['birthday'];         
-                                        $address = $row['address'];  
-                                        $position = $row['position'];  
-                                        $gender = $row['gender']; 
-
-                                        $fullname = $lastname . ', ' . $firstname; 
-                                    ?>
-                                  <tr>
-                                        <td><?php echo htmlspecialchars($fullname); ?></td>
-                                        <td><?php echo htmlspecialchars($position); ?></td>
-                                        <td><?php echo htmlspecialchars($address); ?></td>
-                                        <td><?php echo htmlspecialchars($gender); ?></td>
-                                        <td>
-                                            <a type="button" href="edit_educ.php?update&educid=<?php echo $educid; ?>"   class="btn btn-link btn-success" 
-                                                title="Edit Data">
-                                                <i class="fa fa-edit"></i>
-
-                                            </a>
-                                                <a type="button" href="javascript:void(0);" 
-                                                onclick="confirmDeletion(<?php echo $educid; ?>)" 
-                                                class="btn btn-link btn-danger" title="Remove">
-                                                <i class="fa fa-times"></i>
+                                                <a href="model/export_educprovided_csv.php" class="btn btn-danger btn-border btn-round btn-sm" title="Download">
+                                                    <i class="fa fa-file"></i>
+                                                    Export CSV
                                                 </a>
-                                                <script>
-                                                    function confirmDeletion(educid) {
-                                                        if (confirm('Are you sure you want to delete this record?')) {
-                                                            window.location.href = 'remove_educass.php?deleteid=' + educid + '&confirm=true';
-                                                        }
-                                                    }
-                                                    </script>
-                                        </td>
-                                    </tr>
-                                    <?php } ?>
+                                                <a href="#add" data-toggle="modal" class="btn btn-info btn-border btn-round btn-sm" title="Post Assistance">
+                                                    <i class="fa fa-plus"></i>
+                                                    Add Staff
+                                                </a>
+                                            </div>
 
-</tbody>
+                                        </div>
+                                    </div>
+                                    <div class="card-body">
+                                        <div class="table-responsive">
+                                            <table id="myTable" class="table table-striped">
+                                                <thead>
+                                                    <tr>
+                                                        <th scope="col">Staff</th>
+                                                        <th scope="col">Position</th>
+                                                        <th scope="col">Address</th>
+                                                        <th scope="col">Gender</th>
+                                                        <th scope="col">Action</th>
 
-										
-										</table>
-									</div>
-								</div>
-							</div>
-						</div>
-					</div>
-                    
-				</div>
+                                                    </tr>
+                                                </thead>
+                                                <tbody>
+                                                    <?php
+                                                    $query = "SELECT * FROM `staff` order by `lastname` asc"; // SQL query to fetch all table data
+                                                    $view_data = mysqli_query($conn, $query); // sending the query to the database
 
-			</div>
-			
-			 <!-- Modal ADD NEW STAFF FOR EDUCATIONAL ASSISTANCE -->
-			 <div class="modal fade"  id="add" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
-                <div class="modal-dialog modal-lg"  role="document">
-                    <div class="modal-content">
-                        <div class="modal-header">
-                            <h5 class="modal-title" id="exampleModalLabel">Add New Staff</h5>
-                            <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                                <span aria-hidden="true">&times;</span>
-                            </button>
-                        </div>
-                        <div class="modal-body">
-                            <form method="POST" action="model/addstaff.php" >
-                                <div class="row">
-                                <div class="form-group col-md-4">
-                                    <label>Last Name</label>
-                                    <input type="text" class="form-control" placeholder="Enter Last Name" name="lname" required>
+                                                    // displaying all the data retrieved from the database using while loop
+                                                    while ($row = mysqli_fetch_assoc($view_data)) {
+                                                        $staffid = $row['staffid'];
+                                                        $lastname = $row['lastname'];
+                                                        $firstname = $row['firstname'];
+                                                        $email = $row['email'];
+                                                        $contact_no = $row['contact_no'];
+                                                        $age = $row['age'];
+                                                        $birthday = $row['birthday'];
+                                                        $address = $row['address'];
+                                                        $position = $row['position'];
+                                                        $gender = $row['gender'];
+
+                                                        $fullname = $lastname . ', ' . $firstname;
+                                                    ?>
+                                                        <tr>
+                                                            <td><?php echo htmlspecialchars($fullname); ?></td>
+                                                            <td><?php echo htmlspecialchars($position); ?></td>
+                                                            <td><?php echo htmlspecialchars($address); ?></td>
+                                                            <td><?php echo htmlspecialchars($gender); ?></td>
+                                                            <td>
+                                                                <a type="button" href="edit_educ.php?update&educid=<?php echo $educid; ?>" class="btn btn-link btn-success" title="Edit Data">
+                                                                    <i class="fa fa-edit"></i>
+
+                                                                </a>
+                                                                <a type="button" href="javascript:void(0);" onclick="confirmDeletion(<?php echo $educid; ?>)" class="btn btn-link btn-danger" title="Remove">
+                                                                    <i class="fa fa-times"></i>
+                                                                </a>
+                                                                <script>
+                                                                    function confirmDeletion(educid) {
+                                                                        if (confirm('Are you sure you want to delete this record?')) {
+                                                                            window.location.href = 'remove_educass.php?deleteid=' + educid + '&confirm=true';
+                                                                        }
+                                                                    }
+                                                                </script>
+                                                            </td>
+                                                        </tr>
+                                                    <?php } ?>
+
+                                                </tbody>
+
+
+                                            </table>
+                                        </div>
+                                    </div>
                                 </div>
-                                <div class="form-group col-md-4">
-                                    <label>First Name</label>
-                                    <input type="text" class="form-control" placeholder="Enter First Name" name="fname" required>
-                                </div>   
-                                <div class="form-group col-md-4">
-                                    <label>Email</label>
-                                    <input type="email" class="form-control" placeholder="Enter Email" name="email" required>
-                                </div>                             
-                                </div>
-                                <div class="row">
-                                <div class="form-group col-md-4">
-                                    <label>Position</label>
-                                    <input type="text" class="form-control" placeholder="Enter Position" name="position" required>
-                                </div>
-                                <div class="form-group col-md-4">
-                                    <label>Contact Number</label>
-                                    <input type="tel" class="form-control" placeholder="Enter Contact Number" name="contact_no" required>
-                                </div>   
-                                <div class="form-group col-md-4">
-                                    <label>Address</label>
-                                    <input type="text" class="form-control" placeholder="Enter Address" name="address" required>
-                                </div>                             
-                                </div>
-								<div class="row">
-                                <div class="form-group col-md-4">
-                                    <label>Age</label>
-                                    <input type="number" class="form-control" placeholder="Enter Age" name="age" required>
-                                </div>
-                                <div class="form-group col-md-4">
-                                    <label>Birthday</label>
-                                    <input type="date" class="form-control" placeholder="Enter Birthday" name="bday" required>
-                                </div>   
-                                <div class="form-group col-md-4">
-                                    <label>Gender</label>
-                                    <select class="form-control" id="" required name="gender">
-                                        <option value="Male">Male</option>
-                                        <option value="Female">Female</option>
-                                    </select>
-                                </div>                            
-                                </div>
-								<div class="form-group">
-                                    <label>Password</label>
-                                    <input type="text" class="form-control" placeholder="Password" name="password" required>
-                                </div>   
-								
-								
-                            
-                        </div>
-                        <div class="modal-footer">
-                          <!--  <input type="hidden" id="pos_id" name="id"> -->
-                            <button type="button" class="btn btn-danger" data-dismiss="modal">Close</button>
-                            <button type="submit" class="btn btn-primary" name="create">Create</button>
+                            </div>
                         </div>
 
-                        <?php if(isset($_SESSION['display'])): ?>
-    <script>
-        Swal.fire({
-            title: '<?php echo $_SESSION['title']; ?>',
-            text: '<?php echo $_SESSION['display']; ?>',
-            icon: '<?php echo $_SESSION['success']; ?>',
-            confirmButtonText: 'OK'
-        });
-    </script>
-    <?php unset($_SESSION['display']); unset($_SESSION['success']); ?>
-<?php endif; ?>
-                        </form>
+                    </div>
+
+
+                </div>
+
+                <!-- Modal ADD NEW STAFF FOR EDUCATIONAL ASSISTANCE -->
+                <div class="modal fade" id="add" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+                    <div class="modal-dialog modal-lg" role="document">
+                        <div class="modal-content">
+                            <div class="modal-header">
+                                <h5 class="modal-title" id="exampleModalLabel">Add New Staff</h5>
+                                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                    <span aria-hidden="true">&times;</span>
+                                </button>
+                            </div>
+                            <div class="modal-body">
+                                <form method="POST" action="model/addstaff.php">
+                                    <div class="row">
+                                        <div class="form-group col-md-4">
+                                            <label>Last Name</label>
+                                            <input type="text" class="form-control" placeholder="Enter Last Name" name="lname" required>
+                                        </div>
+                                        <div class="form-group col-md-4">
+                                            <label>First Name</label>
+                                            <input type="text" class="form-control" placeholder="Enter First Name" name="fname" required>
+                                        </div>
+                                        <div class="form-group col-md-4">
+                                            <label>Email</label>
+                                            <input type="email" class="form-control" placeholder="Enter Email" name="email" required>
+                                        </div>
+                                    </div>
+                                    <div class="row">
+                                        <div class="form-group col-md-4">
+                                            <label>Position</label>
+                                            <input type="text" class="form-control" placeholder="Enter Position" name="position" list="posOptions" required>
+                                            <datalist id="posOptions">
+                                                <option value="SK-Arawan">
+                                                <option value="SK-Arawan">
+                                                <option value="SK-Arawan">
+                                                <option value="SK-Arawan">
+                                            </datalist>
+                                        </div>
+                                        <div class="form-group col-md-4">
+                                            <label>Contact Number</label>
+                                            <input type="tel" class="form-control" placeholder="Enter Contact Number" name="contact_no" required>
+                                        </div>
+                                        <div class="form-group col-md-4">
+                                            <label>Address</label>
+                                            <input type="text" class="form-control" placeholder="Enter Address" name="address" required>
+                                        </div>
+                                    </div>
+                                    <div class="row">
+                                        <div class="form-group col-md-4">
+                                            <label>Age</label>
+                                            <input type="number" class="form-control" placeholder="Enter Age" name="age" required>
+                                        </div>
+                                        <div class="form-group col-md-4">
+                                            <label>Birthday</label>
+                                            <input type="date" class="form-control" placeholder="Enter Birthday" name="bday" required>
+                                        </div>
+                                        <div class="form-group col-md-4">
+                                            <label>Gender</label>
+                                            <select class="form-control" id="" required name="gender">
+                                                <option value="Male">Male</option>
+                                                <option value="Female">Female</option>
+                                            </select>
+                                        </div>
+                                    </div>
+                                    <div class="form-group">
+                                        <label>Password</label>
+                                        <input type="text" class="form-control" placeholder="Password" name="password" required>
+                                    </div>
+
+
+
+                            </div>
+                            <div class="modal-footer">
+                                <!--  <input type="hidden" id="pos_id" name="id"> -->
+                                <button type="button" class="btn btn-danger" data-dismiss="modal">Close</button>
+                                <button type="submit" class="btn btn-primary" name="create">Create</button>
+                            </div>
+
+                            <?php if (isset($_SESSION['display'])) : ?>
+                                <script>
+                                    Swal.fire({
+                                        title: '<?php echo $_SESSION['title']; ?>',
+                                        text: '<?php echo $_SESSION['display']; ?>',
+                                        icon: '<?php echo $_SESSION['success']; ?>',
+                                        confirmButtonText: 'OK'
+                                    });
+                                </script>
+                                <?php unset($_SESSION['display']);
+                                unset($_SESSION['success']); ?>
+                            <?php endif; ?>
+                            </form>
+                        </div>
                     </div>
                 </div>
+
+
+
+
+
+
+
+                <!-- Main Footer -->
+                <?php include 'templates/main-footer.php' ?>
+                <!-- End Main Footer -->
+
             </div>
 
+        </div>
+        <?php include 'templates/footer.php' ?>
+        <script type="text/javascript" src="https://cdn.datatables.net/2.1.2/js/dataTables.min.js"></script>
+        <script type="text/javascript" src="https://cdn.datatables.net/2.1.2/js/dataTables.bootstrap5.min.js"></script>
+        <!--sweet alert -->
 
+        <script>
+            $(document).ready(function() {
+                $('#myTable').DataTable({
+                    "lengthMenu": [
+                        [10, 25, 50, -1],
+                        [10, 25, 50, "All"]
+                    ],
+                    "pageLength": 10,
+                    "lengthChange": true,
+                    "order": [
+                        [0, "asc"]
+                    ],
+                    "searching": true,
+                    "ordering": true,
+                    "language": {
+                        "search": "_INPUT_",
+                        "searchPlaceholder": "Search here",
+                        "lengthMenu": "_MENU_entries per page"
+                    },
+                });
+            });
+        </script>
+    </body>
 
-
-
-        
-
-			<!-- Main Footer -->
-			<?php include 'templates/main-footer.php' ?>
-			<!-- End Main Footer -->
-			
-		</div>
-		
-	</div>
-	<?php include 'templates/footer.php' ?>
-    <script type="text/javascript" src="https://cdn.datatables.net/2.1.2/js/dataTables.min.js"></script>
-    <script type="text/javascript" src="https://cdn.datatables.net/2.1.2/js/dataTables.bootstrap5.min.js"></script>
-    <!--sweet alert -->
-   
-   <script>
-$(document).ready(function() {
-    $('#myTable').DataTable({
-        "lengthMenu": [
-            [10, 25, 50, -1], [10, 25, 50, "All"]
-    ],
-        "pageLength": 10,
-        "lengthChange": true,
-        "order": [[ 0, "asc" ]],
-        "searching": true,
-        "ordering": true,
-        "language": {
-                "search": "_INPUT_",
-                "searchPlaceholder": "Search here",
-                "lengthMenu": "_MENU_entries per page"
-            },
-    });
-});
-</script>
-</body>
-</html><?php }?>
+    </html><?php } ?>
