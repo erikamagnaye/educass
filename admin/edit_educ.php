@@ -108,9 +108,9 @@ $conn->close();
 						<div class="row mt--2 justify-content-center">
                     <div class="col-md-8">
                         <div class="card">
-                            <div class="card-header">
+                            <div class="card-header bg-success" style="border-radius: 8px;">
                                 <div class="card-head-row">
-                                    <div class="card-title text-center text-green">Update Educational Assistance Information</div>
+                                    <div class="card-title text-center"  style=" color: #ffffff;">Update Educational Assistance Information</div>
                                 </div>
                             </div>
                             <form method="POST" action="">

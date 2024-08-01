@@ -127,7 +127,13 @@ if (strlen($_SESSION['id'] == 0)) {
                                                 </thead>
                                                 <tbody>
                                                     <?php
-                                                    $query = "SELECT * FROM `staff` order by `lastname` asc"; // SQL query to fetch all table data
+                                                    $query = "SELECT 
+  *, 
+  CONCAT(lastname, ', ', firstname) AS fullname 
+FROM 
+  staff 
+ORDER BY 
+  lastname ASC"; // SQL query to fetch all table data
                                                     $view_data = mysqli_query($conn, $query); // sending the query to the database
 
                                                     // displaying all the data retrieved from the database using while loop
@@ -142,8 +148,9 @@ if (strlen($_SESSION['id'] == 0)) {
                                                         $address = $row['address'];
                                                         $position = $row['position'];
                                                         $gender = $row['gender'];
+                                                        $fullname =$row['fullname'];
 
-                                                        $fullname = $lastname . ', ' . $firstname;
+                                                       // $fullname = $lastname . ', ' . $firstname;
                                                     ?>
                                                         <tr>
                                                             <td><?php echo htmlspecialchars($fullname); ?></td>
@@ -151,17 +158,19 @@ if (strlen($_SESSION['id'] == 0)) {
                                                             <td><?php echo htmlspecialchars($address); ?></td>
                                                             <td><?php echo htmlspecialchars($gender); ?></td>
                                                             <td>
-                                                                <a type="button" href="edit_educ.php?update&educid=<?php echo $educid; ?>" class="btn btn-link btn-success" title="Edit Data">
-                                                                    <i class="fa fa-edit"></i>
+                                                                <a type="button" href="edit_staff.php?update&staffid=<?php echo $staffid; ?>" class="btn btn-link btn-success" title="Edit Data">
+                                                                    <i class="fa fa-edit"></i></a>
 
-                                                                </a>
-                                                                <a type="button" href="javascript:void(0);" onclick="confirmDeletion(<?php echo $educid; ?>)" class="btn btn-link btn-danger" title="Remove">
+                                                            <!--    <a type="button" href="#" data-toggle="modal" data-target="#edit" data-staffid="<?php echo $staffid;?>" class="btn btn-link btn-success" title="Edit Data">
+                                                                    <i class="fa fa-edit"></i></a> -->
+</a>        
+                                                                <a type="button" href="javascript:void(0);" onclick="confirmDeletion(<?php echo $staffid; ?>)" class="btn btn-link btn-danger" title="Delete">
                                                                     <i class="fa fa-times"></i>
                                                                 </a>
                                                                 <script>
-                                                                    function confirmDeletion(educid) {
+                                                                    function confirmDeletion(staffid) {
                                                                         if (confirm('Are you sure you want to delete this record?')) {
-                                                                            window.location.href = 'remove_educass.php?deleteid=' + educid + '&confirm=true';
+                                                                            window.location.href = 'remove_staff.php?deleteid=' + staffid + '&confirm=true';
                                                                         }
                                                                     }
                                                                 </script>
@@ -188,7 +197,7 @@ if (strlen($_SESSION['id'] == 0)) {
                 <div class="modal fade" id="add" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
                     <div class="modal-dialog modal-lg" role="document">
                         <div class="modal-content">
-                            <div class="modal-header">
+                            <div class="modal-header bg-success" style="border-radius: 3px;">
                                 <h5 class="modal-title" id="exampleModalLabel">Add New Staff</h5>
                                 <button type="button" class="close" data-dismiss="modal" aria-label="Close">
                                     <span aria-hidden="true">&times;</span>
@@ -215,10 +224,26 @@ if (strlen($_SESSION['id'] == 0)) {
                                             <label>Position</label>
                                             <input type="text" class="form-control" placeholder="Enter Position" name="position" list="posOptions" required>
                                             <datalist id="posOptions">
-                                                <option value="SK-Arawan">
-                                                <option value="SK-Arawan">
-                                                <option value="SK-Arawan">
-                                                <option value="SK-Arawan">
+                                            <option value="SK-Arawan">
+                                                <option value="SK-Bagong Niing">
+                                                <option value="SK-Balat Atis">
+                                                <option value="SK-Briones">
+                                                <option value="SK-Bulihan">
+                                                <option value="SK-Buliran">
+                                                <option value="SK-Callejon">
+                                                <option value="SK-Corazon">
+                                                <option value="SK-Del Valle">
+                                                <option value="SK-Loob">
+                                                <option value="SK-Magsaysay">
+                                                <option value="SK-Matipunso">
+                                                <option value="SK-Niing">
+                                                <option value="SK-Poblacion">
+                                                <option value="SK-Pulo">
+                                                <option value="SK-Pury">
+                                                <option value="SK-Sampaga">
+                                                <option value="SK-Sampaguita">
+                                                <option value="SK-San Jose">
+                                                <option value="SK-Sinturisan">
                                             </datalist>
                                         </div>
                                         <div class="form-group col-md-4">
@@ -278,10 +303,33 @@ if (strlen($_SESSION['id'] == 0)) {
                     </div>
                 </div>
 
+                    <!-- alert for UPDATEEEEEEEEE -->
+                <?php if (isset($_SESSION['alertmess'])) : ?> 
+                                <script>
+                                    Swal.fire({
+                                        title: '<?php echo $_SESSION['title']; ?>',
+                                        text: '<?php echo $_SESSION['alertmess']; ?>',
+                                        icon: '<?php echo $_SESSION['success']; ?>',
+                                        confirmButtonText: 'OK'
+                                    });
+                                </script>
+                                <?php unset($_SESSION['alertmess']);
+                                unset($_SESSION['success']); ?>
+                            <?php endif; ?>
 
-
-
-
+       <!-- alert for DELETEEEEEEEEE -->
+       <?php if (isset($_SESSION['deletemess'])) : ?> 
+                                <script>
+                                    Swal.fire({
+                                        title: '<?php echo $_SESSION['title']; ?>',
+                                        text: '<?php echo $_SESSION['deletemess']; ?>',
+                                        icon: '<?php echo $_SESSION['success']; ?>',
+                                        confirmButtonText: 'OK'
+                                    });
+                                </script>
+                                <?php unset($_SESSION['deletemess']);
+                                unset($_SESSION['success']); ?>
+                            <?php endif; ?>
 
 
                 <!-- Main Footer -->
