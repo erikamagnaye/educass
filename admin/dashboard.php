@@ -152,6 +152,7 @@ if ($latest_educid) {
     display: grid;
     grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
     gap: 20px;
+    align-items: center;
 }
 
 .card {
@@ -284,21 +285,49 @@ h5 {
 				
 				</div>
 
-				<div class="page-inner mt--2">
-                <div class="row">
+				<div class="page-inner mt--2" >
+             <!--   <div class="container-fluid mt-5">
+                <div class="dashboard" >
+        <div class="card">
+            <div class="card-icon"><i class="fas fa-user"></i></div>
+          <a href="applications.php" class="btn">  <h5><?= $vacc ?> <br>Verified Account</h5></a>
+          
+        </div>
+        <div class="card">
+            <div class="card-icon"><i class="fas fa-chart-line"></i></div>
+			<a href="applications.php" class="btn"><h5><?= $notvacc ?> <br>Not Verified Account</h5></a>
+         
+        </div>
+        <div class="card">
+            <div class="card-icon"><i class="fas fa-cogs"></i></div>
+			<a href="applications.php" class="btn"><h5><?= $complaints ?> <br>Complaints</h5></a>
+     
+        </div>
+        <div class="card">
+            <div class="card-icon"><i class="fas fa-comments"></i></div>
+			<a href="staff.php" class="btn"> <h5><?=$staffcount?><br> staff</h5></a>
+           
+        </div> <div class="card">
+            <div class="card-icon"><i class="fas fa-comments"></i></div>
+			<a href="educaids.php" class="btn"> <h5><?=$totaleduc?><br> Educational Assistance</h5></a>      
+        </div>
+	
+    </div>
+    </div>-->
+              <div class="row">
 						<div class="col-md-12">
-                        <div class="card">
-                        <div class="card-header card-header-border bg-success" style="border-radius: 8px;">
+                        <div class="card" style="padding:0px; margin:0px;background-color:#F5F7F8;">
+                       <!-- <div class="card-header card-header-border bg-success" style="border-radius: 8px;">
 									<div class="card-head-row">
 										<div class="card-title fw" style=" color: #ffffff;">EUCATIONAL ASSISTANCE APPLICATION SYSTEM</div>
 									</div>
-								</div>
+								</div>-->
 								<div class="card-body col-md-12">
-								<div class="container-fluid mt-5">
+								<div class="container-fluid">
 
 	
 
-<div class="dashboard">
+<div class="dashboard" >
         <div class="card">
             <div class="card-icon"><i class="fas fa-user"></i></div>
           <a href="applications.php" class="btn">  <h5><?= $vacc ?> <br>Verified Account</h5></a>
@@ -333,7 +362,7 @@ h5 {
 					</div>
     
 
-
+                    <br>
 					<div class="row">
 						<div class="col-md-12">
 							<div class="card">

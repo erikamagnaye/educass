@@ -51,7 +51,11 @@ $stmtSelect->close();
 	<?php include 'templates/header.php' ?>
 	<title>Educational Assistance</title>
     <link rel="stylesheet" type="text/css" href="https://cdn.datatables.net/2.1.2/css/dataTables.bootstrap5.min.css"/>
-
+<style>
+    .btn-link + .btn-link {
+    margin-left: 5px;
+}
+</style>
 
 </head>
 <body>
@@ -184,14 +188,19 @@ $stmtSelect->close();
                                         <td><?php echo htmlspecialchars($sy); ?></td>
                                         <td><?php echo htmlspecialchars($status); ?></td>
                                         <td>
-                                            <a type="button" href="edit_educ.php?update&educid=<?php echo $educid; ?>"   class="btn btn-link btn-success" 
+                                            <a type="button" href="edit_educ.php?update&educid=<?php echo $educid; ?>"   class="btn btn-link btn-success mr-1" 
+                                                title="view report">
+                                                <i class="fa fa-file"></i>
+
+                                            </a>
+                                            <a type="button" href="edit_educ.php?update&educid=<?php echo $educid; ?>"   class="btn btn-link btn-success mr-1" 
                                                 title="Edit Data">
                                                 <i class="fa fa-edit"></i>
 
                                             </a>
                                                 <a type="button" href="javascript:void(0);" 
                                                 onclick="confirmDeletion(<?php echo $educid; ?>)" 
-                                                class="btn btn-link btn-danger" title="Remove">
+                                                class="btn btn-link btn-danger mr-1" title="Remove">
                                                 <i class="fa fa-times"></i>
                                                 </a>
                                                 <script>

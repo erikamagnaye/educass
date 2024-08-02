@@ -117,27 +117,22 @@ $current_page = PageName();
                         <p>Reports</p>
                     </a>
                 </li>
-                <?php if(isset($_SESSION['username']) && $_SESSION['role']=='admin'): ?>
-                    <li class="nav-section">
-                        <span class="sidebar-mini-icon">
-                            <i class="fa fa-ellipsis-h"></i>
-                        </span>
-                        <h4 class="text-section">System</h4>
-                    </li>
-                    <li class="nav-item">
-                        <a href="#support" data-toggle="modal">
-                            <i class="fas fa-flag"></i>
-                            <p>Support</p>
-                        </a>
-                    </li>
-                <?php endif ?>
-                <?php if(isset($_SESSION['username']) && $_SESSION['role']=='admin'): ?>
-                <li class="nav-item <?= $current_page=='revenue.php' ? 'active' : null ?>">
-                    <a href="revenue.php">
-                        <i class="fas fa-dollar-sign"></i>
-                        <p>Revenues</p>
+                <li class="nav-item ">
+                                    <a href="backup/backup.php">
+                                    <i class="fa fa-database"></i>
+                                        <p>Backup</p>
+                                    </a>
+                                </li>
+                <li class="nav-item ">
+                    <a href="logout.php">
+                        <i class="fa fa-power-off"></i>
+                        <p>Logout</p>
                     </a>
                 </li>
+                   
+                  
+               
+             
                 <li class="nav-section">
                     <span class="sidebar-mini-icon">
                         <i class="fa fa-ellipsis-h"></i>
@@ -209,7 +204,7 @@ $current_page = PageName();
                         </ul>
                     </div>
                 </li>
-                <?php endif ?>
+             
             </ul>
         </div>
     </div>

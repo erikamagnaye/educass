@@ -323,7 +323,7 @@ if (strlen($_SESSION['id'] == 0)) {
                                     });
                                 </script>
                                 <?php unset($_SESSION['deletemess']);
-                                unset($_SESSION['success']); ?>
+                                unset($_SESSION['success']);unset($_SESSION['title']); ?>
                             <?php endif; ?>
 
 

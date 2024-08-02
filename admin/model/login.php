@@ -35,19 +35,21 @@
 			*/
 			}
 
-			$_SESSION['message'] = 'You have successfull logged in to Educational Assistance System!';
-			$_SESSION['success'] = 'success';
-
+			//$_SESSION['message'] = 'You have successfull logged in to Educational Assistance System!';
+			//$_SESSION['success'] = 'success';
+			//$_SESSION['title'] = 'Success';
             header('location: ../dashboard.php');
 
 		}else{
 			$_SESSION['message'] = 'Username or password is incorrect!';
-			$_SESSION['success'] = 'danger';
+			$_SESSION['success'] = 'error';
+			$_SESSION['title']='Invalid Credentials';
             header('location: ../login.php');
 		}
 	}else{
 		$_SESSION['message'] = 'Username or password is empty!';
-		$_SESSION['success'] = 'danger';
+		$_SESSION['success'] = 'error';
+		$_SESSION['title']='Invalid Credentials';
         header('location: ../login.php');
 	}
 

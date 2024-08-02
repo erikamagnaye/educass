@@ -13,6 +13,9 @@
 	<link rel="stylesheet" href="vendors/simple-line-icons/css/simple-line-icons.css">
     <link rel="stylesheet" href="vendors/flag-icon-css/css/flag-icon.min.css">
     <link rel="stylesheet" href="vendors/css/vendor.bundle.base.css">
+	<script src="https://cdn.jsdelivr.net/npm/sweetalert2@11.12.3/dist/sweetalert2.all.min.js"></script>
+        <link href="https://cdn.jsdelivr.net/npm/sweetalert2@11.12.3/dist/sweetalert2.min.css" rel="stylesheet">
+       
 	<style>
      body.login {
     background: url('assets/img/background.jpg') no-repeat center center fixed; 
@@ -31,12 +34,7 @@
 <?php include 'templates/loading_screen.php' ?>
 	<div class="wrapper wrapper-login">
 		<div class="container container-login animated fadeIn">
-            <?php if(isset($_SESSION['message'])): ?>
-                <div class="alert alert-<?= $_SESSION['success']; ?> <?= $_SESSION['success']=='danger' ? 'bg-danger text-light' : null ?>" role="alert">
-                    <?= $_SESSION['message']; ?>
-                </div>
-            <?php unset($_SESSION['message']); ?>
-            <?php endif ?>
+           
 			<h3 class="text-center">Admin Login </h3>
 			<div class="login-form">
                 <form method="POST" action="model/login.php">
@@ -60,6 +58,21 @@
 			</div>
 		</div>
 	</div>
+	<!--  ALERT FOR LOGIN-->
+	<?php if (isset($_SESSION['message'])) : ?> 
+                                <script>
+                                    Swal.fire({
+                                        title: '<?php echo $_SESSION['title']; ?>',
+                                        text: '<?php echo $_SESSION['message']; ?>',
+                                        icon: '<?php echo $_SESSION['success']; ?>',
+                                        confirmButtonText: 'OK'
+                                    });
+                                </script>
+                                <?php unset($_SESSION['message']);
+                                unset($_SESSION['success']); unset($_SESSION['title']); ?>
+                            <?php endif; ?>
+
+							
 	<?php include 'templates/footer.php' ?>
 	<script src="vendors/js/vendor.bundle.base.js"></script>
     <script src="js/off-canvas.js"></script>
