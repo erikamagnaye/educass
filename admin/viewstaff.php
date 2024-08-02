@@ -110,17 +110,12 @@ if (strlen($_SESSION['id'] == 0)) {
 					<div class="row mt--2">
 						<div class="col-md-12">
 
-                            <?php if(isset($_SESSION['message'])): ?>
-                                <div class="alert alert-<?php echo $_SESSION['success']; ?> <?= $_SESSION['success']=='danger' ? 'bg-danger text-light' : null ?>" role="alert">
-                                    <?php echo $_SESSION['message']; ?>
-                                </div>
-                            <?php unset($_SESSION['message']); ?>
-                            <?php endif ?>
+                         
 
                             <div class="card">
 								<div class="card-header">
 									<div class="card-head-row">
-										<div class="card-title">Educational Assistancet</div>
+										<div class="card-title">Educational Assistance Staff</div>
 										<div class="card-tools">
 											<button class="btn btn-info btn-border btn-round btn-sm" onclick="printDiv('printThis')">
 												<i class="fa fa-print"></i>
@@ -138,7 +133,7 @@ if (strlen($_SESSION['id'] == 0)) {
                                             <h3 class="mb-0">Republic of the Philippines</h3>
                                             <h3 class="mb-0">Province of Quezon</h3>
 											<h3 class="fw-bold mb-0">San Antonio</h3>
-                                            <p><i>Mobile No.0923333</i></p>
+											<p><i>Mobile No.0923333</i></p>
 										</div>
                                         <div class="text-center">
                                             <img src="assets/img/logo.png" class="img-fluid" width="100">
@@ -153,18 +148,19 @@ if (strlen($_SESSION['id'] == 0)) {
                                             <div class="table-responsive">
         <table class="table table-bordered">
        <?php
-        $sql = "SELECT * FROM `educ aids`";
+        $sql = "SELECT *, CONCAT(lastname, ', ', firstname) AS fullname FROM staff ORDER BY lastname ASC";
          $result = mysqli_query($conn, $sql); 
     ?>
             <thead>
                 <tr>
-                <th>Educational Assistance</th>
-                    <th>Semester</th>
-                    <th>School year</th>
-                    <th>Start</th>
-                    <th>Due</th>
-                    <th>Minimum Grade</th>
-                    <th>Status</th>
+                    <th>Fullname</th>
+                    <th>Position</th>
+                    <th>Email</th>
+                    <th>Contact Number</th>
+                    <th>Address</th>
+                    <th>Age</th>
+                    <th>Birthday</th>
+                    <th>Gender</th>
                 </tr>
             </thead>
             <tbody>
@@ -176,13 +172,14 @@ if (strlen($_SESSION['id'] == 0)) {
                         echo '</tbody></table><div class="page-break"></div><h2>Educational  (Page ' . ($count / 25 + 1) . ')</h2><table class="table table-bordered"><thead><tr><th>ID</th><th>Name</th><th>Year</th><th>Course</th><th>Barangay</th><th>Gender</th></tr></thead><tbody>';
                     }
                     echo "<tr>";
-                    echo "<td>" . $row['educname'] . "</td>";
-                    echo "<td>" . $row['sem'] . "</td>";
-                    echo "<td>" . $row['sy'] . "</td>";
-                    echo "<td>" . $row['start'] . "</td>";
-                    echo "<td>" . $row['end'] . "</td>";
-                    echo "<td>" . $row['min_grade'] . "</td>";
-                    echo "<td>" . $row['status'] . "</td>";
+                    echo "<td>" . $row['fullname'] . "</td>";
+                    echo "<td>" . $row['position'] . "</td>";
+                    echo "<td>" . $row['email'] . "</td>";
+                    echo "<td>" . $row['contact_no'] . "</td>";
+                    echo "<td>" . $row['address'] . "</td>";
+                    echo "<td>" . $row['age'] . "</td>";
+                    echo "<td>" . $row['birthday'] . "</td>";
+                    echo "<td>" . $row['gender'] . "</td>";
                     echo "</tr>";
                     $count++;
                 }

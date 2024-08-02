@@ -35,7 +35,7 @@
             $_SESSION['success'] = 'danger';
         }
 
-        header("Location: staff.php"); // Adjust the path as needed
+        header("Location: staff.php"); 
         $conn->close();
     } 
 ?>

@@ -100,7 +100,7 @@ if (strlen($_SESSION['id'] == 0)) {
                                                     <i class="fa fa-eye"></i>
                                                     View
                                                 </a>
-                                                <a href="model/export_educprovided_csv.php" class="btn btn-danger btn-border btn-round btn-sm" title="Download">
+                                                <a href="model/export_staff_csv.php" class="btn btn-danger btn-border btn-round btn-sm" title="Download">
                                                     <i class="fa fa-file"></i>
                                                     Export CSV
                                                 </a>
@@ -127,13 +127,7 @@ if (strlen($_SESSION['id'] == 0)) {
                                                 </thead>
                                                 <tbody>
                                                     <?php
-                                                    $query = "SELECT 
-  *, 
-  CONCAT(lastname, ', ', firstname) AS fullname 
-FROM 
-  staff 
-ORDER BY 
-  lastname ASC"; // SQL query to fetch all table data
+                                                    $query = "SELECT *, CONCAT(lastname, ', ', firstname) AS fullname FROM staff ORDER BY lastname ASC"; // SQL query to fetch all table data
                                                     $view_data = mysqli_query($conn, $query); // sending the query to the database
 
                                                     // displaying all the data retrieved from the database using while loop
@@ -248,7 +242,7 @@ ORDER BY
                                         </div>
                                         <div class="form-group col-md-4">
                                             <label>Contact Number</label>
-                                            <input type="tel" class="form-control" placeholder="Enter Contact Number" name="contact_no" required>
+                                            <input type="text" class="form-control" placeholder="09" name="contact_no" required>
                                         </div>
                                         <div class="form-group col-md-4">
                                             <label>Address</label>
@@ -267,6 +261,7 @@ ORDER BY
                                         <div class="form-group col-md-4">
                                             <label>Gender</label>
                                             <select class="form-control" id="" required name="gender">
+                                                <option value="">Select</option>
                                                 <option value="Male">Male</option>
                                                 <option value="Female">Female</option>
                                             </select>

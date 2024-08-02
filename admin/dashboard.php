@@ -316,7 +316,7 @@ h5 {
         </div>
         <div class="card">
             <div class="card-icon"><i class="fas fa-comments"></i></div>
-			<a href="applications.php" class="btn"> <h5><?=$staffcount?><br> staff</h5></a>
+			<a href="staff.php" class="btn"> <h5><?=$staffcount?><br> staff</h5></a>
            
         </div> <div class="card">
             <div class="card-icon"><i class="fas fa-comments"></i></div>

@@ -48,6 +48,8 @@ if (isset($_POST['update'])) {
 		$position = $_POST['position'];
         $gender = $_POST['gender'];
 
+   
+
 	$query = "UPDATE `staff` SET `lastname`='$lname', `firstname`='$fname', `email`='$email', `contact_no`='$contact_no', `age`='$age', `birthday`='$bday', `address`='$address', `position`='$position', `gender`='$gender' WHERE staffid=$staffid";
 	$result = $conn->query($query);
 
@@ -61,9 +63,10 @@ if (isset($_POST['update'])) {
         $_SESSION['title'] = 'Error';
         $_SESSION['success'] = 'danger';
     }
-
-	header("Location: staff.php");
+    header("Location: staff.php");
 	exit();
+    
+	
 }
 
 $conn->close();
@@ -74,7 +77,7 @@ $conn->close();
 	<?php include 'templates/header.php' ?>
 	<title>Educational Assistance</title>
 	<link rel="icon" href="assets/img/logo.png" type="image/x-icon"/>   <!-- THIS IS THE CODE TO DISPLAY AN ICON IN THE BROWASER TAB-->
-
+    <link href="https://cdn.jsdelivr.net/npm/sweetalert2@11.12.3/dist/sweetalert2.min.css" rel="stylesheet">
 
 </head>
 <body>
@@ -146,7 +149,7 @@ $conn->close();
                                         </div>
                                         <div class="form-group col-md-4">
                                             <label>Contact Number</label>
-                                            <input type="tel" class="form-control" value="<?php echo $contact_no; ?>" name="contact_no" required>
+                                            <input type="text" class="form-control" value="<?php echo $contact_no; ?>" name="contact_no" required>
                                         </div>
                                         <div class="form-group col-md-4">
                                             <label>Address</label>
@@ -163,12 +166,13 @@ $conn->close();
                                             <input type="date" class="form-control" value="<?php echo $bday; ?>" name="bday" required>
                                         </div>
                                         <div class="form-group col-md-4">
-                                            <label>Gender</label>
-                                            <select class="form-control" id="" required value="<?php echo $gender; ?>" name="gender">
-                                                <option value="Male">Male</option>
-                                                <option value="Female">Female</option>
-                                            </select>
-                                        </div>
+    <label>Gender</label>
+    <select class="form-control" id="" required name="gender">
+        <option value="Male" <?php echo ($gender == 'Male')? 'selected' : '';?>>Male</option>
+        <option value="Female" <?php echo ($gender == 'Female')? 'selected' : '';?>>Female</option>
+    </select>
+</div>
+       
                                     </div>
 
 
@@ -179,6 +183,7 @@ $conn->close();
                                     <button type="submit" class="btn btn-primary" name="update">Update</button>
                                     <a href="staff.php" class="btn btn-secondary">Back</a>
                                 </div>
+                              
                             </form>
 
                         </div>
@@ -188,7 +193,7 @@ $conn->close();
 					</div>
 				</div>
 			
-			
+                
 			
                 
 			<!-- Main Footer -->
