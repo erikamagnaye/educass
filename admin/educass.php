@@ -76,7 +76,7 @@ $stmtSelect->close();
 					<div class="page-inner">
 						<div class="d-flex align-items-left align-items-md-center flex-column flex-md-row">
 							<div>
-								<h2 class="text-black fw-bold">Educational Assistance</h2>
+								<h2 class="text-black fw-bold">Admin</h2>
 							</div>
 						</div>
 					</div>

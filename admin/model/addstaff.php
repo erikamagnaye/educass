@@ -33,7 +33,7 @@ if (isset($_POST['create'])){
         }else{
             $_SESSION['display'] = 'Something went wrong!';
             $_SESSION['title'] = 'Error';
-            $_SESSION['success'] = 'danger';
+            $_SESSION['success'] = 'error';
         }
 
     }

@@ -69,11 +69,11 @@ $current_page = PageName();
                         <p>Dashboard</p>
                     </a>
                 </li>
-                <li class="nav-section">
+               <li class="nav-section">
                     <span class="sidebar-mini-icon">
                         <i class="fa fa-ellipsis-h"></i>
                     </span>
-                    <h4 class="text-section">Menu</h4>
+                  <!--   <h4 class="text-section">Menu</h4>-->
                 </li>
                 <li class="nav-item <?= $current_page=='educass.php' || $current_page=='viewprinteduc.php' ? 'active' : null ?>">
                     <a href="educass.php">
