@@ -130,10 +130,10 @@ else{
     </tr>
     <tr>
         <th><?php if(!empty($picture)): ?>
-                        <img src="<?= preg_match('/data:image/i', $picture) ? $picture : '../applicants/assets/uploads/applicant_profile/'.$picture ?>" alt="..." 
+                        <img src="<?= preg_match('/data:image/i', $picture) ? $picture : '../applicants/assets/uploads/applicant_profile/'.$picture ?>" alt="Picture" 
                         class="avatar-img rounded-circle" style="height: 70px;width:70px;">
                     <?php else: ?>
-                        <img src="assets/img/logo.png" alt="..." class="avatar-img rounded-circle">
+                        <img src="assets/img/logo.png" alt="Picture" class="avatar-img rounded-circle">
                     <?php endif ?></th>
         <td style="text-transform: uppercase;font-weight:bold;"><?php echo $fullname; ?></td>
         <th>Email</th>
@@ -171,16 +171,13 @@ else{
         <th>Valid ID</th>
         <td>
         <?php if(!empty($validid)): ?>
-    <a href="<?= '../applicants/assets/uploads/validid_file/'.$validid ?>" target="_blank">View Valid ID</a>
+    <a href="<?= '../applicants/assets/uploads/validid_file/'.$validid ?>" target="_blank"><?php echo $validid ?></a>
   <?php else: ?>
     No Valid ID available
   <?php endif ?>
 </td>
     </tr>
-    <tr>
-        <th></th>
-        <td>  <?php echo $picture; ?></td>
-    </tr>
+
 </table>
 
      

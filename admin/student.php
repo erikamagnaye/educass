@@ -63,18 +63,15 @@ if (strlen($_SESSION['id'] == 0)) {
                                             <div class="card-title">Students</div>
 
                                             <div class="card-tools">
-                                                <a href="viewstaff.php" class="btn btn-success btn-border btn-round btn-sm" title="view and print">
+                                                <a href="viewstudent.php" class="btn btn-success btn-border btn-round btn-sm" title="view and print">
                                                     <i class="fa fa-eye"></i>
                                                     View
                                                 </a>
-                                                <a href="model/export_staff_csv.php" class="btn btn-danger btn-border btn-round btn-sm" title="Download">
+                                                <a href="model/export_student_csv.php" class="btn btn-danger btn-border btn-round btn-sm" title="Download">
                                                     <i class="fa fa-file"></i>
                                                     Export CSV
                                                 </a>
-                                                <a href="#add" data-toggle="modal" class="btn btn-info btn-border btn-round btn-sm" title="Post Assistance">
-                                                    <i class="fa fa-plus"></i>
-                                                    Add Students
-                                                </a>
+                                               
                                             </div>
 
                                         </div>
@@ -114,17 +111,23 @@ if (strlen($_SESSION['id'] == 0)) {
                                                         $province = $row['province'];
                                                         $street_name = $row['street_name'];
                                                         $validid = $row['validid'];
-                                                        $picture = $row['picture'];
+                                                        //$picture = $row['picture'];
                                                         $citizenship = $row['citizenship'];
                                                         $religion = $row['religion'];
                                                         $civilstatus = $row['civilstatus'];
                                                         $accstatus = $row['accstatus'];
                                                         $fullname =$row['fullname'];
 
+                                                        $imagePath = $row['picture'];
+                                                        if (filter_var($imagePath, FILTER_VALIDATE_URL)) {
+                                                            $imageUrl = $imagePath;
+                                                        } else {
+                                                            $imageUrl = '../applicants/assets/uploads/applicant_profile/' . $imagePath;
+                                                        }
                                                        // $fullname = $lastname . ', ' . $firstname;
                                                     ?>
                                                         <tr>
-                                                            <td><?php echo htmlspecialchars($fullname); ?></td>
+                                                        <td><img src="<?php echo htmlspecialchars($imageUrl); ?>" alt="Picture" class="avatar-img rounded-circle" style="height: 50px;width:50px;"> <?php echo htmlspecialchars($fullname); ?></td>
                                                             <td><?php echo htmlspecialchars($brgy); ?></td>
                                                             <td><?php echo htmlspecialchars($email); ?></td>
                                                             <td><?php echo htmlspecialchars($gender); ?></td>
@@ -164,116 +167,7 @@ if (strlen($_SESSION['id'] == 0)) {
 
                 </div>
 
-                <!-- Modal ADD NEW STAFF FOR EDUCATIONAL ASSISTANCE -->
-                <div class="modal fade" id="add" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
-                    <div class="modal-dialog modal-lg" role="document">
-                        <div class="modal-content">
-                            <div class="modal-header bg-success" style="border-radius: 3px;">
-                                <h5 class="modal-title" id="exampleModalLabel">Add New Staff</h5>
-                                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                                    <span aria-hidden="true">&times;</span>
-                                </button>
-                            </div>
-                            <div class="modal-body">
-                                <form method="POST" action="model/addstaff.php">
-                                    <div class="row">
-                                        <div class="form-group col-md-4">
-                                            <label>Last Name</label>
-                                            <input type="text" class="form-control" placeholder="Enter Last Name" name="lname" required>
-                                        </div>
-                                        <div class="form-group col-md-4">
-                                            <label>First Name</label>
-                                            <input type="text" class="form-control" placeholder="Enter First Name" name="fname" required>
-                                        </div>
-                                        <div class="form-group col-md-4">
-                                            <label>Email</label>
-                                            <input type="email" class="form-control" placeholder="Enter Email" name="email" required>
-                                        </div>
-                                    </div>
-                                    <div class="row">
-                                        <div class="form-group col-md-4">
-                                            <label>Position</label>
-                                            <input type="text" class="form-control" placeholder="Enter Position" name="position" list="posOptions" required>
-                                            <datalist id="posOptions">
-                                            <option value="SK-Arawan">
-                                                <option value="SK-Bagong Niing">
-                                                <option value="SK-Balat Atis">
-                                                <option value="SK-Briones">
-                                                <option value="SK-Bulihan">
-                                                <option value="SK-Buliran">
-                                                <option value="SK-Callejon">
-                                                <option value="SK-Corazon">
-                                                <option value="SK-Del Valle">
-                                                <option value="SK-Loob">
-                                                <option value="SK-Magsaysay">
-                                                <option value="SK-Matipunso">
-                                                <option value="SK-Niing">
-                                                <option value="SK-Poblacion">
-                                                <option value="SK-Pulo">
-                                                <option value="SK-Pury">
-                                                <option value="SK-Sampaga">
-                                                <option value="SK-Sampaguita">
-                                                <option value="SK-San Jose">
-                                                <option value="SK-Sinturisan">
-                                            </datalist>
-                                        </div>
-                                        <div class="form-group col-md-4">
-                                            <label>Contact Number</label>
-                                            <input type="text" class="form-control" placeholder="09" name="contact_no" required>
-                                        </div>
-                                        <div class="form-group col-md-4">
-                                            <label>Address</label>
-                                            <input type="text" class="form-control" placeholder="Enter Address" name="address" required>
-                                        </div>
-                                    </div>
-                                    <div class="row">
-                                        <div class="form-group col-md-4">
-                                            <label>Age</label>
-                                            <input type="number" class="form-control" placeholder="Enter Age" name="age" required>
-                                        </div>
-                                        <div class="form-group col-md-4">
-                                            <label>Birthday</label>
-                                            <input type="date" class="form-control" placeholder="Enter Birthday" name="bday" required>
-                                        </div>
-                                        <div class="form-group col-md-4">
-                                            <label>Gender</label>
-                                            <select class="form-control" id="" required name="gender">
-                                                <option value="">Select</option>
-                                                <option value="Male">Male</option>
-                                                <option value="Female">Female</option>
-                                            </select>
-                                        </div>
-                                    </div>
-                                    <div class="form-group">
-                                        <label>Password</label>
-                                        <input type="text" class="form-control" placeholder="Password" name="password" required>
-                                    </div>
-
-
-
-                            </div>
-                            <div class="modal-footer">
-                                <!--  <input type="hidden" id="pos_id" name="id"> -->
-                                <button type="button" class="btn btn-danger" data-dismiss="modal">Close</button>
-                                <button type="submit" class="btn btn-primary" name="create">Create</button>
-                            </div>
-
-                            <?php if (isset($_SESSION['display'])) : ?>
-                                <script>
-                                    Swal.fire({
-                                        title: '<?php echo $_SESSION['title']; ?>',
-                                        text: '<?php echo $_SESSION['display']; ?>',
-                                        icon: '<?php echo $_SESSION['success']; ?>',
-                                        confirmButtonText: 'OK'
-                                    });
-                                </script>
-                                <?php unset($_SESSION['display']);
-                                unset($_SESSION['success']); ?>
-                            <?php endif; ?>
-                            </form>
-                        </div>
-                    </div>
-                </div>
+           
 
                     <!-- alert for UPDATEEEEEEEEE -->
                 <?php if (isset($_SESSION['alertmess'])) : ?> 
