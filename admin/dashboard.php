@@ -151,7 +151,7 @@ if ($latest_educid) {
 .dashboard {
     display: grid;
     grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
-    gap: 20px;
+    gap: 15px;
     align-items: center;
 }
 
@@ -172,7 +172,7 @@ if ($latest_educid) {
 }
 
 h5 {
-    margin: 10px 0 10px;
+    margin: 5px 0 5px;
 	word-wrap: break-word;
     overflow-wrap: break-word;
 	word-break: break-all;
@@ -328,7 +328,7 @@ h5 {
 	
 
 <div class="dashboard" >
-        <div class="card">
+        <div class="card" style="">
             <div class="card-icon"><i class="fas fa-user"></i></div>
           <a href="applications.php" class="btn">  <h5><?= $vacc ?> <br>Verified Account</h5></a>
           
@@ -351,6 +351,12 @@ h5 {
             <div class="card-icon"><i class="fas fa-comments"></i></div>
 			<a href="educaids.php" class="btn"> <h5><?=$totaleduc?><br> Educational Assistance</h5></a>      
         </div>
+        <div class="card">
+            <div class="card-icon"><i class="fas fa-comments"></i></div>
+			<a href="educaids.php" class="btn"> <h5><?=$totaleduc?><br> Beneficiaries</h5></a>      
+        </div>
+        </div> 
+       
 	
     </div>
 
@@ -363,6 +369,7 @@ h5 {
     
 
                     <br>
+                    <div class="page-inner mt--2" >
 					<div class="row">
 						<div class="col-md-12">
 							<div class="card">
@@ -462,7 +469,7 @@ h5 {
 							</div>
 						</div>
 					</div>
-				
+                    </div>
 					<div class="row">
         <div class="col-md-6 offset-md-4">
             <div class="card">

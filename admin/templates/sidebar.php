@@ -105,10 +105,10 @@ $current_page = PageName();
                         <p>staff</p>
                     </a>
                 </li>
-                <li class="nav-item <?= $current_page=='applicants.php'  ? 'active' : null ?>">
-                    <a href="applicants.php">
+                <li class="nav-item <?= $current_page=='student.php'  ? 'active' : null ?>">
+                    <a href="student.php">
                         <i class="fas fa-address-card"></i>
-                        <p>Applicants</p>
+                        <p>Students</p>
                     </a>
                 </li>
                 <li class="nav-item <?= $current_page=='reports.php' ? 'active' : null ?>">
@@ -117,7 +117,38 @@ $current_page = PageName();
                         <p>Reports</p>
                     </a>
                 </li>
+             <!--   <li class="nav-item ">
+                                    <a href="backup/backup.php">
+                                    <i class="fa fa-database"></i>
+                                        <p>Backup</p>
+                                    </a>
+                                </li>
                 <li class="nav-item ">
+                    <a href="logout.php">
+                        <i class="fa fa-power-off"></i>
+                        <p>Logout</p>
+                    </a>
+                </li>-->
+                   
+                  
+               
+             
+                <li class="nav-section">
+                    <span class="sidebar-mini-icon">
+                        <i class="fa fa-ellipsis-h"></i>
+                    </span>
+                    <h4 class="text-section">System</h4>
+                </li>
+                <li class="nav-item  'active' : null ?>">
+                    <a href="#settings" data-toggle="collapse" class="collapsed" aria-expanded="false">
+                        <i class="icon-wrench"></i>
+                            <p>Settings</p>
+                        <span class="caret"></span>
+                    </a>
+                    <div class="collapse <?= $current_page=='purok.php' || $current_page=='position.php'  || $current_page=='precinct.php' || $current_page=='chairmanship.php' || $current_page=='users.php' || $current_page=='support.php' || $current_page=='backup.php' ? 'show' : null ?>" id="settings">
+                        <ul class="nav nav-collapse">
+                            
+                        <li class="nav-item ">
                                     <a href="backup/backup.php">
                                     <i class="fa fa-database"></i>
                                         <p>Backup</p>
@@ -129,34 +160,6 @@ $current_page = PageName();
                         <p>Logout</p>
                     </a>
                 </li>
-                   
-                  
-               
-             
-                <li class="nav-section">
-                    <span class="sidebar-mini-icon">
-                        <i class="fa fa-ellipsis-h"></i>
-                    </span>
-                    <h4 class="text-section">System</h4>
-                </li>
-                <li class="nav-item <?= $current_page=='purok.php' || $current_page=='position.php' || $current_page=='chairmanship.php' || $current_page=='precinct.php' ||$current_page=='users.php' || $current_page=='support.php' || $current_page=='backup.php' ? 'active' : null ?>">
-                    <a href="#settings" data-toggle="collapse" class="collapsed" aria-expanded="false">
-                        <i class="icon-wrench"></i>
-                            <p>Settings</p>
-                        <span class="caret"></span>
-                    </a>
-                    <div class="collapse <?= $current_page=='purok.php' || $current_page=='position.php'  || $current_page=='precinct.php' || $current_page=='chairmanship.php' || $current_page=='users.php' || $current_page=='support.php' || $current_page=='backup.php' ? 'show' : null ?>" id="settings">
-                        <ul class="nav nav-collapse">
-                            <li>
-                                <a href="#barangay" data-toggle="modal">
-                                    <span class="sub-item">Barangay Info</span>
-                                </a>
-                            </li>
-                            <li class="<?= $current_page=='purok.php' ? 'active' : null ?>">
-                                <a href="purok.php">
-                                    <span class="sub-item">Purok</span>
-                                </a>
-                            </li>
                             <li class="<?= $current_page=='precinct.php' ? 'active' : null ?>">
                                 <a href="precinct.php">
                                     <span class="sub-item">Precinct</span>
@@ -173,18 +176,8 @@ $current_page = PageName();
                                 </a>
                             </li>
                             
-                            <?php if($_SESSION['role']=='admin'):?>
-                                <li>
-                                    <a href="#support" data-toggle="modal">
-                                        <span class="sub-item">Support</span>
-                                    </a>
-                                </li>
-                            <?php else: ?>
-                                <li class="<?= $current_page=='users.php' ? 'active' : null ?>">
-                                    <a href="users.php">
-                                        <span class="sub-item">Users</span>
-                                    </a>
-                                </li>
+                          
+                                
                                 <li class="<?= $current_page=='support.php' ? 'active' : null ?>">
                                     <a href="support.php">
                                         <span class="sub-item">Support</span>
@@ -200,7 +193,7 @@ $current_page = PageName();
                                         <span class="sub-item">Restore</span>
                                     </a>
                                 </li>
-                            <?php endif ?>
+                         
                         </ul>
                     </div>
                 </li>

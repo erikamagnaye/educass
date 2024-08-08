@@ -26,10 +26,11 @@ if (isset($_POST['save'])) {
     $contact_no = $conn->real_escape_string($_POST['contact_no']);
     $province = $conn->real_escape_string($_POST['province']);
     $password = md5($_POST['password']);
-    $valididPath = 'assets/uploads/validid_file' . basename($_FILES['validid']['name']);
+    //$valididPath = 'assets/uploads/validid_file' . basename($_FILES['validid']['name']);
+    $valididPath = 'assets/uploads/validid_file/' . basename($_FILES['validid']['name']);
     $validid = basename($_FILES['validid']['name']);
     $maxFileSize = 10000000; // 10MB
-
+    $allowedTypes = ['image/png', 'image/jpeg', 'image/jpg', 'application/pdf', 'application/vnd.openxmlformats-officedocument.wordprocessingml.document'];
     // Check if a student with the same firstname, lastname, and email already exists
     $checkStmt = $conn->prepare("SELECT COUNT(*) FROM student WHERE firstname = ? AND lastname = ?  AND midname = ? AND brgy = ? AND contact_no = ? AND birthday = ? or email = ?");
     $checkStmt->bind_param("ssssiss", $fname, $lname,  $mname, $brgy, $contact_no, $bdate, $email );
@@ -44,7 +45,12 @@ if (isset($_POST['save'])) {
     } elseif ($_FILES['validid']['size'] > $maxFileSize) {
         $_SESSION['success'] = 'danger';
         $_SESSION['mess'] = 'File size exceeds the maximum limit of 10MB.';
-    } elseif (move_uploaded_file($_FILES['validid']['tmp_name'], $valididPath)) {
+    } 
+    elseif (!in_array($_FILES['validid']['type'], $allowedTypes)) {
+        $_SESSION['success'] = 'danger';
+        $_SESSION['mess'] = 'Invalid file type. Only PNG, JPEG, DOCx and JPG files are allowed.';
+    }
+    elseif (move_uploaded_file($_FILES['validid']['tmp_name'], $valididPath)) {
         // Insert data into database
         $stmt = $conn->prepare("INSERT INTO student (lastname, firstname, midname, email, `password`, birthday, contact_no, brgy, municipality, province, street_name, validid, picture, gender, citizenship, religion, age, civilstatus, accstatus) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)");
         $stmt->bind_param("ssssssisssssssssiss", $lname, $fname, $mname, $email, $password, $bdate, $contact_no, $brgy, $municipality, $province, $street, $validid, $profile, $gender, $bplace, $religion, $age, $cstatus, $accstatus);
@@ -347,8 +353,8 @@ label {
                             <div class="form-group">
                                  
                                  <label for="formFile" class="form-label">Valid ID</label>
-                                 <input class=" form-control form-control-sm" type="file" id="formFile" name="validid" required>
-                           
+                                 <input class=" form-control form-control-sm" type="file" id="formFile" name="validid" accept=".png, .jpg, .jpeg, .docx, .pdf" required>
+                            
                              </div>
                              </div>
                              <div class="col-md-4">
