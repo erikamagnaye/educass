@@ -173,56 +173,30 @@ else {
 					<div class="page-inner">
 						<div class="d-flex align-items-left align-items-md-center flex-column flex-md-row">
 							<div>
-								<h2 class="text-black fw-bold">Educational Assistance</h2>
+								<h2 class="text-black fw-bold">Applicant Portal</h2>
 							</div>
 						</div>
 					</div>
 				</div>
 				<div class="page-inner">
-					<?php if(isset($_SESSION['message'])): ?>
-							<div class="alert alert-<?php echo $_SESSION['success']; ?> <?= $_SESSION['success']=='danger' ? 'bg-danger text-light' : null ?>" role="alert">
-								<?php echo $_SESSION['message']; ?>
-							</div>
-                            <!-- MESSAGE WHEN DATA IS INSERTED __-->
-                            
-                            <?php 
-                            /*if (isset($_SESSION['message']) && $_SESSION['message'] != ''){ ?>                                                         ?>
-                      <!--  <div class="alert alert-success alert-dismissible fade show" role="alert">
-                        <strong>Hello!</strong><?//php echo $_SESSION['message']; ?>
-                        <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
-                        </div> -->
-                            
-						<?php unset($_SESSION['message']);  //}*/ ?> 
-                       
-
-						<?php endif ?>
+					
 					<div class="row mt--2">
 						
 						<div class="col-md-12">
 						
 							<div class="card">
-								<div class="card-header">
+								<div class="card-header bg-success" style="border-radius: 2px;">
 									<div class="card-head-row">
-										<div class="card-title">Available Educational Assistance </div>
+										<div class="card-title"style=" color: #ffffff;"><h3>Available Educational Assistance </h3></div>
 										
 									
 									
 									</div>
+                                    <form>
+           
 								</div>
 								<div class="card-body">
-									<div class="table-responsive">
-										<table class="table table-striped">
-										<thead>
-												<tr>
-													<th scope="col">Assistance</th>
-													<th scope="col">Semester</th>
-													<th scope="col">Due</th>
-													<th>Status</th>
-													
-													
-												</tr>
-											</thead> 
-											<tbody>
+									
                           <?php 
                                     $query = "SELECT * FROM `educ aids` where status = 'Open' order by `date` desc"; // SQL query to fetch all table data
                                     $view_data = mysqli_query($conn, $query); // sending the query to the database
@@ -239,34 +213,44 @@ else {
                                         $date = $row['date'];  
                                         $min_grade = $row['min_grade'];  
                                     ?>
-                                  <tr>
-                                        <td><?php echo htmlspecialchars($title); ?></td>
-                                        <td><?php echo htmlspecialchars($sem);?></td>
-                                         <td><?php echo htmlspecialchars($end); ?></td>
-                                        <td>
-                                        <a href="apply_educ.php?educid=<?php echo $educid; ?>" class="btn btn-success btn-circle" style="margin: 1px;">
-                                                    <i class="fa fa-check"></i> Apply
+                                        <div class="card mb-2" style="border-width: 1px; border-radius: 10px;">
+                        <div class="card-body py-2">
+                            <div class="d-flex justify-content-between">
+                                <div>
+                                    <h6 class="card-title mb-0"><?php echo $title . " for " . $sy . "   ". $sem ." is open from ". $start . " until " . $end; ?></h6>
+                                    <small class="text-muted">Posted on: <?php echo $date;?></small>
+                                </div>
+                                <div>
+                                <a href="apply_educ.php?educid=<?php echo $educid; ?>" class="btn btn-success btn-circle" style="margin: 1px;">
+                                                    <i class="fa fa-check"></i> Apply Now
                                                     </a>
-                                            
-                                        </td>
-                                    </tr>
+
+                                  
+                                                 
+
+                                </div>
+                            </div>
+                        </div>
+                    </div>
                                     <?php } ?>
 
-</tbody>
+
 
 										
-										</table>
+								
 									</div>
 								</div>
 							</div>
-						</div>
+						
+
+
 <!-- PREVIOUS EDUC ASS -->
 <div class="col-md-12">
-						
+						<br>
                         <div class="card">
-                            <div class="card-header">
+                            <div class="card-header bg-danger" style="border-radius: 2px;">
                                 <div class="card-head-row">
-                                    <div class="card-title">Previous Educational Assistance </div>
+                                    <div class="card-title" style=" color: #ffffff;">Previous Educational Assistance </div>
                                     
                                 
                                 
@@ -386,65 +370,6 @@ else {
                     </div>
                 </div>
             </div>
-
-			<!-- Modal EDIT EDUCATIONAL ASSISTANCE -->
-		<!-- Modal EDIT EDUCATIONAL ASSISTANCE 
-<div class="modal fade" id="edit" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
-    <div class="modal-dialog" role="document">
-        <div class="modal-content">
-            <div class="modal-header">
-                <h5 class="modal-title" id="exampleModalLabel">Edit Assistance</h5>
-                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                    <span aria-hidden="true">&times;</span>
-                </button>
-            </div>
-            <div class="modal-body">
-                <form method="POST" action="model/edit_educass.php">
-                    <div class="form-group">
-                        <label>Title</label>
-                        <input type="text" class="form-control" id="title" placeholder="Enter title" name="title" value="<?php echo $title ?>" required>
-                    </div>
-                    <div class="form-group">
-                        <label>Semester</label>
-                        <input type="text" class="form-control" id="sem" placeholder="Enter semester" name="sem" value="<?php echo $sem ?>"  required>
-                    </div>
-                    <div class="form-group">
-                        <label>School Year</label>
-                        <input type="text" class="form-control" id="sy" placeholder="Enter school year" name="sy" value="<?php echo $sy ?>"  required>
-                    </div>
-                    <div class="form-group">
-                        <label>Minimum Grade Required</label>
-                        <input type="text" class="form-control" id="min_grade" placeholder="Enter minimum grade" name="min_grade" value="<?php echo $min_grade ?>"  required>
-                    </div>
-                    <div class="form-group">
-                        <label>Start</label>
-                        <input type="date" class="form-control" id="start" name="start" value="<?php echo $start ?>"  required>
-                    </div>
-                    <div class="form-group">
-                        <label>Due Date</label>
-                        <input type="date" class="form-control" id="end" name="end" value="<?php echo $end ?>"  required>
-                    </div>
-                    <div class="form-group">
-                        <label>Status</label>
-                        <select class="form-control" id="status" required name="status" value="<?php echo $status ?>" >
-                            <option value="Active">Open</option>
-                            <option value="Inactive">Closed</option>
-                        </select>
-                    </div>
-                    <div class="form-group">
-                        <label>Date Posted</label>
-                        <input type="date" class="form-control" id="date" name="date" value="<?php echo $date ?>"  required>
-                    </div>
-                    <div class="modal-footer">
-                        <input type="hidden" id="educid" name="educid">
-                        <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
-                        <button type="submit" class="btn btn-primary">Update</button>
-                    </div>
-                </form>
-            </div>
-        </div>
-    </div>
-</div> -->
 
 
 			<!-- Main Footer -->

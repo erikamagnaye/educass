@@ -12,28 +12,89 @@ if (strlen($_SESSION['id'] == 0)) {
 
 else {
 //we need to retrieve existing information of the students so they won't have to input their info again
+if (isset($_GET['educid'])) { // this is from educaids.php, this educid will be used for applying for the educ aids
+    $educid = $_GET['educid'];
+
 $studid = $_SESSION['id'];
+$email = $_SESSION['email'];
 $query = "SELECT * FROM `student` where studid= $studid"; // SQL query to fetch all table data
 $student_data = mysqli_query($conn, $query); // sending the query to the database
 
 // displaying all the data retrieved from the database using while loop
-while ($row = mysqli_fetch_assoc($stedent_data)) {
+while ($row = mysqli_fetch_assoc($student_data)) {
                
-    $lastname = $row['educname'];        
-    $firstname = $row['sem'];         
-    $midname = $row['sy'];  
-    $email = $row['status'];           
-    $birthday = $row['start'];        
-    $contact_no = $row['end'];         
-    $brgy = $row['date'];  
-    $municipality = $row['min_grade']; 
-    $province = $row['sem'];         
-    $street_name = $row['sy'];  
-    $gender = $row['status'];           
-    $citizenship = $row['start'];        
-    $religion = $row['end'];         
-    $age = $row['date'];  
-    $civilstatus = $row['min_grade']; 
+    $lastname = $row['lastname'];        
+    $firstname = $row['firstname'];         
+    $midname = $row['midname'];  
+    $email = $row['email'];           
+    $birthday = $row['birthday'];        
+    $contact_no = $row['contact_no'];         
+    $brgy = $row['brgy'];  
+    $municipality = $row['municipality']; 
+    $province = $row['province'];         
+    $street_name = $row['street_name'];  
+    $gender = $row['gender'];           
+    $citizenship = $row['citizenship'];        
+    $religion = $row['religion'];         
+    $age = $row['age'];  
+    $civilstatus = $row['civilstatus']; 
+}
+
+
+$course = ''; // initialize 
+$major = ''; // initialize 
+$school_name = ''; // initialize mjor
+$school_address = ''; // initialize 
+//CODE TO RETRIEVE DATA ABOUT COURSE/EDUCATIONAL BACKGROUND
+$educbg = "SELECT * FROM `studentcourse` where studid= $studid order by studid desc limit 1"; // SQL query to fetch all table data
+$studcourse = mysqli_query($conn, $educbg); // sending the query to the database
+
+// displaying all the data retrieved from the database using while loop
+while ($data = mysqli_fetch_assoc($studcourse)) {
+    $_SESSION= $data['courseid'];         
+        
+    $course = $data['course'];         
+    $major = $data['major'];  
+    $school_name = $data['school_name'];           
+    $school_address = $data['School_address'];        
+   
+}
+
+//CODE TO RETRIEVE PARENTS INFO
+$father = ''; // initialize 
+$f_age = ''; // initialize 
+$f_occu = ''; // initialize mjor
+$f_income = ''; // initialize 
+$f_status= ''; // initialize mjor
+$f_educattain = ''; // initialize 
+$mother = ''; // initialize 
+$m_age = ''; // initialize 
+$m_occu = ''; // initialize mjor
+$m_income = ''; // initialize 
+$m_status= ''; // initialize mjor
+$m_educattain = ''; // initialize 
+//CODE TO RETRIEVE DATA ABOUT COURSE/EDUCATIONAL BACKGROUND
+$parent = "SELECT * FROM `parentinfo` where studid= $studid"; // SQL query to fetch all table data
+$studparent = mysqli_query($conn, $parent); // sending the query to the database
+
+// displaying all the data retrieved from the database using while loop
+while ($parents = mysqli_fetch_assoc($studparent)) {
+               
+    $_SESSION= $parents['parentid']; // use this for application
+    $father = $parents['father'];
+    $f_age = $parents['f_age'];
+    $f_occu = $parents['f_occu'];
+    $f_income = $parents['f_income'];
+    $f_status = $parents['f_status'];
+    $f_educattain = $parents['f_educattain'];
+    $mother = $parents['mother'];
+    $m_age = $parents['m_age'];
+    $m_occu = $parents['m_occu'];
+    $m_income = $parents['m_income'];
+    $m_status = $parents['m_status'];
+    $m_educattain = $parents['m_educattain']; 
+   
+}
 }
 ?>
 <!DOCTYPE html>
@@ -43,7 +104,9 @@ while ($row = mysqli_fetch_assoc($stedent_data)) {
 	<title>Educational Assistance</title>
    <!-- <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css"> -->
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.1.1/css/all.min.css" />
-
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Poppins:ital,wght@0,100;0,200;0,300;0,400;0,500;0,600;0,700;0,800;0,900;1,100;1,200;1,300;1,400;1,500;1,600;1,700;1,800;1,900&display=swap" rel="stylesheet">
 <style>
  /* Default font size for body */
 .content h2{
@@ -127,7 +190,8 @@ html {
     box-sizing: border-box;
     width: 94%;
     margin: 0 3% 20px 3%;
-
+    border-radius: 20px;
+   
     /*stacking fieldsets above each other*/
     position: relative;
 }
@@ -152,7 +216,7 @@ html {
 
 #msform fieldset .form-card {
     text-align: left;
-    color: #9E9E9E;
+    color: black;
 }
 
 #msform input, #msform textarea {
@@ -164,9 +228,9 @@ html {
     margin-top: 2px;
     width: 100%;
     box-sizing: border-box;
-    font-family: 'Times New Roman', Times, serif;
+    font-family: 'Poppins', Times, serif;
     color: black;
-    font-size: 16px;
+    font-size: 14px;
     letter-spacing: 1px;
 }
 
@@ -386,11 +450,24 @@ button {
   box-shadow: none;
   height: 40px; /* add this to make input fields consistent height */
   padding: 10px;
+
+  
 }
+
 
 select.form-control {
   height: 40px; /* add this to make select options consistent height */
   padding: 10px;
+}
+.main-panel {
+  font-family: Poppins, sans-serif;
+}
+
+.form-control-select {   /* font fam for select options */
+  font-family: 'Poppins', sans-serif !important;
+}
+.main-panel select.form-control {
+  font-family: 'Poppins', sans-serif;
 }
 </style>
 </head>
@@ -454,52 +531,54 @@ select.form-control {
                             </ul>
                             <!-- fieldsets -->
                             <fieldset>
-                                <div class="form-card" style="background-color:#F7F9F2;">
-                                    <h2 class="fs-title">Personal Information</h2>
+                                
+                                <div class="form-card">
+                                    <h2 class="fs-title">Personal Information    YUNG CONTACT NUMBER GAWIN VARCHAR</h2>
                                  <!--   <input type="email" name="email" placeholder="Email Id"/> -->
                                    	<div class="row ">
+ 
                                         <div class="col-md-4">
-                                                <input type="text" class="form-control" placeholder="Enter Firstname" name="fname" required>
+                                                <input type="text" class="form-control" placeholder="Enter Firstname" value="<?php echo $firstname; ?>" name="fname" required>
                                         </div>
                                         <div class="col-md-4">
-                                                <input type="text" class="form-control" placeholder="Enter Middlename" name="mname" required>
+                                                <input type="text" class="form-control" placeholder="Enter Middlename" value="<?php echo $midname; ?>" name="mname" required>
                                         </div>
                                         <div class="col-md-4">
-                                                <input type="text" class="form-control" placeholder="Enter Lastname" name="lname" required>
+                                                <input type="text" class="form-control" placeholder="Enter Lastname" value="<?php echo $lastname; ?>" name="lname" required>
                                         </div>
                                     </div>
 								    <div class="row">
                                         <div class="col-md-4">                                      
-                                                <input type="text" class="form-control" placeholder="Enter Religion" name="religion" required>                                         
+                                                <input type="text" class="form-control" placeholder="Enter Religion" value="<?php echo $religion; ?>" name="religion" required>                                         
                                         </div>
                                         <div class="col-md-4">                                       
-                                                <input type="text" class="form-control" placeholder="Enter Citizenship" name="bplace" required>                                       
+                                                <input type="text" class="form-control" placeholder="Enter Citizenship" value="<?php echo $citizenship; ?>" name="citizenship" required>                                       
                                         </div>
                                         <div class="col-md-4">                                       
-                                                <input type="date" class="form-control" placeholder="Enter Birthdate" name="bdate" required>                                       
+                                                <input type="date" class="form-control" placeholder="Enter Birthdate" value="<?php echo $birthday; ?>" name="bdate" required>                                       
                                         </div>
                                     </div>
 									<div class="row">
                                         <div class="col-md-4">                                  
-                                                <input type="number" class="form-control" placeholder="Enter Age" min="1" name="age" required>                                           
+                                                <input type="number" class="form-control" placeholder="Enter Age" min="1" value="<?php echo $age; ?>" name="age" required>                                           
                                             </div>
-                                            <div class="col-md-4 mb-2" >
+                                            <div class="col-md-4" >
                                                 
-                                                <select class="form-control form-control-sm" name="cstatus" required>
-                                                    <option disabled selected>Select Civil Status</option>
-                                                    <option value="Single">Single</option>
-                                                    <option value="Married">Married</option>
-                                                    <option value="Widow">Widow</option>
-                                                </select>
+                                            <select class="form-control form-control-sm form-control-select" name="cstatus" required>
+            <option disabled selected>Select Civil Status</option>
+            <option value="Single" <?php echo ($civilstatus == 'Single') ? 'selected' : ''; ?>>Single</option>
+            <option value="Married" <?php echo ($civilstatus == 'Married') ? 'selected' : ''; ?>>Married</option>
+            <option value="Widow" <?php echo ($civilstatus == 'Widow') ? 'selected' : ''; ?>>Widow</option>
+        </select>
                                            
                                         </div>
-                                        <div class="col-md-4 mb-2">
+                                        <div class="col-md-4">
                                             
-                                                <select class="form-control form-control-sm" required name="gender">
-                                                    <option disabled selected value="">Select Gender</option>
-                                                    <option value="Male">Male</option>
-                                                    <option value="Female">Female</option>
-                                                </select>
+                                        <select class="form-control form-control-sm" required name="gender" style="font-family: 'Poppins', Times, serif;">
+            <option disabled selected value="">Select Gender</option>
+            <option value="Male" <?php echo ($gender == 'Male') ? 'selected' : ''; ?>>Male</option>
+            <option value="Female" <?php echo ($gender == 'Female') ? 'selected' : ''; ?>>Female</option>
+        </select>
                                           
                                         </div>
                                     </div>
@@ -507,50 +586,57 @@ select.form-control {
                                         
                                         <div class="col-md-4">
                                            
-                                                <input type="text" class="form-control" placeholder="Enter Birthplace" name="street" required>
+                                                <input type="text" class="form-control" placeholder="Enter street" value="<?php echo $street_name; ?>" name="street" required>
                                      
                                         </div>
                                       
                                         <div class="col-md-4 mb-2">
                                             
-                                                <select class="form-control form-control-sm vstatus" required name="vstatus">
-                                                    <option disabled selected>Select Barangay</option>
-                                                    <option value="Arawan">Arawan</option>
-                                                    <option value="Baging Niing">Bagong Niing</option>
-                                                    <option value="Balat Atis">Balat Atis</option>
-                                                    <option value="Briones">Briones</option>
-                                                    <option value="Bulihan">Bulihan</option>
-                                                    <option value="Buliran">Buliran</option>
-                                                    <option value="Callejon">Callejon</option>
-                                                    <option value="Corazon">Corazon</option>
-                                                    <option value="Del Valle">Del Valle</option>
-                                                    <option value="Loob">Loob</option>
-                                                    <option value="Magsaysay">Magsaysay</option>
-                                                    <option value="Matipunso">Matipunso</option>
-                                                    <option value="Niing">Niing</option>
-                                                    <option value="Poblacion">Poblacion</option>
-                                                    <option value="Pulo">Pulo</option>
-                                                    <option value="Pury">Pury</option>
-                                                    <option value="Sampaga">Sampaga</option>
-                                                    <option value="Sampaguita">Sampaguita</option>
-                                                    <option value="San Jose">San Jose</option>
-                                                    <option value="Sintorisan">Sintorisan</option>
-                                                    
-                                                </select>                                    
+                                        <?php
+$barangays = array(
+    'Arawan',
+    'Bagong Niing',
+    'Balat Atis',
+    'Briones',
+    'Bulihan',
+    'Buliran',
+    'Callejon',
+    'Corazon',
+    'Del Valle',
+    'Loob',
+    'Magsaysay',
+    'Matipunso',
+    'Niing',
+    'Poblacion',
+    'Pulo',
+    'Pury',
+    'Sampaga',
+    'Sampaguita',
+    'San Jose',
+    'Sintorisan'
+);
+?>
+
+<select class="form-control form-control-sm vstatus" required name="brgy">
+    <option disabled selected value="">Select Barangay</option>
+    <?php foreach ($barangays as $barangay) { ?>
+        <option value="<?php echo $barangay; ?>" <?php echo ($brgy == $barangay) ? 'selected' : ''; ?>><?php echo $barangay; ?></option>
+    <?php } ?>
+</select>                                   
                                         </div>
                                         <div class="col-md-4">
-                                                <input type="text" class="form-control" placeholder="Enter Municipality" name="municipality" required>                                           
+                                                <input type="text" class="form-control" placeholder="Enter Municipality" value="<?php echo $municipality; ?>" name="municipality" required>                                           
                                         </div>
                                     </div>
                                     <div class="row" >
                                         <div class="col-md-4">
-                                                <input type="email" class="form-control" placeholder="Enter Email" name="email" required>
+                                                <input type="email" class="form-control" placeholder="Enter Email" value="<?php echo $email; ?>" name="email" required>
                                         </div>
                                         <div class="col-md-4"> 
-                                                <input type="text" class="form-control" placeholder="Enter Contact Number" name="contact_no" required>
+                                                <input type="text" class="form-control" placeholder="Enter Contact Number" value="<?php echo $contact_no; ?>" name="contact_no" required>
                                         </div>
                                         <div class="col-md-4">
-                                                <input type="text" class="form-control" placeholder="Enter Province" name="province" required>
+                                                <input type="text" class="form-control" placeholder="Enter Province" value="<?php echo $province; ?>" name="province" required>
                                         </div>
                                     </div>
 								</div>
@@ -563,26 +649,34 @@ select.form-control {
                                 <div class="form-card">
                                     <h2 class="fs-title">Educational Background</h2>
                                     <div class="row">
-                                        <div class="col-md-4">
-                                                <input type="text" class="form-control" placeholder="Enter Course" name="fname" required>
+                                        <div class="col-md-6">
+                                                <input type="text" class="form-control" placeholder="Enter Course" value="<?php echo $course; ?>" name="course" required>
                                         </div>
-                                        <div class="col-md-4">
-                                                <input type="text" class="form-control" placeholder="Enter Major (N/A if none)" name="mname" required>
+                                        <div class="col-md-6">
+                                                <input type="text" class="form-control" placeholder="Enter Major (N/A if none)" value="<?php echo $major; ?>" name="major" required>
                                         </div>
-                                        <div class="col-md-4">
-                                                <input type="text" class="form-control" placeholder="Enter School" name="lname" required>
-                                        </div>
+                                      
                                     </div>
 									<div class="row">
-                                        <div class="col-md-4">
-                                                <input type="text" class="form-control" placeholder="Enter School Address" name="fname" required>
+                                    <div class="col-md-6">
+                                                <input type="text" class="form-control" placeholder="Enter School" value="<?php echo $school_name; ?>" name="school_name" required>
+                                        </div>
+                                        <div class="col-md-6">
+                                                <input type="text" class="form-control" placeholder="Enter School Address" value="<?php echo $school_address; ?>" name="school_address" required>
+                                        </div>
+                                       
+                                    </div>
+                                    <div class="row">
+                                    <div class="col-md-4">
+                                                <input type="text" class="form-control" placeholder="Enter Semester" name="sem" required>
                                         </div>
                                         <div class="col-md-4">
-                                                <input type="text" class="form-control" placeholder="Enter Semester" name="mname" required>
+                                                <input type="text" class="form-control" placeholder="Enter School Year (ex. 2024-2025)" name="sy" required>
                                         </div>
                                         <div class="col-md-4">
-                                                <input type="text" class="form-control" placeholder="Enter School Year" name="lname" required>
+                                                <input type="text" class="form-control" placeholder="Enter Year Level" name="year" required>
                                         </div>
+                                       
                                     </div>
 								 </div>
 							
@@ -593,7 +687,7 @@ select.form-control {
                                  </a>
                             </fieldset>
                             <fieldset>
-                                <div class="form-card" style="background-color:#F7F9F2;">
+                                <div class="form-card" style="">
                                     <h2 class="fs-title">Grades</h2>
                                     
                                     <div id="input-container">
@@ -621,57 +715,58 @@ select.form-control {
                                     <h2 class="fs-title">Parenst Information</h2>
                                     <div class="row">
                                         <div class="col-md-4">
-                                                <input type="text" class="form-control" placeholder="Enter Father's Name" name="fname" required>
+                                                <input type="text" class="form-control" placeholder="Enter Father's Name" value="<?php echo $father; ?>" name="father" required>
                                         </div>
                                         <div class="col-md-4">
-                                                <input type="number" class="form-control" placeholder="Enter Age" name="fage" required>
+                                                <input type="number" class="form-control" placeholder="Enter Age"value="<?php echo $f_age; ?>" name="f_age" required>
                                         </div>
                                         <div class="col-md-4">
-                                                <input type="text" class="form-control" placeholder="Occupation" name="lname" required>
+                                                <input type="text" class="form-control" placeholder="Occupation" value="<?php echo $f_occu; ?>" name="f_occu" required>
                                         </div>
                                     </div>
 								    <div class="row">
                                         <div class="col-md-4">                                      
-                                                <input type="text" class="form-control" placeholder="Enter Income" name="religion" required>                                         
+                                                <input type="text" class="form-control" placeholder="Enter Income" value="<?php echo $f_income; ?>"name="f_income" required>                                         
                                         </div>
                                         <div class="col-md-4">                                       
-                                                <input type="text" class="form-control" placeholder="Educational Attainment" name="bplace" required>                                       
+                                                <input type="text" class="form-control" placeholder="Educational Attainment" value="<?php echo $f_educattain; ?>" name="f_educattain" required>                                       
                                         </div>
                                         <div class="col-md-4">                                       
-                                        <select class="form-control form-control-sm" name="fstatus" required>
-                                                    <option disabled selected>Select Status</option>
-                                                    <option value="Alive">Alive</option>
-                                                    <option value="Deceased">Deceased</option>
+                                        <select class="form-control form-control-sm" name="f_status" required>
+                                                    <option disabled selected disabled selected value="">Select Status</option>
+                                                    <option value="Alive" <?php echo ($f_status == 'Alive') ? 'selected' : ''; ?>>Alive</option>
+                                                    <option value="Deceased" <?php echo ($f_status == 'Deceased') ? 'selected' : ''; ?>>Deceased</option>
                                                  
-                                                </select>                                      
+                                                </select>                                        
                                         </div>
                                     </div>
                                     <hr>
                                     <div class="row">
                                         <div class="col-md-4">
-                                                <input type="text" class="form-control" placeholder="Enter Mother's Name" name="fname" required>
+                                                <input type="text" class="form-control" placeholder="Enter Mother's Name" value="<?php echo $mother; ?>" name="mother" required>
                                         </div>
                                         <div class="col-md-4">
-                                                <input type="number" class="form-control" placeholder="Enter Age" name="mage" required>
+                                                <input type="number" class="form-control" placeholder="Enter Age" value="<?php echo $m_age; ?>" name="m_age" required>
                                         </div>
                                         <div class="col-md-4">
-                                                <input type="text" class="form-control" placeholder="Occupation" name="lname" required>
+                                                <input type="text" class="form-control" placeholder="Occupation" value="<?php echo $m_occu; ?>" name="m_occu" required>
                                         </div>
                                     </div>
 								    <div class="row">
                                         <div class="col-md-4">                                      
-                                                <input type="text" class="form-control" placeholder="Enter Income" name="religion" required>                                         
+                                                <input type="text" class="form-control" placeholder="Enter Income" value="<?php echo $m_income; ?>" name="m_income" required>                                         
                                         </div>
                                         <div class="col-md-4">                                       
-                                                <input type="text" class="form-control" placeholder="Educational Attainment" name="bplace" required>                                       
+                                                <input type="text" class="form-control" placeholder="Educational Attainment" value="<?php echo $m_educattain; ?>" name="m_educattain" required>                                       
                                         </div>
                                         <div class="col-md-4">                                       
-                                        <select class="form-control form-control-sm" name="fstatus" required>
-                                                    <option disabled selected>Select Status</option>
-                                                    <option value="Alive">Alive</option>
-                                                    <option value="Deceased">Deceased</option>
+                                        <select class="form-control form-control-sm" name="m_status" required>
+                                                    <option disabled selected disabled selected value="">Select Status</option>
+                                                    <option value="Alive" <?php echo ($m_status == 'Alive') ? 'selected' : ''; ?>>Alive</option>
+                                                    <option value="Deceased" <?php echo ($m_status == 'Deceased') ? 'selected' : ''; ?>>Deceased</option>
                                                  
-                                                </select>                                      
+                                                </select>  
+                                               
                                         </div>
                                     </div>
                                 </div>
@@ -685,30 +780,30 @@ select.form-control {
                                  </a>
                             </fieldset>
                             <fieldset>
-                                <div class="form-card" style="background-color:#F7F9F2;">
+                                <div class="form-card" style="">
                                     <h2 class="fs-title">Requirements</h2>
                                     <div class="row">
                                         <div class="col-md-4">
-                                        <label for="formFile" class="form-label">Valid ID</label>
-                                        <input class=" form-control form-control-sm" type="file" id="formFile" name="validid" required>
+                                        <label for="formFile" class="form-label">Certificate of Enrollment</label>
+                                        <input class=" form-control form-control-sm" type="file" id="formFile" name="coe" accept=".png, .jpg, .jpeg, .docx, .pdf" required>
                                         </div>
                                         <div class="col-md-4">
-                                        <label for="formFile" class="form-label">Valid ID</label>
-                                        <input class=" form-control form-control-sm" type="file" id="formFile" name="validid" required>
+                                        <label for="formFile" class="form-label">Barangay Indigent</label>
+                                        <input class=" form-control form-control-sm" type="file" id="formFile" name="indigent" accept=".png, .jpg, .jpeg, .docx, .pdf" required>
                                         </div>
                                         <div class="col-md-4">
-                                        <label for="formFile" class="form-label">Valid ID</label>
-                                        <input class=" form-control form-control-sm" type="file" id="formFile" name="validid" required>
+                                        <label for="formFile" class="form-label">Grades</label>
+                                        <input class=" form-control form-control-sm" type="file" id="formFile" name="grades" accept=".png, .jpg, .jpeg, .docx, .pdf" required>
                                         </div>
                                     </div>
 								    <div class="row">
                                         <div class="col-md-4">                                      
-                                        <label for="formFile" class="form-label">Valid ID</label>
-                                        <input class=" form-control form-control-sm" type="file" id="formFile" name="validid" required>                                         
+                                        <label for="formFile" class="form-label">Letter</label>
+                                        <input class=" form-control form-control-sm" type="file" id="formFile" name="letter" accept=".png, .jpg, .jpeg, .docx, .pdf" required>                                         
                                         </div>
                                         <div class="col-md-4">                                       
-                                        <label for="formFile" class="form-label">Valid ID</label>
-                                        <input class=" form-control form-control-sm" type="file" id="formFile" name="validid" required>                                      
+                                        <label for="formFile" class="form-label">School ID</label>
+                                        <input class=" form-control form-control-sm" type="file" id="formFile" name="schoolid" accept=".png, .jpg, .jpeg, .docx, .pdf" required>                                      
                                         </div>
                                       
                                     </div>
@@ -739,7 +834,7 @@ select.form-control {
                                 <a  class="previous action-button-previous btn btn-warning btn-circle "  name="previous"><i class="fa-solid fa-backward"></i> Back
                                  </a>
                                 
-                                <a href="apply_educ.php?educid=<?php echo $educid; ?>" class="btn btn-success btn-circle">
+                                <a href="submit_application.php?educid=<?php echo $educid; ?>&studid=<?php echo $studid; ?>" class="btn btn-success btn-circle">
                                                     <i class="fa fa-check"></i> Submit
                                                     </a>
                             </fieldset>
