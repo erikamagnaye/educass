@@ -46,15 +46,51 @@ else{
         $sy = $conn->real_escape_string($_POST['sy']);  
         $year = $conn->real_escape_string($_POST['year']); 
 
-        $course = $conn->query("INSERT INTO studentcourse (studid, course, major, school_name, school_address, sem, `year`, sy ) VALUES ($studid, $course, $major, $school_name, $school_address, $sem, $year, $sy)");
+        $course = $conn->query("INSERT INTO studentcourse (studid, course, major, school_name, school_address, sem, `year`, sy ) VALUES ('$studid', $course, $major, $school_name, $school_address, $sem, $year, $sy)");
         $courseid = $conn->insert_id;
 
         //GRADES
         $subject = $_POST['subject'];
         $grade = $_POST['grade'];
 
-        $grades = $conn->query("INSERT INTO grades (studid, `subject`, grade ) VALUES ($studid, $subject, $grade)");
-        $gradesid = $conn->insert_id;
+        //store value in variable
+        $first = 'First Year';
+        $sec = 'Second Year';
+        $third = 'Third Year';
+        $fourth = 'Fourth Year';
+        $fifth = 'Fifth Year';
+
+        $firstsem = 'First Semester';
+        $secsem = 'Second Semester';
+
+        if ($year == $first && $sem == $firstsem) { // if student is incoming first year
+            if ($grade < 75) {
+                $_SESSION['success'] = 'error';
+            $_SESSION['mess'] = 'Minimum grade required did not meet';
+              $_SESSION['title'] = 'Error';
+           
+            }
+        } elseif ($year == $first || $year == $sec || $year == $third || $year == $fourth || $year == $fifth ) {
+            if ($grade < 3) {
+                $_SESSION['success'] = 'error';
+                $_SESSION['mess'] = 'Minimum grade required did not meet';
+                  $_SESSION['title'] = 'Error';
+               
+            }
+        } elseif ($year == $first && $sem == $secsem ) {
+            if ($grade < 3) {
+                $_SESSION['success'] = 'error';
+                $_SESSION['mess'] = 'Minimum grade required did not meet';
+                  $_SESSION['title'] = 'Error';
+               
+            }
+        }
+        else{
+            $grades = $conn->query("INSERT INTO grades (studid, `subject`, grade ) VALUES ($studid, $subject, $grade)");
+            $gradesid = $conn->insert_id;
+        }
+
+  
 
         //parents info
         $father = $conn->real_escape_string($_POST['father']);

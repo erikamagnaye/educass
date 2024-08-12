@@ -50,7 +50,9 @@ else {
 	<?php include 'templates/header.php' ?>
 	<title>Educational Assistance</title>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
-
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11.12.3/dist/sweetalert2.all.min.js"></script>
+        <link href="https://cdn.jsdelivr.net/npm/sweetalert2@11.12.3/dist/sweetalert2.min.css" rel="stylesheet">
+      
 <style>
  /* Default font size for body */
 .content h2{
@@ -195,50 +197,52 @@ else {
                                     <form>
            
 								</div>
-								<div class="card-body">
-									
-                          <?php 
-                                    $query = "SELECT * FROM `educ aids` where status = 'Open' order by `date` desc"; // SQL query to fetch all table data
-                                    $view_data = mysqli_query($conn, $query); // sending the query to the database
+                                <div class="card-body">
+    <?php 
+    $query = "SELECT * FROM `educ aids` where status = 'Open' order by `date` desc"; // SQL query to fetch all table data
+    $view_data = mysqli_query($conn, $query); // sending the query to the database
 
-                                    // displaying all the data retrieved from the database using while loop
-                                    while ($row = mysqli_fetch_assoc($view_data)) {
-                                        $educid = $row['educid'];                
-                                        $title = $row['educname'];        
-                                        $sem = $row['sem'];         
-                                        $sy = $row['sy'];  
-                                        $status = $row['status'];           
-                                        $start = $row['start'];        
-                                        $end = $row['end'];         
-                                        $date = $row['date'];  
-                                        $min_grade = $row['min_grade'];  
-                                    ?>
-                                        <div class="card mb-2" style="border-width: 1px; border-radius: 10px;">
-                        <div class="card-body py-2">
-                            <div class="d-flex justify-content-between">
-                                <div>
-                                    <h6 class="card-title mb-0"><?php echo $title . " for " . $sy . "   ". $sem ." is open from ". $start . " until " . $end; ?></h6>
-                                    <small class="text-muted">Posted on: <?php echo $date;?></small>
-                                </div>
-                                <div>
-                                <a href="apply_educ.php?educid=<?php echo $educid; ?>" class="btn btn-success btn-circle" style="margin: 1px;">
-                                                    <i class="fa fa-check"></i> Apply Now
-                                                    </a>
-
-                                  
-                                                 
-
-                                </div>
-                            </div>
+    if (mysqli_num_rows($view_data) > 0) { // if there are results
+        while ($row = mysqli_fetch_assoc($view_data)) {
+            $educid = $row['educid'];                
+            $title = $row['educname'];        
+            $sem = $row['sem'];         
+            $sy = $row['sy'];  
+            $status = $row['status'];           
+            $start = $row['start'];        
+            $end = $row['end'];         
+            $date = $row['date'];  
+            $min_grade = $row['min_grade'];  
+            ?>
+            <div class="card mb-2" style="border-width: 1px; border-radius: 10px;">
+                <div class="card-body py-2">
+                    <div class="d-flex justify-content-between">
+                        <div>
+                            <h6 class="card-title mb-0"><?php echo $title . " for " . $sy . "   ". $sem ." is open from ". $start . " until " . $end; ?></h6>
+                            <small class="text-muted">Posted on: <?php echo $date;?></small>
+                        </div>
+                        <div>
+                            <a href="apply_educ.php?educid=<?php echo $educid; ?>" class="btn btn-success btn-circle" style="margin: 1px;">
+                                <i class="fa fa-check"></i> Apply Now
+                            </a>
                         </div>
                     </div>
-                                    <?php } ?>
-
-
-
-										
-								
-									</div>
+                </div>
+            </div>
+            <?php 
+        }
+    } else { // if there are no results
+        ?>
+        <div class="card mb-2" style="border-width: 1px; border-radius: 10px;">
+            <div class="card-body py-2"style="text-align: center;">
+                <h4 class="card-title mb-0">No available Educational assistances yet.</h4>
+                <small class="text-muted" >Check back later for new opportunities.</small>
+            </div>
+        </div>
+        <?php 
+    }
+    ?>
+</div>
 								</div>
 							</div>
 						
@@ -379,6 +383,35 @@ else {
 		</div>
 		
 	</div>
+    <?php
+    //ALERT MESSAGE
+     if (isset($_SESSION['error'])) : ?> 
+                                <script>
+                                    Swal.fire({
+                                        title: '<?php echo $_SESSION['title']; ?>',
+                                        text: '<?php echo $_SESSION['error']; ?>',
+                                        icon: '<?php echo $_SESSION['icon']; ?>',
+                                        confirmButtonText: 'OK'
+                                    });
+                                </script>
+                                <?php unset($_SESSION['error']);
+                                unset($_SESSION['icon']);unset($_SESSION['title']); ?>
+                            <?php endif; ?>
+<?php 
+
+/// message for application
+                            if (isset($_SESSION['mess'])) : ?> 
+                                <script>
+                                    Swal.fire({
+                                        title: '<?php echo $_SESSION['title']; ?>',
+                                        text: '<?php echo $_SESSION['mess']; ?>',
+                                        icon: '<?php echo $_SESSION['icon']; ?>',
+                                        confirmButtonText: 'OK'
+                                    });
+                                </script>
+                                <?php unset($_SESSION['mess']);
+                                unset($_SESSION['icon']);unset($_SESSION['title']); ?>
+                            <?php endif; ?>
 	<?php include 'templates/footer.php' ?>
    
 </body>

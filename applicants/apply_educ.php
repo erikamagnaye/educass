@@ -46,7 +46,7 @@ $major = ''; // initialize
 $school_name = ''; // initialize mjor
 $school_address = ''; // initialize 
 //CODE TO RETRIEVE DATA ABOUT COURSE/EDUCATIONAL BACKGROUND
-$educbg = "SELECT * FROM `studentcourse` where studid= $studid order by studid desc limit 1"; // SQL query to fetch all table data
+$educbg = "SELECT * FROM `studentcourse` where studid= $studid order by courseid desc limit 1"; // SQL query to fetch all table data
 $studcourse = mysqli_query($conn, $educbg); // sending the query to the database
 
 // displaying all the data retrieved from the database using while loop
@@ -56,7 +56,7 @@ while ($data = mysqli_fetch_assoc($studcourse)) {
     $course = $data['course'];         
     $major = $data['major'];  
     $school_name = $data['school_name'];           
-    $school_address = $data['School_address'];        
+    $school_address = $data['school_address'];        
    
 }
 
@@ -96,6 +96,223 @@ while ($parents = mysqli_fetch_assoc($studparent)) {
    
 }
 }
+
+
+//THIS HANDLE SUBMISSION
+if (isset($_POST['submit'])) { // this is from apply_educ.php
+
+    $gradesid = mt_rand(100000, 999999) / 1000; //random 3 digit id id 
+    $reqid = mt_rand(100000, 999999)/1000; // Random 6-digit number
+    $courseid = mt_rand(100000, 999999)/1000; // Random 6-digit number
+    $appid = mt_rand(100000, 999999)/1000;
+    $studid = $_POST['studid'];
+    $educid = $_POST['educid'];
+  
+   
+
+     // PERSONAL INFO
+     $lastname = $_POST['lastname'];
+     $firstname = $_POST['firstname'];
+     $midname = $_POST['midname'];
+     $email = $_POST['email'];
+     $birthday = $_POST['birthday'];
+     $contact_no = $_POST['contact_no'];
+     $brgy = $_POST['brgy'];
+     $municipality = $_POST['municipality'];
+     $province = $_POST['province'];
+     $street_name = $_POST['street_name'];
+     $gender = $_POST['gender'];
+     $citizenship = $_POST['citizenship'];
+     $religion = $_POST['religion'];
+     $age = $_POST['age'];
+     $civilstatus = $_POST['civilstatus'];
+
+     $student = "UPDATE student SET lastname='$lastname', firstname='$firstname', midname='$midname', email='$email', birthday='$birthday', contact_no='$contact_no', brgy='$brgy', municipality='$municipality', province='$province', street_name='$street_name', gender='$gender', citizenship='$citizenship', religion='$religion', age='$age', civilstatus='$civilstatus' WHERE studid='$studid'";
+     $conn->query($student);
+
+     // COURSE INFO
+     $course = $_POST['course'];
+     $major = $_POST['major'];
+     $school_name = $_POST['school_name'];
+     $school_address = $_POST['school_address'];
+     $sem = $_POST['sem'];
+     $sy = $_POST['sy'];
+     $year = $_POST['year'];
+
+     $courseQuery = "INSERT INTO studentcourse (courseid, studid, course, major, school_name, school_address, sem, `year`, sy) VALUES ('$courseid','$studid', '$course', '$major', '$school_name', '$school_address', '$sem', '$year', '$sy')";
+     $conn->query($courseQuery);
+     $courseid = $conn->insert_id;
+
+     // GRADES
+     $sub1 = $_POST['sub1'];
+     $sub2 = $_POST['sub2'];
+     $sub3 = $_POST['sub3'];
+     $sub4 = $_POST['sub4'];
+     $sub5 = $_POST['sub5'];
+     $sub6 = $_POST['sub6'];
+     $sub7 = $_POST['sub7'];
+     $sub8 = $_POST['sub8'];
+     $sub9 = $_POST['sub9'];
+     $sub10 = $_POST['sub10'];
+     $grade1 = $_POST['grade1'];
+     $grade2 = $_POST['grade2'];
+     $grade3 = $_POST['grade3'];
+     $grade4 = $_POST['grade4'];
+     $grade5 = $_POST['grade5'];
+     $grade6 = $_POST['grade6'];
+     $grade7 = $_POST['grade7'];
+     $grade8 = $_POST['grade8'];
+     $grade9 = $_POST['grade9'];
+     $grade10 = $_POST['grade10'];
+
+
+     //$status = 'Rejected'; // Default status
+
+  /*   if ($year == 'First Year' && $sem == 'First Semester' && $grade < 75) {
+         $_SESSION['success'] = 'error';
+         $_SESSION['mess'] = 'Minimum grade required did not meet';
+         $_SESSION['title'] = 'Error';
+     } elseif (($year == 'First Year' && $sem == 'Second Semester' && $grade < 3) || $grade < 3) {
+         $_SESSION['success'] = 'error';
+         $_SESSION['mess'] = 'Minimum grade required did not meet';
+         $_SESSION['title'] = 'Error';
+     } else {
+         $status = 'Approved'; // Set status to approved if all conditions are met
+     } */
+
+     $gradesQuery = "INSERT INTO grades (gradesid, studid, grade1, grade2, grade3, grade4, grade5, grade6, grade7, grade8, grade9, grade10, sub1, sub2, sub3, sub4, sub5, sub6, sub7, sub9, sub10)
+      VALUES ('$gradesid','$studid', '$grade1', '$grade2', '$grade3', '$grade4', '$grade5', '$grade6', '$grade7', '$grade8', '$grade9', '$grade10', '$sub1', '$sub2', '$sub3', '$sub4', '$sub5', '$sub6', '$sub7', '$sub9', '$sub10')";
+     $conn->query($gradesQuery);
+     //$gradesid = $conn->insert_id;
+
+     // PARENT INFO
+     $father = $_POST['father'];
+     $f_age = $_POST['f_age'];
+     $f_occu = $_POST['f_occu'];
+     $f_income = $_POST['f_income'];
+     $f_status = $_POST['f_status'];
+     $f_educattain = $_POST['f_educattain'];
+     $mother = $_POST['mother'];
+     $m_age = $_POST['m_age'];
+     $m_occu = $_POST['m_occu'];
+     $m_income = $_POST['m_income'];
+     $m_status = $_POST['m_status'];
+     $m_educattain = $_POST['m_educattain'];
+
+     $parentcheck = $conn->query("SELECT * FROM parentinfo WHERE studid = '$studid'");
+
+     if ($parentcheck->num_rows == 0) {
+         $parentquery = "INSERT INTO parentinfo (studid, father, f_age, f_occu, f_income, f_status, f_educattain, mother, m_age, m_occu, m_income, m_status, m_educattain) 
+         VALUES ('$studid', '$father', '$f_age', '$f_occu', '$f_income', '$f_status', '$f_educattain', '$mother', '$m_age', '$m_occu', '$m_income', '$m_status', '$m_educattain')";
+         $conn->query($parentquery);
+     } else {
+         $parentquery = "UPDATE parentinfo SET 
+         father = '$father', f_age = '$f_age', f_occu = '$f_occu', f_income = '$f_income', f_status = '$f_status', f_educattain = '$f_educattain', 
+         mother = '$mother', m_age = '$m_age', m_occu = '$m_occu', m_income = '$m_income', m_status = '$m_status', m_educattain = '$m_educattain' 
+         WHERE studid = '$studid'";
+         $conn->query($parentquery);
+     }
+
+     //$parentsid = $conn->insert_id;
+     //retrieve parents
+     $parent = "SELECT * FROM `parentinfo` where studid= $studid"; // SQL query to fetch all table data
+$studparent = mysqli_query($conn, $parent); // sending the query to the database
+
+// displaying all the data retrieved from the database using while loop
+while ($parents = mysqli_fetch_assoc($studparent)) {
+    $parentid = $parents['parentid'];
+   
+}
+
+// FILE UPLOADS
+
+$coePath = 'assets/uploads/requirements/coe/' . basename($_FILES['coe']['name']);
+$coe = basename($_FILES['coe']['name']);
+$coemaxFileSize = 10000000; // 10MB
+$coeallowedTypes = ['image/png', 'image/jpeg', 'image/jpg', 'application/pdf', 'application/vnd.openxmlformats-officedocument.wordprocessingml.document'];
+
+$schoolidPath = 'assets/uploads/requirements/schoolid/' . basename($_FILES['schoolid']['name']);
+$schoolid = basename($_FILES['schoolid']['name']);
+$coemaxFileSize = 10000000; // 10MB
+$schoolidallowedTypes = ['image/png', 'image/jpeg', 'image/jpg', 'application/pdf', 'application/vnd.openxmlformats-officedocument.wordprocessingml.document'];
+
+$gradesPath = 'assets/uploads/requirements/grades/' . basename($_FILES['grades']['name']);
+$grades = basename($_FILES['grades']['name']);
+$gradesmaxFileSize = 10000000; // 10MB
+$gradesallowedTypes = ['image/png', 'image/jpeg', 'image/jpg', 'application/pdf', 'application/vnd.openxmlformats-officedocument.wordprocessingml.document'];
+
+$letterPath = 'assets/uploads/requirements/letter/' . basename($_FILES['letter']['name']);
+$letter = basename($_FILES['letter']['name']);
+$lettermaxFileSize = 10000000; // 10MB
+$letterallowedTypes = ['image/png', 'image/jpeg', 'image/jpg', 'application/pdf', 'application/vnd.openxmlformats-officedocument.wordprocessingml.document'];
+
+$indigentPath = 'assets/uploads/requirements/indigent/' . basename($_FILES['indigent']['name']);
+$indigent = basename($_FILES['indigent']['name']);
+$indigentmaxFileSize = 10000000; // 10MB
+$indigentallowedTypes = ['image/png', 'image/jpeg', 'image/jpg', 'application/pdf', 'application/vnd.openxmlformats-officedocument.wordprocessingml.document'];
+
+if (!in_array($_FILES['coe']['type'], $coeallowedTypes) || 
+    !in_array($_FILES['letter']['type'], $letterallowedTypes) || 
+    !in_array($_FILES['schoolid']['type'], $schoolidallowedTypes) || 
+    !in_array($_FILES['grades']['type'], $gradesallowedTypes) || 
+    !in_array($_FILES['indigent']['type'], $indigentallowedTypes)) {
+    
+    $_SESSION['title'] = 'Invalid';
+    $_SESSION['mess'] = 'Invalid file type. Only PNG, JPEG, DOCx, and JPG files are allowed.';
+    $_SESSION['icon'] = 'error';
+   
+    header('Location: educaids.php');
+    exit;
+} elseif (
+    move_uploaded_file($_FILES['coe']['tmp_name'], $coePath) &&
+    move_uploaded_file($_FILES['letter']['tmp_name'], $letterPath) &&
+    move_uploaded_file($_FILES['schoolid']['tmp_name'], $schoolidPath) &&
+    move_uploaded_file($_FILES['grades']['tmp_name'], $gradesPath) &&
+    move_uploaded_file($_FILES['indigent']['tmp_name'], $indigentPath)
+) {
+    // Insert data into the database
+    $stmt = $conn->prepare("INSERT INTO requirements (reqid, educid, studid, letter, schoolid, `cor`, indigency, grades) VALUES (?,?, ?, ?, ?, ?, ?, ?)");
+    $stmt->bind_param("iiisssss", $reqid,$educid, $studid, $letter, $schoolid, $coe, $indigent, $grades);
+
+    if ($stmt->execute()) {
+        //$reqid = $conn->insert_id;
+        
+       
+    } else {
+        $_SESSION['mess'] = 'Something went wrong';
+        $_SESSION['title'] = 'Failed';
+        $_SESSION['icon'] = 'error';
+        header('Location: educaids.php');
+        exit;
+    }
+} else {
+    $_SESSION['mess'] = 'file upload failed ';
+    $_SESSION['title'] = 'Invalid';
+    $_SESSION['icon'] = 'error';
+    header('Location: educaids.php');
+    exit;
+}
+//if all data are inserted, insert the ids in application
+date_default_timezone_set('Asia/Manila'); // set the time zone to Philippine Standard Time (PST)
+$date = date('Y-m-d');
+
+$application = "INSERT INTO `application` (appid, studid, educid, reqid, courseid, parentsid, gradesid, `status`, `date`) 
+VALUES ('$appid','$studid', '$educid', '$reqid', '$courseid', '$parentsid','$gradesid', '$appstatus','$date')";
+mysqli_query($conn, $application);
+//$appid = mysqli_insert_id($conn);
+
+$_SESSION['mess'] = 'You have submitted your application for educational assistance. Your application ID is ' . $appid;
+$_SESSION['title'] = 'Successful';
+$_SESSION['icon'] = 'success';
+header('Location: educaids.php');
+exit;
+   
+
+}
+
+ 
+
+
 ?>
 <!DOCTYPE html>
 <html lang="en">
@@ -107,6 +324,10 @@ while ($parents = mysqli_fetch_assoc($studparent)) {
     <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Poppins:ital,wght@0,100;0,200;0,300;0,400;0,500;0,600;0,700;0,800;0,900;1,100;1,200;1,300;1,400;1,500;1,600;1,700;1,800;1,900&display=swap" rel="stylesheet">
+<link rel="icon" href="assets/img/logo.png" type="image/x-icon"/>   <!-- THIS IS THE CODE TO DISPLAY AN ICON IN THE BROWASER TAB-->
+<script src="https://cdn.jsdelivr.net/npm/sweetalert2@11.12.3/dist/sweetalert2.all.min.js"></script>
+        <link href="https://cdn.jsdelivr.net/npm/sweetalert2@11.12.3/dist/sweetalert2.min.css" rel="stylesheet">
+      
 <style>
  /* Default font size for body */
 .content h2{
@@ -476,21 +697,19 @@ select.form-control {
 
 	<div class="wrapper">
 		<!-- Main Header -->
-		<?php include 'templates/main-header.php' ?>
+		<?//php include 'templates/main-header.php' ?>
 		<!-- End Main Header -->
 
 		<!-- Sidebar -->
-		<?php include 'templates/sidebar.php' ?>
+		<?//php include 'templates/sidebar.php' ?>
 		<!-- End Sidebar -->
  
-		<div class="main-panel">
+		
 			<div class="content">
 				<div class="panel-header ">
 					<div class="page-inner">
 						<div class="d-flex align-items-left align-items-md-center flex-column flex-md-row">
-							<div>
-								<h2 class="text-black fw-bold">Educational Assistance Application</h2>
-							</div>
+							
 						</div>
 					</div>
 				</div>
@@ -501,14 +720,20 @@ select.form-control {
 						<div class="col-md-12">
 						
 							<div class="card">
-								<div class="card-header">
-									<div class="card-head-row text-center">
-                                    <h2 class="text-center"><strong>Submit Application </strong></h2>
-										
-									
-									
-									</div>
-								</div>
+
+<div class="card-header">
+                                        <div class="card-head-row">
+                                            <div class="card-title"><strong><h1>Submit Application</h1></strong> </div>
+
+                                            <div class="card-tools">
+                                             
+                                                <button class="btn btn-danger btn-border btn-round btn-sm" onclick="history.back()">
+      <i class="fas fa-chevron-left"></i> Back
+    </button>
+                                            </div>
+
+                                        </div>
+                                    </div>
 								
 
 							
@@ -519,7 +744,7 @@ select.form-control {
                 <p class="text-center">Fill out all field and ensure integrity of information</p>
                 <div class="row">
                     <div class="col-md-12 mx-0">
-                        <form id="msform">
+                        <form id="msform" method="POST" action="">
                             <!-- progressbar -->
                             <ul id="progressbar">
                                 <li class="active" id="information"><strong>Information</strong></li>
@@ -530,6 +755,9 @@ select.form-control {
                                 <li id="confirm"><strong>Finish</strong></li>
                             </ul>
                             <!-- fieldsets -->
+                            <input type="hidden" name="educid" value="<?php echo $educid; ?>">
+                            <input type="hidden" name="studid" value="<?php echo $studid; ?>">
+                          
                             <fieldset>
                                 
                                 <div class="form-card">
@@ -538,13 +766,13 @@ select.form-control {
                                    	<div class="row ">
  
                                         <div class="col-md-4">
-                                                <input type="text" class="form-control" placeholder="Enter Firstname" value="<?php echo $firstname; ?>" name="fname" required>
+                                                <input type="text" class="form-control" placeholder="Enter Firstname" value="<?php echo $firstname; ?>" name="firstname" required>
                                         </div>
                                         <div class="col-md-4">
-                                                <input type="text" class="form-control" placeholder="Enter Middlename" value="<?php echo $midname; ?>" name="mname" required>
+                                                <input type="text" class="form-control" placeholder="Enter Middlename" value="<?php echo $midname; ?>" name="midname" required>
                                         </div>
                                         <div class="col-md-4">
-                                                <input type="text" class="form-control" placeholder="Enter Lastname" value="<?php echo $lastname; ?>" name="lname" required>
+                                                <input type="text" class="form-control" placeholder="Enter Lastname" value="<?php echo $lastname; ?>" name="lastname" required>
                                         </div>
                                     </div>
 								    <div class="row">
@@ -555,7 +783,7 @@ select.form-control {
                                                 <input type="text" class="form-control" placeholder="Enter Citizenship" value="<?php echo $citizenship; ?>" name="citizenship" required>                                       
                                         </div>
                                         <div class="col-md-4">                                       
-                                                <input type="date" class="form-control" placeholder="Enter Birthdate" value="<?php echo $birthday; ?>" name="bdate" required>                                       
+                                                <input type="date" class="form-control" placeholder="Enter Birthdate" value="<?php echo $birthday; ?>" name="birthday" required>                                       
                                         </div>
                                     </div>
 									<div class="row">
@@ -564,7 +792,7 @@ select.form-control {
                                             </div>
                                             <div class="col-md-4" >
                                                 
-                                            <select class="form-control form-control-sm form-control-select" name="cstatus" required>
+                                            <select class="form-control form-control-sm form-control-select" name="civilstatus" required>
             <option disabled selected>Select Civil Status</option>
             <option value="Single" <?php echo ($civilstatus == 'Single') ? 'selected' : ''; ?>>Single</option>
             <option value="Married" <?php echo ($civilstatus == 'Married') ? 'selected' : ''; ?>>Married</option>
@@ -586,7 +814,7 @@ select.form-control {
                                         
                                         <div class="col-md-4">
                                            
-                                                <input type="text" class="form-control" placeholder="Enter street" value="<?php echo $street_name; ?>" name="street" required>
+                                                <input type="text" class="form-control" placeholder="Enter street" value="<?php echo $street_name; ?>" name="street_name" required>
                                      
                                         </div>
                                       
@@ -667,16 +895,33 @@ $barangays = array(
                                        
                                     </div>
                                     <div class="row">
-                                    <div class="col-md-4">
-                                                <input type="text" class="form-control" placeholder="Enter Semester" name="sem" required>
-                                        </div>
-                                        <div class="col-md-4">
+                                    <div class="col-md-6">
+                                               
+                                                <select class="form-control form-control-sm form-control-select" name="sem" required>
+            <option disabled selected>Select Semester</option>
+            <option value="First Semester">First Semester</option>
+            <option value="Second Semester">Second Semester</option>
+            
+        </select>
+                                            </div>
+                                        <div class="col-md-6">
                                                 <input type="text" class="form-control" placeholder="Enter School Year (ex. 2024-2025)" name="sy" required>
                                         </div>
-                                        <div class="col-md-4">
-                                                <input type="text" class="form-control" placeholder="Enter Year Level" name="year" required>
                                         </div>
-                                       
+                                       <div class="row">
+
+                                        <div class="col-md-6">
+                                                
+                                                <select class="form-control form-control-sm form-control-select" name="year" required>
+            <option disabled selected>Select Year Level</option>
+            <option value="First Year">First Year</option>
+            <option value="Second Year">Second Year</option>
+            <option value="Third Year">third Year</option>
+            <option value="Fourth Year">Fourth Year</option>
+            <option value="Fifth Year">Fifth Year</option>
+        </select>
+                                            </div>
+              
                                     </div>
 								 </div>
 							
@@ -689,18 +934,81 @@ $barangays = array(
                             <fieldset>
                                 <div class="form-card" style="">
                                     <h2 class="fs-title">Grades</h2>
+         
                                     
-                                    <div id="input-container">
-                                    <div class="input-row">
-                                        <input type="text" placeholder="Subject" name="subject">
-                                        <input type="text" placeholder="Grade" name="grade">
+                                        <div class="row" >
+                                            <div class=" col-md-3">
+                                            <input type="text" class="form-control" placeholder="subject 1"  name="sub1" required></div>
+                                            <div class=" col-md-3">
+                                            <input type="text" class="form-control" placeholder="grade 1"  name="grade1" required>
+                                            </div>
+                                            <div class=" col-md-3">
+                                            <input type="text" class="form-control" placeholder="subject 2"  name="sub2" required>
+                                            </div>
+                                            <div class=" col-md-3">
+                                            <input type="text" class="form-control" placeholder="grade 2"  name="grade2" required>
+                                            </div>
+                                        </div>
+                                        <div class="row" >
+                                            <div class=" col-md-3">
+                                            <input type="text" class="form-control" placeholder="subject 3"  name="sub3" required></div>
+                                            <div class=" col-md-3">
+                                            <input type="text" class="form-control" placeholder="grade 3"  name="grade3" required>
+                                            </div>
+                                            <div class=" col-md-3">
+                                            <input type="text" class="form-control" placeholder="subject 4"  name="sub4" required>
+                                            </div>
+                                            <div class=" col-md-3">
+                                            <input type="text" class="form-control" placeholder="grade 4"  name="grade4" required>
+                                            </div>
+                                        </div>
+                                        <div class="row" >
+                                            <div class=" col-md-3">
+                                            <input type="text" class="form-control" placeholder="subject 5"  name="sub5" required></div>
+                                            <div class=" col-md-3">
+                                            <input type="text" class="form-control" placeholder="grade 5"  name="grade5" required>
+                                            </div>
+                                            <div class=" col-md-3">
+                                            <input type="text" class="form-control" placeholder="subject 6"  name="sub6" required>
+                                            </div>
+                                            <div class=" col-md-3">
+                                            <input type="text" class="form-control" placeholder="grade 6"  name="grade6" required>
+                                            </div>
+                                        </div>
+                                        <div class="row" >
+                                            <div class=" col-md-3">
+                                            <input type="text" class="form-control" placeholder="subject 7"  name="sub7" required></div>
+                                            <div class=" col-md-3">
+                                            <input type="text" class="form-control" placeholder="grade 7"  name="grade7" required>
+                                            </div>
+                                            <div class=" col-md-3">
+                                            <input type="text" class="form-control" placeholder="subject 8"  name="sub8" required>
+                                            </div>
+                                            <div class=" col-md-3">
+                                            <input type="text" class="form-control" placeholder="grade 8"  name="grade8" required>
+                                            </div>
+                                        </div>
+                                        <div class="row" >
+                                            <div class=" col-md-3">
+                                            <input type="text" class="form-control" placeholder="subject 9"  name="sub9" ></div>
+                                            <div class=" col-md-3">
+                                            <input type="text" class="form-control" placeholder="grade 9"  name="grade9" >
+                                            </div>
+                                            <div class=" col-md-3">
+                                            <input type="text" class="form-control" placeholder="subject 10"  name="sub10" >
+                                            </div>
+                                            <div class=" col-md-3">
+                                            <input type="text" class="form-control" placeholder="grade 10"  name="grade10" >
+                                            </div>
+                                        </div>
+                                    
                                     </div>
-                                        <a type="button" id="add-btn" class="btn btn-link btn-success" title="Add Subject">
+                                       <!-- <a type="button" id="add-btn" class="btn btn-link btn-success" title="Add Subject">
                                             <i class="fa fa-plus"></i>
-                                        </a>
-                                    </div>
+                                        </a> -->
+                                    
                                   
-                                </div>
+                                </>
                               
 							<!--	<input type="button" name="previous" class="previous action-button-previous" value="Previous"/>
                                 <input type="button" name="make_payment" class="next action-button" value="Next Step"/>
@@ -780,7 +1088,7 @@ $barangays = array(
                                  </a>
                             </fieldset>
                             <fieldset>
-                                <div class="form-card" style="">
+                                <div class="form-card" >
                                     <h2 class="fs-title">Requirements</h2>
                                     <div class="row">
                                         <div class="col-md-4">
@@ -834,9 +1142,10 @@ $barangays = array(
                                 <a  class="previous action-button-previous btn btn-warning btn-circle "  name="previous"><i class="fa-solid fa-backward"></i> Back
                                  </a>
                                 
-                                <a href="submit_application.php?educid=<?php echo $educid; ?>&studid=<?php echo $studid; ?>" class="btn btn-success btn-circle">
-                                                    <i class="fa fa-check"></i> Submit
-                                                    </a>
+                                 <button type="submit" class="btn btn-success btn-circle" name="submit">
+  <i class="fa fa-check"></i> Submit
+</button>
+        
                             </fieldset>
                         </form>
                     </div>
@@ -863,9 +1172,39 @@ $barangays = array(
 			<?php include 'templates/main-footer.php' ?>
 			<!-- End Main Footer -->
 			
-		</div>
+		
 		
 	</div>
+    <?php
+    //ALERT MESSAGE
+     if (isset($_SESSION['error'])) : ?> 
+                                <script>
+                                    Swal.fire({
+                                        title: '<?php echo $_SESSION['title']; ?>',
+                                        text: '<?php echo $_SESSION['error']; ?>',
+                                        icon: '<?php echo $_SESSION['icon']; ?>',
+                                        confirmButtonText: 'OK'
+                                    });
+                                </script>
+                                <?php unset($_SESSION['error']);
+                                unset($_SESSION['icon']);unset($_SESSION['title']); ?>
+                            <?php endif; ?>
+<?php 
+
+/// message for application
+                            if (isset($_SESSION['mess'])) : ?> 
+                                <script>
+                                    Swal.fire({
+                                        title: '<?php echo $_SESSION['title']; ?>',
+                                        text: '<?php echo $_SESSION['mess']; ?>',
+                                        icon: '<?php echo $_SESSION['icon']; ?>',
+                                        confirmButtonText: 'OK'
+                                    });
+                                </script>
+                                <?php unset($_SESSION['mess']);
+                                unset($_SESSION['icon']);unset($_SESSION['title']); ?>
+                            <?php endif; ?>
+
 	<?php include 'templates/footer.php' ?>
    
 	<script>

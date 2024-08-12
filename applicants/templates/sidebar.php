@@ -7,6 +7,8 @@ if (strlen($_SESSION['id'] == 0)) {
 
 else{
 $id = $_SESSION['id'] ;
+//$name = $_SESSION['name'] ;
+//$email = $_SESSION['email'] ;
 		$query 		= "SELECT * FROM `student` WHERE studid= '$id'";
 		$result 	= $conn->query($query);
         
