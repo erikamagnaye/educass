@@ -80,7 +80,7 @@ $studparent = mysqli_query($conn, $parent); // sending the query to the database
 // displaying all the data retrieved from the database using while loop
 while ($parents = mysqli_fetch_assoc($studparent)) {
                
-    $_SESSION= $parents['parentid']; // use this for application
+    $parentid= $parents['parentid']; // use this for application
     $father = $parents['father'];
     $f_age = $parents['f_age'];
     $f_occu = $parents['f_occu'];
@@ -261,7 +261,7 @@ if (!in_array($_FILES['coe']['type'], $coeallowedTypes) ||
     $_SESSION['mess'] = 'Invalid file type. Only PNG, JPEG, DOCx, and JPG files are allowed.';
     $_SESSION['icon'] = 'error';
    
-    header('Location: educaids.php');
+    header('Location: ../educaids.php');
     exit;
 } elseif (
     move_uploaded_file($_FILES['coe']['tmp_name'], $coePath) &&
@@ -282,31 +282,38 @@ if (!in_array($_FILES['coe']['type'], $coeallowedTypes) ||
         $_SESSION['mess'] = 'Something went wrong';
         $_SESSION['title'] = 'Failed';
         $_SESSION['icon'] = 'error';
-        header('Location: educaids.php');
+        header('Location: ../educaids.php');
         exit;
     }
 } else {
     $_SESSION['mess'] = 'file upload failed ';
     $_SESSION['title'] = 'Invalid';
     $_SESSION['icon'] = 'error';
-    header('Location: educaids.php');
+    header('Location: ../educaids.php');
     exit;
 }
 //if all data are inserted, insert the ids in application
 date_default_timezone_set('Asia/Manila'); // set the time zone to Philippine Standard Time (PST)
 $date = date('Y-m-d');
+$status = 'Pending';
 
 $application = "INSERT INTO `application` (appid, studid, educid, reqid, courseid, parentsid, gradesid, `status`, `date`) 
-VALUES ('$appid','$studid', '$educid', '$reqid', '$courseid', '$parentsid','$gradesid', '$appstatus','$date')";
-mysqli_query($conn, $application);
-//$appid = mysqli_insert_id($conn);
-
-$_SESSION['mess'] = 'You have submitted your application for educational assistance. Your application ID is ' . $appid;
-$_SESSION['title'] = 'Successful';
-$_SESSION['icon'] = 'success';
-header('Location: educaids.php');
-exit;
-   
+VALUES ('$appid','$studid', '$educid', '$reqid', '$courseid', '$parentid','$gradesid', '$status','$date')";
+  
+if (mysqli_query($conn, $application)) {
+    $appid = mysqli_insert_id($conn);
+    $_SESSION['mess'] = 'You have submitted your application for educational assistance. Your application ID is ' .$appid ;
+    $_SESSION['title'] = 'Successful';
+    $_SESSION['icon'] = 'success';
+    header('Location: ../educaids.php');
+    exit;
+} else {
+    $_SESSION['mess'] = 'Error submitting application!';
+    $_SESSION['title'] = 'Error';
+    $_SESSION['icon'] = 'error';
+    header('Location: ../educaids.php');
+    exit;
+}
 
 }
 
@@ -744,7 +751,7 @@ select.form-control {
                 <p class="text-center">Fill out all field and ensure integrity of information</p>
                 <div class="row">
                     <div class="col-md-12 mx-0">
-                        <form id="msform" method="POST" action="">
+                        <form id="msform" method="POST" action="" enctype="multipart/form-data">
                             <!-- progressbar -->
                             <ul id="progressbar">
                                 <li class="active" id="information"><strong>Information</strong></li>

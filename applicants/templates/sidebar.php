@@ -25,7 +25,11 @@ $id = $_SESSION['id'] ;
 				//$role = $row['position'];
 			}
 			}
-     $announcement = 3;       
+            date_default_timezone_set('Asia/Manila');
+         
+            $currentDate = date("Y-m-d");
+            $announce = mysqli_query($conn, "SELECT COUNT(*) FROM `announcement` WHERE DATE(date) = '$currentDate'")->fetch_assoc()['COUNT(*)'];
+
 function PageName() { //return the file name of the current PHP script, without the directory path.
   return substr( $_SERVER["SCRIPT_NAME"], strrpos($_SERVER["SCRIPT_NAME"],"/") +1);
 }
@@ -90,8 +94,8 @@ $current_page = PageName();
                 <li class="nav-item <?= $current_page=='announcement.php' || $current_page=='generate_resident.php' ? 'active' : null ?>">
                     <a href="announcement.php">
                         <i class="fa fa-bullhorn"></i>
-                        <p>Announcement  <?php if ($announcement > 0): ?>
-                <span class="badge badge-danger"><?=$announcement?></span>
+                        <p>Announcement  <?php if ($announce > 0): ?>
+                <span class="badge badge-danger"><?=$announce?></span>
             <?php endif; ?></p>
                     </a>
                 </li>

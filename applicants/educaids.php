@@ -213,6 +213,19 @@ else {
             $end = $row['end'];         
             $date = $row['date'];  
             $min_grade = $row['min_grade'];  
+
+             // Check if student has already applied
+             $check_query = "SELECT * FROM `application` WHERE `studid` = '$studid' AND `educid` = '$educid'";
+             $check_result = mysqli_query($conn, $check_query);
+             if (mysqli_num_rows($check_result) > 0) {
+                $appid_row = mysqli_fetch_assoc($check_result);
+                $appid = $appid_row['appid'];
+                $has_applied = true;
+            } else {
+                $has_applied = false;
+                $appid = null;
+            }
+ 
             ?>
             <div class="card mb-2" style="border-width: 1px; border-radius: 10px;">
                 <div class="card-body py-2">
@@ -222,9 +235,15 @@ else {
                             <small class="text-muted">Posted on: <?php echo $date;?></small>
                         </div>
                         <div>
-                            <a href="apply_educ.php?educid=<?php echo $educid; ?>" class="btn btn-success btn-circle" style="margin: 1px;">
-                                <i class="fa fa-check"></i> Apply Now
-                            </a>
+                            <?php if ($has_applied) { ?>
+                                <a href="view_application.php?appidid=<?php echo $appid; ?>" class="btn btn-success btn-circle" style="margin: 1px;">
+                                    <i class="fa fa-eye"></i> View Application
+                                </a>
+                            <?php } else { ?>
+                                <a href="apply_educ.php?educid=<?php echo $educid; ?>" class="btn btn-success btn-circle" style="margin: 1px;">
+                                    <i class="fa fa-check"></i> Apply Now
+                                </a>
+                            <?php } ?>
                         </div>
                     </div>
                 </div>
@@ -254,7 +273,7 @@ else {
                         <div class="card">
                             <div class="card-header bg-danger" style="border-radius: 2px;">
                                 <div class="card-head-row">
-                                    <div class="card-title" style=" color: #ffffff;">Previous Educational Assistance </div>
+                                    <div class="card-title" style=" color: #ffffff;"><h3>Previous Educational Assistance</h3> </div>
                                     
                                 
                                 
@@ -413,6 +432,7 @@ else {
                                 unset($_SESSION['icon']);unset($_SESSION['title']); ?>
                             <?php endif; ?>
 	<?php include 'templates/footer.php' ?>
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11.12.3/dist/sweetalert2.all.min.js"></script>
    
 </body>
 </html><?php }?>
