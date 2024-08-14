@@ -208,7 +208,7 @@ h5 {
 					<div class="page-inner">
 						<div class="d-flex align-items-left align-items-md-center flex-column flex-md-row">
 							<div>
-								<h2 class="text-black fw-bold"> Dashboard</h2>
+								<h2 class="text-black fw-bold"> Applicant Portal</h2>
 								<!--
 								<?php if(isset($_SESSION['message'])): ?>
 							<div class="alert alert-<?= $_SESSION['success']; ?> <?= $_SESSION['success']=='danger' ? 'bg-danger text-light' : null ?>" role="alert">
@@ -293,20 +293,16 @@ h5 {
 					<div class="row">
 						<div class="col-md-12">
 							<div class="card">
-								<div class="card-header">
-									<div class="card-head-row">
-										<div class="card-title fw">EUCATIONAL ASSISTANCE APPLICATION SYSTEM</div>
-									</div>
-								</div>
+								
 								<div class="card-body col-md-12">
-								<div class="container-fluid mt-5">
+								<div class="container-fluid">
 
 	
 
 <div class="dashboard">
         <div class="card">
             <div class="card-icon"><i class="fas fa-user"></i></div>
-          <a href="applications.php" class="btn">  <h5><?= $totalapp ?> <br>Applications</h5></a>
+          <a href="all_applications.php" class="btn">  <h5><?= $totalapp ?> <br>Applications</h5></a>
           
         </div>
         <div class="card">

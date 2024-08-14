@@ -139,7 +139,8 @@ if (isset($_POST['submit'])) { // this is from apply_educ.php
      $sy = $_POST['sy'];
      $year = $_POST['year'];
 
-     $courseQuery = "INSERT INTO studentcourse (courseid, studid, course, major, school_name, school_address, sem, `year`, sy) VALUES ('$courseid','$studid', '$course', '$major', '$school_name', '$school_address', '$sem', '$year', '$sy')";
+     $courseQuery = "INSERT INTO studentcourse (courseid, studid,educid, course, major, school_name, school_address, sem, `year`, sy) 
+     VALUES ('$courseid','$studid','$educid', '$course', '$major', '$school_name', '$school_address', '$sem', '$year', '$sy')";
      $conn->query($courseQuery);
      $courseid = $conn->insert_id;
 
@@ -180,8 +181,8 @@ if (isset($_POST['submit'])) { // this is from apply_educ.php
          $status = 'Approved'; // Set status to approved if all conditions are met
      } */
 
-     $gradesQuery = "INSERT INTO grades (gradesid, studid, grade1, grade2, grade3, grade4, grade5, grade6, grade7, grade8, grade9, grade10, sub1, sub2, sub3, sub4, sub5, sub6, sub7, sub9, sub10)
-      VALUES ('$gradesid','$studid', '$grade1', '$grade2', '$grade3', '$grade4', '$grade5', '$grade6', '$grade7', '$grade8', '$grade9', '$grade10', '$sub1', '$sub2', '$sub3', '$sub4', '$sub5', '$sub6', '$sub7', '$sub9', '$sub10')";
+     $gradesQuery = "INSERT INTO grades (gradesid, studid, educid, grade1, grade2, grade3, grade4, grade5, grade6, grade7, grade8, grade9, grade10, sub1, sub2, sub3, sub4, sub5, sub6, sub7, sub9, sub10)
+      VALUES ('$gradesid','$studid','$educid', '$grade1', '$grade2', '$grade3', '$grade4', '$grade5', '$grade6', '$grade7', '$grade8', '$grade9', '$grade10', '$sub1', '$sub2', '$sub3', '$sub4', '$sub5', '$sub6', '$sub7', '$sub9', '$sub10')";
      $conn->query($gradesQuery);
      //$gradesid = $conn->insert_id;
 
