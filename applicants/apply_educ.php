@@ -104,8 +104,8 @@ if (isset($_POST['submit'])) { // this is from apply_educ.php
  
 
     $gradesid = mt_rand(100000, 999999) / 1000; //random 3 digit id id 
-    $reqid = mt_rand(100000, 999999)/1000; // Random 6-digit number
-    $courseid = mt_rand(100000, 999999)/1000; // Random 6-digit number
+    $reqid = mt_rand(100000, 999999)/1000;  //Random 3-digit number
+    $courseid = mt_rand(100000, 999999)/1000; // Random 3-digit number
     $appid = mt_rand(100000, 999999)/1000;
     $studid = $_POST['studid'];
     $educid = $_POST['educid'];
@@ -144,7 +144,7 @@ if (isset($_POST['submit'])) { // this is from apply_educ.php
      $courseQuery = "INSERT INTO studentcourse (courseid, studid,educid, course, major, school_name, school_address, sem, `year`, sy) 
      VALUES ('$courseid','$studid','$educid', '$course', '$major', '$school_name', '$school_address', '$sem', '$year', '$sy')";
      $conn->query($courseQuery);
-     $courseid = $conn->insert_id;
+    // $courseid = $conn->insert_id;
 
      // GRADES
   /*   $sub1 = $_POST['sub1'];
@@ -306,7 +306,7 @@ VALUES ('$appid','$studid', '$educid', '$reqid', '$courseid', '$parentid', '$app
   
 if (mysqli_query($conn, $application)) {
     $appid = mysqli_insert_id($conn);
-    $_SESSION['mess'] = 'You have submitted your application for educational assistance. Your application ID is ' .$appid ;
+    $_SESSION['mess'] = ' Your application ID is ' .$appid ;
     $_SESSION['title'] = 'Successful';
     $_SESSION['icon'] = 'success';
     header('Location: educaids.php');
@@ -460,6 +460,12 @@ if (mysqli_query($conn, $application)) {
   font-size: 16px;
   margin: 0 5px;
 }
+.form-control {
+  height: 40px; /* add this to make select options consistent height */
+  padding: 10px;
+ margin-left: 30px;margin-right:30px;
+  width:350px;
+}
 select.form-control {
   height: 40px; /* add this to make select options consistent height */
   padding: 10px;
@@ -568,13 +574,14 @@ select.form-control {
   <!-- Step 1: Information -->
    
   <div class="form-step active">
-  <div class="card-body mx-4">
-    <h2>Information</h2>
+  
+    <h2 style="margin-left: 30px;margin-right:30px;">Information</h2>
     <div class="row">
     
+    <input type="hidden" name="educid" value="<?php echo $educid; ?>">
+    <input type="hidden" name="studid" value="<?php echo $studid; ?>">
     <div class="col-md-4">
-                             <input type="hidden" name="educid" value="<?php echo $educid; ?>">
-                            <input type="hidden" name="studid" value="<?php echo $studid; ?>">
+                            
                           
                                                 <input type="text" class="form-control" placeholder="Enter Firstname" value="<?php echo $firstname; ?>" name="firstname" required>
                                         </div>
@@ -680,9 +687,9 @@ $barangays = array(
 								
                                     
     <div class="btn-container">
-      <button type="button" class="next-step mb-3"><i class="fas fa-arrow-right"></i>Next</button>
+      <button type="button" class="next-step mb-3">Next<i class="fa fa-caret-right"></i></button>
     </div>
-    </div>
+    
 </div>
    
 <div class="form-step ">
@@ -739,10 +746,10 @@ $barangays = array(
                                     
                                     <div class="btn-container">
                     <button type="button" class="prev-step mb-3 mt-3">
-                      <i class="fas fa-arrow-left"></i> Back
+                      <i class="fa fa-caret-left"></i> Back
                     </button>
                     <button type="button" class="next-step mb-3 mt-3">
-                      Next <i class="fas fa-arrow-right"></i>
+                      Next <i class="fa fa-caret-right"></i>
                     </button>
                   </div>
     </div>
@@ -811,10 +818,10 @@ $barangays = array(
                                 </div>
     <div class="btn-container">
                     <button type="button" class="prev-step mb-3 mt-3">
-                      <i class="fas fa-arrow-left"></i> Back
+                      <i class="fa fa-caret-left"></i> Back
                     </button>
                     <button type="button" class="next-step mb-3 mt-3">
-                      Next <i class="fas fa-arrow-right"></i>
+                      Next <i class="fa fa-caret-right"></i>
                     </button>
                   </div>
     </div>
@@ -852,10 +859,10 @@ $barangays = array(
                                 </div>
     <div class="btn-container">
                     <button type="button" class="prev-step mb-3 mt-3">
-                      <i class="fas fa-arrow-left"></i> Back
+                      <i class="fa fa-caret-left"></i> Back
                     </button>
                     <button type="button" class="next-step mb-3 mt-3">
-                      Next <i class="fas fa-arrow-right"></i>
+                      Next <i class="fa fa-caret-right"></i>
                     </button>
                   </div>
     </div>
@@ -863,28 +870,35 @@ $barangays = array(
 
 
 <div class="form-step ">
-  <div class="card-body mx-4">
-    <h2 class="text-center">Finish</h2>
-    <div class="row justify-content-center">
-  <p style="text-align: center;">I hereby certify that all information and requirements submitted in this application are true and correct otherwise it will be disregarded</p>
-  <p style="text-align: center;"><i class="fas fa-smile" style="font-size: 100px; color: yellow;"></i></p>
-  <p style="text-align: center; font-size: 18px; margin-top: 10px;">Good Luck !!</p>
-</div>
-                                    </div>
+ 
+   
+
+<div class="card card-sm text-center ">
+  <div class="card-body">
+    <h5 class="card-title">Finish</h5>
+    <img src="assets/img/emoji.png" alt="..." style="height:100px; width:100px;">
+    <p class="card-text">Good Luck on your journey, Fighting!!!!</p>
+    
+  </div>
+
+
+                                 
     <div class="btn-container">
                     <button type="button" class="prev-step mb-3 mt-3">
                       <i class="fas fa-arrow-left"></i> Back
                     </button>
-                    <button type="submit" name="submit" class="next-step mb-3 mt-3">
-                     Submit <i class="fas fa-send"></i>
+                    <button type="submit" name="submit" class="btn-primary mb-3 mt-3">
+                     Submit <i class="fas fa-check"></i>
                     </button>
                   </div>
-   
+                  </div>
 </div>
+
+</form>
             </div>
             <!-- Add the steps for Parent Info, Requirements, and Finish -->
 
-        </form>
+       
            
       
 
