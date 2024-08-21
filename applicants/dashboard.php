@@ -27,15 +27,15 @@ if (strlen($_SESSION['id'] == 0)) {
     $result = $conn->query($query);
 	$totalapp = $result->num_rows;
         //pending applications    
-	$query = "SELECT * FROM `application`  WHERE studid = '$id' AND `status` ='Pending' order by date desc ";
+	$query = "SELECT * FROM `application`  WHERE studid = '$id' AND `appstatus` ='Pending' order by appdate desc ";
     $result2 = $conn->query($query);
 	$pending = $result2->num_rows;
         //approved applications   
-	$query = "SELECT * FROM `application`  WHERE studid = '$id' AND `status` ='Approved' order by date desc ";
+	$query = "SELECT * FROM `application`  WHERE studid = '$id' AND `appstatus` ='Approved' order by appdate desc ";
     $result3 = $conn->query($query);
 	$approved = $result3->num_rows;
             //rejected applications
-	$query = "SELECT * FROM `application`  WHERE studid = '$id' AND `status` ='Rejected' order by date desc";
+	$query = "SELECT * FROM `application`  WHERE studid = '$id' AND `appstatus` ='Rejected' order by appdate desc";
     $result4 = $conn->query($query);
 	$rejected = $result4->num_rows;
     	//all educ assistance	provided

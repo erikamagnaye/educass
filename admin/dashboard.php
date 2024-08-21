@@ -27,15 +27,15 @@ if (strlen($_SESSION['id'] == 0)) {
     $result = $conn->query($query);
 	$totalapp = $result->num_rows;
         //pending applicants    
-	$query = "SELECT * FROM application join `educ aids` on `application`.`educid`=`educ aids`.`educid` WHERE application.status ='Pending' order by `educ aids`.educid desc ";
+	$query = "SELECT * FROM application join `educ aids` on `application`.`educid`=`educ aids`.`educid` WHERE application.appstatus ='Pending' order by `educ aids`.educid desc ";
     $result2 = $conn->query($query);
 	$pending = $result2->num_rows;
         //approved applicants    
-	$query = "SELECT * FROM application join `educ aids` on `application`.`educid`=`educ aids`.`educid` WHERE application.status ='Approved' order by `educ aids`.educid desc  ";
+	$query = "SELECT * FROM application join `educ aids` on `application`.`educid`=`educ aids`.`educid` WHERE application.appstatus ='Approved' order by `educ aids`.educid desc  ";
     $result3 = $conn->query($query);
 	$approved = $result3->num_rows;
             //rejected applicants
-	$query = "SELECT * FROM application join `educ aids` on `application`.`educid`=`educ aids`.`educid` WHERE application.status ='Rejected' order by `educ aids`.educid desc ";
+	$query = "SELECT * FROM application join `educ aids` on `application`.`educid`=`educ aids`.`educid` WHERE application.appstatus ='Rejected' order by `educ aids`.educid desc ";
     $result4 = $conn->query($query);
 	$rejected = $result4->num_rows;
     	//all educ assistance	provided

@@ -236,7 +236,7 @@ else {
                         </div>
                         <div>
                             <?php if ($has_applied) { ?>
-                                <a href="view_application.php?appidid=<?php echo $appid; ?>" class="btn btn-success btn-circle" style="margin: 1px;">
+                                <a href="view_application.php?appid=<?php echo $appid; ?>&educid=<?php echo $educid; ?>" class="btn btn-success btn-circle" style="margin: 1px;">
                                     <i class="fa fa-eye"></i> View Application
                                 </a>
                             <?php } else { ?>
@@ -402,35 +402,22 @@ else {
 		</div>
 		
 	</div>
+    <?php if (isset($_SESSION['error']) || isset($_SESSION['mess'])) : ?>
+    <script>
+        Swal.fire({
+            title: '<?php echo $_SESSION['title']; ?>',
+            text: '<?php echo isset($_SESSION['error']) ? $_SESSION['error'] : $_SESSION['mess']; ?>',
+            icon: '<?php echo $_SESSION['icon']; ?>',
+            confirmButtonText: 'OK'
+        });
+    </script>
     <?php
-    //ALERT MESSAGE
-     if (isset($_SESSION['error'])) : ?> 
-                                <script>
-                                    Swal.fire({
-                                        title: '<?php echo $_SESSION['title']; ?>',
-                                        text: '<?php echo $_SESSION['error']; ?>',
-                                        icon: '<?php echo $_SESSION['icon']; ?>',
-                                        confirmButtonText: 'OK'
-                                    });
-                                </script>
-                                <?php unset($_SESSION['error']);
-                                unset($_SESSION['icon']);unset($_SESSION['title']); ?>
-                            <?php endif; ?>
-<?php 
-
-/// message for application
-                            if (isset($_SESSION['mess'])) : ?> 
-                                <script>
-                                    Swal.fire({
-                                        title: '<?php echo $_SESSION['title']; ?>',
-                                        text: '<?php echo $_SESSION['mess']; ?>',
-                                        icon: '<?php echo $_SESSION['icon']; ?>',
-                                        confirmButtonText: 'OK'
-                                    });
-                                </script>
-                                <?php unset($_SESSION['mess']);
-                                unset($_SESSION['icon']);unset($_SESSION['title']); ?>
-                            <?php endif; ?>
+        unset($_SESSION['error']);
+        unset($_SESSION['mess']);
+        unset($_SESSION['icon']);
+        unset($_SESSION['title']);
+    ?>
+<?php endif; ?>
 	<?php include 'templates/footer.php' ?>
     <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11.12.3/dist/sweetalert2.all.min.js"></script>
    

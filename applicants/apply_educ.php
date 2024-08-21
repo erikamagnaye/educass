@@ -101,6 +101,8 @@ while ($parents = mysqli_fetch_assoc($studparent)) {
 //THIS HANDLE SUBMISSION
 if (isset($_POST['submit'])) { // this is from apply_educ.php
 
+ 
+
     $gradesid = mt_rand(100000, 999999) / 1000; //random 3 digit id id 
     $reqid = mt_rand(100000, 999999)/1000; // Random 6-digit number
     $courseid = mt_rand(100000, 999999)/1000; // Random 6-digit number
@@ -145,7 +147,7 @@ if (isset($_POST['submit'])) { // this is from apply_educ.php
      $courseid = $conn->insert_id;
 
      // GRADES
-     $sub1 = $_POST['sub1'];
+  /*   $sub1 = $_POST['sub1'];
      $sub2 = $_POST['sub2'];
      $sub3 = $_POST['sub3'];
      $sub4 = $_POST['sub4'];
@@ -167,9 +169,9 @@ if (isset($_POST['submit'])) { // this is from apply_educ.php
      $grade10 = $_POST['grade10'];
 
 
-     //$status = 'Rejected'; // Default status
+    ///$status = 'Rejected'; // Default status
 
-  /*   if ($year == 'First Year' && $sem == 'First Semester' && $grade < 75) {
+  if ($year == 'First Year' && $sem == 'First Semester' && $grade < 75) {
          $_SESSION['success'] = 'error';
          $_SESSION['mess'] = 'Minimum grade required did not meet';
          $_SESSION['title'] = 'Error';
@@ -179,12 +181,13 @@ if (isset($_POST['submit'])) { // this is from apply_educ.php
          $_SESSION['title'] = 'Error';
      } else {
          $status = 'Approved'; // Set status to approved if all conditions are met
-     } */
+     } 
 
      $gradesQuery = "INSERT INTO grades (gradesid, studid, educid, grade1, grade2, grade3, grade4, grade5, grade6, grade7, grade8, grade9, grade10, sub1, sub2, sub3, sub4, sub5, sub6, sub7, sub9, sub10)
       VALUES ('$gradesid','$studid','$educid', '$grade1', '$grade2', '$grade3', '$grade4', '$grade5', '$grade6', '$grade7', '$grade8', '$grade9', '$grade10', '$sub1', '$sub2', '$sub3', '$sub4', '$sub5', '$sub6', '$sub7', '$sub9', '$sub10')";
      $conn->query($gradesQuery);
      //$gradesid = $conn->insert_id;
+     */
 
      // PARENT INFO
      $father = $_POST['father'];
@@ -262,8 +265,8 @@ if (!in_array($_FILES['coe']['type'], $coeallowedTypes) ||
     $_SESSION['mess'] = 'Invalid file type. Only PNG, JPEG, DOCx, and JPG files are allowed.';
     $_SESSION['icon'] = 'error';
    
-    header('Location: ../educaids.php');
-    exit;
+    header('Location: apply_educ.php');
+  exit;
 } elseif (
     move_uploaded_file($_FILES['coe']['tmp_name'], $coePath) &&
     move_uploaded_file($_FILES['letter']['tmp_name'], $letterPath) &&
@@ -283,37 +286,37 @@ if (!in_array($_FILES['coe']['type'], $coeallowedTypes) ||
         $_SESSION['mess'] = 'Something went wrong';
         $_SESSION['title'] = 'Failed';
         $_SESSION['icon'] = 'error';
-        header('Location: ../educaids.php');
+        header('Location: educaids.php');
         exit;
     }
 } else {
     $_SESSION['mess'] = 'file upload failed ';
     $_SESSION['title'] = 'Invalid';
     $_SESSION['icon'] = 'error';
-    header('Location: ../educaids.php');
+    header('Location: educaids.php');
     exit;
 }
 //if all data are inserted, insert the ids in application
 date_default_timezone_set('Asia/Manila'); // set the time zone to Philippine Standard Time (PST)
-$date = date('Y-m-d');
-$status = 'Pending';
+$appdate = date('Y-m-d');
+$appstatus = 'Pending';
 
-$application = "INSERT INTO `application` (appid, studid, educid, reqid, courseid, parentsid, gradesid, `status`, `date`) 
-VALUES ('$appid','$studid', '$educid', '$reqid', '$courseid', '$parentid','$gradesid', '$status','$date')";
+$application = "INSERT INTO `application` (appid, studid, educid, reqid, courseid, parentsid, `appstatus`, `appdate`) 
+VALUES ('$appid','$studid', '$educid', '$reqid', '$courseid', '$parentid', '$appstatus','$appdate')";
   
 if (mysqli_query($conn, $application)) {
     $appid = mysqli_insert_id($conn);
     $_SESSION['mess'] = 'You have submitted your application for educational assistance. Your application ID is ' .$appid ;
     $_SESSION['title'] = 'Successful';
     $_SESSION['icon'] = 'success';
-    header('Location: ../educaids.php');
-    exit;
+    header('Location: educaids.php');
+  exit;
 } else {
     $_SESSION['mess'] = 'Error submitting application!';
     $_SESSION['title'] = 'Error';
     $_SESSION['icon'] = 'error';
-    header('Location: ../educaids.php');
-    exit;
+    header('Location: educaids.php');
+  exit;
 }
 
 }
@@ -335,355 +338,128 @@ if (mysqli_query($conn, $application)) {
 <link rel="icon" href="assets/img/logo.png" type="image/x-icon"/>   <!-- THIS IS THE CODE TO DISPLAY AN ICON IN THE BROWASER TAB-->
 <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11.12.3/dist/sweetalert2.all.min.js"></script>
         <link href="https://cdn.jsdelivr.net/npm/sweetalert2@11.12.3/dist/sweetalert2.min.css" rel="stylesheet">
-      
+        <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script> <!-- THIS IS THE CODE TO validate fields-->
 <style>
- /* Default font size for body */
-.content h2{
-    font-size: 20px;
-}
-
-        /* Font size for small devices (phones, less than 600px) */
-        @media (max-width: 600px) {
-       
-            .card-title, h2, .table th, .table td {
-                font-size: 9px;
-            }
-            .btn {
-                font-size: 9px;
-            }
+      .progressbar {
+            display: flex;
+            justify-content: space-between;
+            position: center;
+            margin-bottom: 30px;
+            align-items: center;
         }
 
-        /* Font size for medium devices (tablets, 600px and up) */
-        @media (min-width: 600px) and (max-width: 768px) {
-          
-            .card-title, h2, .table th, .table td {
-                font-size: 12px;
-            }
-            .btn {
-                font-size: 12px;
-            }
+        .step {
+            text-align: center;
+            width: 20%;
+            flex: 1;
+            position: relative;
         }
 
-        /* Font size for large devices (desktops, 768px and up) */
-        @media (min-width: 768px) and (max-width: 992px) {
-            body {
-                font-size: 16px;
-            }
-            .card-title, h2, .table th, .table td {
-                font-size: 14px;
-            }
-            .btn {
-                font-size: 14px;
-            }
+        .icon-container {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            position: relative;
+        }
+        
+
+        .progressbar .step .icon {
+            background-color: lightgray;
+            color: white;
+            border-radius: 50%;
+            display: inline-block;
+            padding: 10px;
+            margin-bottom: 10px;
+            width: 40px;
+            height: 40px;
+            line-height: 20px;
+            position: relative;
+            z-index: 2;
         }
 
-        /* Font size for extra large devices (large desktops, 992px and up) */
-        @media (min-width: 992px) {
-         
-            .card-title, h2, .table th, .table td {
-                font-size: 14px;
-            }
-            .btn {
-                font-size: 14px;
-            }
+        .progressbar .step .line {
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translateX(-50%);
+            height: 2px;
+            width: 100%;
+            background-color: lightgray;
+            z-index: 1;
         }
-	
-* {
-    margin: 0;
-    padding: 0;
+
+        .progressbar .step.active .icon {
+            background-color: #4CAF50;
+        }
+
+        .progressbar .step.active .line {
+            background-color: #4CAF50;
+        }
+
+        .form-step {
+            display: none;
+        }
+
+        .form-step.active {
+            display: block;
+        }
+
+        input {
+            display: block;
+            width: 48%;
+            padding: 10px;
+            margin-bottom: 15px;
+            border: 1px solid #ccc;
+            border-radius: 4px;
+            font-size: 16px;
+        }
+
+        .form-row {
+            display: flex;
+            justify-content: space-between;
+            margin:10px;
+        }
+
+        button {
+            padding: 10px 15px;
+            border: none;
+            background-color: #4CAF50;
+            color: white;
+            cursor: pointer;
+            border-radius: 5px;
+            margin-top: 10px;
+        }
+
+        button:disabled {
+            background-color: gray;
+        }
+
+        .btn-container {
+  text-align: center;
 }
 
-html {
-    height: 100%;
-}
-
-/*Background color*/
-/*#grad1 {
-    background-color: #9C27B0;
-    background-image: linear-gradient(120deg, #FF4081, #81D4FA);
-}*/
-
-/*form styles*/
-#msform {
-    text-align: center;
-    position: relative;
-    margin-top: 20px;
-}
-
-#msform fieldset .form-card {
-    background: white;
-    border: 0 none;
-    border-radius: 0px;
-    box-shadow: 0 2px 2px 2px rgba(0, 0, 0, 0.2);
-    padding: 20px 40px 30px 40px;
-    box-sizing: border-box;
-    width: 94%;
-    margin: 0 3% 20px 3%;
-    border-radius: 20px;
-   
-    /*stacking fieldsets above each other*/
-    position: relative;
-}
-
-#msform fieldset {
-    background: white;
-    border: 0 none;
-    border-radius: 0.5rem;
-    box-sizing: border-box;
-    width: 100%;
-    margin: 0;
-    padding-bottom: 20px;
-
-    /*stacking fieldsets above each other*/
-    position: relative;
-}
-
-/*Hide all except first fieldset*/
-#msform fieldset:not(:first-of-type) {
-    display: none;
-}
-
-#msform fieldset .form-card {
-    text-align: left;
-    color: black;
-}
-
-#msform input, #msform textarea {
-    padding: 0px 8px 4px 8px;
-    border: none;
-    border-bottom: 1px solid #ccc;
-    border-radius: 0px;
-    margin-bottom: 25px;
-    margin-top: 2px;
-    width: 100%;
-    box-sizing: border-box;
-    font-family: 'Poppins', Times, serif;
-    color: black;
-    font-size: 14px;
-    letter-spacing: 1px;
-}
-
-#msform input:focus, #msform textarea:focus {
-    -moz-box-shadow: none !important;
-    -webkit-box-shadow: none !important;
-    box-shadow: none !important;
-    border: none;
-    font-weight: bold;
-    border-bottom: 2px solid skyblue;
-    outline-width: 0;
-
-    
-}
-
-/*Blue Buttons*/
-#msform .action-button {
-    width: 100px;
-    background: skyblue;
-    font-weight: bold;
-    color: white;
-    border: 0 none;
-    border-radius: 0px;
-    cursor: pointer;
-    padding: 10px 5px;
-    margin: 10px 5px;
-}
-
-#msform .action-button:hover, #msform .action-button:focus {
-    box-shadow: 0 0 0 2px white, 0 0 0 3px skyblue;
-}
-
-/*Previous Buttons*/
-#msform .action-button-previous {
-    width: 100px;
-    background: #616161;
-    font-weight: bold;
-    color: white;
-    border: 0 none;
-    border-radius: 0px;
-    cursor: pointer;
-    padding: 10px 5px;
-    margin: 10px 5px;
-}
-
-#msform .action-button-previous:hover, #msform .action-button-previous:focus {
-    box-shadow: 0 0 0 2px white, 0 0 0 3px #616161;
-}
-
-/*Dropdown List Exp Date*/
-select.list-dt {
-    border: none;
-    outline: 0;
-    border-bottom: 1px solid #ccc;
-    padding: 2px 5px 3px 5px;
-    margin: 2px;
-}
-
-select.list-dt:focus {
-    border-bottom: 2px solid skyblue;
-}
-
-/*The background card*/
-.card {
-    z-index: 0;
-    border: none;
-    border-radius: 0.5rem;
-    position: relative;
-}
-
-/*FieldSet headings*/
-.fs-title {
-    font-size: 25px;
-    color: #2C3E50;
-    margin-bottom: 10px;
-    font-weight: bold;
-    text-align: left;
-}
-
-/*progressbar*/
-#progressbar {
-    margin-bottom: 30px;
-    overflow: hidden;
-    color: lightgrey;
-}
-
-#progressbar .active {
-    color: #000000;
-}
-
-#progressbar li {
-    list-style-type: none;
-    font-size: 12px;
-    width: 16%;
-    float: left;
-    position: relative;
-}
-
-/*Icons in the ProgressBar*/
-#progressbar #information:before {
-    font-family: FontAwesome;
-    content: "\f007";
-}
-
-#progressbar #course:before {
-    font-family: FontAwesome;
-    content: "\f19d";
-}
-
-#progressbar #grades:before {
-    font-family: FontAwesome;
-    content: "\f559";
-}
-#progressbar #parents:before {
-    font-family: FontAwesome;
-    content: "\f0c0";
-}
-#progressbar #requirements:before {
-    font-family: FontAwesome;
-    content: "\f15c";
-}
-
-#progressbar #confirm:before {
-    font-family: FontAwesome;
-    content: "\f46c";
-}
-/* Apply smaller font size on smaller screen sizes */
-@media (max-width: 768px) {
-    #progressbar:before {
-        font-size: 6px;
-    }
-}
-/*ProgressBar before any progress*/
-#progressbar li:before {
-    width: 50px;
-    height: 50px;
-    line-height: 45px;
-    display: block;
-    font-size: 18px;
-    color: #ffffff;
-    background: lightgray;
-    border-radius: 50%;
-    margin: 0 auto 10px auto;
-    padding: 2px;
-}
-
-/*ProgressBar connectors*/
-#progressbar li:after {
-    content: '';
-    width: 100%;
-    height: 2px;
-    background: lightgray;
-    position: absolute;
-    left: 0;
-    top: 25px;
-    z-index: -1;
-}
-
-/*Color number of the step and the connector before it*/
-#progressbar li.active:before, #progressbar li.active:after {
-    background: green;
-}
-
-/*Imaged Radio Buttons*/
-.radio-group {
-    position: relative;
-    margin-bottom: 25px;
-}
-
-.radio {
-    display:inline-block;
-    width: 204;
-    height: 104;
-    border-radius: 0;
-    background: lightblue;
-    box-shadow: 0 2px 2px 2px rgba(0, 0, 0, 0.2);
-    box-sizing: border-box;
-    cursor:pointer;
-    margin: 8px 2px; 
-}
-
-.radio:hover {
-    box-shadow: 2px 2px 2px 2px rgba(0, 0, 0, 0.3);
-}
-
-.radio.selected {
-    box-shadow: 1px 1px 2px 2px rgba(0, 0, 0, 0.1);
-}
-
-/*Fit image in bootstrap div*/
-.fit-image{
-    width: 100%;
-    object-fit: cover;
-}
-
-/* start... this is for input fields of Grades*/
-.input-row {
-  display: flex;
-}
-
-.input-row input {
-  margin-right: 10px;
-}
-
-button {
-  margin-top: 10px;
-  
-}
-
-
-/* end... this is for input fields of Grades*/
-/* this is for the input field with select options*/
-.form-control {
+.prev-step, .next-step {
+  margin: 0 10px;
+  padding: 10px 20px;
   border: none;
-  border-bottom: 1px solid #ccc; /* adjust the color and thickness as needed */
-  border-radius: 0;
-  box-shadow: none;
-  height: 40px; /* add this to make input fields consistent height */
-  padding: 10px;
-
-  
+  border-radius: 5px;
+  cursor: pointer;
 }
 
+.prev-step {
+  background-color: #4CAF50;
+  color: #fff;
+}
 
+.next-step {
+  background-color: #03A9F4;
+  color: #fff;
+}
+
+.fas {
+  font-size: 16px;
+  margin: 0 5px;
+}
 select.form-control {
   height: 40px; /* add this to make select options consistent height */
   padding: 10px;
@@ -750,30 +526,56 @@ select.form-control {
             
                 
                 <p class="text-center">Fill out all field and ensure integrity of information</p>
-                <div class="row">
-                    <div class="col-md-12 mx-0">
-                        <form id="msform" method="POST" action="" enctype="multipart/form-data">
-                            <!-- progressbar -->
-                            <ul id="progressbar">
-                                <li class="active" id="information"><strong>Information</strong></li>
-                                <li id="course"><strong>Course</strong></li>
-                                <li id="grades"><strong>Grades</strong></li>
-								<li id="parents"><strong>Parents</strong></li>
-                                <li id="requirements"><strong>Requirements</strong></li>
-                                <li id="confirm"><strong>Finish</strong></li>
-                            </ul>
-                            <!-- fieldsets -->
-                            <input type="hidden" name="educid" value="<?php echo $educid; ?>">
+                <form id="multiStepForm" method="POST" action="" enctype="multipart/form-data">
+            <!-- Progress Bar -->
+            <div class="progressbar">
+                <div class="step">
+                    <div class="icon-container">
+                        <span class="icon information-icon"> <i class="fa-solid fa-user"></i></span>
+                        <div class="line"></div>
+                    </div>
+                    <p>Information</p>
+                </div>
+                <div class="step">
+                    <div class="icon-container">
+                        <span class="icon"><i class="fa-solid fa-graduation-cap"></i></span>
+                        <div class="line"></div>
+                    </div>
+                    <p>Course</p>
+                </div>
+                <div class="step">
+                    <div class="icon-container">
+                        <span class="icon"><i class="fa-solid fa-user-group"></i></span>
+                        <div class="line"></div>
+                    </div>
+                    <p>Parents</p>
+                </div>
+                <div class="step">
+                    <div class="icon-container">
+                        <span class="icon"><i class="fas fa-file-text"></i></span>
+                        <div class="line"></div>
+                    </div>
+                    <p>Requirements</p>
+                </div>
+                <div class="step">
+                    <div class="icon-container">
+                        <span class="icon"><i class="fas fa-check"></i></span>
+                        <div class="line"></div>
+                    </div>
+                    <p>Finish</p>
+                </div>
+            </div>
+  <!-- Step 1: Information -->
+   
+  <div class="form-step active">
+  <div class="card-body mx-4">
+    <h2>Information</h2>
+    <div class="row">
+    
+    <div class="col-md-4">
+                             <input type="hidden" name="educid" value="<?php echo $educid; ?>">
                             <input type="hidden" name="studid" value="<?php echo $studid; ?>">
                           
-                            <fieldset>
-                                
-                                <div class="form-card">
-                                    <h2 class="fs-title">Personal Information    YUNG CONTACT NUMBER GAWIN VARCHAR</h2>
-                                 <!--   <input type="email" name="email" placeholder="Email Id"/> -->
-                                   	<div class="row ">
- 
-                                        <div class="col-md-4">
                                                 <input type="text" class="form-control" placeholder="Enter Firstname" value="<?php echo $firstname; ?>" name="firstname" required>
                                         </div>
                                         <div class="col-md-4">
@@ -782,8 +584,8 @@ select.form-control {
                                         <div class="col-md-4">
                                                 <input type="text" class="form-control" placeholder="Enter Lastname" value="<?php echo $lastname; ?>" name="lastname" required>
                                         </div>
-                                    </div>
-								    <div class="row">
+    </div>
+    <div class="row">
                                         <div class="col-md-4">                                      
                                                 <input type="text" class="form-control" placeholder="Enter Religion" value="<?php echo $religion; ?>" name="religion" required>                                         
                                         </div>
@@ -800,7 +602,7 @@ select.form-control {
                                             </div>
                                             <div class="col-md-4" >
                                                 
-                                            <select class="form-control form-control-sm form-control-select" name="civilstatus" required>
+                                            <select class="form-control form-control form-control-select" name="civilstatus" required>
             <option disabled selected>Select Civil Status</option>
             <option value="Single" <?php echo ($civilstatus == 'Single') ? 'selected' : ''; ?>>Single</option>
             <option value="Married" <?php echo ($civilstatus == 'Married') ? 'selected' : ''; ?>>Married</option>
@@ -810,7 +612,7 @@ select.form-control {
                                         </div>
                                         <div class="col-md-4">
                                             
-                                        <select class="form-control form-control-sm" required name="gender" style="font-family: 'Poppins', Times, serif;">
+                                        <select class="form-control form-control" required name="gender" style="font-family: 'Poppins', Times, serif;">
             <option disabled selected value="">Select Gender</option>
             <option value="Male" <?php echo ($gender == 'Male') ? 'selected' : ''; ?>>Male</option>
             <option value="Female" <?php echo ($gender == 'Female') ? 'selected' : ''; ?>>Female</option>
@@ -853,7 +655,7 @@ $barangays = array(
 );
 ?>
 
-<select class="form-control form-control-sm vstatus" required name="brgy">
+<select class="form-control form-control vstatus" required name="brgy">
     <option disabled selected value="">Select Barangay</option>
     <?php foreach ($barangays as $barangay) { ?>
         <option value="<?php echo $barangay; ?>" <?php echo ($brgy == $barangay) ? 'selected' : ''; ?>><?php echo $barangay; ?></option>
@@ -875,52 +677,53 @@ $barangays = array(
                                                 <input type="text" class="form-control" placeholder="Enter Province" value="<?php echo $province; ?>" name="province" required>
                                         </div>
                                     </div>
-								</div>
-                               
-                               
-                                <a  class="next action-button btn btn-primary btn-circle "  name="next"><i class="fa-solid fa-forward"></i> Next
-                                 </a>
-                            </fieldset>
-                            <fieldset>
-                                <div class="form-card">
-                                    <h2 class="fs-title">Educational Background</h2>
-                                    <div class="row">
-                                        <div class="col-md-6">
+								
+                                    
+    <div class="btn-container">
+      <button type="button" class="next-step mb-3"><i class="fas fa-arrow-right"></i>Next</button>
+    </div>
+    </div>
+</div>
+   
+<div class="form-step ">
+  <div class="card-body mx-4">
+    <h2>Educational Background</h2>
+   
+    <div class="row">
+                                        <div class="col-md-4">
                                                 <input type="text" class="form-control" placeholder="Enter Course" value="<?php echo $course; ?>" name="course" required>
                                         </div>
-                                        <div class="col-md-6">
+                                        <div class="col-md-4">
                                                 <input type="text" class="form-control" placeholder="Enter Major (N/A if none)" value="<?php echo $major; ?>" name="major" required>
                                         </div>
-                                      
-                                    </div>
-									<div class="row">
-                                    <div class="col-md-6">
+                                        <div class="col-md-4">
                                                 <input type="text" class="form-control" placeholder="Enter School" value="<?php echo $school_name; ?>" name="school_name" required>
                                         </div>
-                                        <div class="col-md-6">
+                                    </div>
+									<div class="row">
+                                   
+                                        <div class="col-md-4">
                                                 <input type="text" class="form-control" placeholder="Enter School Address" value="<?php echo $school_address; ?>" name="school_address" required>
                                         </div>
-                                       
-                                    </div>
-                                    <div class="row">
-                                    <div class="col-md-6">
+                                        <div class="col-md-4">
                                                
-                                                <select class="form-control form-control-sm form-control-select" name="sem" required>
-            <option disabled selected>Select Semester</option>
-            <option value="First Semester">First Semester</option>
-            <option value="Second Semester">Second Semester</option>
-            
-        </select>
-                                            </div>
-                                        <div class="col-md-6">
-                                                <input type="text" class="form-control" placeholder="Enter School Year (ex. 2024-2025)" name="sy" required>
-                                        </div>
-                                        </div>
+                                               <select class="form-control form-control form-control-select" name="sem" required>
+           <option disabled selected>Select Semester</option>
+           <option value="First Semester">First Semester</option>
+           <option value="Second Semester">Second Semester</option>
+           
+       </select>
+                                           </div>
+                                       <div class="col-md-4">
+                                               <input type="text" class="form-control" placeholder="Enter School Year (ex. 2024-2025)" name="sy" required>
+                                       </div>
+                                    </div>
+                                   
                                        <div class="row">
 
-                                        <div class="col-md-6">
+                                        <div class="col-md-4">
                                                 
-                                                <select class="form-control form-control-sm form-control-select" name="year" required>
+                                                <select class="form-control form-control form-control-select" name="year" required>
             <option disabled selected>Select Year Level</option>
             <option value="First Year">First Year</option>
             <option value="Second Year">Second Year</option>
@@ -931,105 +734,25 @@ $barangays = array(
                                             </div>
               
                                     </div>
-								 </div>
-							
-
-                                <a  class="previous action-button-previous btn btn-warning btn-circle "  name="previous"><i class="fa-solid fa-backward"></i> Back
-                                 </a>
-                                 <a  class="next action-button btn btn-primary btn-circle "  name="next"><i class="fa-solid fa-forward"></i> Next
-                                 </a>
-                            </fieldset>
-                            <fieldset>
-                                <div class="form-card" style="">
-                                    <h2 class="fs-title">Grades</h2>
-         
+								
+								
                                     
-                                        <div class="row" >
-                                            <div class=" col-md-3">
-                                            <input type="text" class="form-control" placeholder="subject 1"  name="sub1" required></div>
-                                            <div class=" col-md-3">
-                                            <input type="text" class="form-control" placeholder="grade 1"  name="grade1" required>
-                                            </div>
-                                            <div class=" col-md-3">
-                                            <input type="text" class="form-control" placeholder="subject 2"  name="sub2" required>
-                                            </div>
-                                            <div class=" col-md-3">
-                                            <input type="text" class="form-control" placeholder="grade 2"  name="grade2" required>
-                                            </div>
-                                        </div>
-                                        <div class="row" >
-                                            <div class=" col-md-3">
-                                            <input type="text" class="form-control" placeholder="subject 3"  name="sub3" required></div>
-                                            <div class=" col-md-3">
-                                            <input type="text" class="form-control" placeholder="grade 3"  name="grade3" required>
-                                            </div>
-                                            <div class=" col-md-3">
-                                            <input type="text" class="form-control" placeholder="subject 4"  name="sub4" required>
-                                            </div>
-                                            <div class=" col-md-3">
-                                            <input type="text" class="form-control" placeholder="grade 4"  name="grade4" required>
-                                            </div>
-                                        </div>
-                                        <div class="row" >
-                                            <div class=" col-md-3">
-                                            <input type="text" class="form-control" placeholder="subject 5"  name="sub5" required></div>
-                                            <div class=" col-md-3">
-                                            <input type="text" class="form-control" placeholder="grade 5"  name="grade5" required>
-                                            </div>
-                                            <div class=" col-md-3">
-                                            <input type="text" class="form-control" placeholder="subject 6"  name="sub6" required>
-                                            </div>
-                                            <div class=" col-md-3">
-                                            <input type="text" class="form-control" placeholder="grade 6"  name="grade6" required>
-                                            </div>
-                                        </div>
-                                        <div class="row" >
-                                            <div class=" col-md-3">
-                                            <input type="text" class="form-control" placeholder="subject 7"  name="sub7" required></div>
-                                            <div class=" col-md-3">
-                                            <input type="text" class="form-control" placeholder="grade 7"  name="grade7" required>
-                                            </div>
-                                            <div class=" col-md-3">
-                                            <input type="text" class="form-control" placeholder="subject 8"  name="sub8" required>
-                                            </div>
-                                            <div class=" col-md-3">
-                                            <input type="text" class="form-control" placeholder="grade 8"  name="grade8" required>
-                                            </div>
-                                        </div>
-                                        <div class="row" >
-                                            <div class=" col-md-3">
-                                            <input type="text" class="form-control" placeholder="subject 9"  name="sub9" ></div>
-                                            <div class=" col-md-3">
-                                            <input type="text" class="form-control" placeholder="grade 9"  name="grade9" >
-                                            </div>
-                                            <div class=" col-md-3">
-                                            <input type="text" class="form-control" placeholder="subject 10"  name="sub10" >
-                                            </div>
-                                            <div class=" col-md-3">
-                                            <input type="text" class="form-control" placeholder="grade 10"  name="grade10" >
-                                            </div>
-                                        </div>
-                                    
-                                    </div>
-                                       <!-- <a type="button" id="add-btn" class="btn btn-link btn-success" title="Add Subject">
-                                            <i class="fa fa-plus"></i>
-                                        </a> -->
-                                    
-                                  
-                                </>
-                              
-							<!--	<input type="button" name="previous" class="previous action-button-previous" value="Previous"/>
-                                <input type="button" name="make_payment" class="next action-button" value="Next Step"/>
--->
-                                <a  class="previous action-button-previous btn btn-warning btn-circle "  name="previous"><i class="fa-solid fa-backward"></i> Back
-                                 </a>
-                                 <a  class="next action-button btn btn-primary btn-circle "  name="grades"><i class="fa-solid fa-forward"></i> Next
-                                 </a>
-                            </fieldset>
-                            <fieldset>
-                                <div class="form-card">
-                                    <h2 class="fs-title">Parenst Information</h2>
-                                    <div class="row">
+                                    <div class="btn-container">
+                    <button type="button" class="prev-step mb-3 mt-3">
+                      <i class="fas fa-arrow-left"></i> Back
+                    </button>
+                    <button type="button" class="next-step mb-3 mt-3">
+                      Next <i class="fas fa-arrow-right"></i>
+                    </button>
+                  </div>
+    </div>
+</div>
+       
+<div class="form-step ">
+  <div class="card-body mx-4">
+    <h2>Parent Information</h2>
+   
+    <div class="row">
                                         <div class="col-md-4">
                                                 <input type="text" class="form-control" placeholder="Enter Father's Name" value="<?php echo $father; ?>" name="father" required>
                                         </div>
@@ -1048,7 +771,7 @@ $barangays = array(
                                                 <input type="text" class="form-control" placeholder="Educational Attainment" value="<?php echo $f_educattain; ?>" name="f_educattain" required>                                       
                                         </div>
                                         <div class="col-md-4">                                       
-                                        <select class="form-control form-control-sm" name="f_status" required>
+                                        <select class="form-control form-control" name="f_status" required>
                                                     <option disabled selected disabled selected value="">Select Status</option>
                                                     <option value="Alive" <?php echo ($f_status == 'Alive') ? 'selected' : ''; ?>>Alive</option>
                                                     <option value="Deceased" <?php echo ($f_status == 'Deceased') ? 'selected' : ''; ?>>Deceased</option>
@@ -1076,7 +799,7 @@ $barangays = array(
                                                 <input type="text" class="form-control" placeholder="Educational Attainment" value="<?php echo $m_educattain; ?>" name="m_educattain" required>                                       
                                         </div>
                                         <div class="col-md-4">                                       
-                                        <select class="form-control form-control-sm" name="m_status" required>
+                                        <select class="form-control form-control" name="m_status" required>
                                                     <option disabled selected disabled selected value="">Select Status</option>
                                                     <option value="Alive" <?php echo ($m_status == 'Alive') ? 'selected' : ''; ?>>Alive</option>
                                                     <option value="Deceased" <?php echo ($m_status == 'Deceased') ? 'selected' : ''; ?>>Deceased</option>
@@ -1086,18 +809,21 @@ $barangays = array(
                                         </div>
                                     </div>
                                 </div>
+    <div class="btn-container">
+                    <button type="button" class="prev-step mb-3 mt-3">
+                      <i class="fas fa-arrow-left"></i> Back
+                    </button>
+                    <button type="button" class="next-step mb-3 mt-3">
+                      Next <i class="fas fa-arrow-right"></i>
+                    </button>
+                  </div>
+    </div>
+    <div class="form-step ">
+  <div class="card-body mx-4">
+    <h2>Upload Requirements</h2>
+   
 
-							<!--	<input type="button" name="previous" class="previous action-button-previous" value="Previous"/>
-                                <input type="button" name="make_payment" class="next action-button" value="Next Step"/>
-                            -->
-                                <a  class="previous action-button-previous btn btn-warning btn-circle "  name="previous"><i class="fa-solid fa-backward"></i> Back
-                                 </a>
-                                 <a  class="next action-button btn btn-primary btn-circle "  name="parents"><i class="fa-solid fa-forward"></i> Next
-                                 </a>
-                            </fieldset>
-                            <fieldset>
-                                <div class="form-card" >
-                                    <h2 class="fs-title">Requirements</h2>
+								  
                                     <div class="row">
                                         <div class="col-md-4">
                                         <label for="formFile" class="form-label">Certificate of Enrollment</label>
@@ -1112,7 +838,7 @@ $barangays = array(
                                         <input class=" form-control form-control-sm" type="file" id="formFile" name="grades" accept=".png, .jpg, .jpeg, .docx, .pdf" required>
                                         </div>
                                     </div>
-								    <div class="row">
+                                    <div class="row">
                                         <div class="col-md-4">                                      
                                         <label for="formFile" class="form-label">Letter</label>
                                         <input class=" form-control form-control-sm" type="file" id="formFile" name="letter" accept=".png, .jpg, .jpeg, .docx, .pdf" required>                                         
@@ -1123,41 +849,42 @@ $barangays = array(
                                         </div>
                                       
                                     </div>
-                                 
-                                  
                                 </div>
+    <div class="btn-container">
+                    <button type="button" class="prev-step mb-3 mt-3">
+                      <i class="fas fa-arrow-left"></i> Back
+                    </button>
+                    <button type="button" class="next-step mb-3 mt-3">
+                      Next <i class="fas fa-arrow-right"></i>
+                    </button>
+                  </div>
+    </div>
 
-							<!--	<input type="button" name="previous" class="previous action-button-previous" value="Previous"/>
-                                <input type="button" name="make_payment" class="next action-button" value="Next Step"/>
--->
-                                <a  class="previous action-button-previous btn btn-warning btn-circle "  name="previous"><i class="fa-solid fa-backward"></i> Back
-                                 </a>
-                                 <a  class="next action-button btn btn-primary btn-circle "  name="requirements"><i class="fa-solid fa-forward"></i> Next
-                                 </a>
-                            </fieldset>
-                            <fieldset>
-                                <div class="form-card">
-                                    <h2 class="fs-title text-center">Finish !</h2>
-                                    <br><br>
-                                    <div class="row justify-content-center">
-                                        <p>I hereby certify that all information and requirements submitted in this application are true and correct otherwise it will be disregarded</p>
+
+
+<div class="form-step ">
+  <div class="card-body mx-4">
+    <h2 class="text-center">Finish</h2>
+    <div class="row justify-content-center">
+  <p style="text-align: center;">I hereby certify that all information and requirements submitted in this application are true and correct otherwise it will be disregarded</p>
+  <p style="text-align: center;"><i class="fas fa-smile" style="font-size: 100px; color: yellow;"></i></p>
+  <p style="text-align: center; font-size: 18px; margin-top: 10px;">Good Luck !!</p>
+</div>
                                     </div>
-                                    <br><br>
-                              
-                                </div>
-                            <!--    <input type="button" name="previous" class="previous action-button-previous" value="Previous"/>
-                            -->
-                                <a  class="previous action-button-previous btn btn-warning btn-circle "  name="previous"><i class="fa-solid fa-backward"></i> Back
-                                 </a>
-                                
-                                 <button type="submit" class="btn btn-success btn-circle" name="submit">
-  <i class="fa fa-check"></i> Submit
-</button>
-        
-                            </fieldset>
-                        </form>
-                    </div>
-                </div>
+    <div class="btn-container">
+                    <button type="button" class="prev-step mb-3 mt-3">
+                      <i class="fas fa-arrow-left"></i> Back
+                    </button>
+                    <button type="submit" name="submit" class="next-step mb-3 mt-3">
+                     Submit <i class="fas fa-send"></i>
+                    </button>
+                  </div>
+   
+</div>
+            </div>
+            <!-- Add the steps for Parent Info, Requirements, and Finish -->
+
+        </form>
            
       
 
@@ -1177,7 +904,7 @@ $barangays = array(
 		
 
 			<!-- Main Footer -->
-			<?php include 'templates/main-footer.php' ?>
+			<?//php include 'templates/main-footer.php' ?>
 			<!-- End Main Footer -->
 			
 		
@@ -1215,112 +942,63 @@ $barangays = array(
 
 	<?php include 'templates/footer.php' ?>
    
-	<script>
-    $(document).ready(function(){
-    
-    var current_fs, next_fs, previous_fs; //fieldsets
-    var opacity;
-    
-    $(".next").click(function(){
-        
-        current_fs = $(this).parent();
-        next_fs = $(this).parent().next();
-        
-        //Add Class Active
-        $("#progressbar li").eq($("fieldset").index(next_fs)).addClass("active");
-        
-        //show the next fieldset
-        next_fs.show(); 
-        //hide the current fieldset with style
-        current_fs.animate({opacity: 0}, {
-            step: function(now) {
-                // for making fielset appear animation
-                opacity = 1 - now;
-    
-                current_fs.css({
-                    'display': 'none',
-                    'position': 'relative'
-                });
-                next_fs.css({'opacity': opacity});
-            }, 
-            duration: 600
-        });
-    });
-    
-    $(".previous").click(function(){
-        
-        current_fs = $(this).parent();
-        previous_fs = $(this).parent().prev();
-        
-        //Remove class active
-        $("#progressbar li").eq($("fieldset").index(current_fs)).removeClass("active");
-        
-        //show the previous fieldset
-        previous_fs.show();
-    
-        //hide the current fieldset with style
-        current_fs.animate({opacity: 0}, {
-            step: function(now) {
-                // for making fielset appear animation
-                opacity = 1 - now;
-    
-                current_fs.css({
-                    'display': 'none',
-                    'position': 'relative'
-                });
-                previous_fs.css({'opacity': opacity});
-            }, 
-            duration: 600
-        });
-    });
-    
-    $('.radio-group .radio').click(function(){
-        $(this).parent().find('.radio').removeClass('selected');
-        $(this).addClass('selected');
-    });
-    
-    $(".submit").click(function(){
-        return false;
-    })
-        
-    });
-//this is for add and remove input fields of grades
-const inputContainer = document.getElementById('input-container');
-const addButton = document.getElementById('add-btn');
 
-addButton.addEventListener('click', function() {
-  const inputRow = document.createElement('div');
-  inputRow.classList.add('input-row');
-  
-  const inputSubject = document.createElement('input');
-  inputSubject.setAttribute('type', 'text');
-  inputSubject.setAttribute('placeholder', 'Subject');
-  
-  const inputGrade = document.createElement('input');
-  inputGrade.setAttribute('type', 'text');
-  inputGrade.setAttribute('placeholder', 'Grade');
-  
-  const removeLink = document.createElement('a');
-  removeLink.className = 'btn btn-link btn-danger';
-  removeLink.title = 'Remove';
-  
-  const removeIcon = document.createElement('i');
-  removeIcon.className = 'fa fa-times';
-  
-  removeLink.appendChild(removeIcon);
-  
-  removeLink.addEventListener('click', function(event) {
-    event.preventDefault(); // prevent default anchor behavior
-    inputContainer.removeChild(inputRow);
-  });
-  
-  inputRow.appendChild(inputSubject);
-  inputRow.appendChild(inputGrade);
-  inputRow.appendChild(removeLink);
-  
-  inputContainer.insertBefore(inputRow, addButton);
+    <script>
+        const formSteps = document.querySelectorAll(".form-step");
+        const nextStepBtns = document.querySelectorAll(".next-step");
+        const prevStepBtns = document.querySelectorAll(".prev-step");
+        const progress = document.querySelectorAll(".progressbar .step");
 
-});
-</script>
+        let currentStep = 0;
+
+        nextStepBtns.forEach((btn) => {
+            btn.addEventListener("click", () => {
+                if (validateStep()) {
+                    currentStep++;
+                    updateFormSteps();
+                    updateProgressBar();
+                }
+            });
+        });
+
+        prevStepBtns.forEach((btn) => {
+            btn.addEventListener("click", () => {
+                currentStep--;
+                updateFormSteps();
+                updateProgressBar();
+            });
+        });
+
+        function updateFormSteps() {
+            formSteps.forEach((formStep) => {
+                formStep.classList.remove("active");
+            });
+            formSteps[currentStep].classList.add("active");
+        }
+
+        function updateProgressBar() {
+            progress.forEach((step, index) => {
+                if (index <= currentStep) {
+                    step.classList.add("active");
+                } else {
+                    step.classList.remove("active");
+                }
+            });
+        }
+
+        function validateStep() {
+            const currentInputs = formSteps[currentStep].querySelectorAll("input");
+            let isValid = true;
+
+            currentInputs.forEach((input) => {
+                if (!input.checkValidity()) {
+                    input.reportValidity();
+                    isValid = false;
+                }
+            });
+
+            return isValid;
+        }
+    </script>
 </body>
 </html><?php }?>

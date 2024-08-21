@@ -170,7 +170,7 @@ else {
 								</div>
                                 <div class="card-body">
     <?php 
-    $query = "SELECT application.educid, `application`.appid, `educ aids`.educname as educname, `educ aids`.sem as sem, `educ aids`.sy as sy, `educ aids`.status as status, `application`.date, `educ aids`.min_grade 
+    $query = "SELECT application.educid, `application`.appid, `educ aids`.educname as educname, `educ aids`.sem as sem, `educ aids`.sy as sy, `educ aids`.status as status, `application`.appdate, `educ aids`.min_grade 
           FROM `application` 
           JOIN `educ aids` 
           ON application.educid = `educ aids`.educid 
@@ -186,7 +186,7 @@ else {
             $sem = $row['sem'];         
             $sy = $row['sy'];  
             $status = $row['status'];                
-            $date = $row['date'];  
+            $date = $row['appdate'];  
             $min_grade = $row['min_grade'];  
 
              
