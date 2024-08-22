@@ -103,10 +103,10 @@ if (isset($_POST['submit'])) { // this is from apply_educ.php
 
  
 
-    $gradesid = mt_rand(100000, 999999) / 1000; //random 3 digit id id 
-    $reqid = mt_rand(100000, 999999)/1000;  //Random 3-digit number
-    $courseid = mt_rand(100000, 999999)/1000; // Random 3-digit number
-    $appid = mt_rand(100000, 999999)/1000;
+    $gradesid = mt_rand(3, 1000000);
+    $reqid = mt_rand(3, 1000000);
+    $courseid = mt_rand(3, 1000000);
+    $appid = mt_rand(3, 1000000);
     $studid = $_POST['studid'];
     $educid = $_POST['educid'];
   
@@ -261,12 +261,12 @@ if (!in_array($_FILES['coe']['type'], $coeallowedTypes) ||
     !in_array($_FILES['grades']['type'], $gradesallowedTypes) || 
     !in_array($_FILES['indigent']['type'], $indigentallowedTypes)) {
     
-    $_SESSION['title'] = 'Invalid';
-    $_SESSION['mess'] = 'Invalid file type. Only PNG, JPEG, DOCx, and JPG files are allowed.';
-    $_SESSION['icon'] = 'error';
+        echo '<script>
+        alert("Invalid file type. Only PNG, JPEG, DOCx, and JPG files are allowed.");
+      
+    </script>';
    
-    header('Location: apply_educ.php');
-  exit;
+
 } elseif (
     move_uploaded_file($_FILES['coe']['tmp_name'], $coePath) &&
     move_uploaded_file($_FILES['letter']['tmp_name'], $letterPath) &&
@@ -283,40 +283,40 @@ if (!in_array($_FILES['coe']['type'], $coeallowedTypes) ||
         
        
     } else {
-        $_SESSION['mess'] = 'Something went wrong';
-        $_SESSION['title'] = 'Failed';
-        $_SESSION['icon'] = 'error';
-        header('Location: educaids.php');
-        exit;
+        echo '<script>
+        alert("Something went wrong. Please, Try again!");
+       
+    </script>';
     }
 } else {
-    $_SESSION['mess'] = 'file upload failed ';
-    $_SESSION['title'] = 'Invalid';
-    $_SESSION['icon'] = 'error';
-    header('Location: educaids.php');
-    exit;
+    echo '<script>
+    alert("File upload failed");
+ 
+</script>';
 }
 //if all data are inserted, insert the ids in application
 date_default_timezone_set('Asia/Manila'); // set the time zone to Philippine Standard Time (PST)
 $appdate = date('Y-m-d');
 $appstatus = 'Pending';
 
-$application = "INSERT INTO `application` (appid, studid, educid, reqid, courseid, parentsid, `appstatus`, `appdate`) 
-VALUES ('$appid','$studid', '$educid', '$reqid', '$courseid', '$parentid', '$appstatus','$appdate')";
+$application =$conn->prepare( "INSERT INTO `application` (appid, studid, educid, reqid, courseid, parentsid, `appstatus`, `appdate`) VALUES(?,?,?,?,?,?,?,?)");
+$application->bind_param("iiiiiiss", $appid,$studid, $educid, $reqid, $courseid, $parentid, $appstatus,$appdate);
   
-if (mysqli_query($conn, $application)) {
-    $appid = mysqli_insert_id($conn);
-    $_SESSION['mess'] = ' Your application ID is ' .$appid ;
-    $_SESSION['title'] = 'Successful';
-    $_SESSION['icon'] = 'success';
+  if ($application->execute()) {
+         $appid = mysqli_insert_id($conn);
+    $_SESSION['alertmess'] = ' Your application ID is ' .$appid ;
+   $_SESSION['title'] = 'Successful';
+   $_SESSION['success'] = 'success';
+   header('Location: educaids.php');
+   exit;
+     
+  }
+ else {
+    $_SESSION['appmessage'] = 'Error submitting application!';
+    $_SESSION['appheader'] = 'Error';
+    $_SESSION['appicon'] = 'error';
     header('Location: educaids.php');
-  exit;
-} else {
-    $_SESSION['mess'] = 'Error submitting application!';
-    $_SESSION['title'] = 'Error';
-    $_SESSION['icon'] = 'error';
-    header('Location: educaids.php');
-  exit;
+    exit;
 }
 
 }
@@ -336,9 +336,9 @@ if (mysqli_query($conn, $application)) {
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Poppins:ital,wght@0,100;0,200;0,300;0,400;0,500;0,600;0,700;0,800;0,900;1,100;1,200;1,300;1,400;1,500;1,600;1,700;1,800;1,900&display=swap" rel="stylesheet">
 <link rel="icon" href="assets/img/logo.png" type="image/x-icon"/>   <!-- THIS IS THE CODE TO DISPLAY AN ICON IN THE BROWASER TAB-->
-<script src="https://cdn.jsdelivr.net/npm/sweetalert2@11.12.3/dist/sweetalert2.all.min.js"></script>
-        <link href="https://cdn.jsdelivr.net/npm/sweetalert2@11.12.3/dist/sweetalert2.min.css" rel="stylesheet">
+<script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
         <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script> <!-- THIS IS THE CODE TO validate fields-->
+
 <style>
       .progressbar {
             display: flex;
@@ -890,6 +890,8 @@ $barangays = array(
                     <button type="submit" name="submit" class="btn-primary mb-3 mt-3">
                      Submit <i class="fas fa-check"></i>
                     </button>
+     
+             
                   </div>
                   </div>
 </div>
@@ -924,35 +926,11 @@ $barangays = array(
 		
 		
 	</div>
-    <?php
-    //ALERT MESSAGE
-     if (isset($_SESSION['error'])) : ?> 
-                                <script>
-                                    Swal.fire({
-                                        title: '<?php echo $_SESSION['title']; ?>',
-                                        text: '<?php echo $_SESSION['error']; ?>',
-                                        icon: '<?php echo $_SESSION['icon']; ?>',
-                                        confirmButtonText: 'OK'
-                                    });
-                                </script>
-                                <?php unset($_SESSION['error']);
-                                unset($_SESSION['icon']);unset($_SESSION['title']); ?>
-                            <?php endif; ?>
-<?php 
+ 
 
-/// message for application
-                            if (isset($_SESSION['mess'])) : ?> 
-                                <script>
-                                    Swal.fire({
-                                        title: '<?php echo $_SESSION['title']; ?>',
-                                        text: '<?php echo $_SESSION['mess']; ?>',
-                                        icon: '<?php echo $_SESSION['icon']; ?>',
-                                        confirmButtonText: 'OK'
-                                    });
-                                </script>
-                                <?php unset($_SESSION['mess']);
-                                unset($_SESSION['icon']);unset($_SESSION['title']); ?>
-                            <?php endif; ?>
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+  
+
 
 	<?php include 'templates/footer.php' ?>
    

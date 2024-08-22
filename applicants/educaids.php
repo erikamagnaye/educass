@@ -50,9 +50,10 @@ else {
 	<?php include 'templates/header.php' ?>
 	<title>Educational Assistance</title>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
-    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11.12.3/dist/sweetalert2.all.min.js"></script>
+      <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+      <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11.12.3/dist/sweetalert2.all.min.js"></script>
         <link href="https://cdn.jsdelivr.net/npm/sweetalert2@11.12.3/dist/sweetalert2.min.css" rel="stylesheet">
-      
+       
 <style>
  /* Default font size for body */
 .content h2{
@@ -171,6 +172,8 @@ else {
  
 		<div class="main-panel">
 			<div class="content">
+   
+
 				<div class="panel-header ">
 					<div class="page-inner">
 						<div class="d-flex align-items-left align-items-md-center flex-column flex-md-row">
@@ -191,7 +194,7 @@ else {
 									<div class="card-head-row">
 										<div class="card-title"style=" color: #ffffff;"><h3>Available Educational Assistance </h3></div>
 										
-									
+  
 									
 									</div>
                                     <form>
@@ -394,7 +397,19 @@ else {
                 </div>
             </div>
 
-
+          <!-- alert for UPDATEEEEEEEEE -->
+          <?php if (isset($_SESSION['alertmess'])) : ?> 
+                                <script>
+                                    Swal.fire({
+                                        title: '<?php echo $_SESSION['title']; ?>',
+                                        text: '<?php echo $_SESSION['alertmess']; ?>',
+                                        icon: '<?php echo $_SESSION['success']; ?>',
+                                        confirmButtonText: 'OK'
+                                    });
+                                </script>
+                                <?php unset($_SESSION['alertmess']);
+                                unset($_SESSION['success']); ?>
+                            <?php endif; ?>
 			<!-- Main Footer -->
 			<?php include 'templates/main-footer.php' ?>
 			<!-- End Main Footer -->
@@ -402,24 +417,8 @@ else {
 		</div>
 		
 	</div>
-    <?php if (isset($_SESSION['error']) || isset($_SESSION['mess'])) : ?>
-    <script>
-        Swal.fire({
-            title: '<?php echo $_SESSION['title']; ?>',
-            text: '<?php echo isset($_SESSION['error']) ? $_SESSION['error'] : $_SESSION['mess']; ?>',
-            icon: '<?php echo $_SESSION['icon']; ?>',
-            confirmButtonText: 'OK'
-        });
-    </script>
-    <?php
-        unset($_SESSION['error']);
-        unset($_SESSION['mess']);
-        unset($_SESSION['icon']);
-        unset($_SESSION['title']);
-    ?>
-<?php endif; ?>
+
 	<?php include 'templates/footer.php' ?>
-    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11.12.3/dist/sweetalert2.all.min.js"></script>
-   
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
 </body>
 </html><?php }?>
