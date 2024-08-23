@@ -61,18 +61,15 @@ while ($data = mysqli_fetch_assoc($studcourse)) {
 }
 
 //CODE TO RETRIEVE PARENTS INFO
-$father = ''; // initialize 
-$f_age = ''; // initialize 
-$f_occu = ''; // initialize mjor
-$f_income = ''; // initialize 
-$f_status= ''; // initialize mjor
-$f_educattain = ''; // initialize 
-$mother = ''; // initialize 
-$m_age = ''; // initialize 
-$m_occu = ''; // initialize mjor
-$m_income = ''; // initialize 
-$m_status= ''; // initialize mjor
-$m_educattain = ''; // initialize 
+$parentname = ''; // initialize 
+$parentage = ''; // initialize 
+$parent_occu = ''; // initialize mjor
+$parent_income = ''; // initialize 
+$parent_status= ''; // initialize mjor
+$parent_educattain = ''; // initialize 
+$parent_address = ''; // initialize 
+$parent_contact = ''; // initialize 
+ 
 //CODE TO RETRIEVE DATA ABOUT COURSE/EDUCATIONAL BACKGROUND
 $parent = "SELECT * FROM `parentinfo` where studid= $studid"; // SQL query to fetch all table data
 $studparent = mysqli_query($conn, $parent); // sending the query to the database
@@ -81,18 +78,15 @@ $studparent = mysqli_query($conn, $parent); // sending the query to the database
 while ($parents = mysqli_fetch_assoc($studparent)) {
                
     $parentid= $parents['parentid']; // use this for application
-    $father = $parents['father'];
-    $f_age = $parents['f_age'];
-    $f_occu = $parents['f_occu'];
-    $f_income = $parents['f_income'];
-    $f_status = $parents['f_status'];
-    $f_educattain = $parents['f_educattain'];
-    $mother = $parents['mother'];
-    $m_age = $parents['m_age'];
-    $m_occu = $parents['m_occu'];
-    $m_income = $parents['m_income'];
-    $m_status = $parents['m_status'];
-    $m_educattain = $parents['m_educattain']; 
+    $parentname = $parents['parentname'];
+    $parentage = $parents['parentage'];
+    $parent_occu = $parents['parent_occu'];
+    $parent_income = $parents['parent_income'];
+    $parent_status = $parents['parent_status'];
+    $parent_educattain = $parents['parent_educattain'];
+    $parent_address = $parents['parent_address'];
+    $parent_contact = $parents['parent_contact'];
+     
    
 }
 }
@@ -190,29 +184,28 @@ if (isset($_POST['submit'])) { // this is from apply_educ.php
      */
 
      // PARENT INFO
-     $father = $_POST['father'];
-     $f_age = $_POST['f_age'];
-     $f_occu = $_POST['f_occu'];
-     $f_income = $_POST['f_income'];
-     $f_status = $_POST['f_status'];
-     $f_educattain = $_POST['f_educattain'];
-     $mother = $_POST['mother'];
-     $m_age = $_POST['m_age'];
-     $m_occu = $_POST['m_occu'];
-     $m_income = $_POST['m_income'];
-     $m_status = $_POST['m_status'];
-     $m_educattain = $_POST['m_educattain'];
+     $parentname = $_POST['parentname'];
+     $parentage = $_POST['parentage'];
+     $parent_occu = $_POST['parent_occu'];
+     $parent_income = $_POST['parent_income'];
+     $parent_status =$_POST['parent_status'];
+     $parent_educattain = $_POST['parent_educattain'];
+     $parent_address = $_POST['parent_address'];
+     $parent_contact = $_POST['parent_contact'];
+      
+
+   
 
      $parentcheck = $conn->query("SELECT * FROM parentinfo WHERE studid = '$studid'");
 
      if ($parentcheck->num_rows == 0) {
-         $parentquery = "INSERT INTO parentinfo (studid, father, f_age, f_occu, f_income, f_status, f_educattain, mother, m_age, m_occu, m_income, m_status, m_educattain) 
-         VALUES ('$studid', '$father', '$f_age', '$f_occu', '$f_income', '$f_status', '$f_educattain', '$mother', '$m_age', '$m_occu', '$m_income', '$m_status', '$m_educattain')";
+         $parentquery = "INSERT INTO parentinfo (studid, parentname, parentage, parent_occu, parent_income, parent_status, parent_educattain, parent_address, parent_contact) 
+         VALUES ('$studid', '$parentname', '$parentage', '$parent_occu', '$parent_income', '$parent_status', '$parent_educattain', '$parent_address', '$parent_contact')";
          $conn->query($parentquery);
      } else {
          $parentquery = "UPDATE parentinfo SET 
-         father = '$father', f_age = '$f_age', f_occu = '$f_occu', f_income = '$f_income', f_status = '$f_status', f_educattain = '$f_educattain', 
-         mother = '$mother', m_age = '$m_age', m_occu = '$m_occu', m_income = '$m_income', m_status = '$m_status', m_educattain = '$m_educattain' 
+         parentname = '$parentname', parentage = '$parentage', parent_occu = '$parent_occu', parent_income = '$parent_income', parent_status = '$parent_status', parent_educattain = '$parent_educattain', 
+         parent_address = '$parent_address', parent_contact = '$parent_contact' 
          WHERE studid = '$studid'";
          $conn->query($parentquery);
      }
@@ -757,64 +750,46 @@ $barangays = array(
        
 <div class="form-step ">
   <div class="card-body mx-4">
-    <h2>Parent Information</h2>
+    <h2>Guardian Information</h2>
    
     <div class="row">
                                         <div class="col-md-4">
-                                                <input type="text" class="form-control" placeholder="Enter Father's Name" value="<?php echo $father; ?>" name="father" required>
+                                                <input type="text" class="form-control" placeholder="Enter Guardian's Name" value="<?php echo $parentname; ?>" name="parentname" required>
                                         </div>
                                         <div class="col-md-4">
-                                                <input type="number" class="form-control" placeholder="Enter Age"value="<?php echo $f_age; ?>" name="f_age" required>
+                                                <input type="number" class="form-control" placeholder="Enter Age"value="<?php echo $parentage; ?>" name="parentage" required>
                                         </div>
                                         <div class="col-md-4">
-                                                <input type="text" class="form-control" placeholder="Occupation" value="<?php echo $f_occu; ?>" name="f_occu" required>
+                                                <input type="text" class="form-control" placeholder="Occupation" value="<?php echo $parent_occu; ?>" name="parent_occu" required>
                                         </div>
                                     </div>
 								    <div class="row">
                                         <div class="col-md-4">                                      
-                                                <input type="text" class="form-control" placeholder="Enter Income" value="<?php echo $f_income; ?>"name="f_income" required>                                         
+                                                <input type="text" class="form-control" placeholder="Enter Income" value="<?php echo $parent_income; ?>"name="parent_income" required>                                         
                                         </div>
                                         <div class="col-md-4">                                       
-                                                <input type="text" class="form-control" placeholder="Educational Attainment" value="<?php echo $f_educattain; ?>" name="f_educattain" required>                                       
+                                                <input type="text" class="form-control" placeholder="Educational Attainment" value="<?php echo $parent_educattain; ?>" name="parent_educattain" required>                                       
                                         </div>
                                         <div class="col-md-4">                                       
-                                        <select class="form-control form-control" name="f_status" required>
+                                        <select class="form-control form-control" name="parent_status" required>
                                                     <option disabled selected disabled selected value="">Select Status</option>
-                                                    <option value="Alive" <?php echo ($f_status == 'Alive') ? 'selected' : ''; ?>>Alive</option>
-                                                    <option value="Deceased" <?php echo ($f_status == 'Deceased') ? 'selected' : ''; ?>>Deceased</option>
+                                                    <option value="Alive" <?php echo ($parent_status == 'Alive') ? 'selected' : ''; ?>>Alive</option>
+                                                    <option value="Deceased" <?php echo ($parent_status == 'Deceased') ? 'selected' : ''; ?>>Deceased</option>
                                                  
                                                 </select>                                        
                                         </div>
                                     </div>
-                                    <hr>
+                                
                                     <div class="row">
                                         <div class="col-md-4">
-                                                <input type="text" class="form-control" placeholder="Enter Mother's Name" value="<?php echo $mother; ?>" name="mother" required>
+                                                <input type="text" class="form-control" placeholder="Address" value="<?php echo $parent_address; ?>" name="parent_address" required>
                                         </div>
                                         <div class="col-md-4">
-                                                <input type="number" class="form-control" placeholder="Enter Age" value="<?php echo $m_age; ?>" name="m_age" required>
+                                                <input type="text" class="form-control" placeholder="Contact Number" value="<?php echo $parent_contact; ?>" name="parent_contact" required>
                                         </div>
-                                        <div class="col-md-4">
-                                                <input type="text" class="form-control" placeholder="Occupation" value="<?php echo $m_occu; ?>" name="m_occu" required>
-                                        </div>
+                                       
                                     </div>
-								    <div class="row">
-                                        <div class="col-md-4">                                      
-                                                <input type="text" class="form-control" placeholder="Enter Income" value="<?php echo $m_income; ?>" name="m_income" required>                                         
-                                        </div>
-                                        <div class="col-md-4">                                       
-                                                <input type="text" class="form-control" placeholder="Educational Attainment" value="<?php echo $m_educattain; ?>" name="m_educattain" required>                                       
-                                        </div>
-                                        <div class="col-md-4">                                       
-                                        <select class="form-control form-control" name="m_status" required>
-                                                    <option disabled selected disabled selected value="">Select Status</option>
-                                                    <option value="Alive" <?php echo ($m_status == 'Alive') ? 'selected' : ''; ?>>Alive</option>
-                                                    <option value="Deceased" <?php echo ($m_status == 'Deceased') ? 'selected' : ''; ?>>Deceased</option>
-                                                 
-                                                </select>  
-                                               
-                                        </div>
-                                    </div>
+								
                                 </div>
     <div class="btn-container">
                     <button type="button" class="prev-step mb-3 mt-3">

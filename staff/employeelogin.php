@@ -51,7 +51,7 @@ session_start();
                                             <a href="forgot-password.php" class="auth-link text-black">Forgot password?</a>
                                         </div><br>
                                         <div class="form-action mb-3">
-                                            <button type="button" class="btn btn-outline-danger" onclick="location.href='employeelogin.php'">Cancel</button>
+                                            <button type="button" class="btn btn-outline-danger" onclick="location.href='index.php'">Cancel</button>
                                             <button type="submit" class="btn btn-primary" name="submit">Login</button>
 
                                         </div>
