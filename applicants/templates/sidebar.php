@@ -99,8 +99,8 @@ $current_page = PageName();
             <?php endif; ?></p>
                     </a>
                 </li>
-                <li class="nav-item <?= $current_page=='concerns.php'  ? 'active' : null ?>">
-                    <a href="concerns.php">
+                <li class="nav-item <?= $current_page=='complaint.php'  ? 'active' : null ?>">
+                    <a href="complaint.php">
                         <i class="icon-docs"></i>
                         <p>Concerns</p>
                     </a>

@@ -100,12 +100,11 @@ if (strlen($_SESSION['id'] == 0)) {
     text-align: center;
 	display: flex;
     flex-direction: column;
-    align-items: center;
     justify-content: center;
 }
 
 .card-icon {
-    font-size: 30px;
+    font-size: 20px;
     color: #4CAF50;
 }
 

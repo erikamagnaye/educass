@@ -10,39 +10,10 @@ if (!isset($_SESSION['id']) || strlen($_SESSION['id']) == 0 || $_SESSION['role']
     exit();
 }
 else {
-// staet of code to digitally update status of educ assistance
-$currentDate = date('Y-m-d');
-$newStatus = 'Closed'; // The status you want to set when the end date is reached
-
-// Select all entries with a due date less than the current date
-$selectQuery = "SELECT educid FROM `educ aids` WHERE `end` < ?";
-$stmtSelect = $conn->prepare($selectQuery);
-$stmtSelect->bind_param("s", $currentDate);
-$stmtSelect->execute();
-$result = $stmtSelect->get_result();
-
-// Update the status of each entry found
-if ($result->num_rows > 0) {
-    $updateQuery = "UPDATE `educ aids` SET `status` = ? WHERE educid = ?";
-    $stmtUpdate = $conn->prepare($updateQuery);
-
-    while ($row = $result->fetch_assoc()) {
-        $id = $row['educid'];
-        $stmtUpdate->bind_param("si", $newStatus, $id);
-        $stmtUpdate->execute();
-    }
-
-    $stmtUpdate->close();
-    //echo "Statuses updated successfully.";
-}// else {
-   // echo "No records to update.";
-//}
-
-$stmtSelect->close();
-
-
-
-//end of code to update educ ass digitally
+$allcomplaints =1;
+$pending =1;
+$approved =1;
+$rejected =1;
 
 ?>
 <!DOCTYPE html>
@@ -51,10 +22,150 @@ $stmtSelect->close();
 	<?php include 'templates/header.php' ?>
 	<title>Educational Assistance</title>
     <link rel="stylesheet" type="text/css" href="https://cdn.datatables.net/2.1.2/css/dataTables.bootstrap5.min.css"/>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.1.1/css/all.min.css" integrity="sha512-KfkfwYDsLkIlwQp6LFnl8zNdLGxu9YAA1QvwINks4PhcElQSvqcyVLLD9aMhXd13uQjoXtEKNosOWaZqXgel0g==" crossorigin="anonymous" referrerpolicy="no-referrer" />
 <style>
     .btn-link + .btn-link {
     margin-left: 5px;
 }
+
+
+
+/* styles for medium screens */
+@media (max-width: 768px) {
+  .btn-container button {
+    width: 150px;
+    height: 40px;
+    font-size: 13px;
+  }
+}
+
+/* styles for small screens */
+@media (max-width: 480px) {
+  .btn-container button {
+    width: 100px;
+    height: 30px;
+    font-size: 11px;
+  }
+}
+
+/* style for cards in dash */
+* {
+    box-sizing: border-box;
+}
+
+
+.dashboard {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 10px;
+}
+
+.card {
+    background: #ffffff;
+    border-radius: 10px;
+    box-shadow: 0 4px 8px rgba(0,0,0,0.1);
+    padding: 5px;
+    text-align: center;
+	display: flex;
+    flex-direction: column;
+    justify-content: center;
+    transition: box-shadow 0.3s; 
+}
+.card:hover {
+  box-shadow: 0 0 10px rgba(0, 0, 0, 0.2); 
+  transform: translateY(-5px); 
+}
+
+.card-icon {
+    font-size: 20px;
+    color: #4CAF50;
+}
+
+h5 {
+    margin: 10px 0 10px;
+	word-wrap: break-word;
+    overflow-wrap: break-word;
+	word-break: break-all;
+}
+/* Small screens (max-width: 768px) */
+@media (max-width: 768px) {
+    .dashboard {
+        display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 10px;
+    }
+    .card {
+        padding: 2px;
+		display: flex;
+    flex-direction: column;
+    justify-content: center;
+    text-align: center;
+    }
+    .card-icon {
+        font-size: 13px;
+    }
+    h5 {
+        font-size: 13px;
+		overflow-wrap: break-word; /* Add this line to break long text */
+		word-wrap: break-word;
+		word-break: break-all;
+    }
+}
+
+/* Extra small screens (max-width: 480px) */
+@media (max-width: 480px) {
+    .dashboard {
+        display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 10px;
+    }
+    .card {
+        padding: 2px;
+		display: flex;
+    flex-direction: column;
+    justify-content: center;
+    text-align: center;
+    }
+    .card-icon {
+        font-size: 13px;
+    }
+    h5 {
+        font-size: 13px;
+		overflow-wrap: break-word; /* Add this line to break long text */
+		word-wrap: break-word;
+		word-break: break-all;
+    }
+}
+
+/* Extra extra small screens (max-width: 320px) */
+@media (max-width: 320px) {
+    .dashboard {
+        display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 10px;
+    }
+    .card {
+        padding: 1px;
+		display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    text-align: center;
+    }
+    .card-icon {
+        font-size: 10px;
+    }
+    h5 {
+        font-size: 10px;
+		overflow-wrap: break-word; /* Add this line to break long text */
+		word-wrap: break-word;
+		word-break: break-all;
+    }
+}
+
+
+
+
 </style>
 
 </head>
@@ -76,7 +187,7 @@ $stmtSelect->close();
 					<div class="page-inner">
 						<div class="d-flex align-items-left align-items-md-center flex-column flex-md-row">
 							<div>
-								<h2 class="text-black fw-bold">Admin</h2>
+								<h2 class="text-black fw-bold">Applicant Portal</h2>
 							</div>
 						</div>
 					</div>
@@ -90,64 +201,54 @@ $stmtSelect->close();
 							<div class="card">
 								<div class="card-header">
 									<div class="card-head-row">
-										<div class="card-title">Educational Assistance Provided</div>
+										<div class="card-title">Concerns/Queries</div>
 										
 											<div class="card-tools">
-                                            <a href="viewprinteduc.php" class="btn btn-success btn-border btn-round btn-sm" title="view and print">
-												<i class="fa fa-eye"></i>
-												View
-											</a>
-                                            <a href="model/export_educprovided_csv.php" class="btn btn-danger btn-border btn-round btn-sm" title="Download">
-												<i class="fa fa-file"></i>
-												Export CSV
-											</a>
+                                          
 												<a href="#add" data-toggle="modal" class="btn btn-info btn-border btn-round btn-sm" title="Post Assistance">
 													<i class="fa fa-plus"></i>
-													Post New assistance
+													File Concerns
 												</a>
 											</div>
 									
 									</div>
 								</div>
-								<div class="card-body">
+								<div class="card-body col-md-12">
+<div container-fluid>
+<div class="dashboard">
+        <div class="card">
+            <div class="card-icon" style="color:orange;"><i class="fa-solid fa-clipboard-question"></i></div>
+          <a href="all_applications.php" class="btn">  <h5><?= $allcomplaints ?> <br>All Complaints</h5></a>
+          
+        </div>
+        <div class="card">
+            <div class="card-icon" style="color:violet;"><i class="fa-solid fa-hourglass-end"></i></div>
+			<a href="applications.php" class="btn"><h5><?= $pending ?> <br>Pending</h5></a>
+         
+        </div>
+        <div class="card">
+            <div class="card-icon" style="color:yellow;"><i class="fa fa-spinner fa-spin"></i></div>
+			<a href="applications.php" class="btn"><h5><?= $approved ?> <br>In Process</h5></a>
+     
+        </div>
+        <div class="card">
+            <div class="card-icon" style="color:red;"><i class="fa-solid fa-gavel"></i></div>
+			<a href="applications.php" class="btn"> <h5><?=$rejected?><br> Closed</h5></a>
+           
+        </div> 
+    </div>
+</div>
+   
+
+
+</div>
+    
+    
 									<div class="table-responsive">
 
-	<!-- MANUAL SEARCH .....ETO YUNG MAY CLEAR OPTION
-	<div class="row">
-<div class="col-md-12">
-<form method="GET">
-<div class="input-group mb-3">
-<input type="text" class="form-control" name="search" placeholder="Search..." value="<?//php echo isset($_GET['search']) ? $_GET['search'] : ''; ?>">
-<div class="input-group-append">
-<button class="btn btn-primary" type="submit">Search</button>
-<?//php if (isset($_GET['search']) && $_GET['search'] != ''): ?>
-<a href="<?//php echo $_SERVER['PHP_SELF']; ?>" class="btn btn-secondary">Clear</a>
-<?//php endif; ?>
-</div>
-</div>
-</form>
-</div>
-</div> -->
 
 
-<!--  <div class="row">
-<div class="col-md-6">
-<div class="dataTables_length" id="dataTable_length">
-<label>Show 
-<select name="dataTable_length" aria-controls="dataTable" class="custom-select custom-select-sm form-control form-control-sm">
-<option value="10">10</option>
-<option value="25">25</option>
-<option value="50">50</option>
-<option value="100">100</option>
-</select> entries
-</label>
-</div>
-</div>
-<div class="col-md-6">
-<input type="text" id="search-input" class="form-control" placeholder="Search...">
-<div id="search-results"></div>
-</div>
-</div>-->
+
 										<table id="dataTable" class="table table-striped">
 											<thead>
 												<tr>
@@ -161,12 +262,7 @@ $stmtSelect->close();
 											</thead>
 											<tbody>
                           <?php 
-                         // if (isset($_GET['search'])) {
-                          //  $search = $_GET['search'];
-                          //  $query = "SELECT * FROM `educ aids` WHERE `educname` LIKE '%$search%' OR `sem` LIKE '%$search%' OR `sy` LIKE '%$search%' order by `date` desc";
-                      //  } else {
-                           // $query = "SELECT * FROM `educ aids` order by `date` desc";
-                       // }
+                     
                                     $query = "SELECT * FROM `educ aids` order by `date` desc"; // SQL query to fetch all table data
                                     $view_data = mysqli_query($conn, $query); // sending the query to the database
 

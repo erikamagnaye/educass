@@ -7,7 +7,7 @@ include 'server/server.php';
 session_start(); 
 error_reporting(E_ALL);
 ini_set('display_errors', 1);
-if (strlen($_SESSION['id'] == 0)) {
+if (!isset($_SESSION['id']) || strlen($_SESSION['id']) == 0 || $_SESSION['role'] !== 'admin') {
 	header('location:login.php');
     exit();
 }

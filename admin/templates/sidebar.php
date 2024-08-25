@@ -1,5 +1,6 @@
 <?php // function to get the current page name
-if (strlen($_SESSION['id'] == 0)){
+session_start();
+if (!isset($_SESSION['id']) || strlen($_SESSION['id']) == 0 || $_SESSION['role'] !== 'admin') {
 	header('location:login.php');
     exit();
 }
@@ -87,8 +88,8 @@ $current_page = PageName();
                         <p>Announcement</p>
                     </a>
                 </li>
-                <li class="nav-item <?= $current_page=='concerns.php'  ? 'active' : null ?>">
-                    <a href="concerns.php">
+                <li class="nav-item <?= $current_page=='complaint.php'  ? 'active' : null ?>">
+                    <a href="complaint.php">
                         <i class="icon-docs"></i>
                         <p>Concerns</p>
                     </a>

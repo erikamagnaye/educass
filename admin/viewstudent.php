@@ -5,12 +5,12 @@
 session_start(); 
 error_reporting(E_ALL);
 ini_set('display_errors', 1);
-if (strlen($_SESSION['id'] == 0)) {
+if (!isset($_SESSION['id']) || strlen($_SESSION['id']) == 0 || $_SESSION['role'] !== 'admin') {
 	header('location:login.php');
     exit();
 }
 
-
+else {
 ?>
 <!DOCTYPE html>
 <html lang="en">
@@ -231,4 +231,4 @@ if (strlen($_SESSION['id'] == 0)) {
             }
     </script>
 </body>
-</html>
+</html><?php }?>

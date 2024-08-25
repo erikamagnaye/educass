@@ -1,5 +1,5 @@
 <?php 
-if (strlen($_SESSION['id'] == 0)) {
+if (!isset($_SESSION['id']) || strlen($_SESSION['id']) == 0 || $_SESSION['role'] !== 'admin') {
 	header('location:login.php');
     exit();
 }

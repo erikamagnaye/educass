@@ -26,17 +26,20 @@ if (!empty($email) && !empty($password)) {
             header('Location: ../dashboard.php');
         } else {
             $_SESSION['message'] = 'Account not yet verified!';
-            $_SESSION['success'] = 'danger';
+            $_SESSION['success'] = 'error';
+            $_SESSION['title'] = 'Error';
             header('Location: ../login.php');
         }
     } else {
         $_SESSION['message'] = 'Invalid email or password!';
-        $_SESSION['success'] = 'danger';
+        $_SESSION['success'] = 'error';
+        $_SESSION['title'] = 'Error';
         header('Location: ../login.php');
     }
 } else {
     $_SESSION['message'] = 'Email or password is empty!';
-    $_SESSION['success'] = 'danger';
+    $_SESSION['success'] = 'error';
+    $_SESSION['title'] = 'Error';
     header('Location: ../login.php');
 }
 

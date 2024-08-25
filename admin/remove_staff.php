@@ -5,8 +5,8 @@
     error_reporting(E_ALL);
     ini_set('display_errors', 1);
 
-    if (strlen($_SESSION['id']) == 0) {
-        header('location:login.php'); // Adjust the path as needed
+    if (!isset($_SESSION['id']) || strlen($_SESSION['id']) == 0 || $_SESSION['role'] !== 'admin') {
+        header('location:login.php');
         exit();
     }
 

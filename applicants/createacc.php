@@ -166,7 +166,7 @@ label {
                     window.location.href = 'createacc.php';
                 });
             </script>
-            <?php unset($_SESSION['mess']); ?>
+            <?php unset($_SESSION['mess']); unset($_SESSION['success']);?>
         <?php endif ?>
 			<h2 class="text-center">Create an Account</h2>
 			<div class="login-form">
