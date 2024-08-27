@@ -240,21 +240,24 @@ if (strlen($_SESSION['id'] == 0)) {
                                             $date = $row['date'];
                                             $description = $row['description'];
                                             $file = $row['file'];
+                                            $status = $row['status'];
                                         ?>
                                             <div class="card mb-2" style="border-width: 1px; border-radius: 10px;">
                                                 <div class="card-body py-2">
                                                     <div class="d-flex justify-content-between">
                                                         <div>
-                                                            <h6 class="card-title mb-0" style="text-align: justify;"><?php echo $title; ?></h6>
-                                                            <small class="text-muted">sent: <?php echo $date; ?></small>
+                                                            <h6 class="card-title mb-0" style="text-align: justify;"><?php echo  $title; ?></h6>
+                                                            <small class="text-muted" style="text-align: justify; margin: 2px;">
+    sent: <?php echo $date; ?><span style="margin-left: 15px;">status: <?php echo $status; ?></span>
+</small>
                                                         </div>
                                                         <div>
                                                             <a href="view_complaint.php?concernid=<?php echo $concernid; ?>" class="btn btn-success btn-sm" title="View">
                                                                 View
                                                             </a>
-                                                            <a href="cancel_compllaint.php?concernid=<?php echo $concernid; ?>" class="btn btn-outline-danger btn-sm" title="Cancel">
-                                                                Cancel
-                                                            </a>
+                                                            <a href="#" onclick="return confirmCancel(<?php echo $concernid; ?>)" class="btn btn-outline-danger btn-sm" title="Cancel">
+    Cancel
+</a>
 
 
 
@@ -288,7 +291,7 @@ if (strlen($_SESSION['id'] == 0)) {
                 <div class="modal-dialog" role="document">
                     <div class="modal-content">
                         <div class="modal-header">
-                            <h5 class="modal-title" id="exampleModalLabel">Post Educational Assistance</h5>
+                            <h5 class="modal-title" id="exampleModalLabel">File complaint/ Ask queries</h5>
                             <button type="button" class="close" data-dismiss="modal" aria-label="Close">
                                 <span aria-hidden="true">&times;</span>
                             </button>
@@ -301,7 +304,7 @@ if (strlen($_SESSION['id'] == 0)) {
                                 </div>
                                 <div class="form-group">
                                     <label>Description</label>
-                                    <textarea class="form-control" rows="4" placeholder="Enter Semester" name="description" required></textarea>
+                                    <textarea class="form-control" rows="4" placeholder="Explain your complain/queries" name="description" required></textarea>
                                 </div>
                                 <div class="form-group">
                                 <label for="formFile" class="form-label">File/proof</label>
@@ -328,7 +331,26 @@ if (strlen($_SESSION['id'] == 0)) {
             <!-- End Main Footer -->
 
         </div>
+        <script>
+    function confirmCancel(concernid) {
+     
 
+        Swal.fire({
+  title: "Are you sure?",
+  text: "You won't be able to revert this!",
+  icon: "question",
+  showCancelButton: true,
+  confirmButtonColor: "#3085d6",
+  cancelButtonColor: "#d33",
+  confirmButtonText: "Yes",
+  cancelButtonText: "No"
+}).then((result) => {
+    if (result.isConfirmed) {
+                window.location.href = "model/cancel_complaint.php?concernid=" + concernid;
+            }
+});
+    }
+</script>
         <?php if (isset($_SESSION['message'])) : ?> 
                                 <script>
                                     Swal.fire({
