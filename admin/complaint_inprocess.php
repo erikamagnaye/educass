@@ -23,7 +23,6 @@ if (!isset($_SESSION['id']) || strlen($_SESSION['id']) == 0 || $_SESSION['role']
   $inprocess= $allcomplaints['in_process_count'];
   $close = $allcomplaints['closed_count'];
   $total_complaints = $pending +   $inprocess +   $close;
-
 ?>
     <!DOCTYPE html>
     <html lang="en">
@@ -311,7 +310,7 @@ if (!isset($_SESSION['id']) || strlen($_SESSION['id']) == 0 || $_SESSION['role']
                                             <tbody>
                                                 <?php
 
-                                                $query = "SELECT * FROM `concerns` order by `date` desc"; // SQL query to fetch all table data
+                                                $query = "SELECT * FROM `concerns` where `status`= 'In Process' order by `date` desc"; // SQL query to fetch all table data
                                                 $view_data = mysqli_query($conn, $query); // sending the query to the database
 
                                                 // displaying all the data retrieved from the database using while loop

@@ -14,7 +14,7 @@
 		//
 		if($result->num_rows){
 			while ($row = $result->fetch_assoc()) {
-				$_SESSION['id'] = $row['staffid'];
+				$_SESSION['staffid'] = $row['staffid'];
 				$_SESSION['email'] = $row['email'];
 				$_SESSION['role'] = $row['position'];
 				$_SESSION['avatar'] = $row['image'];

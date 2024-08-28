@@ -1,10 +1,4 @@
-<?php 
-if (!isset($_SESSION['id']) || strlen($_SESSION['id']) == 0 || $_SESSION['role'] !== 'admin') {
-	header('location:login.php');
-    exit();
-}
-else {
-    ?>
+
 
 
 <footer class="footer text-center">
@@ -13,7 +7,7 @@ else {
             2024 &copy Web-Based Educational Assistance Application System for San Antonio, Quezon
         </div>				
     </div>
-</footer>
+</footer> 
 
 <!-- Modal -->
 <div class="modal fade" id="barangay" tabindex="-1" role="dialog" aria-labelledby="myLargeModalLabel" aria-hidden="true">
@@ -243,4 +237,4 @@ else {
             </form>
         </div>
     </div>
-</div><?php }?>
+</div>

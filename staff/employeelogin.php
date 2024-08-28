@@ -48,7 +48,7 @@ session_start();
 
                                         <div class="my-2 d-flex justify-content-between align-items-center">
                                             <!-- <input type="checkbox" name="remember" <?php if (isset($_COOKIE['username'])) { ?> checked <?php } ?> /> Remember me -->
-                                            <a href="forgot-password.php" class="auth-link text-black">Forgot password?</a>
+                                            <a href="forgot-password.php" class="auth-link " style="color:green;text-decoration:none;">Forgot password?</a>
                                         </div><br>
                                         <div class="form-action mb-3">
                                             <button type="button" class="btn btn-outline-danger" onclick="location.href='index.php'">Cancel</button>

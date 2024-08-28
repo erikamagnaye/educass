@@ -1,5 +1,5 @@
 <?php // function to get the current page name
-session_start();
+//session_start();
 if (!isset($_SESSION['id']) || strlen($_SESSION['id']) == 0 || $_SESSION['role'] !== 'admin') {
 	header('location:login.php');
     exit();
@@ -88,18 +88,18 @@ $current_page = PageName();
                         <p>Announcement</p>
                     </a>
                 </li>
-                <li class="nav-item <?= $current_page=='complaint.php'  ? 'active' : null ?>">
+                <li class="nav-item <?= $current_page=='complaint.php' || $current_page=='complaint_pending.php' || $current_page=='complaint_inprocess.php' || $current_page=='complaint_closed.php' ? 'active' : null ?>">
                     <a href="complaint.php">
                         <i class="icon-docs"></i>
                         <p>Concerns</p>
                     </a>
                 </li>
-                <li class="nav-item <?= $current_page=='messages.php'  ? 'active' : null ?>">
+                <!--<li class="nav-item <?= $current_page=='messages.php'  ? 'active' : null ?>">
                     <a href="messages.php">
                         <i class="fa fa-comments"></i>
                         <p>Messages</p>
                     </a>
-                </li>
+                </li> -->
                 <li class="nav-item <?= $current_page=='staff.php'  ? 'active' : null ?>">
                     <a href="staff.php">
                         <i class="fas fa-id-badge"></i>
@@ -161,39 +161,13 @@ $current_page = PageName();
                         <p>Logout</p>
                     </a>
                 </li>
-                            <li class="<?= $current_page=='precinct.php' ? 'active' : null ?>">
-                                <a href="precinct.php">
-                                    <span class="sub-item">Precinct</span>
-                                </a>
-                            </li>
-                            <li class="<?= $current_page=='position.php' ? 'active' : null ?>">
-                                <a href="position.php">
-                                    <span class="sub-item">Positions</span>
-                                </a>
-                            </li>
-                            <li class="<?= $current_page=='chairmanship.php' ? 'active' : null ?>">
-                                <a href="chairmanship.php">
-                                    <span class="sub-item">Chairmanship</span>
-                                </a>
-                            </li>
-                            
-                          
-                                
-                                <li class="<?= $current_page=='support.php' ? 'active' : null ?>">
-                                    <a href="support.php">
-                                        <span class="sub-item">Support</span>
-                                    </a>
-                                </li>
-                                <li>
-                                    <a href="backup/backup.php">
-                                        <span class="sub-item">Backup</span>
-                                    </a>
-                                </li>
-                                <li>
+                              
+                           
+                            <!--    <li>
                                     <a href="#restore" data-toggle="modal">
                                         <span class="sub-item">Restore</span>
                                     </a>
-                                </li>
+                                </li>  -->
                          
                         </ul>
                     </div>

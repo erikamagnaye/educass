@@ -1,13 +1,16 @@
 <?php // function to get the current page name
 
-if (strlen($_SESSION['id'] == 0)) {
-	header('location:login.php');
+$skTypes = array('SK-Arawan','SK-Bagong Niing', 'SK-Balat Atis','SK-Briones','SK-Bulihan','SK-Buliran','SK-Callejon',
+'SK-Corazon', 'SK-Del Valle','SK-loob','SK-Magsaysay','SK-Matipunso','SK-Niing','SK-Poblacion','SK-Pulo',
+ 'SK-Pury','SK-Sampaga','SK-Sampaguita', 'SK-San Jose', 'SK-Sinturisan'); 
+if (!isset($_SESSION['staffid']) || strlen($_SESSION['staffid']) == 0 ||in_array($_SESSION['role'], $skTypes)) {
+	header('location:index.php');
     exit();
 }
 
 else{
-$id = $_SESSION['id'] ;
-		$query 		= "SELECT * FROM `student` WHERE studid= '$id'";
+$staffid = $_SESSION['staffid'] ;
+		$query 		= "SELECT * FROM `staff` WHERE staffid= '$staffid'";
 		$result 	= $conn->query($query);
         
         if (!$result) {
@@ -17,7 +20,7 @@ $id = $_SESSION['id'] ;
         }		
 		if($result->num_rows){
 			while ($row = $result->fetch_assoc()) {
-				$studid = $row['studid'];
+				$staffid = $row['staffid'];
 				$name = $row['firstname'];
                 $email = $row['email'];
 				//$role = $row['position'];
@@ -36,7 +39,7 @@ $current_page = PageName();
             <div class="user">
                 <div class="avatar-sm float-left mr-2">
                     <?php if(!empty($_SESSION['avatar'])): ?>
-                        <img src="<?= preg_match('/data:image/i', $_SESSION['avatar']) ? $_SESSION['avatar'] : 'assets/uploads/applicant_Profile/'.$_SESSION['avatar'] ?>" alt="..." class="avatar-img rounded-circle">
+                        <img src="<?= preg_match('/data:image/i', $_SESSION['avatar']) ? $_SESSION['avatar'] : 'assets/uploads/staff_Profile/'.$_SESSION['avatar'] ?>" alt="..." class="avatar-img rounded-circle">
                     <?php else: ?>
                         <img src="assets/img/logo.png" alt="..." class="avatar-img rounded-circle">
                     <?php endif ?>

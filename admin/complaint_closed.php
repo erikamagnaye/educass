@@ -23,7 +23,6 @@ if (!isset($_SESSION['id']) || strlen($_SESSION['id']) == 0 || $_SESSION['role']
   $inprocess= $allcomplaints['in_process_count'];
   $close = $allcomplaints['closed_count'];
   $total_complaints = $pending +   $inprocess +   $close;
-
 ?>
     <!DOCTYPE html>
     <html lang="en">
@@ -311,7 +310,7 @@ if (!isset($_SESSION['id']) || strlen($_SESSION['id']) == 0 || $_SESSION['role']
                                             <tbody>
                                                 <?php
 
-                                                $query = "SELECT * FROM `concerns` order by `date` desc"; // SQL query to fetch all table data
+                                                $query = "SELECT * FROM `concerns` where `status`= 'Close' order by `date` desc"; // SQL query to fetch all table data
                                                 $view_data = mysqli_query($conn, $query); // sending the query to the database
 
                                                 // displaying all the data retrieved from the database using while loop
@@ -439,65 +438,7 @@ if (!isset($_SESSION['id']) || strlen($_SESSION['id']) == 0 || $_SESSION['role']
                 </div>
             </div>
 
-            <!-- Modal EDIT EDUCATIONAL ASSISTANCE -->
-            <!-- Modal EDIT EDUCATIONAL ASSISTANCE 
-<div class="modal fade" id="edit" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
-    <div class="modal-dialog" role="document">
-        <div class="modal-content">
-            <div class="modal-header">
-                <h5 class="modal-title" id="exampleModalLabel">Edit Assistance</h5>
-                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                    <span aria-hidden="true">&times;</span>
-                </button>
-            </div>
-            <div class="modal-body">
-                <form method="POST" action="model/edit_educass.php">
-                    <div class="form-group">
-                        <label>Title</label>
-                        <input type="text" class="form-control" id="title" placeholder="Enter title" name="title" value="<?php echo $title ?>" required>
-                    </div>
-                    <div class="form-group">
-                        <label>Semester</label>
-                        <input type="text" class="form-control" id="sem" placeholder="Enter semester" name="sem" value="<?php echo $sem ?>"  required>
-                    </div>
-                    <div class="form-group">
-                        <label>School Year</label>
-                        <input type="text" class="form-control" id="sy" placeholder="Enter school year" name="sy" value="<?php echo $sy ?>"  required>
-                    </div>
-                    <div class="form-group">
-                        <label>Minimum Grade Required</label>
-                        <input type="text" class="form-control" id="min_grade" placeholder="Enter minimum grade" name="min_grade" value="<?php echo $min_grade ?>"  required>
-                    </div>
-                    <div class="form-group">
-                        <label>Start</label>
-                        <input type="date" class="form-control" id="start" name="start" value="<?php echo $start ?>"  required>
-                    </div>
-                    <div class="form-group">
-                        <label>Due Date</label>
-                        <input type="date" class="form-control" id="end" name="end" value="<?php echo $end ?>"  required>
-                    </div>
-                    <div class="form-group">
-                        <label>Status</label>
-                        <select class="form-control" id="status" required name="status" value="<?php echo $status ?>" >
-                            <option value="Active">Open</option>
-                            <option value="Inactive">Closed</option>
-                        </select>
-                    </div>
-                    <div class="form-group">
-                        <label>Date Posted</label>
-                        <input type="date" class="form-control" id="date" name="date" value="<?php echo $date ?>"  required>
-                    </div>
-                    <div class="modal-footer">
-                        <input type="hidden" id="educid" name="educid">
-                        <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
-                        <button type="submit" class="btn btn-primary">Update</button>
-                    </div>
-                </form>
-            </div>
-        </div>
-    </div>
-</div> -->
-
+           
 
             <!-- Main Footer -->
             <?php include 'templates/main-footer.php' ?>
