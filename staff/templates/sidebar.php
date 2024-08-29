@@ -70,8 +70,8 @@ $current_page = PageName();
                 </div>
             </div>
             <ul class="nav nav-primary">
-                <li class="nav-item <?= $current_page=='dashboard.php'? 'active' : null ?>">
-                    <a href="dashboard.php" >
+                <li class="nav-item <?= $current_page=='employeedashboard.php'? 'active' : null ?>">
+                    <a href="employeedashboard.php" >
                         <i class="fa fa-dashboard"></i>
                         <p>Dashboard</p>
                     </a>
@@ -82,8 +82,8 @@ $current_page = PageName();
                     </span>
                     <h4 class="text-section">Menu</h4>
                 </li>
-                <li class="nav-item <?= $current_page=='educaids.php' || $current_page=='viewprinteduc.php' ? 'active' : null ?>">
-                    <a href="educaids.php">
+                <li class="nav-item <?= $current_page=='educass.php' || $current_page=='viewprinteduc.php' ? 'active' : null ?>">
+                    <a href="educass.php">
                         <i class="fa fa-graduation-cap"></i>
                         <p>Educational Aids</p>
                     </a>
@@ -96,16 +96,16 @@ $current_page = PageName();
             <?php endif; ?></p>
                     </a>
                 </li>
-                <li class="nav-item <?= $current_page=='concerns.php'  ? 'active' : null ?>">
-                    <a href="concerns.php">
+                <li class="nav-item <?= $current_page=='complaint.php' || $current_page=='complaint_pending.php' || $current_page=='complaint_inprocess.php'|| $current_page=='complaint_closed.php'? 'active' : null ?>">
+                    <a href="complaint.php">
                         <i class="icon-badge"></i>
-                        <p>Concerns</p>
+                        <p>Queries</p>
                     </a>
                 </li>
                 <li class="nav-item <?= $current_page=='messages.php'  ? 'active' : null ?>">
                     <a href="messages.php">
                         <i class="fa fa-comments"></i>
-                        <p>Messages</p>
+                        <p>SK Officials</p>
                     </a>
                 </li>
                 <li class="nav-item <?= $current_page=='staff.php'  ? 'active' : null ?>">
@@ -114,13 +114,45 @@ $current_page = PageName();
                         <p>Profile</p>
                     </a>
                 </li>
+             
+                <li class="nav-section">
+                    <span class="sidebar-mini-icon">
+                        <i class="fa fa-ellipsis-h"></i>
+                    </span>
+                    <h4 class="text-section">System</h4>
+                </li>
+                <li class="nav-item  'active' : null ?>">
+                    <a href="#settings" data-toggle="collapse" class="collapsed" aria-expanded="false">
+                        <i class="icon-wrench"></i>
+                            <p>Settings</p>
+                        <span class="caret"></span>
+                    </a>
+                    <div class="collapse <?= $current_page=='purok.php' || $current_page=='position.php'  || $current_page=='precinct.php' || $current_page=='chairmanship.php' || $current_page=='users.php' || $current_page=='support.php' || $current_page=='backup.php' ? 'show' : null ?>" id="settings">
+                        <ul class="nav nav-collapse">
+                            
+                        <li class="nav-item ">
+                                    <a href="backup/backup.php">
+                                    <i class="fa fa-database"></i>
+                                        <p>Backup</p>
+                                    </a>
+                                </li>
                 <li class="nav-item ">
                     <a href="logout.php">
                         <i class="fa fa-power-off"></i>
                         <p>Logout</p>
                     </a>
                 </li>
-              
+                              
+                           
+                            <!--    <li>
+                                    <a href="#restore" data-toggle="modal">
+                                        <span class="sub-item">Restore</span>
+                                    </a>
+                                </li>  -->
+                         
+                        </ul>
+                    </div>
+                </li>
               
                 
             </ul>

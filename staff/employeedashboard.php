@@ -13,15 +13,16 @@ if (!isset($_SESSION['staffid']) || strlen($_SESSION['staffid']) == 0 ||in_array
 }
 
 	else {
-		$id = $_SESSION['id'] ;
-		$query 		= "SELECT * FROM `admin` join staff on staff.staffid=admin.empid WHERE adminid= '$id'";
+		$staffid = $_SESSION['staffid'] ;
+		$query 		= "SELECT * FROM `staff` WHERE staffid= '$staffid'";
 		$result 	= $conn->query($query);
 		
 		if($result->num_rows){
 			while ($row = $result->fetch_assoc()) {
-				$adminid = $row['adminid'];
-				$username = $row['username'];
+				$staffid = $row['staffid'];
+				$firstname = $row['firstname'];
 				$role = $row['position'];
+                $email = $row['email'];
 			}
 			}
 
@@ -299,7 +300,7 @@ h5 {
         <div class="page-inner">
 						<div class="d-flex align-items-left align-items-md-center flex-column flex-md-row">
 							<div>
-								<h2 class="text-black fw-bold">Admin Dashboard</h2>
+								<h2 class="text-black fw-bold">Staff Dashboard</h2>
 				
 							
 						</div>

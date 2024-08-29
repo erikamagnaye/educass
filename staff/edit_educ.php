@@ -7,12 +7,15 @@ include 'server/server.php';
 session_start(); 
 error_reporting(E_ALL);
 ini_set('display_errors', 1);
-if (!isset($_SESSION['id']) || strlen($_SESSION['id']) == 0 || $_SESSION['role'] !== 'admin') {
-	header('location:login.php');
+$skTypes = array('SK-Arawan','SK-Bagong Niing', 'SK-Balat Atis','SK-Briones','SK-Bulihan','SK-Buliran','SK-Callejon',
+'SK-Corazon', 'SK-Del Valle','SK-loob','SK-Magsaysay','SK-Matipunso','SK-Niing','SK-Poblacion','SK-Pulo',
+ 'SK-Pury','SK-Sampaga','SK-Sampaguita', 'SK-San Jose', 'SK-Sinturisan'); 
+if (!isset($_SESSION['staffid']) || strlen($_SESSION['staffid']) == 0 ||in_array($_SESSION['role'], $skTypes)) {
+	header('location:index.php');
     exit();
 }
 $role= $_SESSION['role'];
-$username= $_SESSION['username'];
+$email= $_SESSION['email'];
 if (isset($_GET['educid'])) {
 	$educid = $_GET['educid'];
 
@@ -30,7 +33,8 @@ if (isset($_GET['educid'])) {
 		$min_grade = $row['min_grade'];
 	} else {
 		$_SESSION['message'] = 'No Record found!';
-		$_SESSION['success'] = 'danger';
+		$_SESSION['success'] = 'error';
+        $_SESSION['title'] = 'Try again';
 		header("Location: ../educass.php");
 		exit();
 	}
@@ -48,20 +52,22 @@ if (isset($_POST['update'])) {
 
 	$query = "UPDATE `educ aids` SET `educname`='$title', `sem`='$sem', `sy`='$sy', `start`='$start', `end`='$end', `min_grade`='$min_grade', `date`='$date', `status`='$status' WHERE educid=$educid";
 	$result = $conn->query($query);
+
+	if ($result === true) {
+        $_SESSION['alertmess'] = 'Successfully Updated a record!';
+        $_SESSION['title'] = 'Good Job';
+        $_SESSION['success'] = 'success';
+
+    }else{
+        $_SESSION['alertmess'] = 'Something went wrong, Try again!';
+        $_SESSION['title'] = 'Error';
+        $_SESSION['success'] = 'danger';
+    }
+    header("Location: educass.php");
+	exit();
+	}
+
 	
-        if ($result === true) {
-            $_SESSION['alertmess'] = 'Successfully Updated a record!';
-            $_SESSION['title'] = 'Good Job';
-            $_SESSION['success'] = 'success';
-    
-        }else{
-            $_SESSION['alertmess'] = 'Something went wrong, Try again!';
-            $_SESSION['title'] = 'Error';
-            $_SESSION['success'] = 'danger';
-        }
-        header("Location: educass.php");
-        exit();
-}
 
 $conn->close();
 ?>

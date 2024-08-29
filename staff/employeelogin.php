@@ -81,7 +81,7 @@ session_start();
                                     });
                                 </script>
                                 <?php unset($_SESSION['message']);
-                                unset($_SESSION['success']); ?>
+                                unset($_SESSION['success']); unset($_SESSION['title']);?>
                             <?php endif; ?>
 
     <?php include 'templates/footer.php' ?>

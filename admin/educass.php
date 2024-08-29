@@ -51,6 +51,9 @@ $stmtSelect->close();
 	<?php include 'templates/header.php' ?>
 	<title>Educational Assistance</title>
     <link rel="stylesheet" type="text/css" href="https://cdn.datatables.net/2.1.2/css/dataTables.bootstrap5.min.css"/>
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11.12.3/dist/sweetalert2.all.min.js"></script>
+        <link href="https://cdn.jsdelivr.net/npm/sweetalert2@11.12.3/dist/sweetalert2.min.css" rel="stylesheet">
+     
 <style>
     .btn-link + .btn-link {
     margin-left: 5px;
@@ -353,6 +356,22 @@ $stmtSelect->close();
 		
 	</div>
 	<?php include 'templates/footer.php' ?>
+
+         <!-- alert for UPDATEEEEEEEEE -->
+         <?php if (isset($_SESSION['alertmess'])) : ?> 
+                                <script>
+                                    Swal.fire({
+                                        title: '<?php echo $_SESSION['title']; ?>',
+                                        text: '<?php echo $_SESSION['alertmess']; ?>',
+                                        icon: '<?php echo $_SESSION['success']; ?>',
+                                        confirmButtonText: 'OK'
+                                    });
+                                </script>
+                                <?php unset($_SESSION['alertmess']);
+                                unset($_SESSION['success']);
+                                unset($_SESSION['title']);  ?>
+                            <?php endif; ?>
+
     <script>
         //this can be remove because search is still working without it
     $(document).ready(function() {
