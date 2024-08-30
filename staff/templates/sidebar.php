@@ -26,7 +26,16 @@ $staffid = $_SESSION['staffid'] ;
 				//$role = $row['position'];
 			}
 			}
-     $announcement = 3;       
+            $stmt = $conn->prepare("SELECT 
+            SUM(IF(`status` = 'Pending', 1, 0)) AS pending_count,
+            SUM(IF(`status` = 'In Process', 1, 0)) AS in_process_count,
+            SUM(IF(`status` = 'Close', 1, 0)) AS closed_count
+          FROM `concerns`");
+          $stmt->execute();
+          $result = $stmt->get_result();
+          $allcomplaints = $result->fetch_assoc();
+          
+          $pending = $allcomplaints['pending_count'];  
 function PageName() { //return the file name of the current PHP script, without the directory path.
   return substr( $_SERVER["SCRIPT_NAME"], strrpos($_SERVER["SCRIPT_NAME"],"/") +1);
 }
@@ -39,7 +48,7 @@ $current_page = PageName();
             <div class="user">
                 <div class="avatar-sm float-left mr-2">
                     <?php if(!empty($_SESSION['avatar'])): ?>
-                        <img src="<?= preg_match('/data:image/i', $_SESSION['avatar']) ? $_SESSION['avatar'] : 'assets/uploads/staff_Profile/'.$_SESSION['avatar'] ?>" alt="..." class="avatar-img rounded-circle">
+                        <img src="<?= preg_match('/data:image/i', $_SESSION['avatar']) ? $_SESSION['avatar'] : 'assets/uploads/avatar/'.$_SESSION['avatar'] ?>" alt="..." class="avatar-img rounded-circle">
                     <?php else: ?>
                         <img src="assets/img/logo.png" alt="..." class="avatar-img rounded-circle">
                     <?php endif ?>
@@ -91,25 +100,25 @@ $current_page = PageName();
                 <li class="nav-item <?= $current_page=='announcement.php' || $current_page=='generate_resident.php' ? 'active' : null ?>">
                     <a href="announcement.php">
                         <i class="fa fa-bullhorn"></i>
-                        <p>Announcement  <?php if ($announcement > 0): ?>
-                <span class="badge badge-danger"><?=$announcement?></span>
-            <?php endif; ?></p>
+                        <p>Announcement  </p>
                     </a>
                 </li>
                 <li class="nav-item <?= $current_page=='complaint.php' || $current_page=='complaint_pending.php' || $current_page=='complaint_inprocess.php'|| $current_page=='complaint_closed.php'? 'active' : null ?>">
                     <a href="complaint.php">
-                        <i class="icon-badge"></i>
-                        <p>Queries</p>
-                    </a>
-                </li>
-                <li class="nav-item <?= $current_page=='messages.php'  ? 'active' : null ?>">
-                    <a href="messages.php">
-                        <i class="fa fa-comments"></i>
-                        <p>SK Officials</p>
+                    <i class="fa-solid fa-clipboard-question"></i>
+                        <p>Queries <?php if ($pending > 0): ?>
+                <span class="badge badge-danger"><?=$pending?></span>
+            <?php endif; ?></p>
                     </a>
                 </li>
                 <li class="nav-item <?= $current_page=='staff.php'  ? 'active' : null ?>">
                     <a href="staff.php">
+                    <i class="fa-solid fa-user-group"></i>
+                        <p>SK Officials</p>
+                    </a>
+                </li>
+                <li class="nav-item <?= $current_page=='profile.php'  ? 'active' : null ?>">
+                    <a href="profile.php">
                         <i class="fas fa-user-tie"></i>
                         <p>Profile</p>
                     </a>

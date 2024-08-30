@@ -249,7 +249,7 @@ if (!isset($_SESSION['staffid']) || strlen($_SESSION['staffid']) == 0 || in_arra
                         <div class="page-inner">
                             <div class="d-flex align-items-left align-items-md-center flex-column flex-md-row">
                                 <div>
-                                    <h2 class="text-black fw-bold">Admin Portal</h2>
+                                    <h2 class="text-black fw-bold">Employee Portal</h2>
                                 </div>
                             </div>
                         </div>
@@ -278,10 +278,10 @@ if (!isset($_SESSION['staffid']) || strlen($_SESSION['staffid']) == 0 || in_arra
                                     <div class="card-body col-md-12">
                                         <div container-fluid>
                                             <div class="dashboard">
-                                                <div class="card">
-                                                    <div class="card-icon" style="color:orange;"><i class="fa-solid fa-clipboard-question"></i></div>
+                                                <div class="card" style="background-color:#06D001;">
+                                                    <div class="card-icon" style="color:white;"><i class="fa-solid fa-clipboard-question"></i></div>
                                                     <a href="complaint.php" class="btn">
-                                                        <h5><?= $total_complaints ?> <br>All Complaints</h5>
+                                                        <h5 style="color:white;"><?= $total_complaints ?> <br>All Complaints</h5>
                                                     </a>
 
                                                 </div>

@@ -198,7 +198,7 @@
     <div class="modal-dialog" role="document">
         <div class="modal-content">
             <div class="modal-header">
-                <h5 class="modal-title" id="exampleModalLabel">Edit Profile Picture</h5>
+                <h5 class="modal-title" id="exampleModalLabel">Update Profile Picture</h5>
                 <button type="button" class="close" data-dismiss="modal" aria-label="Close">
                     <span aria-hidden="true">&times;</span>
                 </button>
@@ -211,7 +211,7 @@
                             <?php if(empty($_SESSION['avatar'])): ?>
                                 <img src="assets/img/person.png" alt="..." class="img img-fluid" width="250" >
                             <?php else: ?>
-                                <img src="<?= preg_match('/data:image/i', $_SESSION['avatar']) ? $_SESSION['avatar'] : 'assets/uploads/applicant_profile/'.$_SESSION['avatar'] ?>" alt="..." class="img img-fluid" width="250" >
+                                <img src="<?= preg_match('/data:image/i', $_SESSION['avatar']) ? $_SESSION['avatar'] : 'assets/uploads/avatar/'.$_SESSION['avatar'] ?>" alt="..." class="img img-fluid" width="250" >
                             <?php endif ?>
                         </div>
                         <div class="form-group d-flex justify-content-center">

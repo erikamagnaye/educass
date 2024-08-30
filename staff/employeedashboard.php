@@ -25,6 +25,8 @@ if (!isset($_SESSION['staffid']) || strlen($_SESSION['staffid']) == 0 ||in_array
                 $email = $row['email'];
 			}
 			}
+ 
+
 
             //get the recent educational
             $query = "SELECT educid FROM `educ aids` ORDER BY date DESC LIMIT 1";
@@ -40,10 +42,10 @@ if (!isset($_SESSION['staffid']) || strlen($_SESSION['staffid']) == 0 ||in_array
     $row = $resultapp->fetch_assoc();
 $totalapp = $row['COUNT(*)'];
         //pending applicants    
-	$query2 = "SELECT COUNT(*) FROM application  where educid = '$recent'  and appstatus ='Pending' ";
+    	$query2 = "SELECT COUNT(*) FROM application  where educid = '$recent'  and appstatus ='Pending' ";
     $result2 = $conn->query($query2);
     $row = $result2->fetch_assoc();
-	$pending = $row['COUNT(*)'];
+	$pendingapp = $row['COUNT(*)'];
         //approved applicants    
 	$query3 = "SELECT  COUNT(*) FROM application  where educid = '$recent'  and appstatus ='Approved'";
     $result3 = $conn->query($query3);
@@ -143,10 +145,12 @@ if ($latest_educid) {
 <html lang="en">
 <head>
 	<?php include 'templates/header.php' ?>
-	<title>Admin Dashboard</title>
+	<title>Employee Dashboard</title>
     <link rel="icon" href="assets/img/logo.png" type="image/x-icon"/>   <!-- THIS IS THE CODE TO DISPLAY AN ICON IN THE BROWASER TAB-->
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.1.1/css/all.min.css" integrity="sha512-KfkfwYDsLkIlwQp6LFnl8zNdLGxu9YAA1QvwINks4PhcElQSvqcyVLLD9aMhXd13uQjoXtEKNosOWaZqXgel0g==" crossorigin="anonymous" referrerpolicy="no-referrer" />
-      
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11.12.3/dist/sweetalert2.all.min.js"></script>
+        <link href="https://cdn.jsdelivr.net/npm/sweetalert2@11.12.3/dist/sweetalert2.min.css" rel="stylesheet">
+        
     <script type="text/javascript" src="https://www.gstatic.com/charts/loader.js"></script>
 	<script type="text/javascript">
         // Load the Visualization API and the corechart package
@@ -448,7 +452,7 @@ h5 {
                             </div>
                             <div class="col-12 ">
                                 <div class="numbers mt-2">
-                                    <h6 class="fw-bold text-uppercase text-center"><?= $pending ?> Pending</h6>
+                                    <h6 class="fw-bold text-uppercase text-center"><?=$pendingapp ?> Pending</h6>
 									<a href="resident_info.php?state=all" class="card-link text-light" style="text-align: left;">view</a>
                                 </div>
                             </div>
@@ -537,7 +541,19 @@ h5 {
 		</div>
 		
 	</div>
-    	
+    	                    <!-- alert for UPDATEEEEEEEEE -->
+                            <?php if (isset($_SESSION['message'])) : ?> 
+                                <script>
+                                    Swal.fire({
+                                        title: '<?php echo $_SESSION['title']; ?>',
+                                        text: '<?php echo $_SESSION['message']; ?>',
+                                        icon: '<?php echo $_SESSION['success']; ?>',
+                                        confirmButtonText: 'OK'
+                                    });
+                                </script>
+                                <?php unset($_SESSION['message']);
+                                unset($_SESSION['success']); ?>
+                            <?php endif; ?>
 			
 
     <script type="text/javascript">

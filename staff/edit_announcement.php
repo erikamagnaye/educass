@@ -18,21 +18,22 @@ else{
 $role= $_SESSION['role'];
 $email= $_SESSION['email'];
 if (isset($_GET['announceid'])) {
-	$announceid = $_GET['announceid'];
+    $announceid = $_GET['announceid'];
 
-	$query = "SELECT * FROM `announcement` WHERE announceid = $announceid";
-	$view = mysqli_query($conn, $query);
+    $stmt = $conn->prepare("SELECT * FROM `announcement` WHERE announceid = ?");
+    $stmt->bind_param("i", $announceid);
+    $stmt->execute();
+    $result = $stmt->get_result();
 
-	if ($row = mysqli_fetch_assoc($view)) {
-		$title = $row['title'];
-		$details = $row['details'];
-		
-	} else {
-		$_SESSION['message'] = 'No Record found!';
-		$_SESSION['success'] = 'danger';
-		header("Location: ../announcement.php");
-		exit();
-	}
+    if ($row = $result->fetch_assoc()) {
+        $title = $row['title'];
+        $details = $row['details'];
+    } else {
+        $_SESSION['message'] = 'No Record found!';
+        $_SESSION['success'] = 'danger';
+        header("Location: announcement.php");
+        exit();
+    }
 }
 
 if (isset($_POST['update'])) {
@@ -74,30 +75,20 @@ $conn->close();
 
 </head>
 <body>
-	<?//php include 'templates/loading_screen.php' ?>
-
-	<div class="wrapper">
-		<!-- Main Header -->
-		<?//php include 'templates/main-header.php' ?>
-		<!-- End Main Header -->
-
-		<!-- Sidebar -->
-		<?//php include 'templates/sidebar.php' ?>
-		<!-- End Sidebar -->
- 
-		
-			<div class="content">
-			
-				<div class="page-inner">
-				
-						<div class="row mt--2 justify-content-center">
-                    <div class="col-md-5">
-                        <div class="card" style="padding: 5px;margin:10px;">
-                            <div class="card-header " style="border-radius: 8px;">
+<div class="row d-flex justify-content-center align-items-center" style="height: 100vh;">
+        <div class="col-md-8">
+            <div class="card mb-3 mt-3" style="width: 80%; margin: 0 auto;">
+                <img src="assets/img/saq.jpg" class="card-img-top" alt="...">
+				<div class="card-header " style="border-radius: 8px;">
                                 <div class="card-head-row">
                                     <div class="card-title text-center" >Update announcement</div>
                                 </div>
                             </div>
+                <div class="card-body">
+				
+                
+                       
+                          
                             <form method="POST" action="">
                             
                             <div class="form-group">
@@ -126,21 +117,20 @@ $conn->close();
                               
                             </form>
 
-                        </div>
+                       
 								
-							</div>
-						</div>
-					</div>
-				</div>
-			
-                
-			
-                
-			<!-- Main Footer -->
-			<?//php include 'templates/main-footer.php' ?>
-			<!-- End Main Footer -->
-			
-		</div>
+						
+                </div>
+                <div class="card-footer text-center">
+                    <p>&copy Web Based Educational Assistance Application System 2024</p>
+                </div>
+            </div>
+        </div>
+
+    </div>
+	<?//php include 'templates/loading_screen.php' ?>
+
+
 		
 	</div>
 	<?//php include 'templates/footer.php' ?>
