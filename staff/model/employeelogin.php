@@ -26,6 +26,8 @@
 					$_SESSION['email'] = $row['email'];
 					$_SESSION['role'] = $row['position'];
 					$_SESSION['avatar'] = $row['image'];
+					$_SESSION['firstname'] = $row['firstname'];
+					$_SESSION['lastname'] = $row['lastname'];
 					header('location: ../employeedashboard.php');
 					exit();
 				}

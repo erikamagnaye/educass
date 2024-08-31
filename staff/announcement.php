@@ -90,24 +90,29 @@ if (!isset($_SESSION['staffid']) || strlen($_SESSION['staffid']) == 0 || in_arra
                                                     New announcement
                                                 </a>
                                             </div>
-                                        </div><br>
-                                        <div class="card-tools">
-                                            <form>
-                                                <div class="input-group">
-                                                    <input type="text" class="form-control" placeholder="Search by title or date" id="search-input">
-                                                    <div class="input-group-append">
-                                                        <button class="btn btn-outline-info" type="submit">
-                                                            <i class="fa fa-search"></i>
-                                                        </button>
-                                                    </div>
-                                                </div>
-                                            </form>
                                         </div>
+                                     
                                     </div>
                                     <div class="card-body">
-                                        <?php
-                                        $query = "SELECT * FROM `announcement` order by `date` desc"; // SQL query to fetch all table data
-                                        $view_data = mysqli_query($conn, $query); // sending the query to the database
+
+                                    <div class="table-responsive">
+
+
+<table id="dataTable" class="table table-striped">
+    <thead>
+        <tr>
+            <th scope="col" class="col-3">Announcement </th>
+            <th scope="col"class="col-4">Details</th>
+            <th scope="col"class="col-3">Date Posted</th>
+            <th scope="col" class="col-3">Action</th>
+
+        </tr>
+    </thead>
+    <tbody>
+        <?php
+  
+        $query = "SELECT * FROM `announcement` order by `date` desc"; // SQL query to fetch all table data
+        $view_data = mysqli_query($conn, $query); // sending the query to the database
 
                                         // displaying all the data retrieved from the database using while loop
                                         while ($row = mysqli_fetch_assoc($view_data)) {
@@ -115,20 +120,17 @@ if (!isset($_SESSION['staffid']) || strlen($_SESSION['staffid']) == 0 || in_arra
                                             $title = $row['title'];
                                             $date = $row['date'];
                                             $details = $row['details'];
-                                        ?>
-                                            <div class="card mb-2" style="border-width: 1px; border-radius: 10px;">
-                                                <div class="card-body py-2">
-                                                    <div class="d-flex justify-content-between">
-                                                        <div>
-                                                            <h6 class="card-title mb-0"><?php echo $title; ?></h6>
-                                                            <small class="text-muted">Posted on: <?php echo $date; ?></small>
-                                                        </div>
-                                                        <div>
-                                                            <a href="edit_announcement.php?update&announceid=<?php echo $announceid; ?>" class="btn btn-primary btn-sm" title="View">
+        ?>
+            <tr>
+                <td class=""><?php echo htmlspecialchars($title); ?></td>
+                <td><?php echo htmlspecialchars($details); ?></td>
+                <td><?php echo htmlspecialchars($date); ?></td>
+                <td>
+                <a href="edit_announcement.php?update&announceid=<?php echo $announceid; ?>" class="btn btn-outline-primary btn-sm border-0" title="View">
                                                                 <i class="fa fa-eye"></i>
                                                             </a>
 
-                                                            <a href="javascript:void(0);" class="btn btn-danger btn-sm" title="Delete" onclick="confirmDeletion(<?php echo $announceid; ?>)">
+                                                            <a href="javascript:void(0);" class="btn btn-outline-danger btn-sm border-0" title="Delete" onclick="confirmDeletion(<?php echo $announceid; ?>)">
     <i class="fa fa-trash"></i>
 </a>
 
@@ -151,16 +153,19 @@ if (!isset($_SESSION['staffid']) || strlen($_SESSION['staffid']) == 0 || in_arra
     }
 </script>
 
-                                                           
 
 
+                </td>
+            </tr>
+        <?php } ?>
+
+    </tbody>
 
 
-                                                        </div>
-                                                    </div>
-                                                </div>
-                                            </div>
-                                        <?php } ?>
+</table>
+</div>
+
+                                     
                                     </div>
                                 </div>
                             </div>
@@ -315,35 +320,7 @@ if (!isset($_SESSION['staffid']) || strlen($_SESSION['staffid']) == 0 || in_arra
                 });
 
 
-                //for search announcement
-                $(document).ready(function() {
-                    $('#search-input').on('keyup', function() {
-                        var searchQuery = $(this).val();
-                        if (searchQuery != '') {
-                            $.ajax({
-                                type: 'POST',
-                                url: 'search_announcements.php',
-                                data: {
-                                    search: searchQuery
-                                },
-                                success: function(data) {
-                                    $('.card-body').html(data);
-                                }
-                            });
-                        } else {
-                            $.ajax({
-                                type: 'POST',
-                                url: 'search_announcements.php',
-                                data: {
-                                    search: ''
-                                },
-                                success: function(data) {
-                                    $('.card-body').html(data);
-                                }
-                            });
-                        }
-                    });
-                });
+         
             </script>
             <script type="text/javascript" src="https://cdn.datatables.net/2.1.2/js/dataTables.min.js"></script>
             <script type="text/javascript" src="https://cdn.datatables.net/2.1.2/js/dataTables.bootstrap5.min.js"></script>
