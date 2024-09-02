@@ -68,55 +68,80 @@ if (!isset($_SESSION['id']) || strlen($_SESSION['id']) == 0 || $_SESSION['role']
                             </a>
                         </div>
                     </div><br>
-                    <div class="card-tools">
-        <form>
-            <div class="input-group">
-                <input type="text" class="form-control" placeholder="Search by title or date" id="search-input">
-                <div class="input-group-append">
-                    <button class="btn btn-outline-info" type="submit">
-                        <i class="fa fa-search"></i>
-                    </button>
-                </div>
-            </div>
-        </form>
-    </div>
+             
                 </div>
                 <div class="card-body">
-                    <?php
-                    $query = "SELECT * FROM `announcement` order by `date` desc"; // SQL query to fetch all table data
-                    $view_data = mysqli_query($conn, $query); // sending the query to the database
+                  
+                <div class="table-responsive">
 
-                    // displaying all the data retrieved from the database using while loop
-                    while ($row = mysqli_fetch_assoc($view_data)) {
-                        $announceid = $row['announceid'];
-                        $title = $row['title'];
-                        $date = $row['date'];
-                        $details = $row['details'];
-                  ?>
-                    <div class="card mb-2" style="border-width: 1px; border-radius: 10px;">
-                        <div class="card-body py-2">
-                            <div class="d-flex justify-content-between">
-                                <div>
-                                    <h6 class="card-title mb-0"><?php echo $title;?></h6>
-                                    <small class="text-muted">Posted on: <?php echo $date;?></small>
-                                </div>
-                                <div>
-                                    <a href="edit_announcement.php?update&announceid=<?php echo $announceid; ?>" class="btn btn-primary btn-sm" title="View">
-                                        <i class="fa fa-eye"></i>
-                                    </a>
-                                
-                                    <a href="javascript:void(0);" class="btn btn-danger btn-sm" title="Delete" onclick="confirmDeletion(<?php echo $announceid; ?>)">
-                                        <i class="fa fa-trash"></i>
-                                    </a>
 
-                                  
-                                                 
+<table id="dataTable" class="table table-striped">
+    <thead>
+        <tr>
+            <th scope="col" class="col-3">Announcement </th>
+            <th scope="col"class="col-4">Details</th>
+            <th scope="col"class="col-3">Date Posted</th>
+            <th scope="col" class="col-3">Action</th>
 
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                    <?php }?>
+        </tr>
+    </thead>
+    <tbody>
+        <?php
+  
+        $query = "SELECT * FROM `announcement` order by `date` desc"; // SQL query to fetch all table data
+        $view_data = mysqli_query($conn, $query); // sending the query to the database
+
+                                        // displaying all the data retrieved from the database using while loop
+                                        while ($row = mysqli_fetch_assoc($view_data)) {
+                                            $announceid = $row['announceid'];
+                                            $title = $row['title'];
+                                            $date = $row['date'];
+                                            $details = $row['details'];
+        ?>
+            <tr>
+                <td class=""><?php echo htmlspecialchars($title); ?></td>
+                <td><?php echo htmlspecialchars($details); ?></td>
+                <td><?php echo htmlspecialchars($date); ?></td>
+                <td>
+                <a href="edit_announcement.php?update&announceid=<?php echo $announceid; ?>" class="btn btn-outline-primary btn-sm border-0" title="View">
+                                                                <i class="fa fa-eye"></i>
+                                                            </a>
+
+                                                            <a href="javascript:void(0);" class="btn btn-outline-danger btn-sm border-0" title="Delete" onclick="confirmDeletion(<?php echo $announceid; ?>)">
+    <i class="fa fa-trash"></i>
+</a>
+
+<script>
+    function confirmDeletion(announceid) {
+        Swal.fire({
+            title: "Are you sure?",
+            text: "You want to delete this record?",
+            icon: "warning",
+            showCancelButton: true,
+            confirmButtonColor: "#DD6B55",
+            confirmButtonText: "Yes, delete it!",
+            cancelButtonText: "Cancel",
+            closeOnConfirm: true
+        }).then((result) => {
+            if (result.isConfirmed) {
+                window.location.href = 'remove_announcement.php?deleteid=' + announceid + '&confirm=true';
+            }
+        });
+    }
+</script>
+
+
+
+                </td>
+            </tr>
+        <?php } ?>
+
+    </tbody>
+
+
+</table>
+</div>
+
                 </div>
             </div>
         </div>
@@ -264,7 +289,7 @@ if (!isset($_SESSION['id']) || strlen($_SESSION['id']) == 0 || $_SESSION['role']
                     "pageLength": 10,
                     "lengthChange": true,
                     "order": [
-                        [0, "asc"]
+                        [2, "desc"]
                     ],
                     "searching": true,
                     "ordering": true,

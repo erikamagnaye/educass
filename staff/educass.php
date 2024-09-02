@@ -404,6 +404,9 @@ if (!isset($_SESSION['staffid']) || strlen($_SESSION['staffid']) == 0 || in_arra
                         [10, 25, 50, 100],
                         [10, 25, 50, 100]
                     ],
+                    "order": [[2, "desc"], 
+                    [1, "desc"],
+                ],
                     "language": {
                         "search": "_INPUT_",
                         "searchPlaceholder": "Search here"

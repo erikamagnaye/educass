@@ -5,8 +5,11 @@
 session_start();
 error_reporting(E_ALL);
 ini_set('display_errors', 1);
-if (!isset($_SESSION['id']) || strlen($_SESSION['id']) == 0 || $_SESSION['role'] !== 'admin') {
-	header('location:login.php');
+$skTypes = array('SK-Arawan','SK-Bagong Niing', 'SK-Balat Atis','SK-Briones','SK-Bulihan','SK-Buliran','SK-Callejon',
+'SK-Corazon', 'SK-Del Valle','SK-loob','SK-Magsaysay','SK-Matipunso','SK-Niing','SK-Poblacion','SK-Pulo',
+ 'SK-Pury','SK-Sampaga','SK-Sampaguita', 'SK-San Jose', 'SK-Sinturisan'); 
+if (!isset($_SESSION['staffid']) || strlen($_SESSION['staffid']) == 0 ||in_array($_SESSION['role'], $skTypes)) {
+	header('location:index.php');
     exit();
 } else {
    
@@ -21,7 +24,9 @@ if (!isset($_SESSION['id']) || strlen($_SESSION['id']) == 0 || $_SESSION['role']
         <link rel="stylesheet" type="text/css" href="https://cdn.datatables.net/2.1.2/css/dataTables.bootstrap5.min.css">
         <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11.12.3/dist/sweetalert2.all.min.js"></script>
         <link href="https://cdn.jsdelivr.net/npm/sweetalert2@11.12.3/dist/sweetalert2.min.css" rel="stylesheet">
-        <style>
+        <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.1.1/css/all.min.css" integrity="sha512-KfkfwYDsLkIlwQp6LFnl8zNdLGxu9YAA1QvwINks4PhcElQSvqcyVLLD9aMhXd13uQjoXtEKNosOWaZqXgel0g==" crossorigin="anonymous" referrerpolicy="no-referrer" />
+   
+       <style>
 
 
         </style>
@@ -119,7 +124,9 @@ if (!isset($_SESSION['id']) || strlen($_SESSION['id']) == 0 || $_SESSION['role']
                                                         $fullname =$row['fullname'];
 
                                                         $imagePath = $row['picture'];
-                                                        if (filter_var($imagePath, FILTER_VALIDATE_URL)) {
+                                                        if (empty($imagePath)) {
+                                                            $imageUrl = '../applicants/assets/img/pic.jpg'; // assign default image
+                                                        } elseif (filter_var($imagePath, FILTER_VALIDATE_URL)) {
                                                             $imageUrl = $imagePath;
                                                         } else {
                                                             $imageUrl = '../applicants/assets/uploads/applicant_profile/' . $imagePath;
@@ -127,7 +134,7 @@ if (!isset($_SESSION['id']) || strlen($_SESSION['id']) == 0 || $_SESSION['role']
                                                        // $fullname = $lastname . ', ' . $firstname;
                                                     ?>
                                                         <tr>
-                                                        <td><img src="<?php echo htmlspecialchars($imageUrl); ?>" alt="Picture" class="avatar-img rounded-circle" style="height: 50px;width:50px;"> <?php echo htmlspecialchars($fullname); ?></td>
+                                                        <td><img src="<?php echo htmlspecialchars($imageUrl); ?>" alt="" class="avatar-img rounded-circle" style="height: 50px;width:50px;"> <?php echo htmlspecialchars($fullname); ?></td>
                                                             <td><?php echo htmlspecialchars($brgy); ?></td>
                                                             <td><?php echo htmlspecialchars($email); ?></td>
                                                             <td><?php echo htmlspecialchars($gender); ?></td>
@@ -138,16 +145,7 @@ if (!isset($_SESSION['id']) || strlen($_SESSION['id']) == 0 || $_SESSION['role']
                                                             <!--    <a type="button" href="#" data-toggle="modal" data-target="#edit" data-staffid="<?php echo $staffid;?>" class="btn btn-link btn-success" title="Edit Data">
                                                                     <i class="fa fa-edit"></i></a> -->
 </a>        
-                                                                <a type="button" href="javascript:void(0);" onclick="confirmDeletion(<?php echo $studid; ?>)" class="btn btn-link btn-danger" title="Delete">
-                                                                    <i class="fa fa-times"></i>
-                                                                </a>
-                                                                <script>
-                                                                    function confirmDeletion(studid) {
-                                                                        if (confirm('Are you sure you want to delete this record?')) {
-                                                                            window.location.href = 'remove_student.php?deleteid=' + studid + '&confirm=true';
-                                                                        }
-                                                                    }
-                                                                </script>
+                                                             
                                                             </td>
                                                         </tr>
                                                     <?php } ?>
@@ -220,7 +218,7 @@ if (!isset($_SESSION['id']) || strlen($_SESSION['id']) == 0 || $_SESSION['role']
                     "pageLength": 10,
                     "lengthChange": true,
                     "order": [
-                        [1, "asc"], [0, "asc"]
+                        [0, "asc"]
                     ],
                     "searching": true,
                     "ordering": true,

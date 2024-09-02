@@ -201,18 +201,31 @@ $stmtSelect->close();
                                                 <i class="fa fa-edit"></i>
 
                                             </a>
-                                                <a type="button" href="javascript:void(0);" 
-                                                onclick="confirmDeletion(<?php echo $educid; ?>)" 
-                                                class="btn btn-link btn-danger mr-1" title="Remove">
-                                                <i class="fa fa-times"></i>
-                                                </a>
-                                                <script>
-                                                    function confirmDeletion(educid) {
-                                                        if (confirm('Are you sure you want to delete this record?')) {
-                                                            window.location.href = 'remove_educass.php?deleteid=' + educid + '&confirm=true';
-                                                        }
-                                                    }
-                                                    </script>
+                                            <a type="button" href="javascript:void(0);"
+                                                                    onclick="confirmDeletion(<?php echo $educid; ?>)"
+                                                                    class="btn btn-link btn-danger mr-1" title="Remove">
+                                                                    <i class="fa fa-times"></i>
+                                                                </a>
+
+
+                                                                <script>
+                                                                    function confirmDeletion(educid) {
+                                                                        Swal.fire({
+                                                                            title: "Are you sure?",
+                                                                            text: "You want to delete this record?",
+                                                                            icon: "warning",
+                                                                            showCancelButton: true,
+                                                                            confirmButtonColor: "#DD6B55",
+                                                                            confirmButtonText: "Yes, delete it!",
+                                                                            cancelButtonText: "Cancel",
+                                                                            closeOnConfirm: true
+                                                                        }).then((result) => {
+                                                                            if (result.isConfirmed) {
+                                                                                window.location.href = 'remove_educass.php?deleteid=' + educid + '&confirm=true';
+                                                                            }
+                                                                        });
+                                                                    }
+                                                                </script>
                                         </td>
                                     </tr>
                                     <?php } ?>
@@ -397,6 +410,9 @@ $stmtSelect->close();
         $('#dataTable').DataTable({
             "ordering": true,
             "lengthMenu": [[10, 25, 50, 100], [10, 25, 50, 100]],
+            "order": [[2, "desc"], 
+                    [1, "desc"],
+                ],
             "language": {
                 "search": "_INPUT_",
                 "searchPlaceholder": "Search here"

@@ -117,6 +117,12 @@ $current_page = PageName();
                         <p>SK Officials</p>
                     </a>
                 </li>
+                <li class="nav-item <?= $current_page=='student.php'  ? 'active' : null ?>">
+                    <a href="student.php">
+                        <i class="fas fa-address-card"></i>
+                        <p>Students</p>
+                    </a>
+                </li>
                 <li class="nav-item <?= $current_page=='profile.php'  ? 'active' : null ?>">
                     <a href="profile.php">
                         <i class="fas fa-user-tie"></i>

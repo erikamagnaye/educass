@@ -62,10 +62,12 @@ $totalapp = $row['COUNT(*)'];
 	$totaleduc = $result6->num_rows;
 
 //all staff
-    $staff = "SELECT COUNT(*) FROM staff";
+    $staff = "SELECT COUNT(*) FROM staff WHERE position IN ('" . implode("', '", $skTypes) . " ')";
+  
+
     $resultstaff= $conn->query($staff);
     $row = $resultstaff->fetch_assoc();
-$staffcount = $row['COUNT(*)'];
+$skcount = $row['COUNT(*)'];
 //verified account
 $verified = "SELECT COUNT(*) FROM student WHERE accstatus ='Verified'";
 $resultvacc= $conn->query($verified);
@@ -136,6 +138,19 @@ if ($latest_educid) {
 // END OF CODE FOR PIE CHART
 
 //START OF CODE FOR LINE CHART TO DISPLAY ALL APPLICANTS PER EDUCATIONAL ASSISTANCE
+//START OF CODE FOR LINE CHART TO DISPLAY ALL APPLICANTS PER EDUCATIONAL ASSISTANCE
+// SQL Query to get the total number of applicants grouped by concatenated school year and semester
+$allapp = "SELECT CONCAT(sy, ' - ', sem) AS sy_sem, COUNT(appid) AS total_applicants
+          FROM application
+          JOIN `educ aids` ON application.educid = `educ aids`.educid
+          GROUP BY sy_sem";
+
+$result = $conn->query($allapp);
+
+$all = [];
+while($row = $result->fetch_assoc()) {
+    $all[] = [$row['sy_sem'], (int)$row['total_applicants']];
+}
 
 
 ?>
@@ -166,7 +181,9 @@ if ($latest_educid) {
             // Set chart options
             var options = {
                 title: 'Number of Applicants per Barangay',
-                is3D: true
+                is3D: true,
+                width: 1000, 
+                height: 600 
             };
 
             // Instantiate and draw the chart, passing in some options
@@ -174,6 +191,104 @@ if ($latest_educid) {
             chart.draw(data, options);
         }
     </script>
+
+<!--START OF CODE FOR LINE CHART TO DISPLAY ALL APPLICANTS PER EDUCATIONAL ASSISTANCE -->
+<script>
+  google.charts.load('current', {packages: ['corechart', 'line']});
+  google.charts.setOnLoadCallback(drawBasic);
+
+  function drawBasic() {
+    var data = new google.visualization.DataTable();
+    data.addColumn('string', 'EA');
+    data.addColumn('number', 'Applicants');
+
+    var chartData = <?php
+    $allapp = "SELECT ea.sy, ea.sem, COUNT(a.appid) AS total_applicants
+              FROM `educ aids` ea
+              LEFT JOIN `application` a ON ea.educid = a.educid
+              GROUP BY ea.sy, ea.sem";
+
+    $result = $conn->query($allapp);
+
+    $all = [];
+    while($row = $result->fetch_assoc()) {
+        $total_applicants = isset($row['total_applicants']) ? (int)$row['total_applicants'] : 0;
+        $all[] = [$row['sy'] . ' ' . $row['sem'], $total_applicants];
+    }
+
+    echo json_encode($all);
+    ?>;
+
+    data.addRows(chartData);
+
+    var options = {
+      title: 'Total Applicants per Educational Assistance',
+      hAxis: {
+        title: 'Educational Assistance'
+      },
+      vAxis: {
+        title: 'Applicants'
+      }
+    };
+
+    var chart = new google.visualization.LineChart(document.getElementById('chart_div'));
+
+    chart.draw(data, options);
+  }
+</script>
+<!--START OF CODE FOR bar chart CHART TO DISPLAY ALL APPLICANTS PER year level-->
+
+<?php
+// Execute the query to retrieve the data
+$query = "SELECT sc.year, COUNT(*) AS count 
+          FROM application 
+          JOIN studentcourse sc ON application.courseid = sc.courseid 
+          WHERE application.educid = (SELECT educid FROM `educ aids` ORDER BY educid DESC LIMIT 1) 
+          GROUP BY sc.year 
+          ORDER BY sc.year ASC";
+$result = $conn->query($query);
+
+// Create an array to store the data for the chart
+$data = array();
+while ($row = $result->fetch_assoc()) {
+  $data[] = array($row['year'], $row['count']);
+}
+
+// Close the database connection
+
+?>
+<script type="text/javascript">
+  // Load the Google Charts library
+  google.charts.load('current', {'packages':['bar']});
+  google.charts.setOnLoadCallback(drawbarChart);
+
+  // Draw the chart
+  function drawbarChart() {
+    // Create the data table
+    var data = google.visualization.arrayToDataTable([
+      ['Year', 'Applicants'],
+      <?php foreach ($data as $row) { ?>
+        ['<?php echo $row[0]; ?>', <?php echo $row[1]; ?>],
+      <?php } ?>
+    ]);
+
+    // Create the chart options
+    var options = {
+      title: 'Applicants per Year Level',
+      chartArea: {width: '40%', height:'20%'},
+      hAxis: {
+        minValue: 0
+      },
+      vAxis: {
+        title: ''
+      }
+    };
+
+    // Create the chart
+    var chart = new google.visualization.BarChart(document.getElementById('barchart_div'));
+    chart.draw(data, options);
+  }
+</script>
 	<style>
 	
 .dashboard {
@@ -285,6 +400,51 @@ h5 {
         font-size: 10px;
     }
 }
+
+.piechart, .barchart {
+  width: 100%;
+  height: 350px;
+  border: 1px solid lightgrey;
+  box-sizing: border-box;
+  font-size: 16px;
+  margin: 0 auto;
+}
+
+@media (max-width: 767.98px) {
+  .piechart, .barchart {
+    height: 250px;
+    overflow: hidden;
+    font-size: 13px;
+    align-items: justify;
+    margin: 0 auto;
+  }
+}
+
+@media (min-width: 768px) and (max-width: 991.98px) {
+  .piechart, .barchart {
+    height: 300px;
+    overflow: hidden;
+    font-size: 13px;
+    margin: 0 auto;
+  }
+}
+
+@media (min-width: 992px) {
+  .piechart, .barchart {
+    height: 350px;
+    overflow: hidden;
+    font-size: 13px;
+    margin: 0 auto;
+  }
+}
+/*line chart */
+.linechart {
+    width: 100%;
+    height: 350px;
+
+}
+
+
 	</style>
 </head>
 <body>
@@ -356,7 +516,7 @@ h5 {
 	
 
 <div class="dashboard" >
-        <div class="card" style="">
+        <div class="card" >
             <div class="card-icon" style="color: skyblue;"><i class="fa-solid fa-user-shield"></i></div>
           <a href="applications.php" class="btn">  <h5><?= $vacc ?> <br>Verified Account</h5></a>
           
@@ -368,23 +528,24 @@ h5 {
         </div>
         <div class="card">
             <div class="card-icon" style="color: red;"><i class="fa-solid fa-clipboard-question"></i></div>
-			<a href="applications.php" class="btn"><h5><?= $complaints ?> <br>Complaints</h5></a>
+			<a href="complaint.php" class="btn"><h5><?= $complaints ?> <br>Complaints</h5></a>
      
         </div>
         <div class="card">
             <div class="card-icon" style="color: green;"><i class="fa-solid fa-user-tie"></i></div>
-			<a href="staff.php" class="btn"> <h5><?=$staffcount?><br> staff</h5></a>
+			<a href="staff.php" class="btn"> <h5><?=$skcount?><br> SK Officials</h5></a>
            
         </div> <div class="card">
             <div class="card-icon" style="color: yellow;"><i class="fa-solid fa-book-open-reader"></i></div>
-			<a href="educaids.php" class="btn"> <h5><?=$totaleduc?><br> Educational Assistance</h5></a>      
+			<a href="educass.php" class="btn"> <h5><?=$totaleduc?><br> Educational Assistance</h5></a>      
         </div>
   <!--      <div class="card">
             <div class="card-icon"style="color: blue;"><i class="fa-solid fa-user-graduate"></i></div>
 			<a href="educaids.php" class="btn"> <h5><?=$totaleduc?><br> Beneficiaries</h5></a>      
         </div> -->
         </div> 
-       
+        <br>
+        <div id="chart_div" class="linechart"></div>
 	
     </div>
 
@@ -505,23 +666,28 @@ h5 {
 					</div>
 
 </div>
+<br>
+
+<div class="row">
+  <div class="col-md-6 mb-3">
+   
+        <div id="piechart_3d" class="piechart" ></div>
+      
+  </div>
+  <div class="col-md-6 mb-3">
+   
+        <div id="barchart_div" class="barchart" ></div>
+   
+  </div>
+</div>
+
 								</div>
 							</div>
 						</div>
+                        
 					</div>
 
-                    <div class="row">
-        <div class="col-md-6 offset-md-4">
-            <div class="card">
-                <div class="card-header">
-                    Applicants Per Barangay
-                </div>
-                <div class="card-body">
-                    <div id="piechart_3d" style="width: 100%; height: 450px;"></div>
-                </div>
-            </div>
-        </div>
-    </div>
+       
 					</div>
     
 

@@ -111,7 +111,7 @@ if (!isset($_SESSION['staffid']) || strlen($_SESSION['staffid']) == 0 ||in_array
                                                 </a>
                                                 <a href="#add" data-toggle="modal" class="btn btn-info btn-border btn-round btn-sm" title="Post Assistance">
                                                     <i class="fa fa-plus"></i>
-                                                    Add Staff
+                                                    Add SK
                                                 </a>
                                             </div>
 
@@ -163,22 +163,34 @@ if (!isset($_SESSION['staffid']) || strlen($_SESSION['staffid']) == 0 ||in_array
                                                             <td><?php echo htmlspecialchars($address); ?></td>
                                                             <td><?php echo htmlspecialchars($gender); ?></td>
                                                             <td>
-                                                                <a type="button" href="edit_staff.php?update&staffid=<?php echo $staffid; ?>" class="btn btn-link btn-success" title="Edit Data">
-                                                                    <i class="fa fa-edit"></i></a>
+                                                              
 
-                                                            <!--    <a type="button" href="#" data-toggle="modal" data-target="#edit" data-staffid="<?php echo $staffid;?>" class="btn btn-link btn-success" title="Edit Data">
-                                                                    <i class="fa fa-edit"></i></a> -->
-</a>        
-                                                                <a type="button" href="javascript:void(0);" onclick="confirmDeletion(<?php echo $staffid; ?>)" class="btn btn-link btn-danger" title="Delete">
-                                                                    <i class="fa fa-times"></i>
-                                                                </a>
-                                                                <script>
-                                                                    function confirmDeletion(staffid) {
-                                                                        if (confirm('Are you sure you want to delete this record?')) {
-                                                                            window.location.href = 'remove_staff.php?deleteid=' + staffid + '&confirm=true';
-                                                                        }
-                                                                    }
-                                                                </script>
+<a href="edit_staff.php?update&staffid=<?php echo $staffid; ?>" class="btn btn-link btn-success mr-1" title="View">
+                                                                <i class="fa fa-eye"></i>
+                                                            </a>
+
+                                                            <a href="javascript:void(0);" class="btn btn-outline-danger btn-sm border-0" title="Delete" onclick="confirmDeletion(<?php echo $staffid; ?>)">
+    <i class="fa fa-trash"></i>
+</a>
+
+<script>
+    function confirmDeletion(concernid) {
+        Swal.fire({
+            title: "Are you sure?",
+            text: "You want to delete this record?",
+            icon: "warning",
+            showCancelButton: true,
+            confirmButtonColor: "#DD6B55",
+            confirmButtonText: "Yes, delete it!",
+            cancelButtonText: "Cancel",
+            closeOnConfirm: true
+        }).then((result) => {
+            if (result.isConfirmed) {
+                window.location.href = 'remove_staff.php?deleteid=' + staffid + '&confirm=true';
+            }
+        });
+    }
+</script>
                                                             </td>
                                                         </tr>
                                                     <?php } ?>

@@ -307,7 +307,7 @@ if (!isset($_SESSION['staffid']) || strlen($_SESSION['staffid']) == 0 || in_arra
                         "pageLength": 10,
                         "lengthChange": true,
                         "order": [
-                            [0, "asc"]
+                            [2, "desc"]
                         ],
                         "searching": true,
                         "ordering": true,
