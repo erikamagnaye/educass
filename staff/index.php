@@ -34,7 +34,7 @@
                 <h5 class="card-text text-center">Login as</h5><br>
                 <div class="text-center">
                 <button type="button" class="btn btn-outline-primary" onclick="location.href='employeelogin.php'">Employee</button>
-                <button type="button" class="btn btn-outline-warning" onclick="location.href='sklogin.php'">SK Official</button>
+                <button type="button" class="btn btn-outline-warning" onclick="location.href='../sk/sklogin.php'">SK Official</button>
               </div>
               </div>
             </div>
