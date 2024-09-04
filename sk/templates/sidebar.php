@@ -22,18 +22,23 @@ $skid = $_SESSION['skid'] ;
 			while ($row = $result->fetch_assoc()) {
 				$staffid = $row['staffid'];
 				$name = $row['firstname'];
-                $email = $row['email'];
+                $skemail = $row['email'];
 				//$role = $row['position'];
 			}
 			}
             $stmt = $conn->prepare("SELECT 
-            SUM(IF(`status` = 'Pending', 1, 0)) AS pending_count,
-            SUM(IF(`status` = 'In Process', 1, 0)) AS in_process_count,
-            SUM(IF(`status` = 'Close', 1, 0)) AS closed_count
-          FROM `concerns`");
-          $stmt->execute();
-          $result = $stmt->get_result();
-          $allcomplaints = $result->fetch_assoc();
+            c.*,
+            SUM(IF(c.`status` = 'Pending', 1, 0)) AS pending_count,
+            SUM(IF(c.`status` = 'In Process', 1, 0)) AS in_process_count,
+            SUM(IF(c.`status` = 'Close', 1, 0)) AS closed_count
+        FROM `concerns` c
+        JOIN `student` s ON c.`studid` = s.`studid`
+        WHERE s.`brgy` = ?
+        ");
+        $stmt->bind_param("s", $skpos);
+        $stmt->execute();
+        $result = $stmt->get_result();
+        $allcomplaints = $result->fetch_assoc();
           
           $pending = $allcomplaints['pending_count'];  
 function PageName() { //return the file name of the current PHP script, without the directory path.
@@ -58,7 +63,7 @@ $current_page = PageName();
                 <a data-toggle="collapse" href="#collapseExample" aria-expanded="true">
                 <span>
                             <?php echo ucfirst($name); ?>
-                            <span class="user-level"><?php echo ucfirst($email); ?></span>
+                            <span class="user-level"><?php echo ucfirst($skemail); ?></span>
                             <span class="caret"></span>
                           
                         </span>
@@ -79,7 +84,7 @@ $current_page = PageName();
                 </div>
             </div>
             <ul class="nav nav-primary">
-                <li class="nav-item <?= $current_page=='skdashboard.php'? 'active' : null ?>">
+                <li class="nav-item <?= $current_page=='skdashboard.php' ||$current_page=='pendingapplication.php' || $current_page=='approvedapplication.php'|| $current_page=='rejectedapplication.php'? 'active' : null ?>">
                     <a href="skdashboard.php" >
                         <i class="fa fa-dashboard"></i>
                         <p>Dashboard</p>

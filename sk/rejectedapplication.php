@@ -567,31 +567,31 @@ if (!isset($_SESSION['skid']) || strlen($_SESSION['skid']) == 0 || !in_array($_S
                                         <div class="container-fluid mt-5">
                                             
                                             <div class="dashboard">
-                                                <div class="card card-primary">
-                                                    <div class="card-icon" style="color: white;"> <i class="fa-solid fa-user-graduate"></i></div>
+                                                <div class="card ">
+                                                    <div class="card-icon" style="color: skyblue;"> <i class="fa-solid fa-user-graduate"></i></div>
                                                     <a href="skdashboard.php" class="btn">
-                                                        <h5 style="color:white;"><?= $totalapp ?>  <br>All Applicants</h5>
+                                                        <h5 ><?= $totalapp ?>  <br>All Applicants</h5>
                                                     </a>
 
                                                 </div>
-                                                <div class="card">
-                                                    <div class="card-icon" style="color: orange;"><i class="fa-solid fa-spinner fa-spin"></i></div>
+                                                <div class="card ">
+                                                    <div class="card-icon" style="color: yellow;"><i class="fa-solid fa-spinner fa-spin"></i></div>
                                                     <a href="pendingapplication.php" class="btn">
-                                                        <h5><?= $pendingapp ?> <br>Pending</h5>
+                                                        <h5 ><?= $pendingapp ?> <br>Pending</h5>
                                                     </a>
 
                                                 </div>
-                                                <div class="card">
+                                                <div class="card ">
                                                     <div class="card-icon" style="color: green;"><i class="fa-regular fa-thumbs-up"></i></div>
                                                     <a href="approvedapplication.php" class="btn">
-                                                        <h5><?= $approved ?> <br>Approved</h5>
+                                                        <h5 ><?= $approved ?> <br>Approved</h5>
                                                     </a>
 
                                                 </div>
-                                                <div class="card">
-                                                    <div class="card-icon" style="color: red;"><i class="fa-regular fa-thumbs-down"></i></div>
+                                                <div class="card card-danger">
+                                                    <div class="card-icon" style="color: white;"><i class="fa-regular fa-thumbs-down"></i></div>
                                                     <a href="rejectedapplication.php" class="btn">
-                                                        <h5><?= $rejected ?><br> Rejected</h5>
+                                                        <h5 style="color:white;"><?= $rejected ?><br> Rejected</h5>
                                                     </a>
                                                 </div>
                                    
@@ -606,13 +606,13 @@ if (!isset($_SESSION['skid']) || strlen($_SESSION['skid']) == 0 || !in_array($_S
                                                     <div class="card-header">
                                                         <div class="card-head-row">
                                                             <div class="card-title">
-                                                                <h2>All Applicants</h2>
+                                                                <h2>All Pending Applicants</h2>
                                                             </div>
 
                                                             <div class="card-tools">
-                                                                <a href="viewstudent.php" class="btn btn-danger btn-border btn-round btn-sm" title="view and print">
+                                                                <a href="printrejectedstudent.php" class="btn btn-danger btn-border btn-round btn-sm" title="view and print">
                                                                     <i class="fa fa-print"></i>
-                                                                   Print
+                                                                    Print
                                                                 </a>
                                                                 <a href="model/export_student_csv.php" class="btn btn-danger btn-border btn-round btn-sm" title="Download">
                                                                     <i class="fa fa-file"></i>
@@ -643,12 +643,13 @@ if (!isset($_SESSION['skid']) || strlen($_SESSION['skid']) == 0 || !in_array($_S
                                                                 <tbody>
                                                                     <?php
 
-                                                                    $query = " SELECT *, CONCAT(lastname, ', ', firstname, ' ' , midname, '.' ) AS fullname FROM student join studentcourse on student.studid=studentcourse.studid 
+                                                                    $query = " SELECT *, CONCAT(lastname, ', ', firstname, ' ' , midname, '.' ) AS fullname 
+                                                                    FROM student join studentcourse on student.studid=studentcourse.studid 
                                                     join application on studentcourse.courseid=application.courseid 
-                                                    where application.educid=$recent and brgy = '$skpos' ORDER BY lastname ASC";
+                                                    where application.educid=$recent and brgy = '$skpos' AND appstatus= 'Rejected' ORDER BY lastname ASC";
                                                                     $view_data = mysqli_query($conn, $query); // sending the query to the database
 
-                                                                    $count =1;
+                                                                    $count=1;
                                                                     // displaying all the data retrieved from the database using while loop
                                                                     while ($row = mysqli_fetch_assoc($view_data)) {
                                                                         $studid = $row['studid'];
@@ -705,15 +706,14 @@ if (!isset($_SESSION['skid']) || strlen($_SESSION['skid']) == 0 || !in_array($_S
                                                                                 <?php echo htmlspecialchars($appstatus); ?>
                                                                             </td>
                                                                             <td>
-                                                                                <a type="button" href="view_application.php?studid=<?php echo $studid; ?>&educid=<?php echo $recent; ?>&appid=<?php echo $appid; ?>" class="btn btn-link btn-info" title="Edit Data">
+                                                                                <a type="button" href="view_rejected_application.php?studid=<?php echo $studid; ?>&educid=<?php echo $recent; ?>&appid=<?php echo $appid; ?>" class="btn btn-link btn-info" title="Edit Data">
                                                                                     <i class="fa fa-file"></i></a>
 
 
 
                                                                             </td>
                                                                         </tr>
-                                                                     
-                                                                    <?php    $count++; } ?>
+                                                                    <?php $count++; } ?>
 
                                                                 </tbody>
 

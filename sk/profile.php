@@ -31,6 +31,7 @@ if (!isset($_SESSION['skid']) || strlen($_SESSION['skid']) == 0 || !in_array($_S
     header('location:index.php');
     exit();
 } else {
+    $position =$_SESSION['role'];
     $staffid = $_SESSION['skid'];
     $query = "SELECT * FROM `staff` where staffid = $staffid "; // SQL query to fetch all table data
     $view_data = mysqli_query($conn, $query); // sending the query to the database
@@ -89,7 +90,7 @@ if (!isset($_SESSION['skid']) || strlen($_SESSION['skid']) == 0 || !in_array($_S
                         <div class="page-inner">
                             <div class="d-flex align-items-left align-items-md-center flex-column flex-md-row">
                                 <div>
-                                    <h2 class="text-black fw-bold">SK Dashboard</h2>
+                                    <h2 class="text-black fw-bold"><?php echo $position?> Dashboard</h2>
                                 </div>
                             </div>
                         </div>

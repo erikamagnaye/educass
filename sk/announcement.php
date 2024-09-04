@@ -31,7 +31,7 @@ if (!isset($_SESSION['skid']) || strlen($_SESSION['skid']) == 0 || !in_array($_S
     header('location:index.php');
     exit();
 } else {
-
+    $position =$_SESSION['role'];
 ?>
     <!DOCTYPE html>
     <html lang="en">
@@ -71,7 +71,7 @@ if (!isset($_SESSION['skid']) || strlen($_SESSION['skid']) == 0 || !in_array($_S
                         <div class="page-inner">
                             <div class="d-flex align-items-left align-items-md-center flex-column flex-md-row">
                                 <div>
-                                    <h2 class="text-black fw-bold">Applicant Portal</h2>
+                                    <h2 class="text-black fw-bold"><?php echo $position?> Dashboard</h2>
                                 </div>
                             </div>
                         </div>
@@ -119,7 +119,7 @@ if (!isset($_SESSION['skid']) || strlen($_SESSION['skid']) == 0 || !in_array($_S
                                     <small class="text-muted">Posted on: <?php echo $date;?></small>
                                 </div>
                                 <div>
-                                    <a href="view_announcement.php?announceid=<?php echo $announceid; ?>" class="btn btn-success btn-sm" title="View">
+                                    <a href="read_announcement.php?announceid=<?php echo $announceid; ?>" class="btn btn-success btn-sm" title="View">
                                     View
                                     </a>
                          

@@ -31,6 +31,7 @@ if (!isset($_SESSION['skid']) || strlen($_SESSION['skid']) == 0 || !in_array($_S
     header('location:index.php');
     exit();
 } else {
+    $position =$_SESSION['role'];
     // staet of code to digitally update status of educ assistance
     $currentDate = date('Y-m-d');
     $newStatus = 'Closed'; // The status you want to set when the end date is reached
@@ -104,7 +105,7 @@ if (!isset($_SESSION['skid']) || strlen($_SESSION['skid']) == 0 || !in_array($_S
                         <div class="page-inner">
                             <div class="d-flex align-items-left align-items-md-center flex-column flex-md-row">
                                 <div>
-                                    <h2 class="text-black fw-bold">Staff Dashboard</h2>
+                                    <h2 class="text-black fw-bold"><?php echo $position?> Dashboard</h2>
                                 </div>
                             </div>
                         </div>
