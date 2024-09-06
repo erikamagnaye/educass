@@ -288,7 +288,7 @@ label {
                                                 <select class="form-control vstatus" required name="vstatus">
                                                     <option disabled selected>Select Barangay</option>
                                                     <option value="Arawan">Arawan</option>
-                                                    <option value="Baging Niing">Bagong Niing</option>
+                                                    <option value="Bagong Niing">Bagong Niing</option>
                                                     <option value="Balat Atis">Balat Atis</option>
                                                     <option value="Briones">Briones</option>
                                                     <option value="Bulihan">Bulihan</option>
