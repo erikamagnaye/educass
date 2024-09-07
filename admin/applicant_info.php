@@ -346,7 +346,7 @@ WHERE `application`.`appid` = $appid AND `application`.`educid` = $educid AND `a
                                                         </td>
                                                           <th style="height: 30px;">School Year</th>
                                                         <td style="height: 30px;"><?php echo $sy; ?></td>
-                                                    </tr>
+                                                    </tr> 
                                                 
                                                     <tr>
                                                         <th colspan="4" style="height: 30px;text-transform: uppercase;text-align:center;<?php

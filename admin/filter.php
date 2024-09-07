@@ -68,18 +68,22 @@ if (isset($_POST['filter'])) {
 							<div class="card">
 								<div class="card-header">
 									<div class="card-head-row">
+                                      
 										<div class="card-title" style=" margin-right: 10px;"><?php echo $filbrgy?></div>
                                      
 											<div class="card-tools">
-                                            <a href="print_filter_all_current.php?recent=<?=$recent?>&filbrgy=<?=$filbrgy?>" class="btn btn-success btn-border btn-round btn-sm" title="view and print">
-												<i class="fa fa-eye"></i>
-												View
+                                            <a href="print_filter_all_current.php?recent=<?=$recent?>&filbrgy=<?=$filbrgy?>" class="btn btn-danger btn-border btn-round btn-sm" title="view and print">
+												<i class="fa fa-print"></i>
+												Print
 											</a>
-                                            <a href="model/export_educprovided_csv.php" class="btn btn-danger btn-border btn-round btn-sm" title="Download">
+                                            <a href="model/export_educprovided_csv.php" class="btn btn-success btn-border btn-round btn-sm" title="Download">
 												<i class="fa fa-file"></i>
 												Export CSV
 											</a>
-											
+											    <a href="all_current_applicants.php" class="btn btn-danger btn-border btn-round btn-sm" title="Download">
+												<i class="fa fa-chevron-left"></i>
+												Back
+											</a>
 											</div>
 									
 									</div>

@@ -9,7 +9,7 @@ if (isset($_POST['reply'])) {
     $concernid = $_POST['concernid'];
     $message = $_POST['message'];
     date_default_timezone_set('Asia/Manila');
-    $date = date("Y-m-d");
+    $date = date("Y-m-d H:i:s");
 
     // Insert into reply table
     $stmt = $conn->prepare("INSERT INTO reply (studid, concernid, `reply`, `date`) 

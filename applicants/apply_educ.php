@@ -97,10 +97,10 @@ if (isset($_POST['submit'])) { // this is from apply_educ.php
 
  
 
-    $gradesid = mt_rand(3, 1000000);
-    $reqid = mt_rand(3, 1000000);
-    $courseid = mt_rand(3, 1000000);
-    $appid = mt_rand(3, 1000000);
+    //$gradesid = mt_rand(3, 1000000);
+    //$reqid = mt_rand(3, 1000000);
+    //$courseid = mt_rand(3, 1000000);
+   // $appid = mt_rand(3, 1000000);
     $studid = $_POST['studid'];
     $educid = $_POST['educid'];
   
@@ -123,7 +123,11 @@ if (isset($_POST['submit'])) { // this is from apply_educ.php
      $age = $_POST['age'];
      $civilstatus = $_POST['civilstatus'];
 
-     $student = "UPDATE student SET lastname='$lastname', firstname='$firstname', midname='$midname', email='$email', birthday='$birthday', contact_no='$contact_no', brgy='$brgy', municipality='$municipality', province='$province', street_name='$street_name', gender='$gender', citizenship='$citizenship', religion='$religion', age='$age', civilstatus='$civilstatus' WHERE studid='$studid'";
+     $student = "UPDATE student SET lastname='$lastname', firstname='$firstname', 
+     midname='$midname', email='$email', birthday='$birthday', contact_no='$contact_no', 
+     brgy='$brgy', municipality='$municipality', province='$province', street_name='$street_name', 
+     gender='$gender', citizenship='$citizenship', religion='$religion', age='$age', civilstatus='$civilstatus' 
+     WHERE studid='$studid'";
      $conn->query($student);
 
      // COURSE INFO
@@ -135,10 +139,10 @@ if (isset($_POST['submit'])) { // this is from apply_educ.php
      $sy = $_POST['sy'];
      $year = $_POST['year'];
 
-     $courseQuery = "INSERT INTO studentcourse (courseid, studid,educid, course, major, school_name, school_address, sem, `year`, sy) 
-     VALUES ('$courseid','$studid','$educid', '$course', '$major', '$school_name', '$school_address', '$sem', '$year', '$sy')";
+     $courseQuery = "INSERT INTO studentcourse ( studid,educid, course, major, school_name, school_address, sem, `year`, sy) 
+     VALUES ('$studid','$educid', '$course', '$major', '$school_name', '$school_address', '$sem', '$year', '$sy')";
      $conn->query($courseQuery);
-    // $courseid = $conn->insert_id;
+    $courseid = $conn->insert_id;
 
      // GRADES
   /*   $sub1 = $_POST['sub1'];
@@ -202,6 +206,7 @@ if (isset($_POST['submit'])) { // this is from apply_educ.php
          $parentquery = "INSERT INTO parentinfo (studid, parentname, parentage, parent_occu, parent_income, parent_status, parent_educattain, parent_address, parent_contact) 
          VALUES ('$studid', '$parentname', '$parentage', '$parent_occu', '$parent_income', '$parent_status', '$parent_educattain', '$parent_address', '$parent_contact')";
          $conn->query($parentquery);
+
      } else {
          $parentquery = "UPDATE parentinfo SET 
          parentname = '$parentname', parentage = '$parentage', parent_occu = '$parent_occu', parent_income = '$parent_income', parent_status = '$parent_status', parent_educattain = '$parent_educattain', 
@@ -272,7 +277,7 @@ if (!in_array($_FILES['coe']['type'], $coeallowedTypes) ||
     $stmt->bind_param("iiisssss", $reqid,$educid, $studid, $letter, $schoolid, $coe, $indigent, $grades);
 
     if ($stmt->execute()) {
-        //$reqid = $conn->insert_id;
+        $reqid = $conn->insert_id;
         
        
     } else {
@@ -292,8 +297,9 @@ date_default_timezone_set('Asia/Manila'); // set the time zone to Philippine Sta
 $appdate = date('Y-m-d');
 $appstatus = 'Pending';
 
-$application =$conn->prepare( "INSERT INTO `application` (appid, studid, educid, reqid, courseid, parentsid, `appstatus`, `appdate`) VALUES(?,?,?,?,?,?,?,?)");
-$application->bind_param("iiiiiiss", $appid,$studid, $educid, $reqid, $courseid, $parentid, $appstatus,$appdate);
+$application =$conn->prepare( "INSERT INTO `application` ( studid, educid, reqid, courseid, parentsid, `appstatus`, `appdate`) 
+VALUES(?,?,?,?,?,?,?)");
+$application->bind_param("iiiiiss",$studid, $educid, $reqid, $courseid, $parentid, $appstatus,$appdate);
   
   if ($application->execute()) {
          $appid = mysqli_insert_id($conn);

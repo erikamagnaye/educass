@@ -58,7 +58,8 @@ if (strlen($_SESSION['id'] == 0)) {
 	
     <link rel="icon" href="assets/img/logo.png" type="image/x-icon"/>   <!-- THIS IS THE CODE TO DISPLAY AN ICON IN THE BROWASER TAB-->
 	<script type="text/javascript" src="https://www.gstatic.com/charts/loader.js"></script>
-
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.1.1/css/all.min.css" integrity="sha512-KfkfwYDsLkIlwQp6LFnl8zNdLGxu9YAA1QvwINks4PhcElQSvqcyVLLD9aMhXd13uQjoXtEKNosOWaZqXgel0g==" crossorigin="anonymous" referrerpolicy="no-referrer" />
+   
 	<style>
 
 
@@ -88,8 +89,9 @@ if (strlen($_SESSION['id'] == 0)) {
 
 .dashboard {
     display: grid;
-    grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
-    gap: 20px;
+    grid-template-columns: repeat(6, 1fr);
+    gap: 10px;
+    align-items: center;
 }
 
 .card {
@@ -113,11 +115,12 @@ h5 {
 	word-wrap: break-word;
     overflow-wrap: break-word;
 	word-break: break-all;
+    font-size: 15px;
 }
 /* Small screens (max-width: 768px) */
 @media (max-width: 768px) {
     .dashboard {
-        grid-template-columns: repeat(auto-fill, minmax(150px, 1fr));
+        grid-template-columns: repeat(3, 1fr);
     }
     .card {
         padding: 5px;
@@ -131,7 +134,7 @@ h5 {
         font-size: 16px;
     }
     h5 {
-        font-size: 16px;
+        font-size: 13px;
 		overflow-wrap: break-word; /* Add this line to break long text */
 		word-wrap: break-word;
 		word-break: break-all;
@@ -141,7 +144,7 @@ h5 {
 /* Extra small screens (max-width: 480px) */
 @media (max-width: 480px) {
     .dashboard {
-        grid-template-columns: repeat(auto-fill, minmax(100px, 1fr));
+        grid-template-columns: repeat(3, 1fr);
     }
     .card {
         padding: 2px;
@@ -155,7 +158,7 @@ h5 {
         font-size: 15px;
     }
     h5 {
-        font-size: 14px;
+        font-size: 13px;
 		overflow-wrap: break-word; /* Add this line to break long text */
 		word-wrap: break-word;
 		word-break: break-all;
@@ -165,7 +168,7 @@ h5 {
 /* Extra extra small screens (max-width: 320px) */
 @media (max-width: 320px) {
     .dashboard {
-        grid-template-columns: repeat(auto-fill, minmax(80px, 1fr));
+        grid-template-columns: repeat(3, 1fr);
     }
     .card {
         padding: 1px;
@@ -176,10 +179,10 @@ h5 {
     text-align: center;
     }
     .card-icon {
-        font-size: 12px;
+        font-size: 14px;
     }
     h5 {
-        font-size: 12px;
+        font-size: 13px;
 		overflow-wrap: break-word; /* Add this line to break long text */
 		word-wrap: break-word;
 		word-break: break-all;
@@ -208,32 +211,7 @@ h5 {
 						<div class="d-flex align-items-left align-items-md-center flex-column flex-md-row">
 							<div>
 								<h2 class="text-black fw-bold"> Applicant Portal</h2>
-								<!--
-								<?php if(isset($_SESSION['message'])): ?>
-							<div class="alert alert-<?= $_SESSION['success']; ?> <?= $_SESSION['success']=='danger' ? 'bg-danger text-light' : null ?>" role="alert">
-								<?php echo $_SESSION['message']; ?>
-							</div>
-						<?php unset($_SESSION['message']); ?>
-						<?php endif ?>
-
-						
-                        <div > <hr style="width: 100%;">
-								<h4 class="text-black fw-regular ">Cute ko</h4>
-								<div class="btn-container">
-    <a href="#" class="btn"><i class="fas fa-user icon" style="margin-right: 8px;"> </i><?= $totalapp ?>  Applications </a>
-    <a href="#" class="btn"><i class="fas fa-users icon" style="margin-right: 8px;"></i><?= $pending ?>  Pending </a>
-	<a href="#" class="btn"><i class="fas fa-users icon" style="margin-right: 8px;"></i><?= $approved ?>  Approved </a>
-	<a href="#" class="btn"><i class="fas fa-users icon" style="margin-right: 8px;"></i><?= $rejected ?>  Rejected </a>
-	<a href="#" class="btn"><i class="fas fa-users icon" style="margin-right: 8px;"></i><?= $totaleduc ?>  Educational Assistance </a>
-	<a href="#" class="btn"><i class="fas fa-users icon" style="margin-right: 8px;"></i><?= $totalconcerns ?>  Complaints </a>
-
-</div>
-
-
-								<div > <hr>
-								<h4 class="text-black fw-regular ">Educational Assistance </h4>
-							</div>
-							</div> -->
+				
 							
 						</div>
 						
@@ -241,99 +219,48 @@ h5 {
 				
 				</div>
                             <div class="page-inner mt--2">
-			<!--		<div class="row">
-					<div class="col-md-6">
-                <div class="card card-stats card-warning card-round">
-                    <div class="card-body">
-                        <div class="row">
-                            <div class="col-12 ">
-                                <div class="icon-big text-center">
-                                    <i class="flaticon-users"></i>
-                                </div>
-                            </div>
-                            <div class="col-12 ">
-                                <div class="numbers mt-2">
-                                    <h6 class="fw-bold text-uppercase text-center"><?= $totalapp ?> Open Educational Assistance</h6>
-									<a href="resident_info.php?state=all" class="card-link text-light" style="text-align: left;">view</a>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                   
-                </div>
-            </div>
-            <div class="col-md-6">
-                <div class="card card-stats card-danger card-round">
-                    <div class="card-body">
-                        <div class="row">
-                            <div class="col-12 ">
-                                <div class="icon-big text-center">
-                                    <i class="flaticon-users"></i>
-                                </div>
-                            </div>
-                            <div class="col-12 ">
-                                <div class="numbers mt-2">
-                                    <h6 class="fw-bold text-uppercase text-center"><?= $totalapp ?> Close Educational Assistance</h6>
-									<a href="resident_info.php?state=all" class="card-link text-light" style="text-align: left;">view</a>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                   
-                </div>
-            </div>
-						
 		
-		
-					</div> -->
 
 	
 				
-					<div class="row">
-						<div class="col-md-12">
-							<div class="card">
+				
 								
-								<div class="card-body col-md-12">
-								<div class="container-fluid">
 
 	
 
 <div class="dashboard">
-        <div class="card">
-            <div class="card-icon"><i class="fas fa-user"></i></div>
-          <a href="all_applications.php" class="btn">  <h5><?= $totalapp ?> <br>Applications</h5></a>
+        <div class="card bg-secondary">
+            <div class="card-icon" style="color:white"><i class="fas fa-user"></i></div>
+          <a href="all_applications.php" class="btn">  <h5 style="color:white"><?= $totalapp ?> <br>Applications</h5></a>
           
         </div>
-        <div class="card">
-            <div class="card-icon"><i class="fas fa-chart-line"></i></div>
-			<a href="applications.php" class="btn"><h5><?= $pending ?> <br>Pending</h5></a>
+        <div class="card bg-warning">
+            <div class="card-icon"style="color:white"><i class="fa-solid fa-spinner fa-spin"></i></div>
+			<a href="applications.php" class="btn"><h5 style="color:white"><?= $pending ?> <br>Pending</h5></a>
          
         </div>
-        <div class="card">
-            <div class="card-icon"><i class="fas fa-cogs"></i></div>
-			<a href="applications.php" class="btn"><h5><?= $approved ?> <br>Approved</h5></a>
+        <div class="card bg-success">
+            <div class="card-icon" style="color:white"><i class="fa fa-thumbs-up"></i></div>
+			<a href="applications.php" class="btn"><h5 style="color:white"><?= $approved ?> <br>Approved</h5></a>
      
         </div>
-        <div class="card">
-            <div class="card-icon"><i class="fas fa-comments"></i></div>
-			<a href="applications.php" class="btn"> <h5><?=$rejected?><br> Rejected</h5></a>
+        <div class="card "style="background-color:#B80000">
+            <div class="card-icon" style="color:white"><i class="fa fa-thumbs-down"></i></div>
+			<a href="applications.php" class="btn"> <h5 style="color:white"><?=$rejected?><br> Rejected</h5></a>
            
-        </div> <div class="card">
-            <div class="card-icon"><i class="fas fa-comments"></i></div>
-			<a href="educaids.php" class="btn"> <h5><?=$totaleduc?><br> Educational Assistance</h5></a>      
+        </div> <div class="card bg-info">
+            <div class="card-icon" style="color:white"><i class="fa-solid fa-user-graduate"></i></div>
+			<a href="educaids.php" class="btn"> <h5 style="color:white"><?=$totaleduc?><br>Educational Aids </h5></a>      
         </div>
-		<div class="card">
-            <div class="card-icon"><i class="fas fa-comments"></i></div>
-			<a href="applications.php" class="btn"> <h5><?=$totalconcerns?> <br>Complaints</h5></a>         
+		<div class="card text-center " style="background-color:#E36414">
+            <div class="card-icon" style="color:white"><i class="fa-solid fa-clipboard-question"></i></div>
+			<a href="applications.php" class="btn"> <h5 style="color:white"><?=$totalconcerns?> <br>Complaints</h5></a>         
         </div>
     </div>
 
 
-</div>
-								</div>
-							</div>
-						</div>
-					</div>
+
+							
 
                     <div class="row">
 						<div class="col-md-12">

@@ -126,6 +126,21 @@ else {
     margin-right:5px; /* Reset margin right to 30px */
   }
 }
+/*button color depending on status of complaint */
+.btn-violet {
+  background-color: #7A288A; /* violet */
+  color: #fff;
+}
+
+.btn-warning {
+  background-color: #F7DC6F; /* yellow */
+  color: #333;
+}
+
+.btn-danger {
+  background-color: #FF0000; /* red */
+  color: white;
+}
 </style>
 </head>
 <body>
@@ -170,7 +185,7 @@ else {
 								</div>
                                 <div class="card-body">
     <?php 
-    $query = "SELECT application.educid, `application`.appid, `educ aids`.educname as educname, `educ aids`.sem as sem, `educ aids`.sy as sy, `educ aids`.status as status, `application`.appdate, `educ aids`.min_grade 
+    $query = "SELECT application.educid,`application`.appstatus, `application`.appid, `educ aids`.educname as educname, `educ aids`.sem as sem, `educ aids`.sy as sy, `educ aids`.status as status, `application`.appdate, `educ aids`.min_grade 
           FROM `application` 
           JOIN `educ aids` 
           ON application.educid = `educ aids`.educid 
@@ -188,9 +203,18 @@ else {
             $status = $row['status'];                
             $date = $row['appdate'];  
             $min_grade = $row['min_grade'];  
-
+            $appstatus = $row['appstatus']; 
              
- 
+    // Determine the button color based on the status
+    if ($appstatus == 'Pending') {
+      $btn_color = 'btn-violet';
+  } elseif ($appstatus == 'Approved') {
+      $btn_color = 'btn-warning';
+  } elseif ($appstatus == 'Rejected') {
+      $btn_color = 'btn-danger'; // red
+  } else {
+      $btn_color = 'btn-default'; // default color
+  }
             ?>
             <div class="card mb-2" style="border-width: 1px; border-radius: 10px;">
                 <div class="card-body py-2">
@@ -203,7 +227,7 @@ else {
 </small>
                         </div>
                         <div>
-                         
+                        <button class="btn <?php echo $btn_color; ?>"><?php echo htmlspecialchars($appstatus); ?></button>
                                 <a href="view_application.php?appid=<?php echo $appid; ?>&educid=<?php echo $educid; ?>" class="btn btn-success btn-circle" style="margin: 1px;">
                                     <i class="fa fa-eye"></i> View Application
                                 </a>

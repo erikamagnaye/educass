@@ -49,6 +49,7 @@ WHERE `application`.`appid` = $appid AND `application`.`educid` = $educid AND `a
 
             $appstatus = $row['appstatus'];
             $appdate = $row['appdate'];
+            $reviewedby = $row['reviewedby'];
 
             //calculate the age based on their application date because the age is updatable
             $birthday_date = date_create($birthday);
@@ -168,12 +169,13 @@ WHERE `application`.`appid` = $appid AND `application`.`educid` = $educid AND `a
                                     </div>
 
                                     <div class="card-body m-5" id="printThis">
-                                        <p style="text-align:center">Date of Application: <?php echo $appdate ?></p>
+                                       
                                         <div class="text-center">
                                             <img src="assets/img/logo.png" class="img-fluid" width="80" height="60">
                                         </div>
                                        <p class="mt-4 fw-bold text-center" style=""><?php echo $educname . ' SY: ' . $sy . ' ' . $sem ?></p>
-                                        <br>
+                                       <p style="text-align:center">Date of Application: <?php echo $appdate ?></p>
+                                       <br>
 
 
 
@@ -337,10 +339,21 @@ WHERE `application`.`appid` = $appid AND `application`.`educid` = $educid AND `a
                                                         <td style="height: 30px;"><?php echo $sy; ?></td>
                                                     </tr>
                                                     <tr>
-                                                        <th colspan="4" style="height: 30px;text-transform: uppercase;text-align:center;color:red;">......  Your application is  <?php echo $appstatus; ?> ......</th>
+                                                        <th colspan="4" style="height: 30px;text-transform: uppercase;text-align:center;<?php
+                                                                                        if ($appstatus == 'Pending') {
+                                                                                            echo 'color: #FFC107'; // yellow-orange color for pending
+                                                                                        } elseif ($appstatus == 'Approved') {
+                                                                                            echo 'color: #4CAF50'; // green color for approved
+                                                                                        } elseif ($appstatus == 'Rejected') {
+                                                                                            echo 'color: #FF0000'; // red color for rejected
+                                                                                        }
+                                                                                        ?>">......  Your application is  <?php echo $appstatus; ?> ......</th>
                                                         
                                                     </tr>
-                                     
+                                                    <tr>
+                                                        <th colspan="4" style="height: 30px;text-transform: uppercase;text-align:center;">Reviewed and Evaluated by   <?php echo $reviewedby; ?> </th>
+                                                        
+                                                    </tr>
 
                                                 </table>
 

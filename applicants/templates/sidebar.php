@@ -105,14 +105,9 @@ $current_page = PageName();
                         <p>Concerns</p>
                     </a>
                 </li>
-                <li class="nav-item <?= $current_page=='messages.php'  ? 'active' : null ?>">
-                    <a href="messages.php">
-                        <i class="fa fa-comments"></i>
-                        <p>Messages</p>
-                    </a>
-                </li>
-                <li class="nav-item <?= $current_page=='staff.php'  ? 'active' : null ?>">
-                    <a href="staff.php">
+            
+                <li class="nav-item <?= $current_page=='profile.php'  ? 'active' : null ?>">
+                    <a href="profile.php">
                         <i class="fas fa-user-tie"></i>
                         <p>Profile</p>
                     </a>
