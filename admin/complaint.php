@@ -6,7 +6,7 @@ session_start();
 error_reporting(E_ALL);
 ini_set('display_errors', 1);
 if (!isset($_SESSION['id']) || strlen($_SESSION['id']) == 0 || $_SESSION['role'] !== 'admin') {
-    header('location:login.php');
+	header('location:login.php');
     exit();
 } else {
 
@@ -33,6 +33,10 @@ if (!isset($_SESSION['id']) || strlen($_SESSION['id']) == 0 || $_SESSION['role']
         <title>Educational Assistance</title>
         <link rel="stylesheet" type="text/css" href="https://cdn.datatables.net/2.1.2/css/dataTables.bootstrap5.min.css" />
         <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.1.1/css/all.min.css" integrity="sha512-KfkfwYDsLkIlwQp6LFnl8zNdLGxu9YAA1QvwINks4PhcElQSvqcyVLLD9aMhXd13uQjoXtEKNosOWaZqXgel0g==" crossorigin="anonymous" referrerpolicy="no-referrer" />
+       
+        <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11.12.3/dist/sweetalert2.all.min.js"></script>
+        <link href="https://cdn.jsdelivr.net/npm/sweetalert2@11.12.3/dist/sweetalert2.min.css" rel="stylesheet">
+      
         <style>
             .btn-link+.btn-link {
                 margin-left: 5px;
@@ -227,7 +231,7 @@ if (!isset($_SESSION['id']) || strlen($_SESSION['id']) == 0 || $_SESSION['role']
                         <div class="page-inner">
                             <div class="d-flex align-items-left align-items-md-center flex-column flex-md-row">
                                 <div>
-                                    <h2 class="text-black fw-bold">Admin Portal</h2>
+                                    <h2 class="text-black fw-bold">Employee Portal</h2>
                                 </div>
                             </div>
                         </div>
@@ -243,23 +247,17 @@ if (!isset($_SESSION['id']) || strlen($_SESSION['id']) == 0 || $_SESSION['role']
                                         <div class="card-head-row">
                                             <div class="card-title">Concerns/Queries</div>
 
-                                            <div class="card-tools">
-
-                                                <a href="#add" data-toggle="modal" class="btn btn-info btn-border btn-round btn-sm" title="Post Assistance">
-                                                    <i class="fa fa-plus"></i>
-                                                    File Concerns
-                                                </a>
-                                            </div>
+                   
 
                                         </div>
                                     </div>
                                     <div class="card-body col-md-12">
                                         <div container-fluid>
                                             <div class="dashboard">
-                                                <div class="card">
-                                                    <div class="card-icon" style="color:orange;"><i class="fa-solid fa-clipboard-question"></i></div>
+                                                <div class="card" style="background-color:#06D001;">
+                                                    <div class="card-icon" style="color:white;"><i class="fa-solid fa-clipboard-question"></i></div>
                                                     <a href="complaint.php" class="btn">
-                                                        <h5><?= $total_complaints ?> <br>All Complaints</h5>
+                                                        <h5 style="color:white;"><?= $total_complaints ?> <br>All Complaints</h5>
                                                     </a>
 
                                                 </div>
@@ -303,8 +301,8 @@ if (!isset($_SESSION['id']) || strlen($_SESSION['id']) == 0 || $_SESSION['role']
                                                     <th scope="col" style="text-align: justify;">Complaint No.</th>
                                                     <th scope="col" style="text-align: justify;">Complaint</th>
                                                     <th scope="col" style="text-align: justify;">Date</th>
-                                                    <th style="text-align: justify;">Status</th>
-                                                    <th style="text-align: justify;">Action</th>
+                                                    <th scope="col" style="text-align: justify;">Status</th>
+                                                    <th scope="col" style="text-align: justify;">Action</th>
 
                                                 </tr>
                                             </thead>
@@ -342,28 +340,38 @@ if (!isset($_SESSION['id']) || strlen($_SESSION['id']) == 0 || $_SESSION['role']
       <button class="btn <?php echo $btn_color; ?>"><?php echo htmlspecialchars($status); ?></button>
     </td>
                                                         <td>
-                                                            <a type="button" href="edit_complaint.php?update&concernid=<?php echo $concernid; ?>" class="btn btn-link btn-success mr-1"
-                                                                title="view report" style="display: inline-block;">
-                                                                <i class="fa fa-file"></i>
+                                                          
+                                          
+                                                 
+                                                            <a href="view_complaint.php?update&concernid=<?php echo $concernid; ?>" class="btn btn-link btn-success mr-1" title="View">
+                                                                <i class="fa fa-eye"></i>
+                                                            </a>
 
-                                                            </a>
-                                                            <a type="button" href="edit_complaint.php?update&concernid=<?php echo $concernid; ?>" class="btn btn-link btn-success mr-1"
-                                                                title="Edit Data" style="display: inline-block;">
-                                                                <i class="fa fa-edit"></i>
+                                                            <a href="javascript:void(0);" class="btn btn-outline-danger btn-sm border-0" title="Delete" onclick="confirmDeletion(<?php echo $concernid; ?>)">
+    <i class="fa fa-trash"></i>
+</a>
 
-                                                            </a>
-                                                            <a type="button" href="javascript:void(0);"
-                                                                onclick="confirmDeletion(<?php echo $educid; ?>)"
-                                                                class="btn btn-link btn-danger mr-1" title="Remove" style="display: inline-block;">
-                                                                <i class="fa fa-times"></i>
-                                                            </a>
-                                                            <script>
-                                                                function confirmDeletion(educid) {
-                                                                    if (confirm('Are you sure you want to delete this record?')) {
-                                                                        window.location.href = 'remove_educass.php?deleteid=' + educid + '&confirm=true';
-                                                                    }
-                                                                }
-                                                            </script>
+<script>
+    function confirmDeletion(concernid) {
+        Swal.fire({
+            title: "Are you sure?",
+            text: "You want to delete this record?",
+            icon: "warning",
+            showCancelButton: true,
+            confirmButtonColor: "#DD6B55",
+            confirmButtonText: "Yes, delete it!",
+            cancelButtonText: "Cancel",
+            closeOnConfirm: true
+        }).then((result) => {
+            if (result.isConfirmed) {
+                window.location.href = 'delete_complaint.php?concernid=' + concernid + '&confirm=true';
+            }
+        });
+    }
+</script>
+                                                           
+
+                                                        
                                                         </td>
                                                     </tr>
                                                 <?php } ?>
@@ -380,124 +388,9 @@ if (!isset($_SESSION['id']) || strlen($_SESSION['id']) == 0 || $_SESSION['role']
                 </div>
             </div>
 
-            <!-- Modal ADD NEW POST FOR EDUCATIONAL ASSISTANCE -->
-            <div class="modal fade" id="add" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
-                <div class="modal-dialog" role="document">
-                    <div class="modal-content">
-                        <div class="modal-header">
-                            <h5 class="modal-title" id="exampleModalLabel">Post Educational Assistance</h5>
-                            <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                                <span aria-hidden="true">&times;</span>
-                            </button>
-                        </div>
-                        <div class="modal-body">
-                            <form method="POST" action="model/addeduc.php">
-                                <div class="form-group">
-                                    <label>Title</label>
-                                    <input type="text" class="form-control" placeholder="Enter Title" name="title" required>
-                                </div>
-                                <div class="form-group">
-                                    <label>Semester</label>
-                                    <input type="text" class="form-control" placeholder="Enter Semester" name="sem" required>
-                                </div>
-                                <div class="form-group">
-                                    <label>School Year</label>
-                                    <input type="text" class="form-control" placeholder="Enter Title" name="sy" required>
-                                </div>
-                                <div class="form-group">
-                                    <label>Start of Application</label>
-                                    <input type="date" class="form-control" name="start" required>
-                                </div>
-                                <div class="form-group">
-                                    <label>End of Application</label>
-                                    <input type="date" class="form-control" name="end" required>
-                                </div>
-                                <div class="form-group">
-                                    <label>Minimum Grade needed</label>
-                                    <input type="text" class="form-control" name="min_grade" required>
-                                </div>
-                                <div class="form-group">
-                                    <label>Date Created</label>
-                                    <input type="date" class="form-control" name="date" required>
-                                </div>
-                                <div class="form-group">
-                                    <label>Status</label>
-                                    <select class="form-control" id="" required name="status">
-                                        <option value="Open">Open</option>
-                                        <option value="Closed">Closed</option>
-                                    </select>
-                                </div>
+        
 
-                        </div>
-                        <div class="modal-footer">
-                            <!--  <input type="hidden" id="pos_id" name="id"> -->
-                            <button type="button" class="btn btn-danger" data-dismiss="modal">Close</button>
-                            <button type="submit" class="btn btn-primary" name="create">Create</button>
-                        </div>
-                        </form>
-                    </div>
-                </div>
-            </div>
-
-            <!-- Modal EDIT EDUCATIONAL ASSISTANCE -->
-            <!-- Modal EDIT EDUCATIONAL ASSISTANCE 
-<div class="modal fade" id="edit" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
-    <div class="modal-dialog" role="document">
-        <div class="modal-content">
-            <div class="modal-header">
-                <h5 class="modal-title" id="exampleModalLabel">Edit Assistance</h5>
-                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                    <span aria-hidden="true">&times;</span>
-                </button>
-            </div>
-            <div class="modal-body">
-                <form method="POST" action="model/edit_educass.php">
-                    <div class="form-group">
-                        <label>Title</label>
-                        <input type="text" class="form-control" id="title" placeholder="Enter title" name="title" value="<?php echo $title ?>" required>
-                    </div>
-                    <div class="form-group">
-                        <label>Semester</label>
-                        <input type="text" class="form-control" id="sem" placeholder="Enter semester" name="sem" value="<?php echo $sem ?>"  required>
-                    </div>
-                    <div class="form-group">
-                        <label>School Year</label>
-                        <input type="text" class="form-control" id="sy" placeholder="Enter school year" name="sy" value="<?php echo $sy ?>"  required>
-                    </div>
-                    <div class="form-group">
-                        <label>Minimum Grade Required</label>
-                        <input type="text" class="form-control" id="min_grade" placeholder="Enter minimum grade" name="min_grade" value="<?php echo $min_grade ?>"  required>
-                    </div>
-                    <div class="form-group">
-                        <label>Start</label>
-                        <input type="date" class="form-control" id="start" name="start" value="<?php echo $start ?>"  required>
-                    </div>
-                    <div class="form-group">
-                        <label>Due Date</label>
-                        <input type="date" class="form-control" id="end" name="end" value="<?php echo $end ?>"  required>
-                    </div>
-                    <div class="form-group">
-                        <label>Status</label>
-                        <select class="form-control" id="status" required name="status" value="<?php echo $status ?>" >
-                            <option value="Active">Open</option>
-                            <option value="Inactive">Closed</option>
-                        </select>
-                    </div>
-                    <div class="form-group">
-                        <label>Date Posted</label>
-                        <input type="date" class="form-control" id="date" name="date" value="<?php echo $date ?>"  required>
-                    </div>
-                    <div class="modal-footer">
-                        <input type="hidden" id="educid" name="educid">
-                        <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
-                        <button type="submit" class="btn btn-primary">Update</button>
-                    </div>
-                </form>
-            </div>
-        </div>
-    </div>
-</div> -->
-
+          
 
             <!-- Main Footer -->
             <?php include 'templates/main-footer.php' ?>
@@ -507,6 +400,18 @@ if (!isset($_SESSION['id']) || strlen($_SESSION['id']) == 0 || $_SESSION['role']
 
         </div>
         <?php include 'templates/footer.php' ?>
+        <?php if (isset($_SESSION['message'])) : ?> 
+                                <script>
+                                    Swal.fire({
+                                        title: '<?php echo $_SESSION['title']; ?>',
+                                        text: '<?php echo $_SESSION['message']; ?>',
+                                        icon: '<?php echo $_SESSION['success']; ?>',
+                                        confirmButtonText: 'OK'
+                                    });
+                                </script>
+                                <?php unset($_SESSION['message']);
+                                unset($_SESSION['success']);unset($_SESSION['title']); ?>
+                            <?php endif; ?>
         <script>
             //this can be remove because search is still working without it
             $(document).ready(function() {

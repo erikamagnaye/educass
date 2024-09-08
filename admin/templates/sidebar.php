@@ -91,7 +91,7 @@ $current_page = PageName();
                 <li class="nav-item <?= $current_page=='complaint.php' || $current_page=='complaint_pending.php' || $current_page=='complaint_inprocess.php' || $current_page=='complaint_closed.php' ? 'active' : null ?>">
                     <a href="complaint.php">
                         <i class="icon-docs"></i>
-                        <p>Concerns</p>
+                        <p>Queries</p>
                     </a>
                 </li>
                 <!--<li class="nav-item <?= $current_page=='messages.php'  ? 'active' : null ?>">

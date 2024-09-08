@@ -145,7 +145,7 @@ if (strlen($_SESSION['id'] == 0)) {
                                             <div class="row">
                                             <div class="col-md-4 mb-3">
                                                     <label for="exampleFormControlInput1" class="form-label" style="font-weight:bold;">Street</label>
-                                                    <input type="text" class="form-control" placeholder="Enter Contact Number" value="<?php echo $street_name; ?>" name="street_name" required>
+                                                    <input type="text" class="form-control" placeholder="Enter  Street" value="<?php echo $street_name; ?>" name="street_name" required>
                                                 </div>
                                                 <div class="col-md-4 mb-3">
                                                     <label for="exampleFormControlInput1" class="form-label" style="font-weight:bold;">Barangay</label>
@@ -184,7 +184,7 @@ $barangays = array(
                                                 
                                                 <div class="col-md-4 mb-3">
                                                     <label for="exampleFormControlInput1" class="form-label" style="font-weight:bold;">Municipality</label>
-                                                    <input type="text" class="form-control" placeholder="Enter Birthday" value="<?php echo $municipality; ?>" name="municipality" required>
+                                                    <input type="text" class="form-control" placeholder="Enter Municipality" value="<?php echo $municipality; ?>" name="municipality" required>
                                                 </div>
 </div>
                                                 

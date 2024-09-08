@@ -6,7 +6,7 @@ session_start();
 error_reporting(E_ALL);
 ini_set('display_errors', 1);
 if (!isset($_SESSION['id']) || strlen($_SESSION['id']) == 0 || $_SESSION['role'] !== 'admin') {
-    header('location:login.php');
+	header('location:login.php');
     exit();
 } else {
 
@@ -32,7 +32,11 @@ if (!isset($_SESSION['id']) || strlen($_SESSION['id']) == 0 || $_SESSION['role']
         <title>Educational Assistance</title>
         <link rel="stylesheet" type="text/css" href="https://cdn.datatables.net/2.1.2/css/dataTables.bootstrap5.min.css" />
         <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.1.1/css/all.min.css" integrity="sha512-KfkfwYDsLkIlwQp6LFnl8zNdLGxu9YAA1QvwINks4PhcElQSvqcyVLLD9aMhXd13uQjoXtEKNosOWaZqXgel0g==" crossorigin="anonymous" referrerpolicy="no-referrer" />
-        <style>
+        
+        <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11.12.3/dist/sweetalert2.all.min.js"></script>
+        <link href="https://cdn.jsdelivr.net/npm/sweetalert2@11.12.3/dist/sweetalert2.min.css" rel="stylesheet">
+      
+       <style>
             .btn-link+.btn-link {
                 margin-left: 5px;
             }
@@ -226,7 +230,7 @@ if (!isset($_SESSION['id']) || strlen($_SESSION['id']) == 0 || $_SESSION['role']
                         <div class="page-inner">
                             <div class="d-flex align-items-left align-items-md-center flex-column flex-md-row">
                                 <div>
-                                    <h2 class="text-black fw-bold">Admin Portal</h2>
+                                    <h2 class="text-black fw-bold">Employee Portal</h2>
                                 </div>
                             </div>
                         </div>
@@ -242,13 +246,6 @@ if (!isset($_SESSION['id']) || strlen($_SESSION['id']) == 0 || $_SESSION['role']
                                         <div class="card-head-row">
                                             <div class="card-title">Concerns/Queries</div>
 
-                                            <div class="card-tools">
-
-                                                <a href="#add" data-toggle="modal" class="btn btn-info btn-border btn-round btn-sm" title="Post Assistance">
-                                                    <i class="fa fa-plus"></i>
-                                                    File Concerns
-                                                </a>
-                                            </div>
 
                                         </div>
                                     </div>
@@ -276,10 +273,10 @@ if (!isset($_SESSION['id']) || strlen($_SESSION['id']) == 0 || $_SESSION['role']
                                                     </a>
 
                                                 </div>
-                                                <div class="card">
-                                                    <div class="card-icon" style="color:red;"><i class="fa-solid fa-gavel"></i></div>
+                                                <div class="card bg-danger">
+                                                    <div class="card-icon" style="color:white;"><i class="fa-solid fa-gavel"></i></div>
                                                     <a href="complaint_closed.php" class="btn">
-                                                        <h5><?= $close ?><br> Closed</h5>
+                                                        <h5 style="color:white;"><?= $close ?><br> Closed</h5>
                                                     </a>
 
                                                 </div>
@@ -341,28 +338,32 @@ if (!isset($_SESSION['id']) || strlen($_SESSION['id']) == 0 || $_SESSION['role']
       <button class="btn <?php echo $btn_color; ?>"><?php echo htmlspecialchars($status); ?></button>
     </td>
                                                         <td>
-                                                            <a type="button" href="edit_complaint.php?update&concernid=<?php echo $concernid; ?>" class="btn btn-link btn-success mr-1"
-                                                                title="view report" style="display: inline-block;">
-                                                                <i class="fa fa-file"></i>
+                                                        <a href="view_complaint.php?update&concernid=<?php echo $concernid; ?>" class="btn btn-link btn-success mr-1" title="View">
+                                                                <i class="fa fa-eye"></i>
+                                                            </a>
 
-                                                            </a>
-                                                            <a type="button" href="edit_complaint.php?update&concernid=<?php echo $concernid; ?>" class="btn btn-link btn-success mr-1"
-                                                                title="Edit Data" style="display: inline-block;">
-                                                                <i class="fa fa-edit"></i>
+                                                            <a href="javascript:void(0);" class="btn btn-outline-danger btn-sm border-0" title="Delete" onclick="confirmDeletion(<?php echo $concernid; ?>)">
+    <i class="fa fa-trash"></i>
+</a>
 
-                                                            </a>
-                                                            <a type="button" href="javascript:void(0);"
-                                                                onclick="confirmDeletion(<?php echo $educid; ?>)"
-                                                                class="btn btn-link btn-danger mr-1" title="Remove" style="display: inline-block;">
-                                                                <i class="fa fa-times"></i>
-                                                            </a>
-                                                            <script>
-                                                                function confirmDeletion(educid) {
-                                                                    if (confirm('Are you sure you want to delete this record?')) {
-                                                                        window.location.href = 'remove_educass.php?deleteid=' + educid + '&confirm=true';
-                                                                    }
-                                                                }
-                                                            </script>
+<script>
+    function confirmDeletion(concernid) {
+        Swal.fire({
+            title: "Are you sure?",
+            text: "You want to delete this record?",
+            icon: "warning",
+            showCancelButton: true,
+            confirmButtonColor: "#DD6B55",
+            confirmButtonText: "Yes, delete it!",
+            cancelButtonText: "Cancel",
+            closeOnConfirm: true
+        }).then((result) => {
+            if (result.isConfirmed) {
+                window.location.href = 'delete_complaint.php?concernid=' + concernid + '&confirm=true';
+            }
+        });
+    }
+</script>
                                                         </td>
                                                     </tr>
                                                 <?php } ?>

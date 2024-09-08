@@ -60,7 +60,7 @@ if (!isset($_SESSION['id']) || strlen($_SESSION['id']) == 0 || $_SESSION['role']
                                 <div class="card">
                                     <div class="card-header">
                                         <div class="card-head-row">
-                                            <div class="card-title">Verified Accounts</div>
+                                            <div class="card-title" style="color:red;">Not Verified Accounts</div>
 
                                             <div class="card-tools">
                                                 <a href="viewstudent.php" class="btn btn-success btn-border btn-round btn-sm" title="view and print">
@@ -93,7 +93,7 @@ if (!isset($_SESSION['id']) || strlen($_SESSION['id']) == 0 || $_SESSION['role']
                                                 <tbody>
                                                     <?php
                                                     $query = "SELECT *, CONCAT(lastname, ', ', firstname, ' ' , midname, '.' ) AS fullname 
-                                                    FROM student where accstatus ='Verified' ORDER BY brgy asc, lastname ASC"; // SQL query to fetch all table data
+                                                    FROM student where accstatus ='' ORDER BY brgy asc, lastname ASC"; // SQL query to fetch all table data
                                                     $view_data = mysqli_query($conn, $query); // sending the query to the database
                                                     $count=1;
                                                     // displaying all the data retrieved from the database using while loop

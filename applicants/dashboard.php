@@ -236,17 +236,17 @@ h5 {
         </div>
         <div class="card bg-warning">
             <div class="card-icon"style="color:white"><i class="fa-solid fa-spinner fa-spin"></i></div>
-			<a href="applications.php" class="btn"><h5 style="color:white"><?= $pending ?> <br>Pending</h5></a>
+			<a href="all_pending_applications.php" class="btn"><h5 style="color:white"><?= $pending ?> <br>Pending</h5></a>
          
         </div>
         <div class="card bg-success">
             <div class="card-icon" style="color:white"><i class="fa fa-thumbs-up"></i></div>
-			<a href="applications.php" class="btn"><h5 style="color:white"><?= $approved ?> <br>Approved</h5></a>
+			<a href="all_approved_applications.php" class="btn"><h5 style="color:white"><?= $approved ?> <br>Approved</h5></a>
      
         </div>
         <div class="card "style="background-color:#B80000">
             <div class="card-icon" style="color:white"><i class="fa fa-thumbs-down"></i></div>
-			<a href="applications.php" class="btn"> <h5 style="color:white"><?=$rejected?><br> Rejected</h5></a>
+			<a href="all_rejected_applications.php" class="btn"> <h5 style="color:white"><?=$rejected?><br> Rejected</h5></a>
            
         </div> <div class="card bg-info">
             <div class="card-icon" style="color:white"><i class="fa-solid fa-user-graduate"></i></div>
@@ -254,7 +254,7 @@ h5 {
         </div>
 		<div class="card text-center " style="background-color:#E36414">
             <div class="card-icon" style="color:white"><i class="fa-solid fa-clipboard-question"></i></div>
-			<a href="applications.php" class="btn"> <h5 style="color:white"><?=$totalconcerns?> <br>Complaints</h5></a>         
+			<a href="complaint.php" class="btn"> <h5 style="color:white"><?=$totalconcerns?> <br>Complaints</h5></a>         
         </div>
     </div>
 

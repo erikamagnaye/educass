@@ -54,7 +54,11 @@ if (!isset($_SESSION['staffid']) || strlen($_SESSION['staffid']) == 0 || in_arra
         <title>Educational Assistance</title>
         <link rel="stylesheet" type="text/css" href="https://cdn.datatables.net/2.1.2/css/dataTables.bootstrap5.min.css" />
         <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.1.1/css/all.min.css" integrity="sha512-KfkfwYDsLkIlwQp6LFnl8zNdLGxu9YAA1QvwINks4PhcElQSvqcyVLLD9aMhXd13uQjoXtEKNosOWaZqXgel0g==" crossorigin="anonymous" referrerpolicy="no-referrer" />
-        <style>
+        
+        <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11.12.3/dist/sweetalert2.all.min.js"></script>
+        <link href="https://cdn.jsdelivr.net/npm/sweetalert2@11.12.3/dist/sweetalert2.min.css" rel="stylesheet">
+      
+       <style>
             .btn-link+.btn-link {
                 margin-left: 5px;
             }
@@ -285,7 +289,7 @@ if (!isset($_SESSION['staffid']) || strlen($_SESSION['staffid']) == 0 || in_arra
                                                     </a>
 
                                                 </div>
-                                                <div class="card" style="background-color:#06D001;">
+                                                <div class="card bg-warning" >
                                                     <div class="card-icon" style="color:white;"><i class="fa fa-spinner fa-spin"></i></div>
                                                     <a href="complaint_inprocess.php" class="btn">
                                                         <h5 style="color:white;"><?= $inprocess ?> <br>In Process</h5>
