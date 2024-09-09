@@ -443,6 +443,113 @@ h5 {
     height: 350px;
 
 }
+/*second card */
+.stats-dashboard {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 15px;
+    align-items: center;
+}
+
+.stats-card {
+    background: #ffffff;
+    border-radius: 10px;
+    box-shadow: 0 4px 8px rgba(0,0,0,0.1);
+    padding: 5px;
+    text-align: center;
+    display: flex;
+    flex-direction: column;
+}
+
+.stats-card-icon {
+    font-size: 20px;
+    color: #4CAF50;
+}
+
+h5 {
+    margin: 5px 0 5px;
+    word-wrap: break-word;
+    overflow-wrap: break-word;
+    word-break: break-all;
+}
+.stats-card-title {
+    font-size: 18px; 
+}
+
+/* Small screens (max-width: 768px) */
+@media (max-width: 768px) {
+    .stats-dashboard {
+        grid-template-columns: repeat(2, 1fr);
+    }
+    .stats-card {
+        padding: 5px;
+        display: flex;
+        flex-direction: column;
+        text-align: center;
+    }
+    .stats-card-icon {
+        font-size: 14px;
+    }
+    h5 {
+        font-size: 14px;
+        overflow-wrap: break-word; /* Add this line to break long text */
+        word-wrap: break-word;
+        word-break: break-all;
+    }
+    .stats-card-title {
+        font-size: 12px;
+    }
+}
+
+/* Extra small screens (max-width: 480px) */
+@media (max-width: 480px) {
+    .stats-dashboard {
+        grid-template-columns: repeat(2, 1fr);
+    }
+    .stats-card {
+        padding: 2px;
+        display: flex;
+        flex-direction: column;
+        text-align: center;
+    }
+    .stats-card-icon {
+        font-size: 12px;
+    }
+    h5 {
+        font-size: 12px;
+        overflow-wrap: break-word; /* Add this line to break long text */
+        word-wrap: break-word;
+        word-break: break-all;
+    }
+    .stats-card-title {
+        font-size: 10px;
+    }
+}
+
+/* Extra extra small screens (max-width: 320px) */
+@media (max-width: 320px) {
+    .stats-dashboard {
+        grid-template-columns: repeat(2, 1fr);
+    }
+    .stats-card {
+        padding: 1px;
+        display: flex;
+        flex-direction: column;
+        text-align: center;
+    }
+    .stats-card-icon {
+        font-size: 10px;
+    }
+    h5 {
+        font-size: 10px;
+        overflow-wrap: break-word; /* Add this line to break long text */
+        word-wrap: break-word;
+        word-break: break-all;
+    }
+    .stats-card-title {
+        font-size: 10px;
+    }
+}
 
 
 	</style>
@@ -474,34 +581,7 @@ h5 {
 				</div>
 
 				<div class="page-inner mt--2" >
-             <!--   <div class="container-fluid mt-5">
-                <div class="dashboard" >
-        <div class="card">
-            <div class="card-icon"><i class="fas fa-user"></i></div>
-          <a href="applications.php" class="btn">  <h5><?= $vacc ?> <br>Verified Account</h5></a>
-          
-        </div>
-        <div class="card">
-            <div class="card-icon"><i class="fas fa-chart-line"></i></div>
-			<a href="applications.php" class="btn"><h5><?= $notvacc ?> <br>Not Verified Account</h5></a>
-         
-        </div>
-        <div class="card">
-            <div class="card-icon"><i class="fas fa-cogs"></i></div>
-			<a href="applications.php" class="btn"><h5><?= $complaints ?> <br>Complaints</h5></a>
-     
-        </div>
-        <div class="card">
-            <div class="card-icon"><i class="fas fa-comments"></i></div>
-			<a href="staff.php" class="btn"> <h5><?=$staffcount?><br> staff</h5></a>
-           
-        </div> <div class="card">
-            <div class="card-icon"><i class="fas fa-comments"></i></div>
-			<a href="educaids.php" class="btn"> <h5><?=$totaleduc?><br> Educational Assistance</h5></a>      
-        </div>
-	
-    </div>
-    </div>-->
+  
               <div class="row">
 						<div class="col-md-12">
                         <div class="card" style="padding:0px; margin:0px;background-color:#F5F7F8;">
@@ -570,6 +650,8 @@ h5 {
 								</div>
                                 </div>
 						</div>
+
+
 <br>
                         <div class="row">
 						<div class="col-md-12">
@@ -581,89 +663,25 @@ h5 {
 								</div>
 								<div class="card-body">
 								<div class="container-fluid mt-5">
-                                <div class="row">
-					<div class="col-md-3">
-                <div class="card card-stats card-primary card-round">
-                    <div class="card-body">
-                        <div class="row">
-                            <div class="col-12 ">
-                                <div class="icon-big text-center">
-                                    <i class="fa-solid fa-user-graduate"></i>
-                                </div>
-                            </div>
-                            <div class="col-12 ">
-                                <div class="numbers mt-2">
-                                    <h6 class="fw-bold text-uppercase text-center"><?= $totalapp ?> Applicants</h6>
-									<a href="resident_info.php?state=all" class="card-link text-light" style="text-align: left;">view</a>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                   
-                </div>
-            </div>
-			<div class="col-md-3">
-                <div class="card card-stats card-warning card-round">
-                    <div class="card-body">
-                        <div class="row">
-                            <div class="col-12 ">
-                                <div class="icon-big text-center">
-                                <i class="fa-solid fa-spinner fa-spin"></i>
-                                </div>
-                            </div>
-                            <div class="col-12 ">
-                                <div class="numbers mt-2">
-                                    <h6 class="fw-bold text-uppercase text-center"><?=$pendingapp ?> Pending</h6>
-									<a href="resident_info.php?state=all" class="card-link text-light" style="text-align: left;">view</a>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                   
-                </div>
-            </div>
-						
-			<div class="col-md-3">
-                <div class="card card-stats card-secondary card-round">
-                    <div class="card-body">
-                        <div class="row">
-                            <div class="col-12 ">
-                                <div class="icon-big text-center">
-                                <i class="fa-regular fa-thumbs-up"></i>
-                                </div>
-                            </div>
-                            <div class="col-12 ">
-                                <div class="numbers mt-2">
-                                    <h6 class="fw-bold text-uppercase text-center"><?= $approved ?> Approved</h6>
-									<a href="resident_info.php?state=all" class="card-link text-light" style="text-align: left;">view</a>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                   
-                </div>
-            </div>
-			<div class="col-md-3">
-                <div class="card card-stats card-danger card-round">
-                    <div class="card-body">
-                        <div class="row">
-                            <div class="col-12 ">
-                                <div class="icon-big text-center">
-                                <i class="fa-regular fa-thumbs-down"></i>
-                                </div>
-                            </div>
-                            <div class="col-12 ">
-                                <div class="numbers mt-2">
-                                    <h6 class="fw-bold text-uppercase text-center"><?= $rejected ?> Rejected</h6>
-									<a href="resident_info.php?state=all" class="card-link text-light" style="text-align: left;">view</a>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                   
-                </div>
-            </div>
-					</div>
+                                <div class="stats-dashboard">
+    <div class="stats-card bg-primary mb-2">
+        <div class="stats-card-icon" style="color: white;"><i class="fa-solid fa-user-graduate"></i></div>
+        <a href="all_current_applicants.php" class="btn">  <h5 style="color: white;"><?= $totalapp ?> <br>Applicants</h5></a>
+    </div>
+    <div class="stats-card bg-warning mb-2">
+        <div class="stats-card-icon" style="color: white;"><i class="fa-solid fa-spinner fa-spin"></i></div>
+        <a href="pending_current_applicants.php" class="btn"><h5 style="color: white;"><?= $pendingapp ?> <br> Pending</h5></a>
+    </div>
+    <div class="stats-card bg-success mb-2">
+        <div class="stats-card-icon" style="color: white;"><i class="fa-regular fa-thumbs-up"></i></div>
+        <a href="approved_current_applicants.php" class="btn"><h5 style="color: white;"><?= $approved ?> <br> Approved</h5></a>
+    </div>
+    <div class="stats-card bg-danger mb-2">
+        <div class="stats-card-icon" style="color: white;"><i class="fa-regular fa-thumbs-down"></i></div>
+        <a href="rejected_current_applicants.php" class="btn"> <h5 style="color: white;"><?= $rejected ?> <br> Rejected</h5></a>
+    </div>
+</div>
+                  
 
 </div>
 <br>

@@ -21,6 +21,16 @@ $id = $_SESSION['id'] ;
 				$role = $row['position'];
 			}
 			}
+            $stmt = $conn->prepare("SELECT 
+            SUM(IF(`status` = 'Pending', 1, 0)) AS pending_count,
+            SUM(IF(`status` = 'In Process', 1, 0)) AS in_process_count,
+            SUM(IF(`status` = 'Close', 1, 0)) AS closed_count
+          FROM `concerns`");
+          $stmt->execute();
+          $result = $stmt->get_result();
+          $allcomplaints = $result->fetch_assoc();
+          
+          $pendingcomp = $allcomplaints['pending_count']; 
 function PageName() {
   return substr( $_SERVER["SCRIPT_NAME"], strrpos($_SERVER["SCRIPT_NAME"],"/") +1);
 }
@@ -91,7 +101,9 @@ $current_page = PageName();
                 <li class="nav-item <?= $current_page=='complaint.php' || $current_page=='complaint_pending.php' || $current_page=='complaint_inprocess.php' || $current_page=='complaint_closed.php' ? 'active' : null ?>">
                     <a href="complaint.php">
                         <i class="icon-docs"></i>
-                        <p>Queries</p>
+                        <p>Queries <?php if ($pendingcomp > 0): ?>
+                <span class="badge badge-danger"><?=$pendingcomp?></span>
+            <?php endif; ?></p>
                     </a>
                 </li>
                 <!--<li class="nav-item <?= $current_page=='messages.php'  ? 'active' : null ?>">

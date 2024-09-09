@@ -127,8 +127,8 @@ else {
   }
 }
 /*button color depending on status of complaint */
-.btn-violet {
-  background-color: #7A288A; /* violet */
+.btn-yellow {
+  background-color: orange; /* violet */
   color: #fff;
 }
 
@@ -207,7 +207,7 @@ else {
              
     // Determine the button color based on the status
     if ($appstatus == 'Pending') {
-      $btn_color = 'btn-violet';
+      $btn_color = 'btn-yellow';
   } elseif ($appstatus == 'Approved') {
       $btn_color = 'btn-warning';
   } elseif ($appstatus == 'Rejected') {
