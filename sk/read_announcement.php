@@ -71,7 +71,7 @@ $conn->close();
 <div class="row d-flex justify-content-center align-items-center" style="height: 100vh;">
         <div class="col-md-6">
             <div class="card mb-3 mt-3" style="width: 80%; margin: 0 auto;">
-                <img src="assets/img/saq.jpg" class="card-img-top" alt="...">
+                <img src="assets/img/announcement.jpg" class="card-img-top" alt="...">
 				<div class="card-header " style="border-radius: 8px;">
                                 <div class="card-head-row">
                                     <div class="card-title text-center"> Announcement</div>

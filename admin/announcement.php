@@ -58,8 +58,10 @@ if (!isset($_SESSION['id']) || strlen($_SESSION['id']) == 0 || $_SESSION['role']
     <div class="row mt--2">
         <div class="col-md-12">
             <div class="card">
+            <img src="assets/img/announcement.jpg" class="card-img-top" alt="...">
                 <div class="card-header">
                     <div class="card-head-row">
+                   
                         <div class="card-title">Announcement</div>
                         <div class="card-tools">
                             <a href="#add" data-toggle="modal" class="btn btn-info btn-border btn-round btn-sm" title="Post Assistance">

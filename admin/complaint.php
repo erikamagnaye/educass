@@ -231,7 +231,7 @@ if (!isset($_SESSION['id']) || strlen($_SESSION['id']) == 0 || $_SESSION['role']
                         <div class="page-inner">
                             <div class="d-flex align-items-left align-items-md-center flex-column flex-md-row">
                                 <div>
-                                    <h2 class="text-black fw-bold">Employee Portal</h2>
+                                    <h2 class="text-black fw-bold">Admin Dashboard</h2>
                                 </div>
                             </div>
                         </div>
@@ -243,6 +243,7 @@ if (!isset($_SESSION['id']) || strlen($_SESSION['id']) == 0 || $_SESSION['role']
                             <div class="col-md-12">
 
                                 <div class="card">
+                                <img src="assets/img/queries.jpg" class="card-img-top" alt="...">
                                     <div class="card-header">
                                         <div class="card-head-row">
                                             <div class="card-title">Concerns/Queries</div>

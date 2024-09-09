@@ -81,6 +81,7 @@ if (!isset($_SESSION['skid']) || strlen($_SESSION['skid']) == 0 || !in_array($_S
     <div class="row mt--2">
         <div class="col-md-12">
             <div class="card">
+            <img src="assets/img/announcement.jpg" class="card-img-top" alt="...">
                 <div class="card-header">
                     <div class="card-head-row">
                         <div class="card-title">Announcement</div>

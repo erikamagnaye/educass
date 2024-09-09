@@ -78,7 +78,10 @@ else{
 <head>
 	<?php include 'templates/header.php' ?>
 	<title>Educational Assistance</title>
-   
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.1.1/css/all.min.css" integrity="sha512-KfkfwYDsLkIlwQp6LFnl8zNdLGxu9YAA1QvwINks4PhcElQSvqcyVLLD9aMhXd13uQjoXtEKNosOWaZqXgel0g==" crossorigin="anonymous" referrerpolicy="no-referrer" />
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11.12.3/dist/sweetalert2.all.min.js"></script>
+        <link href="https://cdn.jsdelivr.net/npm/sweetalert2@11.12.3/dist/sweetalert2.min.css" rel="stylesheet">
+       
     <style>
     body {
         font-family: Arial, sans-serif;
@@ -123,10 +126,14 @@ else{
 									<div class="card-head-row">
 										<div class="card-title">Educational Assistance  Applicant</div>
 										<div class="card-tools">
-											<button class="btn btn-info btn-border btn-round btn-sm" onclick="printDiv('printThis')">
+											<button class="btn btn-danger btn-border btn-round btn-sm" onclick="printDiv('printThis')">
 												<i class="fa fa-print"></i>
 												Print 
 											</button>
+                                            <a href="#add" data-toggle="modal" class="btn btn-info btn-border btn-round btn-sm" title="Post Assistance">
+                                                    <i class="fa fa-refresh"></i>
+                                                    Update Status
+                                                </a>
 										</div>
 									</div>
 								</div>
@@ -218,7 +225,55 @@ else{
 
 		
 		</div>
+  <!-- MODAL TO UPDATE Application  -->
+  <div class="modal fade" id="add" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+                    <div class="modal-dialog modal-md" role="document">
+                        <div class="modal-content">
+                            <div class="modal-header " >
+                                <h5 class="modal-title" id="exampleModalLabel">Update Account Status</h5>
+                                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                    <span aria-hidden="true">&times;</span>
+                                </button>
+                            </div>
+                            <div class="modal-body">
+                                <form method="POST" action="model/updateaccount.php">
+                                  
+                                   
+                                  
+                                    <div class="form-group col-md-12">
+                                        <input type="hidden" value="<?php echo $studid ?>" name="studid">
+                                      
+                                            <label>Account Status</label>
+                                            <select class="form-control" id="" required name="accstatus">
+                                               
+                                                <option value="Verified">Verified</option>
+                                                
+                                            </select>
+                                        </div>
+                              
+                            </div>
+                            <div class="modal-footer">
+                                <!--  <input type="hidden" id="pos_id" name="id"> -->
+                                <button type="button" class="btn btn-danger btn-sm" data-dismiss="modal">Close</button>
+                                <button type="submit" class="btn btn-primary btn-sm" name="update">Update</button>
+                            </div>
 
+                            <?php if (isset($_SESSION['message'])) : ?>
+                                <script>
+                                    Swal.fire({
+                                        title: '<?php echo $_SESSION['title']; ?>',
+                                        text: '<?php echo $_SESSION['message']; ?>',
+                                        icon: '<?php echo $_SESSION['success']; ?>',
+                                        confirmButtonText: 'OK'
+                                    });
+                                </script>
+                                <?php unset($_SESSION['message']);
+                                unset($_SESSION['success']);unset($_SESSION['title']); ?>
+                            <?php endif; ?>
+                            </form>
+                        </div>
+                    </div>
+                </div>
 
 			<!-- Main Footer -->
 			<?php include 'templates/main-footer.php' ?>

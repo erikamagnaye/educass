@@ -311,7 +311,7 @@ WHERE `application`.`appid` = $appid AND `application`.`educid` = $educid AND `a
                                                     <tr>
                                                         <th style="height: 30px;">School ID</th>
                                                         <td style="height: 30px;"><?php if (!empty($schoolid)): ?>
-                                                                <a href="<?= 'assets/uploads/requirements/schoolid/' . $schoolid ?>" target="_blank"><?php echo $schoolid ?></a>
+                                                                <a href="<?= '../applicants/assets/uploads/requirements/schoolid/' . $schoolid ?>" target="_blank"><?php echo $schoolid ?></a>
                                                             <?php else: ?>
                                                                 No letter submitted
                                                             <?php endif ?></td>
@@ -321,7 +321,7 @@ WHERE `application`.`appid` = $appid AND `application`.`educid` = $educid AND `a
                                                     <tr>
                                                         <th style="height: 30px;">Enrollment Form</th>
                                                         <td style="height: 30px;"><?php if (!empty($cor)): ?>
-                                                                <a href="<?= 'assets/uploads/requirements/coe/' . $cor ?>" target="_blank"><?php echo $cor ?></a>
+                                                                <a href="<?= '../applicants/assets/uploads/requirements/coe/' . $cor ?>" target="_blank"><?php echo $cor ?></a>
                                                             <?php else: ?>
                                                                 No Enrollment form submitted
                                                             <?php endif ?></td>
@@ -331,7 +331,7 @@ WHERE `application`.`appid` = $appid AND `application`.`educid` = $educid AND `a
                                                     <tr>
                                                         <th style="height: 30px;">Grades</th>
                                                         <td style="height: 30px;"><?php if (!empty($grades)): ?>
-                                                                <a href="<?= 'assets/uploads/requirements/grades/' . $grades ?>" target="_blank"><?php echo $grades ?></a>
+                                                                <a href="<?= '../applicants/assets/uploads/requirements/grades/' . $grades ?>" target="_blank"><?php echo $grades ?></a>
                                                             <?php else: ?>
                                                                 No grades submitted
                                                             <?php endif ?></td>
@@ -341,7 +341,7 @@ WHERE `application`.`appid` = $appid AND `application`.`educid` = $educid AND `a
                                                     <tr>
                                                         <th style="height: 30px;">Barangay Indigent</th>
                                                         <td style="height: 30px;"><?php if (!empty($indigency)): ?>
-                                                                <a href="<?= 'assets/uploads/requirements/indigent/' . $indigency ?>" target="_blank"><?php echo $indigency ?></a>
+                                                                <a href="<?= '../applicants/assets/uploads/requirements/indigent/' . $indigency ?>" target="_blank"><?php echo $indigency ?></a>
                                                             <?php else: ?>
                                                                 No barangay indigent submitted
                                                             <?php endif ?></td>
@@ -351,7 +351,7 @@ WHERE `application`.`appid` = $appid AND `application`.`educid` = $educid AND `a
                                                     <tr>
                                                         <th style="height: 30px;">Letter</th>
                                                         <td style="height: 30px;"><?php if (!empty($letter)): ?>
-                                                                <a href="<?= 'assets/uploads/requirements/letter/' . $letter ?>" target="_blank"><?php echo $letter ?></a>
+                                                                <a href="<?= '../applicants/assets/uploads/requirements/letter/' . $letter ?>" target="_blank"><?php echo $letter ?></a>
                                                             <?php else: ?>
                                                                 No letter submitted
                                                             <?php endif ?></td>
@@ -403,6 +403,7 @@ WHERE `application`.`appid` = $appid AND `application`.`educid` = $educid AND `a
 
 
                     </div>
+          <!-- MODAL TO UPDATE Application  -->
                     <div class="modal fade" id="add" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
                     <div class="modal-dialog modal-sm" role="document">
                         <div class="modal-content">

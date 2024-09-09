@@ -91,7 +91,7 @@ if (!isset($_SESSION['skid']) || strlen($_SESSION['skid']) == 0 || !in_array($_S
         <div class="row d-flex justify-content-center align-items-center" style="height: 100vh;">
             <div class="col-md-12">
                 <div class="card mb-3 mt-3" style="width: 80%; margin: 0 auto;">
-                    <img src="assets/img/saq.jpg" class="card-img-top" alt="...">
+                    <img src="assets/img/queries.jpg" class="card-img-top" alt="...">
                     <div class="card-header " style="border-radius: 8px;">
                         <div class="card-head-row">
                             <div class="card-title text-center">Manage Queries</div>
