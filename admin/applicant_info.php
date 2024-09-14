@@ -51,6 +51,7 @@ WHERE `application`.`appid` = $appid AND `application`.`educid` = $educid AND `a
             $appstatus = $row['appstatus'];
             $appdate = $row['appdate'];
             $reviewedby = $row['reviewedby'];
+            $appremark = $row['appremark'];
 
             //calculate the age based on their application date because the age is updatable
             $birthday_date = date_create($birthday);
@@ -347,7 +348,10 @@ WHERE `application`.`appid` = $appid AND `application`.`educid` = $educid AND `a
                                                           <th style="height: 30px;">School Year</th>
                                                         <td style="height: 30px;"><?php echo $sy; ?></td>
                                                     </tr> 
-                                                
+                                                    <tr>
+                                                        <th  style="height: 30px;">Remarks</th>
+                                                        <td colspan="3" style="height: 30px;"> <?php echo $appremark; ?></td>                    
+                                                    </tr>
                                                     <tr>
                                                         <th colspan="4" style="height: 30px;text-transform: uppercase;text-align:center;<?php
                                                                                         if ($appstatus == 'Pending') {
@@ -382,7 +386,7 @@ WHERE `application`.`appid` = $appid AND `application`.`educid` = $educid AND `a
 
                     </div>
                     <div class="modal fade" id="add" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
-                    <div class="modal-dialog modal-sm" role="document">
+                    <div class="modal-dialog modal-md" role="document">
                         <div class="modal-content">
                             <div class="modal-header " >
                                 <h5 class="modal-title" id="exampleModalLabel">Update Application Status</h5>
@@ -406,6 +410,13 @@ WHERE `application`.`appid` = $appid AND `application`.`educid` = $educid AND `a
                                                 <option value="Approved">Approved</option>
                                                 <option value="Rejected">Rejected</option>
                                             </select>
+                                        </div>
+                                        <div class="form-group col-md-12">
+                                       
+                                            <label>Remarks</label>
+                                        
+                                            <textarea class="form-control" id="validationTextarea" rows="2"  name="appremarks" required></textarea>
+
                                         </div>
                               
                             </div>

@@ -69,10 +69,13 @@ else {
 							<div class="card">
 								<div class="card-header">
 									<div class="card-head-row">
-										<div class="card-title">Educational Assistance Provided</div>
-										
+										<div class="card-title">Rejected Applicants</div>
+                                        <a href="#add" data-toggle="modal" class="btn btn-secondary btn-border btn-round btn-sm" title="Post Assistance">
+                                                    <i class="fa fa-filter"></i>
+                                                   Filter Option
+                                                </a>
 											<div class="card-tools">
-                                            <a href="print_all_current.php" class="btn btn-success btn-border btn-round btn-sm" title="view and print">
+                                            <a href="print_rejected_current.php" class="btn btn-success btn-border btn-round btn-sm" title="view and print">
 												<i class="fa fa-eye"></i>
 												View
 											</a>
@@ -196,7 +199,73 @@ where application.educid=$recent and appstatus = 'Rejected' ORDER BY brgy ASC, `
 				</div>
 			</div>
 			
-			 
+            <div class="modal fade" id="add" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+                    <div class="modal-dialog modal-md" role="document">
+                        <div class="modal-content">
+                            <div class="modal-header " >
+                                <h5 class="modal-title" id="exampleModalLabel">Filter Options</h5>
+                                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                    <span aria-hidden="true">&times;</span>
+                                </button>
+                            </div>
+                            <div class="modal-body">
+                                <form method="POST" action="filterrejected.php">
+                                  
+                                   
+                                  
+                                    <div class="form-group col-md-12">
+                                       
+                                        <input type="hidden" value="<?php echo $recent ?>" name="recent">
+                                      
+                                            <label>Barangay</label>
+                                            <select class="form-control" id="" required name="brgy">
+                                          
+                                                    <option value="Arawan">Arawan</option>
+                                                    <option value="Bagong Niing">Bagong Niing</option>
+                                                    <option value="Balat Atis">Balat Atis</option>
+                                                    <option value="Briones">Briones</option>
+                                                    <option value="Bulihan">Bulihan</option>
+                                                    <option value="Buliran">Buliran</option>
+                                                    <option value="Callejon">Callejon</option>
+                                                    <option value="Corazon">Corazon</option>
+                                                    <option value="Del Valle">Del Valle</option>
+                                                    <option value="Loob">Loob</option>
+                                                    <option value="Magsaysay">Magsaysay</option>
+                                                    <option value="Matipunso">Matipunso</option>
+                                                    <option value="Niing">Niing</option>
+                                                    <option value="Poblacion">Poblacion</option>
+                                                    <option value="Pulo">Pulo</option>
+                                                    <option value="Pury">Pury</option>
+                                                    <option value="Sampaga">Sampaga</option>
+                                                    <option value="Sampaguita">Sampaguita</option>
+                                                    <option value="San Jose">San Jose</option>
+                                                    <option value="Sintorisan">Sintorisan</option>
+                                            </select>
+                                            <label>Year Level</label>
+                                            <select class="form-control" id="" required name="yearlevel">
+                                         
+                                                    <option value="All Levels">All Levels</option>
+                                                    <option value="First Year">First Year</option>
+                                                    <option value="Second Year">Second Year</option>
+                                                    <option value="Third Year">Third Year</option>
+                                                    <option value="Fourth Year">Fourth Year</option>
+                                                    <option value="Fifth Year">Fifth Year</option>
+                                            
+                                            </select>
+                                        </div>
+                              
+                            </div>
+                            <div class="modal-footer">
+                                <!--  <input type="hidden" id="pos_id" name="id"> -->
+                                <button type="button" class="btn  btn-sm" data-dismiss="modal">Close</button>
+                                <button type="submit" class="btn btn-primary btn-sm" name="filter">Filter</button>
+                            </div>
+
+                        
+                            </form>
+                        </div>
+                    </div>
+                </div>
 
 		
 

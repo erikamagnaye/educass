@@ -72,7 +72,7 @@ if (isset($_POST['filter'])) {
 										<div class="card-title" style=" margin-right: 10px;"><?php echo $filbrgy?></div>
                                      
 											<div class="card-tools">
-                                            <a href="print_filter_all_current.php?recent=<?=$recent?>&filbrgy=<?=$filbrgy?>" class="btn btn-danger btn-border btn-round btn-sm" title="view and print">
+                                            <a href="print_filter_all_current.php?recent=<?=$recent?>&filbrgy=<?=$filbrgy?>&year=<?=$level_condition?>" class="btn btn-danger btn-border btn-round btn-sm" title="view and print">
 												<i class="fa fa-print"></i>
 												Print
 											</a>
@@ -109,6 +109,7 @@ if (isset($_POST['filter'])) {
     </tr>
 </thead>
 <tbody>
+
 <?php 
 
     // Perform the query
@@ -163,7 +164,6 @@ if (isset($_POST['filter'])) {
         }
         // $fullname = $lastname . ', ' . $firstname;
     ?>
-
 <tr>
         <td><?php echo $count; ?></td>
             <td><img src="<?php echo htmlspecialchars($imageUrl); ?>" alt="" class="avatar-img rounded-circle" style="height: 50px;width:50px;"> <?php echo htmlspecialchars($fullname); ?></td>

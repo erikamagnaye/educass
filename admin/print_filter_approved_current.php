@@ -5,23 +5,27 @@
 session_start(); 
 error_reporting(E_ALL);
 ini_set('display_errors', 1);
-$skTypes = array('SK-Arawan','SK-Bagong Niing', 'SK-Balat Atis','SK-Briones','SK-Bulihan','SK-Buliran','SK-Callejon',
-'SK-Corazon', 'SK-Del Valle','SK-loob','SK-Magsaysay','SK-Matipunso','SK-Niing','SK-Poblacion','SK-Pulo',
- 'SK-Pury','SK-Sampaga','SK-Sampaguita', 'SK-San Jose', 'SK-Sinturisan'); 
-if (!isset($_SESSION['staffid']) || strlen($_SESSION['staffid']) == 0 ||in_array($_SESSION['role'], $skTypes)) {
-	header('location:index.php');
+if (!isset($_SESSION['id']) || strlen($_SESSION['id']) == 0 || $_SESSION['role'] !== 'admin') {
+	header('location:login.php');
     exit();
 }
 
 else {
+
+        
+    
+
+
+        
 ?>
 <!DOCTYPE html>
 <html lang="en">
 <head>
 	<?php include 'templates/header.php' ?>
 	<title>Educational Assistance</title>
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.1.1/css/all.min.css" integrity="sha512-KfkfwYDsLkIlwQp6LFnl8zNdLGxu9YAA1QvwINks4PhcElQSvqcyVLLD9aMhXd13uQjoXtEKNosOWaZqXgel0g==" crossorigin="anonymous" referrerpolicy="no-referrer" />
-   
+    <link rel="icon" href="assets/img/logo.png" type="image/x-icon"/>   <!-- THIS IS THE CODE TO DISPLAY AN ICON IN THE BROWASER TAB-->
+        <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.1.1/css/all.min.css" integrity="sha512-KfkfwYDsLkIlwQp6LFnl8zNdLGxu9YAA1QvwINks4PhcElQSvqcyVLLD9aMhXd13uQjoXtEKNosOWaZqXgel0g==" crossorigin="anonymous" referrerpolicy="no-referrer" />
+       
     <style>
     body {
         font-family: Arial, sans-serif;
@@ -33,6 +37,7 @@ else {
     }
     .table th, .table td {
         font-size: 12px;
+        height: 40px;
     }
     .table h2 {
         font-size: 18px;
@@ -44,9 +49,7 @@ else {
         .card-body {
             padding: 1rem;
         }
-        .table-responsive {
-            overflow-x: auto;
-        }
+  
         .table {
             font-size: 12px;
         }
@@ -67,9 +70,7 @@ else {
         .card-body {
             padding: 0.5rem;
         }
-        .table-responsive {
-            overflow-x: auto;
-        }
+    
         .table {
             font-size: 10px;
         }
@@ -84,6 +85,8 @@ else {
          height: auto;
 }
     }
+
+
 </style>
 
 </head>
@@ -125,14 +128,42 @@ else {
 												<i class="fa fa-print"></i>
 												Print 
 											</button>
+                                            <a href="model/export.php" class="btn btn-success btn-border btn-round btn-sm" title="Download">
+												<i class="fa fa-file"></i>
+												Export CSV
+											</a>
+											    <a href="pending_current_applicants.php" class="btn btn-danger btn-border btn-round btn-sm" title="Download">
+												<i class="fa fa-chevron-left"></i>
+												Back
+											</a>
 										</div>
 									</div>
 								</div>
-								<div class="card-body m-5" id="printThis">
+								<div class="card-body m-5" id="printThis" >
                                     <div class="d-flex flex-wrap justify-content-around" style="border-bottom:1px solid green">
                                         <div class="text-center">
                                             <img src="assets/img/logo.png" class="img-fluid" width="100">
 										</div>
+
+             <?php
+                                         $recent = mysqli_real_escape_string($conn, $_GET['recent']);
+                                         $filbrgy = mysqli_real_escape_string($conn, $_GET['filbrgy']);
+                                         $year = mysqli_real_escape_string($conn, $_GET['year']);
+                                                           
+                                            
+            $query = "SELECT *, CONCAT(lastname, ', ', firstname, ' ' , midname, '.' ) AS fullname 
+            FROM student join studentcourse on student.studid=studentcourse.studid 
+            join application on studentcourse.courseid=application.courseid 
+            where application.educid=? and brgy=? and `year` LIKE ? and application.appstatus = 'Approved' ORDER BY `year` ASC, lastname ASC";
+            
+            $stmt = mysqli_prepare($conn, $query);
+            mysqli_stmt_bind_param($stmt, 'sss', $recent, $filbrgy, $year);
+            mysqli_stmt_execute($stmt);
+            $result = mysqli_stmt_get_result($stmt);
+            
+            
+             ?>
+
 										<div class="text-center">
                                             <h3 class="mb-0">Republic of the Philippines</h3>
                                             <h3 class="mb-0">Province of Quezon</h3>
@@ -146,53 +177,48 @@ else {
                                     <div class="row mt-2">
                                         <div class="col-md-12">
                                             <div class="text-center mt-5">
-                                                <h3 class="mt-4 fw-bold">Educational Assistance Applicants</h3>
+                                                <h3 class="mt-4 fw-bold">Educational Assistance Applicants from <?php echo $filbrgy ?></h3>
                                             </div>
                                             <br>
                                             <div class="table-responsive">
-        <table class="table table-bordered">
-       <?php
-        $sql = "SELECT *, CONCAT(lastname, ', ', firstname, ' ' , midname ) AS fullname FROM student ORDER BY brgy ASC, lastname ASC";
-         $result = mysqli_query($conn, $sql); 
-    ?>
-            <thead>
-                <tr>
-                    <th>  Fullname</th>
-                    <th>Barangay</th>
-                    <th>Gender</th>
-                    <th>Contact Number</th>
-                    <th>Age</th>
+ <table class="table table-bordered">
+ <thead>
+     <tr>
+         <th> No</th>
+         <th> Fullname</th>
+         <th> Gender</th>
+         <th> Barangay</th>
+         <th>School</th>
+         <th> Contact No</th>
+         <th>Year Level</th>
+     </tr>
+ </thead>
+ <tbody>
+     <?php
+                             
+ 
 
-                </tr>
-            </thead>
-            <tbody>
-                <?php
-                // Display each record in the table
-                $count = 0;
-                while ($row = mysqli_fetch_assoc($result)) {
-                    $imagePath = $row['picture'];
-                    if (filter_var($imagePath, FILTER_VALIDATE_URL)) {
-                        $imageUrl = $imagePath;
-                    } else {
-                        $imageUrl = '../applicants/assets/uploads/applicant_profile/' . $imagePath;
-                    }
-                 
-                    echo "<tr>";
-                    echo "<td><img src=\"$imageUrl\" alt=\"\" class=\"avatar-img rounded-circle\" style=\"height: 50px;width:50px;\"> " . $row['fullname'] . "</td>";
-                    echo "<td>" . $row['brgy'] . "</td>";
-                    echo "<td>" . $row['gender'] . "</td>";
-                    echo "<td>" . $row['contact_no'] . "</td>";
-                    echo "<td>" . $row['age'] . "</td>";
-                   
-                    echo "</tr>";
-                    if ($count % 20 === 0 && $count !== 0) {
-                        echo '</tbody></table><div class="page-break"></div><h2>Educational  (Page ' . ($count / 25 + 1) . ')</h2><table class="table table-bordered"><thead><tr><th>ID</th><th>Name</th><th>Year</th><th>Course</th><th>Barangay</th><th>Gender</th></tr></thead><tbody>';
-                    }
-                    $count++;
-                }
-                ?>
-            </tbody>
-        </table>
+
+     // Display each record in the table
+     $count = 1; // Initialize the counter variable
+     while ($row = mysqli_fetch_assoc($result)) {
+         echo "<tr>";
+         echo "<td> " . $count . "</td>"; // Display the counter value
+         echo "<td> " . $row['fullname'] . "</td>";
+         echo "<td>" . $row['gender'] . "</td>";
+         echo "<td>" . $row['brgy'] . "</td>";
+         echo "<td>" . $row['school_name'] . "</td>";
+         echo "<td>" . $row['contact_no'] . "</td>";
+         echo "<td>" . $row['year'] . "</td>";
+         echo "</tr>";
+         if ($count % 20 === 0 && $count !== 0) {
+             echo '</tbody></table><div class="page-break"></div><h2>Educational  (Page ' . ($count / 25 + 1) . ')</h2><table class="table table-bordered"><thead><tr><th>No</th><th>fullname</th><th>Gender</th><th>Barangay</th><th>School</th><th>Contact </th><th>Year level </th></tr></thead><tbody>';
+         }
+         $count++; // Increment the counter variable
+        }  
+     ?>
+ </tbody>
+</table>
     </div>
                                           
                                         
@@ -235,4 +261,4 @@ else {
             }
     </script>
 </body>
-</html><?php }?>
+</html><?php   }?>

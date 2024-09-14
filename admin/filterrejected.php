@@ -1,3 +1,4 @@
+
 <?php include 'server/server.php' ?>
 
 <?php 
@@ -5,20 +6,18 @@
 session_start(); 
 error_reporting(E_ALL);
 ini_set('display_errors', 1);
-if (!isset($_SESSION['id']) || strlen($_SESSION['id']) == 0 || $_SESSION['role'] !== 'admin') {
-	header('location:login.php');
-    exit();
-}
-else {
 
+if (isset($_POST['filter'])) {
+    $recent = $_POST['recent'];
+    $filbrgy = $_POST['brgy'];
+    $level = $_POST['yearlevel'];
 
-  //get the recent educational
-  $query = "SELECT educid FROM `educ aids` ORDER BY date DESC LIMIT 1";
-  $result = $conn->query($query);
-  $row = $result->fetch_assoc();
-  $recent = $row['educid'];
+    if ($level == 'All Levels') {
+        $level_condition = '%'; // Use a wildcard to fetch all year levels
+    } else {
+        $level_condition = $level; // Use the specific year level selected
+    }
 
-//end of code to update educ ass digitally
 
 ?>
 <!DOCTYPE html>
@@ -69,21 +68,19 @@ else {
 							<div class="card">
 								<div class="card-header">
 									<div class="card-head-row">
-										<div class="card-title">Approved Applicants</div>
-										<a href="#add" data-toggle="modal" class="btn btn-secondary btn-border btn-round btn-sm" title="Post Assistance">
-                                                    <i class="fa fa-filter"></i>
-                                                   Filter Option
-                                                </a>
+                                      
+										<div class="card-title" style=" margin-right: 10px;"><?php echo $filbrgy?></div>
+                                     
 											<div class="card-tools">
-                                            <a href="print_approved_current.php" class="btn btn-success btn-border btn-round btn-sm" title="view and print">
-												<i class="fa fa-eye"></i>
-												View
+                                            <a href="print_filter_rejected_current.php?recent=<?=$recent?>&filbrgy=<?=$filbrgy?>&year=<?=$level_condition?>" class="btn btn-danger btn-border btn-round btn-sm" title="view and print">
+												<i class="fa fa-print"></i>
+												Print
 											</a>
-                                            <a href="model/export_educprovided_csv.php" class="btn btn-danger btn-border btn-round btn-sm" title="Download">
+                                            <a href="model/export.php" class="btn btn-success btn-border btn-round btn-sm" title="Download">
 												<i class="fa fa-file"></i>
 												Export CSV
 											</a>
-                                            <a href="dashboard.php" class="btn btn-danger btn-border btn-round btn-sm" >
+											    <a href="all_current_applicants.php" class="btn btn-danger btn-border btn-round btn-sm" title="Download">
 												<i class="fa fa-chevron-left"></i>
 												Back
 											</a>
@@ -112,17 +109,23 @@ else {
     </tr>
 </thead>
 <tbody>
-    <?php
+<?php 
 
-    $query = " SELECT *, CONCAT(lastname, ', ', firstname, ' ' , midname, '.' ) AS fullname 
+    // Perform the query
+    $query = "SELECT *, CONCAT(lastname, ', ', firstname, ' ' , midname, '.' ) AS fullname 
     FROM student join studentcourse on student.studid=studentcourse.studid 
-join application on studentcourse.courseid=application.courseid 
-where application.educid=$recent and appstatus = 'Approved' ORDER BY brgy ASC, `year` ASC, lastname ASC";
-    $view_data = mysqli_query($conn, $query); // sending the query to the database
+    join application on studentcourse.courseid=application.courseid 
+    where application.educid=? and brgy=? and `year` LIKE ? and application.appstatus = 'Rejected' ORDER BY `year` ASC, lastname ASC";
 
-    $count =1;
-    // displaying all the data retrieved from the database using while loop
-    while ($row = mysqli_fetch_assoc($view_data)) {
+    $stmt = mysqli_prepare($conn, $query);
+    mysqli_stmt_bind_param($stmt, 'sss', $recent, $filbrgy, $level_condition);
+    mysqli_stmt_execute($stmt);
+    $result = mysqli_stmt_get_result($stmt);
+
+
+
+    $count = 1;
+    while ($row = mysqli_fetch_assoc($result)) {
         $studid = $row['studid'];
         $lastname = $row['lastname'];
         $firstname = $row['firstname'];
@@ -160,7 +163,8 @@ where application.educid=$recent and appstatus = 'Approved' ORDER BY brgy ASC, `
         }
         // $fullname = $lastname . ', ' . $firstname;
     ?>
-        <tr>
+
+<tr>
         <td><?php echo $count; ?></td>
             <td><img src="<?php echo htmlspecialchars($imageUrl); ?>" alt="" class="avatar-img rounded-circle" style="height: 50px;width:50px;"> <?php echo htmlspecialchars($fullname); ?></td>
             <td><?php echo htmlspecialchars($year); ?></td>
@@ -186,6 +190,7 @@ where application.educid=$recent and appstatus = 'Approved' ORDER BY brgy ASC, `
         </tr>
      
     <?php    $count++; } ?>
+ 
 
 </tbody>
 
@@ -199,74 +204,7 @@ where application.educid=$recent and appstatus = 'Approved' ORDER BY brgy ASC, `
 				</div>
 			</div>
 			
-			 
-            <div class="modal fade" id="add" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
-                    <div class="modal-dialog modal-md" role="document">
-                        <div class="modal-content">
-                            <div class="modal-header " >
-                                <h5 class="modal-title" id="exampleModalLabel">Filter Options</h5>
-                                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                                    <span aria-hidden="true">&times;</span>
-                                </button>
-                            </div>
-                            <div class="modal-body">
-                                <form method="POST" action="filterapproved.php">
-                                  
-                                   
-                                  
-                                    <div class="form-group col-md-12">
-                                       
-                                        <input type="hidden" value="<?php echo $recent ?>" name="recent">
-                                      
-                                            <label>Barangay</label>
-                                            <select class="form-control" id="" required name="brgy">
-                                          
-                                                    <option value="Arawan">Arawan</option>
-                                                    <option value="Bagong Niing">Bagong Niing</option>
-                                                    <option value="Balat Atis">Balat Atis</option>
-                                                    <option value="Briones">Briones</option>
-                                                    <option value="Bulihan">Bulihan</option>
-                                                    <option value="Buliran">Buliran</option>
-                                                    <option value="Callejon">Callejon</option>
-                                                    <option value="Corazon">Corazon</option>
-                                                    <option value="Del Valle">Del Valle</option>
-                                                    <option value="Loob">Loob</option>
-                                                    <option value="Magsaysay">Magsaysay</option>
-                                                    <option value="Matipunso">Matipunso</option>
-                                                    <option value="Niing">Niing</option>
-                                                    <option value="Poblacion">Poblacion</option>
-                                                    <option value="Pulo">Pulo</option>
-                                                    <option value="Pury">Pury</option>
-                                                    <option value="Sampaga">Sampaga</option>
-                                                    <option value="Sampaguita">Sampaguita</option>
-                                                    <option value="San Jose">San Jose</option>
-                                                    <option value="Sintorisan">Sintorisan</option>
-                                            </select>
-                                            <label>Year Level</label>
-                                            <select class="form-control" id="" required name="yearlevel">
-                                         
-                                                    <option value="All Levels">All Levels</option>
-                                                    <option value="First Year">First Year</option>
-                                                    <option value="Second Year">Second Year</option>
-                                                    <option value="Third Year">Third Year</option>
-                                                    <option value="Fourth Year">Fourth Year</option>
-                                                    <option value="Fifth Year">Fifth Year</option>
-                                            
-                                            </select>
-                                        </div>
-                              
-                            </div>
-                            <div class="modal-footer">
-                                <!--  <input type="hidden" id="pos_id" name="id"> -->
-                                <button type="button" class="btn  btn-sm" data-dismiss="modal">Close</button>
-                                <button type="submit" class="btn btn-primary btn-sm" name="filter">Filter</button>
-                            </div>
-
-                        
-                            </form>
-                        </div>
-                    </div>
-                </div>
+            
 		
 
 			<!-- Main Footer -->

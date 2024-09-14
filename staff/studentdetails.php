@@ -167,7 +167,7 @@ else{
         <th>Civil Status:</th>
         <td><?php echo $civilstatus; ?></td>
     </tr>
-    <tr>
+   <!-- <tr>
 
   
         <th>Account Status:</th>
@@ -180,7 +180,7 @@ else{
     No Valid ID available
   <?php endif ?>
 </td>
-    </tr>
+    </tr>-->
 
 </table>
 

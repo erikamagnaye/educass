@@ -8,14 +8,15 @@
     $username = $_SESSION['username']; 
     $reviewedby = $_SESSION['role']; 
     $appstatus = $conn->real_escape_string($_POST['appstatus']); 
+    $appremark = $conn->real_escape_string($_POST['appremarks']); 
     $appid = $_POST['appid'];
     $educid = $_POST['educid'];
     $studid = $_POST['studid'];
 
     if(isset ($_POST['update'])){
-        $query = "UPDATE application SET appstatus = ?, reviewedby = ? WHERE appid = ? AND educid = ? AND studid = ?";
+        $query = "UPDATE application SET appstatus = ?, reviewedby = ? , appremark = ? WHERE appid = ? AND educid = ? AND studid = ?";
         $stmt = $conn->prepare($query);
-        $stmt->bind_param("ssiii", $appstatus, $reviewedby, $appid, $educid, $studid);
+        $stmt->bind_param("sssiii", $appstatus, $reviewedby,$appremark, $appid, $educid, $studid);
         $stmt->execute();
 
         if ($stmt->affected_rows > 0) {

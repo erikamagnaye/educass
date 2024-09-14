@@ -69,7 +69,7 @@ else {
 							<div class="card">
 								<div class="card-header">
 									<div class="card-head-row">
-										<div class="card-title" style=" margin-right: 10px;">Educational Assistance Applicants</div>
+										<div class="card-title" style=" margin-right: 10px;">All Applicants</div>
                                         <a href="#add" data-toggle="modal" class="btn btn-secondary btn-border btn-round btn-sm" title="Post Assistance">
                                                     <i class="fa fa-filter"></i>
                                                    Filter Option

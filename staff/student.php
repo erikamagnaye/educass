@@ -96,7 +96,7 @@ if (!isset($_SESSION['staffid']) || strlen($_SESSION['staffid']) == 0 ||in_array
                                                 </thead>
                                                 <tbody>
                                                     <?php
-                                                    $query = "SELECT *, CONCAT(lastname, ', ', firstname, ' ' , midname, '.' ) AS fullname FROM student where accstatus ='Verified' ORDER BY lastname ASC"; // SQL query to fetch all table data
+                                                    $query = "SELECT *, CONCAT(lastname, ', ', firstname, ' ' , midname, '.' ) AS fullname FROM student ORDER BY lastname ASC"; // SQL query to fetch all table data
                                                     $view_data = mysqli_query($conn, $query); // sending the query to the database
 
                                                     // displaying all the data retrieved from the database using while loop

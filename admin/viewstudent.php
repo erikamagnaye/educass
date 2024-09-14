@@ -101,7 +101,7 @@ else {
 					<div class="page-inner">
 						<div class="d-flex align-items-left align-items-md-center flex-column flex-md-row">
 							<div>
-								<h2 class="text-black fw-bold">Educational Assistance</h2>
+								<h2 class="text-black fw-bold">Admin Dashboard</h2>
 							</div>
 						</div>
 					</div>
@@ -115,7 +115,7 @@ else {
                             <div class="card">
 								<div class="card-header">
 									<div class="card-head-row">
-										<div class="card-title">Educational Assistance Applicants</div>
+										<div class="card-title">Registered Students</div>
 										<div class="card-tools">
 											<button class="btn btn-info btn-border btn-round btn-sm" onclick="printDiv('printThis')">
 												<i class="fa fa-print"></i>
@@ -142,13 +142,13 @@ else {
                                     <div class="row mt-2">
                                         <div class="col-md-12">
                                             <div class="text-center mt-5">
-                                                <h3 class="mt-4 fw-bold">Educational Assistance Applicants</h3>
+                                                <h3 class="mt-4 fw-bold">Registered Students</h3>
                                             </div>
                                             <br>
                                             <div class="table-responsive">
         <table class="table table-bordered">
        <?php
-        $sql = "SELECT *, CONCAT(lastname, ', ', firstname, ' ' , midname ) AS fullname FROM student where accstatus ='Verified' ORDER BY brgy ASC, lastname ASC";
+        $sql = "SELECT *, CONCAT(lastname, ', ', firstname, ' ' , midname ) AS fullname FROM student ORDER BY brgy ASC, lastname ASC";
          $result = mysqli_query($conn, $sql); 
     ?>
             <thead>
