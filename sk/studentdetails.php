@@ -162,7 +162,7 @@ else{
                         <img src="<?= preg_match('/data:image/i', $picture) ? $picture : '../applicants/assets/uploads/applicant_profile/'.$picture ?>" alt="Picture" 
                         class="avatar-img rounded-circle" style="height: 70px;width:70px;">
                     <?php else: ?>
-                        <img src="assets/img/logo.png" alt="Picture" class="avatar-img rounded-circle">
+                        <img src="assets/img/pic.jpg" alt="Picture" class="avatar-img rounded-circle"style="height: 70px;width:70px;">
                     <?php endif ?></th>
         <td style="text-transform: uppercase;font-weight:bold;"><?php echo $fullname; ?></td>
         <th>Email</th>

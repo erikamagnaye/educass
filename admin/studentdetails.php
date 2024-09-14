@@ -84,7 +84,7 @@ else{
 					<div class="page-inner">
 						<div class="d-flex align-items-left align-items-md-center flex-column flex-md-row">
 							<div>
-								<h2 class="text-black fw-bold">Educational Assistance Beneficiary</h2>
+								<h2 class="text-black fw-bold">Admin Dashboard</h2>
 							</div>
 						</div>
 					</div>
@@ -133,7 +133,7 @@ else{
                         <img src="<?= preg_match('/data:image/i', $picture) ? $picture : '../applicants/assets/uploads/applicant_profile/'.$picture ?>" alt="Picture" 
                         class="avatar-img rounded-circle" style="height: 70px;width:70px;">
                     <?php else: ?>
-                        <img src="assets/img/logo.png" alt="Picture" class="avatar-img rounded-circle">
+                        <img src="assets/img/pic.jpg" alt="Picture" class="avatar-img rounded-circle" style="height: 70px;width:70px;">
                     <?php endif ?></th>
         <td style="text-transform: uppercase;font-weight:bold;"><?php echo $fullname; ?></td>
         <th>Email</th>
@@ -152,11 +152,11 @@ else{
         <td><?php echo $gender; ?></td>
     </tr>
     <tr>
-        <th>Address:</th>
-        <td><?php echo $street_name . ', ' . $brgy . ', ' . $municipality . ', ' . $province; ?></td>
-        <th>Citizenship:</th>
-        <td><?php echo $citizenship; ?></td>
+        <th >Address:</th>
+        <td colspan="3"><?php echo $street_name . ', ' . $brgy . ', ' . $municipality . ', ' . $province; ?></td>
+       
     </tr>
+    <!--
     <tr>
         <th>Religion:</th>
         <td><?php echo $religion; ?></td>
@@ -176,7 +176,7 @@ else{
     No Valid ID available
   <?php endif ?>
 </td>
-    </tr>
+    </tr>-->
 
 </table>
 

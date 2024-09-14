@@ -4,12 +4,13 @@
 session_start(); 
 error_reporting(E_ALL);
 ini_set('display_errors', 1);
-if (strlen($_SESSION['id'] == 0)) {
+if (strlen($_SESSION['id'] == 0) || !isset($_SESSION['id'])) {
 	header('location:login.php');
     exit();
 }
 
 	else {
+        
 		$id = $_SESSION['id'] ;
 		$query 		= "SELECT * FROM `student`  WHERE studid= '$id'";
 		$result 	= $conn->query($query);

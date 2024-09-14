@@ -43,7 +43,9 @@ if (!isset($_SESSION['skid']) || strlen($_SESSION['skid']) == 0 || !in_array($_S
         <link rel="stylesheet" type="text/css" href="https://cdn.datatables.net/2.1.2/css/dataTables.bootstrap5.min.css">
         <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11.12.3/dist/sweetalert2.all.min.js"></script>
         <link href="https://cdn.jsdelivr.net/npm/sweetalert2@11.12.3/dist/sweetalert2.min.css" rel="stylesheet">
-        <style>
+        <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.1.1/css/all.min.css" integrity="sha512-KfkfwYDsLkIlwQp6LFnl8zNdLGxu9YAA1QvwINks4PhcElQSvqcyVLLD9aMhXd13uQjoXtEKNosOWaZqXgel0g==" crossorigin="anonymous" referrerpolicy="no-referrer" />
+ 
+      <style>
 
 
         </style>
@@ -82,7 +84,7 @@ if (!isset($_SESSION['skid']) || strlen($_SESSION['skid']) == 0 || !in_array($_S
                                 <div class="card">
                                     <div class="card-header">
                                         <div class="card-head-row">
-                                            <div class="card-title">Verified Accounts</div>
+                                            <div class="card-title">Registered Applicants</div>
 
                                             <div class="card-tools">
                                                 <a href="viewstudent.php" class="btn btn-success btn-border btn-round btn-sm" title="view and print">
@@ -115,7 +117,7 @@ if (!isset($_SESSION['skid']) || strlen($_SESSION['skid']) == 0 || !in_array($_S
                                                 <tbody>
                                                     <?php
                                                     $query = "SELECT *, CONCAT(lastname, ', ', firstname, ' ' , midname, '.' ) AS fullname 
-                                                    FROM student where accstatus ='Verified'and brgy='$skpos' ORDER BY brgy asc, lastname ASC"; // SQL query to fetch all table data
+                                                    FROM student where  brgy='$skpos' ORDER BY brgy asc, lastname ASC"; // SQL query to fetch all table data
                                                     $view_data = mysqli_query($conn, $query); // sending the query to the database
                                                     $count=1;
                                                     // displaying all the data retrieved from the database using while loop

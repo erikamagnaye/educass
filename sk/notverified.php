@@ -31,7 +31,7 @@ if (!isset($_SESSION['skid']) || strlen($_SESSION['skid']) == 0 || !in_array($_S
     header('location:sklogin.php');
     exit();
 } else {
-   
+    $skpos = $_SESSION['skpos'];
 
 ?>
     <!DOCTYPE html>
@@ -116,7 +116,7 @@ if (!isset($_SESSION['skid']) || strlen($_SESSION['skid']) == 0 || !in_array($_S
                                                 <tbody>
                                                     <?php
                                                     $query = "SELECT *, CONCAT(lastname, ', ', firstname, ' ' , midname, '.' ) AS fullname 
-                                                    FROM student where accstatus ='' ORDER BY brgy asc, lastname ASC"; // SQL query to fetch all table data
+                                                    FROM student where accstatus ='' and brgy='$skpos' ORDER BY brgy asc, lastname ASC"; // SQL query to fetch all table data
                                                     $view_data = mysqli_query($conn, $query); // sending the query to the database
                                                     $count=1;
                                                     // displaying all the data retrieved from the database using while loop

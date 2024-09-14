@@ -209,7 +209,7 @@
                     <div class="text-center">
                         <div id="my_camera" style="height: 250;" class="text-center">
                             <?php if(empty($_SESSION['avatar'])): ?>
-                                <img src="assets/img/person.png" alt="..." class="img img-fluid" width="250" >
+                                <img src="assets/img/pic.jpg" alt="..." class="img img-fluid" width="250" >
                             <?php else: ?>
                                 <img src="<?= preg_match('/data:image/i', $_SESSION['avatar']) ? $_SESSION['avatar'] : 'assets/uploads/applicant_profile/'.$_SESSION['avatar'] ?>" alt="..." class="img img-fluid" width="250" >
                             <?php endif ?>

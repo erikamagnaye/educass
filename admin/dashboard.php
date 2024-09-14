@@ -60,11 +60,16 @@ $totalapp = $row['COUNT(*)'];
     $resultstaff= $conn->query($staff);
     $row = $resultstaff->fetch_assoc();
 $staffcount = $row['COUNT(*)'];
-//verified account
-$verified = "SELECT COUNT(*) FROM student WHERE accstatus ='Verified'";
-$resultvacc= $conn->query($verified);
-$row = $resultvacc->fetch_assoc();
-$vacc = $row['COUNT(*)'];
+//ALL STUDENT
+$allstud = "SELECT COUNT(*) FROM student ";
+$resultallstud= $conn->query($allstud);
+$all = $resultallstud->fetch_assoc();
+$regstudent = $all['COUNT(*)'];
+//announcement
+$announce = "SELECT COUNT(*) FROM announcement ";
+$resultann = $conn->query($announce);
+$rows = $resultann->fetch_assoc();
+$announcement = $rows['COUNT(*)'];
 //not verified account
 $notverified = "SELECT COUNT(*) FROM student WHERE accstatus = '' OR accstatus IS NULL";
 $resultnotvacc= $conn->query($notverified);
@@ -611,28 +616,33 @@ h5 {
 	
 
 <div class="dashboard" >
-        <div class="card">
-            <div class="card-icon" style="color: skyblue;"><i class="fa-solid fa-user-shield"></i></div>
-          <a href="student.php" class="btn">  <h5><?= $vacc ?> <br>Verified Account</h5></a>
-          
-        </div>
-        <div class="card">
-            <div class="card-icon" style="color: orange;"><i class="fa-solid fa-user-xmark"></i></div>
-			<a href="notverified.php" class="btn"><h5><?= $notvacc ?> <br>Not Verified Account</h5></a>
-         
-        </div>
-        <div class="card">
-            <div class="card-icon" style="color: red;"><i class="fa-solid fa-clipboard-question"></i></div>
-			<a href="complaint.php" class="btn"><h5><?= $complaints ?> <br>Complaints</h5></a>
+<div class="card bg-info">
+                                                    <div class="card-icon" style="color: white;"><i class="fa-solid fa-graduation-cap"></i></div>
+                                                    <a href="student.php" class="btn">
+                                                        <h5 style="color: white;"><?= $regstudent ?> <br>Students</h5>
+                                                    </a>
+
+                                                </div>
+       
+                                                <div class="card" style="background-color: orange;">
+                                                    <div class="card-icon" style="color: white;"><i class="fa-solid fa-bullhorn"></i></div>
+                                                    <a href="announcement.php" class="btn">
+                                                        <h5 style="color: white;"><?= $announcement ?> <br>Announcement</h5>
+                                                    </a>
+
+                                                </div> 
+        <div class="card" style="background-color: #800000;">
+            <div class="card-icon" style="color:white;"><i class="fa-solid fa-clipboard-question"></i></div>
+			<a href="complaint.php" class="btn"><h5 style="color: white;"><?= $complaints ?> <br>Complaints</h5></a>
      
         </div>
-        <div class="card">
-            <div class="card-icon" style="color: green;"><i class="fa-solid fa-user-tie"></i></div>
-			<a href="staff.php" class="btn"> <h5><?=$staffcount?><br> staff</h5></a>
+        <div class="card" style="background-color: #ED3EF7;">
+            <div class="card-icon" style="color: white;"><i class="fa-solid fa-user-tie"></i></div>
+			<a href="staff.php" class="btn"> <h5 style="color: white;"><?=$staffcount?><br> staff</h5></a>
            
-        </div> <div class="card">
-            <div class="card-icon" style="color: yellow;"><i class="fa-solid fa-book-open-reader"></i></div>
-			<a href="educaids.php" class="btn"> <h5 style="text-align: center;"><?=$totaleduc?><br> Educational Assistance</h5></a>      
+        </div> <div class="card" style="background-color: #185519;">
+            <div class="card-icon" style="color: white;"><i class="fa-solid fa-book-open-reader"></i></div>
+			<a href="educaids.php" class="btn"> <h5 style="color: white;"><?=$totaleduc?><br> Educational Assistance</h5></a>      
         </div>
   <!--      <div class="card">
             <div class="card-icon"style="color: blue;"><i class="fa-solid fa-user-graduate"></i></div>

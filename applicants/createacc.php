@@ -13,11 +13,11 @@ if (isset($_POST['save'])) {
     $fname = $conn->real_escape_string($_POST['fname']);
     $mname = $conn->real_escape_string($_POST['mname']);
     $lname = $conn->real_escape_string($_POST['lname']);
-    $religion = $conn->real_escape_string($_POST['religion']);
-    $bplace = $conn->real_escape_string($_POST['bplace']);
+    //$religion = $conn->real_escape_string($_POST['religion']);
+   // $bplace = $conn->real_escape_string($_POST['bplace']);
     $bdate = $conn->real_escape_string($_POST['bdate']);
     $age = $conn->real_escape_string($_POST['age']);
-    $cstatus = $conn->real_escape_string($_POST['cstatus']);
+   // $cstatus = $conn->real_escape_string($_POST['cstatus']);
     $gender = $conn->real_escape_string($_POST['gender']);
     $street = $conn->real_escape_string($_POST['street']);
     $brgy = $conn->real_escape_string($_POST['vstatus']);
@@ -27,22 +27,51 @@ if (isset($_POST['save'])) {
     $province = $conn->real_escape_string($_POST['province']);
     $password = md5($_POST['password']);
     //$valididPath = 'assets/uploads/validid_file' . basename($_FILES['validid']['name']);
-    $valididPath = 'assets/uploads/validid_file/' . basename($_FILES['validid']['name']);
-    $validid = basename($_FILES['validid']['name']);
-    $maxFileSize = 10000000; // 10MB
-    $allowedTypes = ['image/png', 'image/jpeg', 'image/jpg', 'application/pdf', 'application/vnd.openxmlformats-officedocument.wordprocessingml.document'];
-    // Check if a student with the same firstname, lastname, and email already exists
-    $checkStmt = $conn->prepare("SELECT COUNT(*) FROM student WHERE firstname = ? AND lastname = ?  AND midname = ? AND brgy = ? AND contact_no = ? AND birthday = ? or email = ?");
-    $checkStmt->bind_param("ssssiss", $fname, $lname,  $mname, $brgy, $contact_no, $bdate, $email );
-    $checkStmt->execute();
-    $checkStmt->bind_result($count);
-    $checkStmt->fetch();
-    $checkStmt->close();
+   // $valididPath = 'assets/uploads/validid_file/' . basename($_FILES['validid']['name']);
+   // $validid = basename($_FILES['validid']['name']);
+   // $maxFileSize = 10000000; // 10MB
+   // $allowedTypes = ['image/png', 'image/jpeg', 'image/jpg', 'application/pdf', 'application/vnd.openxmlformats-officedocument.wordprocessingml.document'];
 
-    if ($count > 0) {
-        $_SESSION['success'] = 'danger';
-        $_SESSION['mess'] = 'There is an existing account with the same information';
-    } elseif ($_FILES['validid']['size'] > $maxFileSize) {
+   //check  municipality and  province 
+   if ( $municipality == 'San Antonio' && $province == 'Quezon'){
+
+        // Check if a student with the same firstname, lastname, and email already exists
+        $checkStmt = $conn->prepare("SELECT COUNT(*) FROM student WHERE firstname = ? AND lastname = ?  AND midname = ? AND brgy = ? AND contact_no = ? AND birthday = ? or email = ?");
+        $checkStmt->bind_param("ssssiss", $fname, $lname,  $mname, $brgy, $contact_no, $bdate, $email );
+        $checkStmt->execute();
+        $checkStmt->bind_result($count);
+        $checkStmt->fetch();
+        $checkStmt->close();
+    
+        if ($count > 0) {
+            $_SESSION['success'] = 'danger';
+            $_SESSION['mess'] = 'There is an existing account with the same information';
+        } 
+    else {
+         // Insert data into database
+         $stmt = $conn->prepare("INSERT INTO student (lastname, firstname, midname, email, `password`, birthday, contact_no, brgy, municipality, province, street_name, gender, age) VALUES ( ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)");
+         $stmt->bind_param("ssssssssssssi", $lname, $fname, $mname, $email, $password, $bdate, $contact_no, $brgy, $municipality, $province, $street, $gender,  $age);
+    
+         if ($stmt->execute()) {
+             $_SESSION['success'] = 'success';
+             $_SESSION['mess'] = 'Account created successfully! Go to login';
+         } else {
+             $_SESSION['success'] = 'danger';
+             $_SESSION['mess'] = 'There was an error creating your account.';
+         }
+         $stmt->close();
+    }
+   }
+else{
+
+ $_SESSION['success'] = 'danger';
+$_SESSION['mess'] = 'This is for college student of San Antonio, Quezon only!';
+}
+    
+
+    //THIS IS THE ORIGINAL CODE WITH VALID ID
+
+    /*elseif ($_FILES['validid']['size'] > $maxFileSize) {
         $_SESSION['success'] = 'danger';
         $_SESSION['mess'] = 'File size exceeds the maximum limit of 10MB.';
     } 
@@ -57,7 +86,7 @@ if (isset($_POST['save'])) {
 
         if ($stmt->execute()) {
             $_SESSION['success'] = 'success';
-            $_SESSION['mess'] = 'Account created successfully! Please wait until your account has been verified.';
+            $_SESSION['mess'] = 'Account created successfully! Please wait until your account is verified.';
         } else {
             $_SESSION['success'] = 'danger';
             $_SESSION['mess'] = 'There was an error creating your account.';
@@ -66,7 +95,7 @@ if (isset($_POST['save'])) {
     } else {
         $_SESSION['success'] = 'danger';
         $_SESSION['mess'] = 'File upload failed.';
-    }
+    } */
 }
 
 
@@ -79,9 +108,7 @@ $conn->close();
     <?php include 'templates/header.php' ?>
 	<title>Login </title>
 	<link rel="icon" href="assets/img/logo.png" type="image/x-icon"/>   <!-- THIS IS THE CODE TO DISPLAY AN ICON IN THE BROWASER TAB-->
-	<link rel="stylesheet" href="vendors/simple-line-icons/css/simple-line-icons.css">
-    <link rel="stylesheet" href="vendors/flag-icon-css/css/flag-icon.min.css">
-    <link rel="stylesheet" href="vendors/css/vendor.bundle.base.css">
+
     <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
 	<style>
      body.login {
@@ -225,32 +252,33 @@ label {
                                         </div>
                                     </div>
                                     <div class="row">
-                                        <div class="col-md-4">
-                                            <div class="form-group">
-                                                <label>Religion</label>
-                                                <input type="text" class="form-control" placeholder="Enter Religion" name="religion" required>
-                                            </div>
-                                        </div>
-                                        <div class="col-md-4">
-                                            <div class="form-group">
-                                                <label>Citizenship</label>
-                                                <input type="text" class="form-control" placeholder="Enter Citizenship" name="bplace" required>
-                                            </div>
-                                        </div>
+                                 
                                         <div class="col-md-4">
                                             <div class="form-group">
                                                 <label>Birthdate</label>
                                                 <input type="date" class="form-control" placeholder="Enter Birthdate" name="bdate" required>
                                             </div>
                                         </div>
-                                    </div>
-                                    <div class="row">
                                         <div class="col-md-4">
                                             <div class="form-group">
                                                 <label>Age</label>
                                                 <input type="number" class="form-control" placeholder="Enter Age" min="1" name="age" required>
                                                 </div>
                                             </div>
+                                            <div class="col-md-4">
+                                            <div class="form-group">
+                                                <label>Sex</label>
+                                                <select class="form-control" required name="gender">
+                                                    <option disabled selected value="">Select </option>
+                                                    <option value="Male">Male</option>
+                                                    <option value="Female">Female</option>
+                                                </select>
+                                            </div>
+                                        </div>
+
+                                    </div>
+                                  <!--   <div class="row">
+                                      
                                             <div class="col-md-4">
                                                 <div class="form-group">
                                                 <label>Civil Status</label>
@@ -262,23 +290,25 @@ label {
                                                 </select>
                                             </div>
                                         </div>
-                                        <div class="col-md-4">
+                                              <div class="col-md-4">
                                             <div class="form-group">
-                                                <label>Gender</label>
-                                                <select class="form-control" required name="gender">
-                                                    <option disabled selected value="">Select Gender</option>
-                                                    <option value="Male">Male</option>
-                                                    <option value="Female">Female</option>
-                                                </select>
+                                                <label>Religion</label>
+                                                <input type="text" class="form-control" placeholder="Enter Religion" name="religion" required>
                                             </div>
                                         </div>
-                                    </div>
+                                        <div class="col-md-4">
+                                            <div class="form-group">
+                                                <label>Citizenship</label>
+                                                <input type="text" class="form-control" placeholder="Enter Citizenship" name="bplace" required>
+                                            </div>
+                                        </div>
+                                    </div> -->
                                     <div class="row">
                                         
                                         <div class="col-md-4">
                                             <div class="form-group">
                                                 <label>Street Name (ex. Purok 6)</label>
-                                                <input type="text" class="form-control" placeholder="Enter Birthplace" name="street" required>
+                                                <input type="text" class="form-control" placeholder="Enter Street" name="street" required>
                                             </div>
                                         </div>
                                       
@@ -342,21 +372,15 @@ label {
                                         </div>
                                     </div>
                                          <div class="row" >
-                                <!--   <div class="col-md-4">
-                                <div class="form-group">
-                                    <label>Place of Birth</label>
-                                    <input type="text" class="form-control" placeholder="Enter Birthplace" name="bplace" >
-                                
-                                </div>
-                            </div>  -->
-                            <div class="col-md-4">
+                              
+                         <!--   <div class="col-md-4">
                             <div class="form-group">
                                  
                                  <label for="formFile" class="form-label">Valid ID</label>
                                  <input class=" form-control form-control-sm" type="file" id="formFile" name="validid" accept=".png, .jpg, .jpeg, .docx, .pdf" required>
                             
                              </div>
-                             </div>
+                             </div> -->
                              <div class="col-md-4">
                              <div class="form-group">
                                     <label>Password</label>
@@ -390,7 +414,7 @@ label {
                                 <div class="terms">
                                     <input type="checkbox" id="terms" name="terms" required>
                                     I agree to the collection and use of my information for the educational assistance system. I understand that my information will be used solely for this purpose.</p>
-                                    <h4 class="terms" style="color: white;"><a href="terms_and_conditions.html" target="_blank"><span>Read our full Terms and Conditions</span></a></h4>
+                                    <h4 class="terms" style="color: white;">I Agree to the <a href="terms_and_conditions.html" target="_blank"> Terms of use </a> and  <a href="privacy.php" target="_blank"> Privacy Policy </a></h4>
                                 </div>
                             </div>  
                         <div class="modal-footer">
@@ -415,9 +439,7 @@ label {
 		</div>
 	</div>
 	<?php include 'templates/footer.php' ?>
-	<script src="vendors/js/vendor.bundle.base.js"></script>
-    <script src="js/off-canvas.js"></script>
-    <script src="js/misc.js"></script>
+
     <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
 </body>
 </html>

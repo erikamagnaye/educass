@@ -65,7 +65,9 @@ else {
     .table h2 {
         font-size: 18px;
     }
-
+    .table td{
+       hehight:30px;
+    }
     /* Responsive styles */
     @media only screen and (max-width: 768px) {
         /* Tablet and mobile styles */
@@ -163,10 +165,9 @@ else {
 										</div>
 
                                         <?php
-        $sql =  " SELECT *, CONCAT(lastname, ', ', firstname, ' ' , midname, '.' ) AS fullname 
-        FROM student join studentcourse on student.studid=studentcourse.studid 
-        join application on studentcourse.courseid=application.courseid 
-        where application.educid=$recent and brgy = '$skpos' ORDER BY lastname ASC, year asc";
+        $sql =  " SELECT *, CONCAT(lastname, ', ', firstname, ' ' , midname, '.' ) AS fullname   
+        from student
+        where  brgy = '$skpos' ORDER BY lastname ASC";
          $result = mysqli_query($conn, $sql); 
     ?>
 
@@ -194,9 +195,7 @@ else {
          <th> Fullname</th>
          <th> Gender</th>
          <th> Barangay</th>
-         <th>School</th>
          <th> Contact No</th>
-         <th>Year Level</th>
      </tr>
  </thead>
  <tbody>
@@ -209,12 +208,10 @@ else {
          echo "<td> " . $row['fullname'] . "</td>";
          echo "<td>" . $row['gender'] . "</td>";
          echo "<td>" . $row['brgy'] . "</td>";
-         echo "<td>" . $row['school_name'] . "</td>";
-         echo "<td>" . $row['contact_no'] . "</td>";
-         echo "<td>" . $row['year'] . "</td>";
+         echo "<td>" . $row['contact_no'] . "</td>";  
          echo "</tr>";
          if ($count % 20 === 0 && $count !== 0) {
-             echo '</tbody></table><div class="page-break"></div><h2>Educational  (Page ' . ($count / 25 + 1) . ')</h2><table class="table table-bordered"><thead><tr><th>No</th><th>fullname</th><th>Gender</th><th>Barangay</th><th>School</th><th>Contact </th><th>Year level </th></tr></thead><tbody>';
+             echo '</tbody></table><div class="page-break"></div><h2>Educational  (Page ' . ($count / 25 + 1) . ')</h2><table class="table table-bordered"><thead><tr><th>No</th><th>fullname</th><th>Gender</th><th>Barangay</th><th>Contact </th></tr></thead><tbody>';
          }
          $count++; // Increment the counter variable
      }

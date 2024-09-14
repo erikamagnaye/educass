@@ -78,16 +78,23 @@ if (!isset($_SESSION['skid']) || strlen($_SESSION['skid']) == 0 || !in_array($_S
     $result6 = $conn->query($query6);
     $totaleduc = $result6->num_rows;
 
-
-
+    //all student each barangay
+    $stud = "SELECT COUNT(*) FROM student where brgy = '$skpos' ";
+    $resultstud = $conn->query($stud);
+    $data = $resultstud->fetch_assoc();
+    $brgystudent = $data['COUNT(*)'];
+//announcement
+    $announce = "SELECT COUNT(*) FROM announcement ";
+    $resultann = $conn->query($announce);
+    $rows = $resultann->fetch_assoc();
+    $announcement = $rows['COUNT(*)'];
     //verified account
-
     $verified = "SELECT COUNT(*) FROM student WHERE accstatus ='Verified' and brgy='$skpos'";
     $resultvacc = $conn->query($verified);
     $row = $resultvacc->fetch_assoc();
     $vacc = $row['COUNT(*)'];
     //not verified account
-    $notverified = "SELECT COUNT(*) FROM student WHERE accstatus = '' OR accstatus IS NULL and brgy='$skpos'";
+    $notverified = "SELECT COUNT(*) FROM student WHERE accstatus = '' and brgy='$skpos'";
     $resultnotvacc = $conn->query($notverified);
     $row = $resultnotvacc->fetch_assoc();
     $notvacc = $row['COUNT(*)'];
@@ -501,19 +508,19 @@ if (!isset($_SESSION['skid']) || strlen($_SESSION['skid']) == 0 || !in_array($_S
 
                                             <div class="dashboard">
                                                 <div class="card bg-info">
-                                                    <div class="card-icon" style="color: white;"><i class="fa-solid fa-user-shield"></i></div>
+                                                    <div class="card-icon" style="color: white;"><i class="fa-solid fa-graduation-cap"></i></div>
                                                     <a href="student.php" class="btn">
-                                                        <h5 style="color: white;"><?= $vacc ?> <br>Verified Account</h5>
+                                                        <h5 style="color: white;"><?= $brgystudent ?> <br>Students</h5>
                                                     </a>
 
                                                 </div>
-                                                <div class="card" style="background-color: orange;">
-                                                    <div class="card-icon" style="color: white;"><i class="fa-solid fa-user-xmark"></i></div>
-                                                    <a href="notverified.php" class="btn">
-                                                        <h5 style="color: white;"><?= $notvacc ?> <br>Not Verified Account</h5>
+                                          <div class="card" style="background-color: orange;">
+                                                    <div class="card-icon" style="color: white;"><i class="fa-solid fa-bullhorn"></i></div>
+                                                    <a href="announcement.php" class="btn">
+                                                        <h5 style="color: white;"><?= $announcement ?> <br>Announcement</h5>
                                                     </a>
 
-                                                </div>
+                                                </div> 
                                                 <div class="card" style="background-color: #800000;">
                                                     <div class="card-icon" style="color: white;"><i class="fa-solid fa-clipboard-question"></i></div>
                                                     <a href="complaint.php" class="btn">

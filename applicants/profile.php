@@ -138,9 +138,14 @@ if (strlen($_SESSION['id'] == 0)) {
         </select>
                                                 </div>
                                                 <div class="col-md-4 mb-3">
+                                        <label for="exampleFormControlInput1" class="form-label" style="font-weight:bold;">Province</label>
+                                                <input type="text" class="form-control" placeholder="Enter Province" value="<?php echo $province; ?>" name="province" required>
+                                       
+                                        </div>
+                                              <!--  <div class="col-md-4 mb-3">
                                                     <label for="exampleFormControlInput1" class="form-label" style="font-weight:bold;">Citizenship</label>
                                                     <input type="text" class="form-control" placeholder="Enter Citizenship" value="<?php echo $citizenship; ?>" name="citizenship" required>
-                                                </div>
+                                                </div> -->
                                             </div>
                                             <div class="row">
                                             <div class="col-md-4 mb-3">
@@ -189,7 +194,7 @@ $barangays = array(
 </div>
                                                 
                                                 <div class="row">
-                                                <div class="col-md-4 mb-3">
+                                            <!--    <div class="col-md-4 mb-3">
                                                     <label for="exampleFormControlInput1" class="form-label" style="font-weight:bold;">Religion</label>
                                                     <input type="text" class="form-control" placeholder="Enter Religion" value="<?php echo $religion; ?>" name="religion" required>
                                                 </div>
@@ -202,12 +207,8 @@ $barangays = array(
             <option value="Widow" <?php echo ($civilstatus == 'Widow') ? 'selected' : ''; ?>>Widow</option>
         </select>
                                            
-                                        </div>
-                                        <div class="col-md-4 mb-3">
-                                        <label for="exampleFormControlInput1" class="form-label" style="font-weight:bold;">Province</label>
-                                                <input type="text" class="form-control" placeholder="Enter Province" value="<?php echo $province; ?>" name="province" required>
-                                       
-                                        </div>
+                                        </div> -->
+                                     
                                     </div>
                                          
                                             <button type="submit" class="btn btn-outline-primary btn-round" name="update"> <i class="fa fa-refresh"></i>Update</button>
