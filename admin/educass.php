@@ -191,7 +191,7 @@ $stmtSelect->close();
                                         <td><?php echo htmlspecialchars($sy); ?></td>
                                         <td><?php echo htmlspecialchars($status); ?></td>
                                         <td>
-                                            <a type="button" href="edit_educ.php?update&educid=<?php echo $educid; ?>"   class="btn btn-link btn-success mr-1" 
+                                            <a type="button" href="educ_report.php?educreportid=<?php echo $educid; ?>"   class="btn btn-link btn-success mr-1" 
                                                 title="view report">
                                                 <i class="fa fa-file"></i>
 

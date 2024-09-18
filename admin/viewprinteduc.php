@@ -141,7 +141,7 @@ else {
                                             <p><i>Mobile No.0923333</i></p>
 										</div>
                                         <div class="text-center">
-                                            <img src="assets/img/logo.png" class="img-fluid" width="100">
+                                            <img src="assets/img/quezon.png" class="img-fluid" width="100">
 										</div>
 									</div>
                                     <div class="row mt-2">

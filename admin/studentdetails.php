@@ -110,9 +110,21 @@ else{
 								</div>
 
 								<div class="card-body m-5" id="printThis">
-                                <h3 class="mt-4 fw-bold text-center" style="border-bottom:1px solid green">Educational Assistance Applicant</h3>
-                                <br>
-
+                                
+                                <div class="d-flex flex-wrap justify-content-around" style="border-bottom:1px solid green">
+                                        <div class="text-center">
+                                            <img src="assets/img/logo.png" class="img-fluid" width="100">
+										</div>
+										<div class="text-center">
+                                            <h3 class="mb-0">Republic of the Philippines</h3>
+                                            <h3 class="mb-0">Province of Quezon</h3>
+											<h3 class="fw-bold mb-0">San Antonio</h3>
+											<p><i>Mobile No.0923333</i></p>
+										</div>
+                                        <div class="text-center">
+                                            <img src="assets/img/quezon.png" class="img-fluid" width="100">
+										</div>
+									</div>
  
 
                                     <div class="row mt-2">
