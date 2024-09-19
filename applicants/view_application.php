@@ -19,7 +19,6 @@ FROM `application`
 JOIN `student` ON `application`.`studid` = `student`.`studid`
 JOIN `studentcourse` ON `application`.`studid` = `studentcourse`.`studid` and `application`.educid=`studentcourse`.educid
 JOIN `parentinfo` ON `application`.`studid` = `parentinfo`.`studid`
-JOIN `requirements` ON `application`.`studid` = `requirements`.`studid` and `application`.educid=`requirements`.educid and application.reqid=requirements.reqid
 JOIN (
   SELECT * FROM `educ aids` WHERE `educid` = $educid
 ) AS `educ aids` ON `application`.`educid` = `educ aids`.`educid`
@@ -49,6 +48,7 @@ WHERE `application`.`appid` = $appid AND `application`.`educid` = $educid AND `a
 
             $appstatus = $row['appstatus'];
             $appdate = $row['appdate'];
+            $appremark = $row['appremark'];
             $reviewedby = $row['reviewedby'];
 
             //calculate the age based on their application date because the age is updatable
@@ -78,11 +78,7 @@ WHERE `application`.`appid` = $appid AND `application`.`educid` = $educid AND `a
             $parent_address = $row['parent_address'];
             $parent_contact = $row['parent_contact'];
 
-            $letter = $row['letter'];
-            $schoolid = $row['schoolid'];
-            $cor = $row['cor'];
-            $indigency = $row['indigency'];
-            $grades = $row['grades'];
+      
         } else {
             $_SESSION['title'] = 'Error!';
             $_SESSION['message'] = 'Something went Wrong. Please, Try again!';
@@ -90,7 +86,20 @@ WHERE `application`.`appid` = $appid AND `application`.`educid` = $educid AND `a
             header("Location: all_application.php");
             exit();
         }
+
+        $req="SELECT *
+        FROM `requirements` join application on requirements.reqid= application.reqid WHERE `application`.`appid` = $appid AND `requirements`.`educid` = $educid AND `requirements`.`studid` = $studid"; ;
+         $viewreq = mysqli_query($conn, $req);
+        
+         if ($rowreq = mysqli_fetch_assoc($viewreq)) {
+            $letter = $rowreq['letter'];
+            $schoolid = $rowreq['schoolid'];
+            $cor = $rowreq['cor'];
+            $indigency = $rowreq['indigency'];
+            $grades = $rowreq['grades'];
+         }
     }
+
 
 ?>
     <!DOCTYPE html>
@@ -282,7 +291,7 @@ WHERE `application`.`appid` = $appid AND `application`.`educid` = $educid AND `a
                                                         <td style="height: 30px;"><?php if (!empty($schoolid)): ?>
                                                                 <a href="<?= 'assets/uploads/requirements/schoolid/' . $schoolid ?>" target="_blank"><?php echo $schoolid ?></a>
                                                             <?php else: ?>
-                                                                No letter submitted
+                                                                No letter 
                                                             <?php endif ?></td>
                                                         <th style="height: 30px;">Major</th>
                                                         <td style="height: 30px;"><?php echo $major; ?></td>
@@ -292,7 +301,7 @@ WHERE `application`.`appid` = $appid AND `application`.`educid` = $educid AND `a
                                                         <td style="height: 30px;"><?php if (!empty($cor)): ?>
                                                                 <a href="<?= 'assets/uploads/requirements/coe/' . $cor ?>" target="_blank"><?php echo $cor ?></a>
                                                             <?php else: ?>
-                                                                No Enrollment form submitted
+                                                                No Enrollment form 
                                                             <?php endif ?></td>
                                                         <th style="height: 30px;">Year Level</th>
                                                         <td style="height: 30px;"><?php echo $year; ?></td>
@@ -302,7 +311,7 @@ WHERE `application`.`appid` = $appid AND `application`.`educid` = $educid AND `a
                                                         <td style="height: 30px;"><?php if (!empty($grades)): ?>
                                                                 <a href="<?= 'assets/uploads/requirements/grades/' . $grades ?>" target="_blank"><?php echo $grades ?></a>
                                                             <?php else: ?>
-                                                                No grades submitted
+                                                                No grades 
                                                             <?php endif ?></td>
                                                         <th style="height: 30px;">School</th>
                                                         <td style="height: 30px;"><?php echo $school_name; ?></td>
@@ -312,7 +321,7 @@ WHERE `application`.`appid` = $appid AND `application`.`educid` = $educid AND `a
                                                         <td style="height: 30px;"><?php if (!empty($indigency)): ?>
                                                                 <a href="<?= 'assets/uploads/requirements/indigent/' . $indigency ?>" target="_blank"><?php echo $indigency ?></a>
                                                             <?php else: ?>
-                                                                No barangay indigent submitted
+                                                                No barangay indigent 
                                                             <?php endif ?></td>
                                                         <th style="height: 30px;">School Address</th>
                                                         <td style="height: 30px;"><?php echo $school_address; ?></td>
@@ -322,7 +331,7 @@ WHERE `application`.`appid` = $appid AND `application`.`educid` = $educid AND `a
                                                         <td style="height: 30px;"><?php if (!empty($letter)): ?>
                                                                 <a href="<?= 'assets/uploads/requirements/letter/' . $letter ?>" target="_blank"><?php echo $letter ?></a>
                                                             <?php else: ?>
-                                                                No letter submitted
+                                                                No letter 
                                                             <?php endif ?></td>
                                                         <th style="height: 30px;">Semester</th>
                                                         <td style="height: 30px;"><?php echo $sem; ?></td>
@@ -337,6 +346,10 @@ WHERE `application`.`appid` = $appid AND `application`.`educid` = $educid AND `a
                                                         </td>
                                                           <th style="height: 30px;">School Year</th>
                                                         <td style="height: 30px;"><?php echo $sy; ?></td>
+                                                    </tr>
+                                                    <tr>
+                                                        <th  style="height: 30px;">Remarks</th>                                                      
+                                                        <td colspan="3" style="height: 30px;"><?php echo $appremark; ?></td>
                                                     </tr>
                                                     <tr>
                                                         <th colspan="4" style="height: 30px;text-transform: uppercase;text-align:center;<?php

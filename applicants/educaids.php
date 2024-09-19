@@ -156,6 +156,20 @@ else {
     margin-right:5px; /* Reset margin right to 30px */
   }
 }
+.btn-yellow {
+  background-color: orange;
+  color: #fff;
+}
+
+.btn-warning {
+  background-color: #F7DC6F; 
+  color: #333;
+}
+
+.btn-danger {
+  background-color: #FF0000; 
+  color: white;
+}
 </style>
 </head>
 <body>
@@ -202,7 +216,7 @@ else {
 								</div>
                                 <div class="card-body">
     <?php 
-    $query = "SELECT * FROM `educ aids` where status = 'Open' order by `date` desc"; // SQL query to fetch all table data
+    $query = "SELECT * FROM `educ aids`  where status = 'Open' order by `date` desc"; // SQL query to fetch all table data
     $view_data = mysqli_query($conn, $query); // sending the query to the database
 
     if (mysqli_num_rows($view_data) > 0) { // if there are results
@@ -215,7 +229,8 @@ else {
             $start = $row['start'];        
             $end = $row['end'];         
             $date = $row['date'];  
-            $min_grade = $row['min_grade'];  
+            $min_grade = $row['min_grade']; 
+           
 
              // Check if student has already applied
              $check_query = "SELECT * FROM `application` WHERE `studid` = '$studid' AND `educid` = '$educid'";
@@ -223,12 +238,22 @@ else {
              if (mysqli_num_rows($check_result) > 0) {
                 $appid_row = mysqli_fetch_assoc($check_result);
                 $appid = $appid_row['appid'];
+                $appstatus = $appid_row['appstatus']; 
                 $has_applied = true;
             } else {
                 $has_applied = false;
                 $appid = null;
             }
- 
+    // Determine the button color based on the status
+    if ($appstatus == 'Pending') {
+        $btn_color = 'btn-yellow';
+    } elseif ($appstatus == 'Approved') {
+        $btn_color = 'btn-success';
+    } elseif ($appstatus == 'Rejected') {
+        $btn_color = 'btn-danger'; // red
+    } else {
+        $btn_color = 'btn-default'; // default color
+    }
             ?>
             <div class="card mb-2" style="border-width: 1px; border-radius: 10px;">
                 <div class="card-body py-2">
@@ -239,6 +264,7 @@ else {
                         </div>
                         <div>
                             <?php if ($has_applied) { ?>
+                                <button class="btn <?php echo $btn_color; ?>"><?php echo htmlspecialchars($appstatus); ?></button>
                                 <a href="view_application.php?appid=<?php echo $appid; ?>&educid=<?php echo $educid; ?>" class="btn btn-success btn-circle" style="margin: 1px;">
                                     <i class="fa fa-eye"></i> View Application
                                 </a>

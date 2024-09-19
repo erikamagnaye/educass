@@ -20,7 +20,6 @@ FROM `application`
 JOIN `student` ON `application`.`studid` = `student`.`studid`
 JOIN `studentcourse` ON `application`.`courseid` = `studentcourse`.`courseid` and `application`.educid=`studentcourse`.educid
 JOIN `parentinfo` ON `application`.`studid` = `parentinfo`.`studid`
-JOIN `requirements` ON `application`.`studid` = `requirements`.`studid` and `application`.educid=`requirements`.educid and application.reqid=requirements.reqid
 JOIN (
   SELECT * FROM `educ aids` WHERE `educid` = $educid
 ) AS `educ aids` ON `application`.`educid` = `educ aids`.`educid`
@@ -80,11 +79,7 @@ WHERE `application`.`appid` = $appid AND `application`.`educid` = $educid AND `a
             $parent_address = $row['parent_address'];
             $parent_contact = $row['parent_contact'];
 
-            $letter = $row['letter'];
-            $schoolid = $row['schoolid'];
-            $cor = $row['cor'];
-            $indigency = $row['indigency'];
-            $grades = $row['grades'];
+       
         } else {
             $_SESSION['title'] = 'Error!';
             $_SESSION['message'] = 'Something went Wrong. Please, Try again!';
@@ -92,6 +87,18 @@ WHERE `application`.`appid` = $appid AND `application`.`educid` = $educid AND `a
             header("Location: skdashboard.php");
             exit();
         }
+
+        $req="SELECT *
+        FROM `requirements` join application on requirements.reqid= application.reqid WHERE `application`.`appid` = $appid AND `requirements`.`educid` = $educid AND `requirements`.`studid` = $studid"; ;
+         $viewreq = mysqli_query($conn, $req);
+        
+         if ($rowreq = mysqli_fetch_assoc($viewreq)) {
+            $letter = $rowreq['letter'];
+            $schoolid = $rowreq['schoolid'];
+            $cor = $rowreq['cor'];
+            $indigency = $rowreq['indigency'];
+            $grades = $rowreq['grades'];
+         }
     }
 
 ?>

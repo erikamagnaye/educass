@@ -62,8 +62,42 @@ if (strlen($_SESSION['id'] == 0) || !isset($_SESSION['id'])) {
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.1.1/css/all.min.css" integrity="sha512-KfkfwYDsLkIlwQp6LFnl8zNdLGxu9YAA1QvwINks4PhcElQSvqcyVLLD9aMhXd13uQjoXtEKNosOWaZqXgel0g==" crossorigin="anonymous" referrerpolicy="no-referrer" />
    
 	<style>
+        .btn-yellow {
+  background-color: orange;
+  color: #fff;
+}
 
+.btn-warning {
+  background-color: #F7DC6F; 
+  color: #333;
+}
 
+.btn-danger {
+  background-color: #FF0000; 
+  color: white;
+}
+ /*start of responsive for previous*/
+/* styles for medium screens */
+@media (max-width: 768px) {
+  .card-title2 {   
+    font-size: 12px;
+  }
+  .btn {   
+    font-size: 9px;
+    height: auto;
+    width: auto;
+  }
+}
+
+/* styles for small screens */
+@media (max-width: 480px) {
+  .card-title2 {
+
+    font-size: 12px;
+  }
+}
+
+/*end of responsive for previous*/
 /* styles for medium screens */
 @media (max-width: 768px) {
   .btn-container button {
@@ -220,13 +254,6 @@ h5 {
 				
 				</div>
                             <div class="page-inner mt--2">
-		
-
-	
-				
-				
-								
-
 	
 
 <div class="dashboard">
@@ -261,8 +288,103 @@ h5 {
 
 
 
-							
+			
+<br>
+                    <div class="row">
+						<div class="col-md-12" >
+							<div class="card">
+								<div class="card-header">
+									<div class="card-head-row">
+										<div class="card-title fw">Available Educational Assistance</div>
+									</div>
+								</div>
+								<div class="card-body col-md-12 ">
+								
+                                
+<?php 
+$query = "SELECT * FROM `educ aids`  where status = 'Open' order by `date` desc"; // SQL query to fetch all table data
+$view_data = mysqli_query($conn, $query); // sending the query to the database
 
+if (mysqli_num_rows($view_data) > 0) { // if there are results
+    while ($row = mysqli_fetch_assoc($view_data)) {
+        $educid = $row['educid'];                
+        $title = $row['educname'];        
+        $sem = $row['sem'];         
+        $sy = $row['sy'];  
+        $status = $row['status'];           
+        $start = $row['start'];        
+        $end = $row['end'];         
+        $date = $row['date'];  
+        $min_grade = $row['min_grade']; 
+       
+
+         // Check if student has already applied
+         $check_query = "SELECT * FROM `application` WHERE `studid` = '$studid' AND `educid` = '$educid'";
+         $check_result = mysqli_query($conn, $check_query);
+         if (mysqli_num_rows($check_result) > 0) {
+            $appid_row = mysqli_fetch_assoc($check_result);
+            $appid = $appid_row['appid'];
+            $appstatus = $appid_row['appstatus']; 
+            $has_applied = true;
+        } else {
+            $has_applied = false;
+            $appid = null;
+        }
+// Determine the button color based on the status
+if ($appstatus == 'Pending') {
+    $btn_color = 'btn-yellow';
+} elseif ($appstatus == 'Approved') {
+    $btn_color = 'btn-success';
+} elseif ($appstatus == 'Rejected') {
+    $btn_color = 'btn-danger'; // red
+} else {
+    $btn_color = 'btn-default'; // default color
+}
+        ?>
+        <div class="card card2 mb-2" style="border-width: 1px; border-radius: 5px;text-align:justify;font-size:12px;">
+            <div class="card-body py-2">
+                <div class="d-flex justify-content-between">
+                    <div>
+                        <p class="card-title2 mb-0"><?php echo $title . " for " . $sy . "   ". $sem ." is open from ". $start . " until " . $end; ?></p>
+                        <small class="text-muted">Posted on: <?php echo $date;?></small>
+                    </div>
+                    <div>
+                        <?php if ($has_applied) { ?>
+                            <button class="btn <?php echo $btn_color; ?>"><?php echo htmlspecialchars($appstatus); ?></button>
+                            <a href="view_application.php?appid=<?php echo $appid; ?>&educid=<?php echo $educid; ?>" class="btn btn-success btn-circle" style="margin: 1px;">
+                                <i class="fa fa-eye"></i> View Application
+                            </a>
+                        <?php } else { ?>
+                            <a href="apply_educ.php?educid=<?php echo $educid; ?>" class="btn btn-success btn-circle" style="margin: 1px;">
+                                <i class="fa fa-check"></i> Apply Now
+                            </a>
+                        <?php } ?>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <?php 
+    }
+} else { // if there are no results
+    ?>
+    <div class="card mb-2" style="border-width: 1px; border-radius: 10px;">
+        <div class="card-body py-2"style="text-align: center;">
+            <h4 class="card-title mb-0">No available Educational assistances yet.</h4>
+            <small class="text-muted" >Check back later for new opportunities.</small>
+        </div>
+    </div>
+    <?php 
+}
+?>
+
+
+
+
+
+								</div>
+							</div>
+						</div>
+					</div>
                     <div class="row">
 						<div class="col-md-12">
 							<div class="card">
@@ -282,7 +404,6 @@ h5 {
 							</div>
 						</div>
 					</div>
-
 
 				</div>
 			</div>

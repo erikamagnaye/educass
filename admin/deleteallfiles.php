@@ -10,16 +10,16 @@ if (!isset($_SESSION['id']) || strlen($_SESSION['id']) == 0 || $_SESSION['role']
     exit();
 }
 
-if (isset($_GET['deleteid']) && isset($_GET['studid'])) {
+if (isset($_GET['deleteid']) ) {
     $educreportid = $_GET['deleteid'];
-    $studid = $_GET['studid'];
+   
 
     // Check if the user has confirmed the deletion
     if (isset($_GET['confirm']) && $_GET['confirm'] == 'true') {
         // Get the student's uploaded files and image paths from the database
-        $query = "SELECT schoolid, letter, cor, grades, indigency FROM `requirements` WHERE studid = ? AND educid = ?";
+        $query = "SELECT * FROM `requirements` WHERE  educid = ?";
         $stmt = $conn->prepare($query);
-        $stmt->bind_param("ii", $studid, $educreportid);
+        $stmt->bind_param("i",  $educreportid);
         $stmt->execute();
         $result = $stmt->get_result();
         $row = $result->fetch_assoc();
@@ -47,9 +47,9 @@ if (isset($_GET['deleteid']) && isset($_GET['studid'])) {
         $indigencypath = '../applicants/assets/uploads/requirements/indigent/' . $indigency;
 
         // Delete the student's data from the database
-        $query = "DELETE FROM `requirements` WHERE educid = ? AND studid = ?";
+        $query = "DELETE FROM `requirements` WHERE educid = ? ";
         $stmt = $conn->prepare($query);
-        $stmt->bind_param("ii", $educreportid, $studid);
+        $stmt->bind_param("i", $educreportid);
         $stmt->execute();
 
         if ($stmt->affected_rows > 0) {
@@ -70,7 +70,7 @@ if (isset($_GET['deleteid']) && isset($_GET['studid'])) {
                 unlink($indigencypath);
             }
 
-            $_SESSION['deletemess'] = 'Successfully deleted student files!';
+            $_SESSION['deletemess'] = 'Successfully deleted student!';
             $_SESSION['title'] = 'Good Job';
             $_SESSION['success'] = 'success';
         } else {

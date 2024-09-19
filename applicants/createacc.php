@@ -413,8 +413,7 @@ label {
                             <div class="form-group" style="border-top:1px solid white; background-color: green;margin-top:15px;">
                                 <div class="terms">
                                     <input type="checkbox" id="terms" name="terms" required>
-                                    I agree to the collection and use of my information for the educational assistance system. I understand that my information will be used solely for this purpose.</p>
-                                    <h4 class="terms" style="color: white;">I Agree to the <a href="terms_and_conditions.html" target="_blank"> Terms of use </a> and  <a href="privacy.php" target="_blank"> Privacy Policy </a></h4>
+                                    I Agree to the <a href="terms_and_conditions.php"style="color:white;"> <strong>Terms and Condition </strong></a> and  <a href="privacy.php"  style="color:white;"><strong>Privacy Policy </strong> </a></h4>
                                 </div>
                             </div>  
                         <div class="modal-footer">

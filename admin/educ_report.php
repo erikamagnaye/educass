@@ -22,10 +22,10 @@ if (!isset($_SESSION['id']) || strlen($_SESSION['id']) == 0 || $_SESSION['role']
     }
 
     //get the recent educational
-    $query = "SELECT educid FROM `educ aids` ORDER BY date DESC LIMIT 1";
-    $result = $conn->query($query);
-    $row = $result->fetch_assoc();
-    $recent = $row['educid'];
+    //$query = "SELECT educid FROM `educ aids` ORDER BY date DESC LIMIT 1";
+    //$result = $conn->query($query);
+    //$row = $result->fetch_assoc();
+    //$recent = $row['educid'];
 
     //all applicants for recent assistance	
 
@@ -63,6 +63,7 @@ if (!isset($_SESSION['id']) || strlen($_SESSION['id']) == 0 || $_SESSION['role']
         while ($row = $result5->fetch_assoc()) {
             $sem = $row['sem'];
             $sy = $row['sy'];
+            $educstatus = $row['status'];
         }
     }
 
@@ -106,10 +107,10 @@ if (!isset($_SESSION['id']) || strlen($_SESSION['id']) == 0 || $_SESSION['role']
         <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.1.1/css/all.min.css"
             integrity="sha512-KfkfwYDsLkIlwQp6LFnl8zNdLGxu9YAA1QvwINks4PhcElQSvqcyVLLD9aMhXd13uQjoXtEKNosOWaZqXgel0g=="
             crossorigin="anonymous" referrerpolicy="no-referrer" />
-            <link rel="stylesheet" type="text/css" href="https://cdn.datatables.net/2.1.2/css/dataTables.bootstrap5.min.css"/>
-    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11.12.3/dist/sweetalert2.all.min.js"></script>
+        <link rel="stylesheet" type="text/css" href="https://cdn.datatables.net/2.1.2/css/dataTables.bootstrap5.min.css" />
+        <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11.12.3/dist/sweetalert2.all.min.js"></script>
         <link href="https://cdn.jsdelivr.net/npm/sweetalert2@11.12.3/dist/sweetalert2.min.css" rel="stylesheet">
-     
+
         <script type="text/javascript" src="https://www.gstatic.com/charts/loader.js"></script>
         <script type="text/javascript">
             // Load the Visualization API and the corechart package
@@ -198,7 +199,6 @@ if (!isset($_SESSION['id']) || strlen($_SESSION['id']) == 0 || $_SESSION['role']
         </script>
         </script>
         <style>
-
             .dashboard {
                 display: grid;
                 grid-template-columns: repeat(5, 1fr);
@@ -559,13 +559,14 @@ if (!isset($_SESSION['id']) || strlen($_SESSION['id']) == 0 || $_SESSION['role']
                                         <div class="card-head-row">
                                             <div class="card-title fw-regular ">Educational Assistance for SY: <?= $sy ?>
                                                 for <?= $sem ?> Report</div>
-                                                <div class="card-tools">
-                                            <a href="educass.php" class="btn btn-danger btn-border btn-round btn-sm" title="view and print">
-												<i class="fa fa-chevron-left"></i>
-												Back
-											</a>
-                                         
-											</div>
+                                            <div class="card-tools">
+                                                <a href="educass.php" class="btn btn-danger btn-border btn-round btn-sm"
+                                                    title="view and print">
+                                                    <i class="fa fa-chevron-left"></i>
+                                                    Back
+                                                </a>
+
+                                            </div>
                                         </div>
                                     </div>
                                     <div class="card-body">
@@ -619,7 +620,7 @@ if (!isset($_SESSION['id']) || strlen($_SESSION['id']) == 0 || $_SESSION['role']
 
                                             </div>
                                         </div>
-                                       
+
                                         <div class="row">
                                             <div class="col-md-12">
                                                 <div class="card" style="padding:0px; margin:0px;">
@@ -628,19 +629,37 @@ if (!isset($_SESSION['id']) || strlen($_SESSION['id']) == 0 || $_SESSION['role']
                                                             <div class="card-title fw">All submitted files of applicants
                                                             </div>
                                                             <div class="card-tools">
-                                         
-                                                            <a type="button" href="javascript:void(0);"
-                                                                    onclick="confirmDeleteall(<?php echo $educreportid; ?>)"
-                                                                    class="btn  btn-outline-danger  mr-1" title="Remove">
+
+                                                                <a type="button" href="javascript:void(0);"
+                                                                    onclick="checkEducationStatus('<?php echo $educstatus; ?>', <?php echo $educreportid; ?>)"
+                                                                    class="btn btn-outline-danger mr-1" title="Remove">
                                                                     <i class="fa fa-trash"></i> Delete all
                                                                 </a>
 
-
                                                                 <script>
+                                                                    function checkEducationStatus(educstatus, educreportid) {
+                                                                        if (educstatus === 'Open') {
+                                                                            // Alert when the education status is 'Open'
+                                                                            Swal.fire({
+                                                                                title: "Ooops!",
+                                                                                text: "You cannot delete files while the educational status is Open.",
+                                                                                icon: "info",
+
+                                                                                confirmButtonColor: "blue",
+                                                                                confirmButtonText: "OK",
+
+                                                                                closeOnConfirm: true
+                                                                            });
+                                                                        } else {
+                                                                            // If not 'Open', proceed with confirmation dialog
+                                                                            confirmDeleteall(educreportid);
+                                                                        }
+                                                                    }
+
                                                                     function confirmDeleteall(educreportid) {
                                                                         Swal.fire({
                                                                             title: "Are you sure?",
-                                                                            text: "You want to delete all files?",
+                                                                            text: "This action will delete all files for this educational assistance.",
                                                                             icon: "warning",
                                                                             showCancelButton: true,
                                                                             confirmButtonColor: "#DD6B55",
@@ -649,106 +668,193 @@ if (!isset($_SESSION['id']) || strlen($_SESSION['id']) == 0 || $_SESSION['role']
                                                                             closeOnConfirm: true
                                                                         }).then((result) => {
                                                                             if (result.isConfirmed) {
-                                                                                window.location.href = 'deleteall.php?deleteid=' + educid + '&confirm=true';
+                                                                                // Redirect if user confirms deletion
+                                                                                window.location.href = 'deleteallfiles.php?deleteid=' + educreportid + '&confirm=true';
                                                                             }
                                                                         });
                                                                     }
                                                                 </script>
-                                        </td>
-												
-											</div>
+
+                                                                </td>
+
+                                                            </div>
                                                         </div>
                                                     </div>
                                                     <div class="card-body" style="text-align:justify;font-size:10px;">
-                                                        
-										<table id="dataTable" class="table table-striped">
-											<thead>
-												<tr>
-													<th scope="col">No</th>
-													<th >Student</th>
-                                                    <th >Barangay</th>
-													<th >School ID</th>
-													<th >Grades</th>
-													<th >Enrollment Form</th>
-													<th >Indigency</th>
-                                                    <th >Letter</th>
-													<th>Action</th>
-													
-												</tr>
-											</thead>
-											<tbody>
-                          <?php 
-                         // if (isset($_GET['search'])) {
-                          //  $search = $_GET['search'];
-                          //  $query = "SELECT * FROM `educ aids` WHERE `educname` LIKE '%$search%' OR `sem` LIKE '%$search%' OR `sy` LIKE '%$search%' order by `date` desc";
-                      //  } else {
-                           // $query = "SELECT * FROM `educ aids` order by `date` desc";
-                       // }
-                                    $query = "SELECT * FROM `requirements` join student on requirements.studid=student.studid 
+
+                                                        <table id="dataTable" class="table table-striped">
+                                                            <thead>
+                                                                <tr>
+                                                                    <th scope="col">No</th>
+                                                                    <th>Student</th>
+                                                                    <th>Barangay</th>
+                                                                    <th>School ID</th>
+                                                                    <th>Grades</th>
+                                                                    <th>Enrollment Form</th>
+                                                                    <th>Indigency</th>
+                                                                    <th>Letter</th>
+                                                                    <th>Action</th>
+
+                                                                </tr>
+                                                            </thead>
+                                                            <tbody>
+                                                                <?php
+                                                                // if (isset($_GET['search'])) {
+                                                                //  $search = $_GET['search'];
+                                                                //  $query = "SELECT * FROM `educ aids` WHERE `educname` LIKE '%$search%' OR `sem` LIKE '%$search%' OR `sy` LIKE '%$search%' order by `date` desc";
+                                                                //  } else {
+                                                                // $query = "SELECT * FROM `educ aids` order by `date` desc";
+                                                                // }
+                                                                $query = "SELECT * FROM `requirements` join student on requirements.studid=student.studid 
                                     join application on requirements.reqid=application.reqid
                                     where requirements.educid ='$educreportid'"; // SQL query to fetch all table data
-                                    $view_data = mysqli_query($conn, $query); // sending the query to the database
+                                                                $view_data = mysqli_query($conn, $query); // sending the query to the database
+                                                            
+                                                                // displaying all the data retrieved from the database using while loop
+                                                                $count = 1;
+                                                                while ($row = mysqli_fetch_assoc($view_data)) {
+                                                                    $studid = $row['studid'];
+                                                                    $lastname = $row['lastname'];
+                                                                    $firstname = $row['firstname'];
+                                                                    $midname = $row['midname'];
+                                                                    $letter = $row['letter'];
+                                                                    $schoolid = $row['schoolid'];
+                                                                    $grades = $row['grades'];
+                                                                    $cor = $row['cor'];
+                                                                    $indigency = $row['indigency'];
+                                                                    $brgy = $row['brgy'];
+                                                                    ?>
+                                                                    <tr>
 
-                                    // displaying all the data retrieved from the database using while loop
-                                    $count=1;
-                                    while ($row = mysqli_fetch_assoc($view_data)) {
-                                        $studid = $row['studid'];                
-                                        $lastname = $row['lastname'];        
-                                        $firstname = $row['firstname'];         
-                                        $midname = $row['midname'];  
-                                        $letter = $row['letter'];           
-                                        $schoolid = $row['schoolid'];        
-                                        $grades = $row['grades'];         
-                                        $cor = $row['cor'];  
-                                        $indigency = $row['indigency'];  
-                                         $brgy = $row['brgy']; 
-                                    ?>
-                                  <tr>
-    
-                                        <td><?php echo $count; ?></td>
-                                        <td><?php echo htmlspecialchars($lastname. ' ' . $firstname . ' ' . $midname); ?></td>
-                                        <td><?php echo htmlspecialchars($brgy);?></td>
-                                        <td><?php if (!empty($schoolid)): ?>   <a href="<?= '../applicants/assets/uploads/requirements/schoolid/' . $schoolid ?>" target="_blank">School ID</a>  <?php endif; ?></td>
-                                        <td><?php if (!empty($grades)): ?>   <a href="<?= '../applicants/assets/uploads/requirements/grades/' . $grades?>" target="_blank"><?//php echo $grades ?> Grades</a>  <?php endif; ?></td>
-                                        <td><?php if (!empty($cor)): ?>   <a href="<?= '../applicants/assets/uploads/requirements/coe/' . $cor ?>" target="_blank"><?//php echo $cor ?>Enrollment form</a>  <?php endif; ?></td>
-                                        <td><?php if (!empty($indigency)): ?>   <a href="<?= '../applicants/assets/uploads/requirements/indigent/' . $indigency ?>" target="_blank"><?//php echo $indigency ?>Indigent</a>  <?php endif; ?></td>
-                                        <td><?php if (!empty($letter)): ?>   <a href="<?= '../applicants/assets/uploads/requirements/letter/' . $letter ?>" target="_blank"><?//php echo $letter ?> letter</a>  <?php endif; ?></td>
+                                                                        <td><?php echo $count; ?></td>
+                                                                        <td><?php echo htmlspecialchars($lastname . ' ' . $firstname . ' ' . $midname); ?>
+                                                                        </td>
+                                                                        <td><?php echo htmlspecialchars($brgy); ?></td>
+                                                                        <td><?php if (!empty($schoolid)): ?> <a
+                                                                                    href="<?= '../applicants/assets/uploads/requirements/schoolid/' . $schoolid ?>"
+                                                                                    target="_blank" style="color:black">School
+                                                                                    ID</a> <?php endif; ?></td>
+                                                                        <td><?php if (!empty($grades)): ?> <a
+                                                                                    href="<?= '../applicants/assets/uploads/requirements/grades/' . $grades ?>"
+                                                                                    target="_blank"
+                                                                                    style="color:black"><?//php echo $grades ?>
+                                                                                    Grades</a> <?php endif; ?></td>
+                                                                        <td><?php if (!empty($cor)): ?> <a
+                                                                                    href="<?= '../applicants/assets/uploads/requirements/coe/' . $cor ?>"
+                                                                                    target="_blank"
+                                                                                    style="color:black"><?//php echo $cor ?>Enrollment
+                                                                                    form</a> <?php endif; ?></td>
+                                                                        <td><?php if (!empty($indigency)): ?> <a
+                                                                                    href="<?= '../applicants/assets/uploads/requirements/indigent/' . $indigency ?>"
+                                                                                    target="_blank"
+                                                                                    style="color:black"><?//php echo $indigency ?>Indigent</a>
+                                                                            <?php endif; ?></td>
+                                                                        <td><?php if (!empty($letter)): ?> <a
+                                                                                    href="<?= '../applicants/assets/uploads/requirements/letter/' . $letter ?>"
+                                                                                    target="_blank"
+                                                                                    style="color:black"><?//php echo $letter ?>
+                                                                                    letter</a> <?php endif; ?></td>
 
-                                            <td>
-                       
-                                            <a type="button" href="javascript:void(0);"
-                                                                    onclick="confirmDeletion(<?php echo $educreportid; ?>, <?php echo $studid ?>)"
-                                                                    class="btn btn-link btn-danger mr-1" title="Remove">
-                                                                    <i class="fa fa-times"></i>
-                                                                </a>
+                                                                        <td>
+                                                                            <a type="button" href="javascript:void(0);"
+                                                                                onclick="checkEducationStatus('<?php echo $educstatus; ?>', <?php echo $educreportid; ?>)"
+                                                                                class="btn btn-outline-danger mr-1"
+                                                                                title="Remove">
+                                                                                <i class="fa fa-trash"></i> Delete all
+                                                                            </a>
+
+                                                                            <script>
+                                                                                function checkEducationStatus(educstatus, educreportid) {
+                                                                                    if (educstatus === 'Open') {
+                                                                                        // Alert when the education status is 'Open'
+                                                                                        Swal.fire({
+                                                                                            title: "Ooops!",
+                                                                                            text: "You cannot delete files while the educational status is Open.",
+                                                                                            icon: "info",
+
+                                                                                            confirmButtonColor: "blue",
+                                                                                            confirmButtonText: "OK",
+
+                                                                                            closeOnConfirm: true
+                                                                                        });
+                                                                                    } else {
+                                                                                        // If not 'Open', proceed with confirmation dialog
+                                                                                        confirmDeleteall(educreportid);
+                                                                                    }
+                                                                                }
+
+                                                                                function confirmDeleteall(educreportid) {
+                                                                                    Swal.fire({
+                                                                                        title: "Are you sure?",
+                                                                                        text: "This action will delete all files for this educational assistance.",
+                                                                                        icon: "warning",
+                                                                                        showCancelButton: true,
+                                                                                        confirmButtonColor: "#DD6B55",
+                                                                                        confirmButtonText: "Yes, delete it!",
+                                                                                        cancelButtonText: "Cancel",
+                                                                                        closeOnConfirm: true
+                                                                                    }).then((result) => {
+                                                                                        if (result.isConfirmed) {
+                                                                                            // Redirect if user confirms deletion
+                                                                                            window.location.href = 'deleteallfiles.php?deleteid=' + educreportid + '&confirm=true';
+                                                                                        }
+                                                                                    });
+                                                                                }
+                                                                            </script>
+
+                                                                            <a type="button" href="javascript:void(0);"
+                                                                                onclick="checkeducstatus(<?php echo $educstatus; ?>,<?php echo $educreportid; ?>, <?php echo $studid ?>)"
+                                                                                class="btn btn-link btn-danger mr-1"
+                                                                                title="Remove">
+                                                                                <i class="fa fa-times"></i>
+                                                                            </a>
 
 
-                                                                <script>
-                                                                    function confirmDeletion(educreportid, studid) {
-                                                                        Swal.fire({
-                                                                            title: "Are you sure?",
-                                                                            text: "You want to delete this record?",
-                                                                            icon: "warning",
-                                                                            showCancelButton: true,
-                                                                            confirmButtonColor: "#DD6B55",
-                                                                            confirmButtonText: "Yes, delete it!",
-                                                                            cancelButtonText: "Cancel",
-                                                                            closeOnConfirm: true
-                                                                        }).then((result) => {
-                                                                            if (result.isConfirmed) {
-                                                                                window.location.href = 'deletefile.php?deleteid=' + educreportid + '&studid=' + studid + '&confirm=true';
-            }
-                                                                        });
-                                                                    }
-                                                                </script>
-                                        </td>
-                                    </tr>
-                                    <?php $count++; } ?>
+                                                                            <script>
+                                                                                function checkeducstatus(educstatus, educreportid, studid) {
+                                                                                    if (educstatus === 'Open') {
+                                                                                        // Alert when the education status is 'Open'
+                                                                                        Swal.fire({
+                                                                                            title: "Ooops!",
+                                                                                            text: "You cannot delete files while the educational status is Open.",
+                                                                                            icon: "info",
 
-</tbody>
+                                                                                            confirmButtonColor: "blue",
+                                                                                            confirmButtonText: "OK",
 
-										
-										</table>
+                                                                                            closeOnConfirm: true
+                                                                                        });
+                                                                                    } else {
+                                                                                        // If not 'Open', proceed with confirmation dialog
+                                                                                        confirmDeleteall(educreportid, studid);
+                                                                                    }
+                                                                                }
+                                                                                function confirmDeletion(educreportid, studid) {
+                                                                                    Swal.fire({
+                                                                                        title: "Are you sure?",
+                                                                                        text: "You want to delete this record?",
+                                                                                        icon: "warning",
+                                                                                        showCancelButton: true,
+                                                                                        confirmButtonColor: "#DD6B55",
+                                                                                        confirmButtonText: "Yes, delete it!",
+                                                                                        cancelButtonText: "Cancel",
+                                                                                        closeOnConfirm: true
+                                                                                    }).then((result) => {
+                                                                                        if (result.isConfirmed) {
+                                                                                            window.location.href = 'deletefile.php?deleteid=' + educreportid + '&studid=' + studid + '&confirm=true';
+                                                                                        }
+                                                                                    });
+                                                                                }
+                                                                            </script>
+                                                                        </td>
+                                                                    </tr>
+                                                                    <?php $count++;
+                                                                } ?>
+
+                                                            </tbody>
+
+
+                                                        </table>
                                                     </div>
 
                                                 </div>
@@ -779,9 +885,22 @@ if (!isset($_SESSION['id']) || strlen($_SESSION['id']) == 0 || $_SESSION['role']
         </div>
 
         </div>
-
+        <!-- alert for DELETEEEEEEEEE -->
+        <?php if (isset($_SESSION['deletemess'])): ?>
+            <script>
+                Swal.fire({
+                    title: '<?php echo $_SESSION['title']; ?>',
+                    text: '<?php echo $_SESSION['deletemess']; ?>',
+                    icon: '<?php echo $_SESSION['success']; ?>',
+                    confirmButtonText: 'OK'
+                });
+            </script>
+            <?php unset($_SESSION['deletemess']);
+            unset($_SESSION['success']);
+            unset($_SESSION['title']); ?>
+        <?php endif; ?>
         <script>
-            $(document).ready(function() {
+            $(document).ready(function () {
                 $('#dataTable').DataTable({
                     "lengthMenu": [
                         [10, 25, 50, -1],
@@ -790,7 +909,7 @@ if (!isset($_SESSION['id']) || strlen($_SESSION['id']) == 0 || $_SESSION['role']
                     "pageLength": 10,
                     "lengthChange": true,
                     "order": [
-                       
+
                     ],
                     "searching": true,
                     "ordering": true,
@@ -800,8 +919,8 @@ if (!isset($_SESSION['id']) || strlen($_SESSION['id']) == 0 || $_SESSION['role']
                         "lengthMenu": "_MENU_entries per page"
                     },
                     "scrollX": "300px", // Add this option to enable vertical scrolling
-            "scrollCollapse": true, // Add this option to collapse the table when scrolling
-        });
+                    "scrollCollapse": true, // Add this option to collapse the table when scrolling
+                });
             });
         </script>
 
