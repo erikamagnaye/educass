@@ -254,41 +254,55 @@ $stmtSelect->close();
                         </div>
                         <div class="modal-body">
                             <form method="POST" action="model/addeduc.php" >
-                                <div class="form-group">
+                                <div class="row">
+                                <div class="form-group col-md-12">
                                     <label>Title</label>
                                     <input type="text" class="form-control" placeholder="Enter Title" name="title" required>
                                 </div>
-                                <div class="form-group">
+                                
+                              
+                                </div>
+                                <div class="row">
+                                <div class="form-group col-md-6">
                                     <label>Semester</label>
                                     <input type="text" class="form-control" placeholder="Enter Semester" name="sem" required>
-                                </div>
-                                <div class="form-group">
+                                    </div>
+                                    <div class="form-group col-md-6">
                                     <label>School Year</label>
                                     <input type="text" class="form-control" placeholder="Enter Title" name="sy" required>
                                 </div>
-								<div class="form-group">
+                                
+                                </div>
+                                <div class="row">
+                                <div class="form-group col-md-6">
                                     <label>Start of Application</label>
                                     <input type="date" class="form-control" name="start" required>
                                 </div>
-								<div class="form-group">
+								<div class="form-group col-md-6">
                                     <label>End of Application</label>
                                     <input type="date" class="form-control" name="end" required>
                                 </div>
-                                <div class="form-group">
+                                </div>
+                                
+								
+                              <!--  <div class="form-group">
                                     <label>Minimum Grade needed</label>
                                     <input type="text" class="form-control" name="min_grade" required>
-                                </div>
-								<div class="form-group">
+                                </div>-->
+                                <div class="row">
+                                <div class="form-group col-md-6">
                                     <label>Date Created</label>
                                     <input type="date" class="form-control" name="date" required>
                                 </div>
-								<div class="form-group">
+								<div class="form-group col-md-6">
                                     <label>Status</label>
                                     <select class="form-control" id="" required name="status">
                                         <option value="Open">Open</option>
                                         <option value="Closed">Closed</option>
                                     </select>
                                 </div>
+                                </div>
+								
                             
                         </div>
                         <div class="modal-footer">

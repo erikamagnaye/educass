@@ -72,7 +72,14 @@ $conn->close();
 	<title>Educational Assistance</title>
 	<link rel="icon" href="assets/img/logo.png" type="image/x-icon"/>   <!-- THIS IS THE CODE TO DISPLAY AN ICON IN THE BROWASER TAB-->
 
+<style>
+       body{
+    background: url('assets/img/saqbound.jpg') no-repeat center center fixed; 
+    background-size: cover;
+  
+}
 
+</style>
 </head>
 <body>
 	<?//php include 'templates/loading_screen.php' ?>
@@ -90,29 +97,14 @@ $conn->close();
 			<div class="content">
 			
 				<div class="page-inner">
-				<!--	<?//php if(isset($_SESSION['message'])): ?>
-							<div class="alert alert-<?//php echo $_SESSION['success']; ?> <?//= $_SESSION['success']=='danger' ? 'bg-danger text-light' : null ?>" role="alert">
-								<?//php echo $_SESSION['message']; ?>
-							</div> -->
-                            <!-- MESSAGE WHEN DATA IS INSERTED __-->
-                            
-                            <?php 
-                            /*if (isset($_SESSION['message']) && $_SESSION['message'] != ''){ ?>                                                         ?>
-                      <!--  <div class="alert alert-success alert-dismissible fade show" role="alert">
-                        <strong>Hello!</strong><?//php echo $_SESSION['message']; ?>
-                        <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
-                        </div> -->
-                            
-						<?php unset($_SESSION['message']);  //}*/ ?> 
-                       
-
-						<?//php endif ?>
+				
 						<div class="row mt--2 justify-content-center">
-                    <div class="col-md-8">
+                    <div class="col-md-6">
                         <div class="card">
-                            <div class="card-header bg-success" style="border-radius: 8px;">
+                        <img src="assets/img/educ.jpg" class="card-img-top" alt="...">
+                            <div class="card-header " style="border-radius: 8px;">
                                 <div class="card-head-row">
-                                    <div class="card-title text-center"  style=" color: #ffffff;">Update Educational Assistance Information</div>
+                                    <div class="card-title text-center"  >Update Educational Assistance Information</div>
                                 </div>
                             </div>
                             <form method="POST" action="">

@@ -20,7 +20,7 @@ if (strlen($_SESSION['id'] == 0) || !isset($_SESSION['id']) || !isset($_SESSION[
         <link rel="stylesheet" type="text/css" href="https://cdn.datatables.net/2.1.2/css/dataTables.bootstrap5.min.css" />
         <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11.12.3/dist/sweetalert2.all.min.js"></script>
         <link href="https://cdn.jsdelivr.net/npm/sweetalert2@11.12.3/dist/sweetalert2.min.css" rel="stylesheet">
-     
+        <script src="https://code.jquery.com/jquery-3.7.1.js" integrity="sha256-eKhayi8LEQwp4NKxN+CfCh+3qOVUtJn3QNZ0TciWLP4=" crossorigin="anonymous"></script>
         <style>
             .btn-link+.btn-link {
                 margin-left: 5px;
@@ -77,44 +77,87 @@ if (strlen($_SESSION['id'] == 0) || !isset($_SESSION['id']) || !isset($_SESSION[
     </div>
                 </div>
                 <div class="card-body">
-                    <?php
-                    $query = "SELECT * FROM `announcement` order by `date` desc"; // SQL query to fetch all table data
-                    $view_data = mysqli_query($conn, $query); // sending the query to the database
+    <?php
+    $query = "SELECT * FROM `announcement` ORDER BY `date` DESC"; // SQL query to fetch all table data
+    $view_data = mysqli_query($conn, $query); // sending the query to the database
 
-                    // displaying all the data retrieved from the database using while loop
-                    while ($row = mysqli_fetch_assoc($view_data)) {
-                        $announceid = $row['announceid'];
-                        $title = $row['title'];
-                        $date = $row['date'];
-                        $details = $row['details'];
-                  ?>
-                    <div class="card mb-2" style="border-width: 1px; border-radius: 10px;">
-                        <div class="card-body py-2">
-                            <div class="d-flex justify-content-between">
-                                <div>
-                                    <h6 class="card-title mb-0"><?php echo $title;?></h6>
-                                    <small class="text-muted">Posted on: <?php echo $date;?></small>
-                                </div>
-                                <div>
-                                    <a href="view_announcement.php?announceid=<?php echo $announceid; ?>" class="btn btn-success btn-sm" title="View">
-                                    View
-                                    </a>
-                         
-                                  
-                                                 
-
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                    <?php }?>
+    // displaying all the data retrieved from the database using while loop
+    while ($row = mysqli_fetch_assoc($view_data)) {
+        $announceid = $row['announceid'];
+        $title = $row['title'];
+        $date = $row['date'];
+        $details = $row['details'];
+    ?>
+    <div class="card mb-2" style="border-width: 1px; border-radius: 10px;">
+        <div class="card-body py-2">
+            <div class="d-flex justify-content-between">
+                <div>
+                    <h6 class="card-title mb-0"><?php echo $title;?></h6>
+                    <small class="text-muted">Posted on: <?php echo $date;?></small>
                 </div>
+                <div>
+                    <a href="#" 
+                       class="btn btn-success btn-sm view_announcement" 
+                       title="View" 
+                       data-announceid="<?php echo $announceid; ?>" 
+                       data-title="<?php echo htmlspecialchars($title); ?>" 
+                       data-details="<?php echo htmlspecialchars($details); ?>"> 
+                        View
+                    </a>                                     
+                </div>
+            </div>
+        </div>
+    </div>
+    <?php }?>
+</div>
+
+<!-- Modal -->
+<div class="modal fade" id="announcementModal" tabindex="-1" aria-labelledby="announcementModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="announcementModalLabel">Announcement Details</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body">
+                <h4 style="text-align:center;" id="modalTitle"></h4>
+                <p nl2br id="modalDetails"></p>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+            </div>
+        </div>
+    </div>
+</div>
             </div>
         </div>
     </div>
 </div>
 
+<script>
+$(document).ready(function () {
+    $('.view_announcement').click(function (e) {
+        e.preventDefault(); // Prevent default anchor behavior
+        
+        // Get announcement details from data attributes
+        var announceId = $(this).data('announceid');
+        var title = $(this).data('title');
+        var details = $(this).data('details');
 
+        // Populate modal with announcement details
+        $('#modalTitle').text(title); // Set title in modal
+       
+
+           // Replace newlines with <br> for HTML display
+           $('#modalDetails').html(details.replace(/\n/g, '<br>')); // Set details in modal
+        
+        // Show the modal
+        $('#announcementModal').modal('show');
+    });
+});
+</script>
 
 
 

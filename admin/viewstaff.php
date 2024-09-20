@@ -29,6 +29,7 @@ else {
     }
     .table th, .table td {
         font-size: 12px;
+        height:40px;
     }
     .table h2 {
         font-size: 18px;

@@ -196,12 +196,19 @@ WHERE `application`.`appid` = $appid AND `application`.`educid` = $educid AND `a
                                     </div>
 
                                     <div class="card-body m-5" id="printThis">
-                                       
+                                    <div class="d-flex flex-wrap justify-content-around" >
                                         <div class="text-center">
                                             <img src="assets/img/logo.png" class="img-fluid" width="80" height="60">
                                         </div>
-                                       <p class="mt-4 fw-bold text-center" style=""><?php echo $educname . ' SY: ' . $sy . ' ' . $sem ?></p>
+                                        <div class="text-center">
+                                        <p class="mt-4 fw-bold text-center" style=""><?php echo $educname . ' SY: ' . $sy . ' ' . $sem ?></p>
                                        <p style="text-align:center">Date of Application: <?php echo $appdate ?></p>
+                                      
+                                        </div>
+                                        <div class="text-center">
+                                            <img src="assets/img/quezon.png" class="img-fluid" width="80" height="60">
+										</div>
+                                        </div>
                                        <br>
 
 
@@ -271,104 +278,85 @@ WHERE `application`.`appid` = $appid AND `application`.`educid` = $educid AND `a
                                                         <td style="height: 30px;"><?php echo $parent_status; ?></td>
                                                     </tr>
                                                     <tr>
-                                                        <th style="height: 30px;">Citizenship:</th>
-                                                        <td style="height: 30px;"><?php echo $citizenship;; ?></td>
-                                                        <th style="height: 30px;">Educational attainment</th>
-                                                        <td style="height: 30px;"><?php echo $parent_educattain; ?></td>
-                                                    </tr>
-                                                    <tr>
-                                                        <th style="height: 30px;">Religion:</th>
-                                                        <td style="height: 30px;"><?php echo $religion; ?></td>
+                                                        <th style="height: 30px;">Sex:</th>
+                                                        <td style="height: 30px;"><?php echo $gender; ?></td>
                                                         <th style="height: 30px;">Address</th>
                                                         <td style="height: 30px;"><?php echo $parent_address; ?></td>
                                                     </tr>
                                                     <tr>
-                                                        <th style="height: 30px;">Civil Status:</th>
-                                                        <td style="height: 30px;"><?php echo $civilstatus; ?></td>
-                                                        <th style="height: 30px;">Contact No</th>
+                                                    <th colspan="2" style="height: 30px;"></th>
+                                                    <th style="height: 30px;">Contact No</th>
                                                         <td style="height: 30px;"><?php echo $parent_contact; ?></td>
                                                     </tr>
                                                     <tr>
-                                                        <th style="height: 30px;">Gender</th>
-                                                        <td style="height: 30px;"><?php echo $gender; ?></td>
-                                                        <th colspan="2" style="height: 30px;"></th>
-                                                        
+                                                    <th colspan="2" style="height: 30px;">REQUIREMENTS</th>
+                                                    <th colspan="2" style="height: 30px;"></th>
                                                     </tr>
+                                                   
                                                     <tr>
-                                                        <th colspan="2" style="height: 30px;"></th>
-                                                        <th colspan="2" style="height: 30px;"> COURSE INFORMATION</th>                    
-                                                    </tr>
-                                                    <tr>
-                                                        <th colspan="2" style="height: 30px;">REQUIREMENTS</th>
-                                                        
-                                                        <th style="height: 30px;">Course</th>
-                                                        <td style="height: 30px;"><?php echo $course; ?></td>
-                                                    </tr>
-                                                    <tr>
-                                                        <th style="height: 30px;">School ID</th>
+                                                    <th style="height: 30px;">School ID</th>
                                                         <td style="height: 30px;"><?php if (!empty($schoolid)): ?>
                                                                 <a href="<?= 'assets/uploads/requirements/schoolid/' . $schoolid ?>" target="_blank"><?php echo $schoolid ?></a>
                                                             <?php else: ?>
                                                                 No letter 
                                                             <?php endif ?></td>
-                                                        <th style="height: 30px;">Major</th>
-                                                        <td style="height: 30px;"><?php echo $major; ?></td>
+                                                        
+                                                            <th colspan="2" style="height: 30px;"> COURSE INFORMATION</th>                    
                                                     </tr>
+                                                  
                                                     <tr>
-                                                        <th style="height: 30px;">Enrollment Form</th>
+                                                    <th style="height: 30px;">Enrollment Form</th>
                                                         <td style="height: 30px;"><?php if (!empty($cor)): ?>
                                                                 <a href="<?= 'assets/uploads/requirements/coe/' . $cor ?>" target="_blank"><?php echo $cor ?></a>
                                                             <?php else: ?>
                                                                 No Enrollment form 
                                                             <?php endif ?></td>
-                                                        <th style="height: 30px;">Year Level</th>
-                                                        <td style="height: 30px;"><?php echo $year; ?></td>
+                                                        
+                                                        <th style="height: 30px;">Course</th>
+                                                        <td style="height: 30px;"><?php echo $course; ?></td>
                                                     </tr>
                                                     <tr>
-                                                        <th style="height: 30px;">Grades</th>
+                                                    <th style="height: 30px;">Grades</th>
                                                         <td style="height: 30px;"><?php if (!empty($grades)): ?>
                                                                 <a href="<?= 'assets/uploads/requirements/grades/' . $grades ?>" target="_blank"><?php echo $grades ?></a>
                                                             <?php else: ?>
                                                                 No grades 
                                                             <?php endif ?></td>
-                                                        <th style="height: 30px;">School</th>
-                                                        <td style="height: 30px;"><?php echo $school_name; ?></td>
+                                                            <th style="height: 30px;">Major</th>
+                                                        <td style="height: 30px;"><?php echo $major; ?></td>
                                                     </tr>
                                                     <tr>
-                                                        <th style="height: 30px;">Barangay Indigent</th>
+                                                    <th style="height: 30px;">Barangay Indigent</th>
                                                         <td style="height: 30px;"><?php if (!empty($indigency)): ?>
                                                                 <a href="<?= 'assets/uploads/requirements/indigent/' . $indigency ?>" target="_blank"><?php echo $indigency ?></a>
                                                             <?php else: ?>
                                                                 No barangay indigent 
                                                             <?php endif ?></td>
-                                                        <th style="height: 30px;">School Address</th>
-                                                        <td style="height: 30px;"><?php echo $school_address; ?></td>
+                                                            <th style="height: 30px;">Year Level</th>
+                                                        <td style="height: 30px;"><?php echo $year . ' S.Y '. $sy; ?></td>
                                                     </tr>
                                                     <tr>
-                                                        <th style="height: 30px;">Letter</th>
+                                                    <th style="height: 30px;">Letter</th>
                                                         <td style="height: 30px;"><?php if (!empty($letter)): ?>
                                                                 <a href="<?= 'assets/uploads/requirements/letter/' . $letter ?>" target="_blank"><?php echo $letter ?></a>
                                                             <?php else: ?>
                                                                 No letter 
                                                             <?php endif ?></td>
+                                                            <th style="height: 30px;">School</th>
+                                                        <td style="height: 30px;"><?php echo $school_name; ?></td>
+                                                    </tr>
+                                                    <tr>
+                                                        <th colspan="2"  style="height: 30px; text-align:center;">Remarks</th>                                                      
+                                                        <th style="height: 30px;">School Address</th>
+                                                        <td style="height: 30px;"><?php echo $school_address; ?></td>
+                                                    </tr>
+                                                    <tr>
+                                                        <td colspan="2"  style="height: 30px;text-align:center"><?php echo $appremark; ?></td>                                                      
                                                         <th style="height: 30px;">Semester</th>
                                                         <td style="height: 30px;"><?php echo $sem; ?></td>
                                                     </tr>
-                                                    <tr>
-                                                    <th style="height: 30px;">Valid ID</th>
-                                                        <td style="height: 30px;"> <?php if (!empty($validid)): ?>
-                                                                <a href="<?= '../applicants/assets/uploads/validid_file/' . $validid ?>" target="_blank"><?php echo $validid ?></a>
-                                                            <?php else: ?>
-                                                                No Valid ID available
-                                                            <?php endif ?>
-                                                        </td>
-                                                          <th style="height: 30px;">School Year</th>
-                                                        <td style="height: 30px;"><?php echo $sy; ?></td>
-                                                    </tr>
-                                                    <tr>
-                                                        <th  style="height: 30px;">Remarks</th>                                                      
-                                                        <td colspan="3" style="height: 30px;"><?php echo $appremark; ?></td>
-                                                    </tr>
+
+                                                  
                                                     <tr>
                                                         <th colspan="4" style="height: 30px;text-transform: uppercase;text-align:center;<?php
                                                                                         if ($appstatus == 'Pending') {

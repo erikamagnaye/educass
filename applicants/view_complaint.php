@@ -49,6 +49,11 @@ if (strlen($_SESSION['id'] == 0) || !isset($_SESSION['id']) || !isset($_SESSION[
             .btn-link+.btn-link {
                 margin-left: 5px;
             }
+            body{
+    background: url('assets/img/saqbound.jpg') no-repeat center center fixed; 
+    background-size: cover;
+  
+}
         </style>
 
     </head>
@@ -80,7 +85,9 @@ if (strlen($_SESSION['id'] == 0) || !isset($_SESSION['id']) || !isset($_SESSION[
             <div class="row mt--2 justify-content-center">
                 <div class="col-md-6">
                     <div class="card  my-5">
+                    <img src="assets/img/queries.jpg" class="card-img-top" alt="...">
                         <div class="card-header">
+                      
                             <div class="card-head-row">
                                 <div class="card-title">My Complaint/ Queries</div>
 
@@ -94,6 +101,7 @@ if (strlen($_SESSION['id'] == 0) || !isset($_SESSION['id']) || !isset($_SESSION[
 
                             </div>
                         </div>
+                       
                         <div class="card-body">
 
 
@@ -147,16 +155,29 @@ if (mysqli_num_rows($result) > 0) {
     $allReplies = "No replies found.";
 }
 
+//QUERY FOR REMARKS OF EMPLOYEE
+$remarks = "SELECT * FROM `remark` WHERE concernid = $concernid AND studid = $studid ORDER BY `date` ASC";
+$remarksresult = mysqli_query($conn, $remarks);
+$allremarks = '';
+
+
+if (mysqli_num_rows($remarksresult) > 0) {
+while ($row = mysqli_fetch_assoc($remarksresult)) {
+$empremarks = $row['remarks'];
+$dateremarks = $row['date'];
+$remarksby = $row['sender'];
+$allremarks .= "$dateremarks from $remarksby | $empremarks<br>"; // Concatenate the replies
+}
+} else {
+$allremarks = "No replies found.";
+}
 echo "<tr>";
-echo "<th style='height: 40px;'>My Replies</th>";
-echo "<td style='height: 40px;'>$allReplies</td>";
+echo "<td style='height: 40px;'> <strong>Applicant  Replies</strong> <br><br> $allReplies</th>";
+echo "<td style='height: 40px;'><strong>Remarks</strong> <br><br>$allremarks</td>";
 echo "</tr>";
 ?>
                                    
-                                    <tr>
-                                        <th style="height: 40px;">Remarks</th>
-                                        <td style="height: 40px;"><?php echo $status ?></td>
-                                    </tr>
+                                   
                                 </table>
                             </form>
                             <form action="model/reply.php" method="post">

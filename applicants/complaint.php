@@ -8,7 +8,7 @@ ini_set('display_errors', 1);
 if (strlen($_SESSION['id'] == 0) || !isset($_SESSION['id']) || !isset($_SESSION['email'])) {
 	header('location:login.php');
     exit();
-} else {
+}else {
     $id = $_SESSION['id'] ;
     $allcomplaints = 1;
     $pending = 1;

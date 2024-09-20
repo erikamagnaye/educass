@@ -78,7 +78,14 @@ $conn->close();
 	<title>Educational Assistance</title>
 	<link rel="icon" href="assets/img/logo.png" type="image/x-icon"/>   <!-- THIS IS THE CODE TO DISPLAY AN ICON IN THE BROWASER TAB-->
     <link href="https://cdn.jsdelivr.net/npm/sweetalert2@11.12.3/dist/sweetalert2.min.css" rel="stylesheet">
+    <style>
+       body{
+    background: url('assets/img/saqbound.jpg') no-repeat center center fixed; 
+    background-size: cover;
+  
+}
 
+</style>
 </head>
 <body>
 	<?//php include 'templates/loading_screen.php' ?>
@@ -100,9 +107,9 @@ $conn->close();
 						<div class="row mt--2 justify-content-center">
                     <div class="col-md-7">
                         <div class="card" style="padding: 5px;margin:10px;">
-                            <div class="card-header bg-success" style="border-radius: 8px;">
+                            <div class="card-header " style="border-radius: 8px;">
                                 <div class="card-head-row">
-                                    <div class="card-title text-center" style=" color: #ffffff;">Update Staff Information</div>
+                                    <div class="card-title text-center">Update Staff Information</div>
                                 </div>
                             </div>
                             <form method="POST" action="">
