@@ -4,25 +4,24 @@ include '../server/server.php';
 
 $email = $conn->real_escape_string($_POST['email']);
 $password = md5($_POST['password']);
-//$status = "Verified";
 
 if (!empty($email) && !empty($password)) {
     // Check if the account is verified
-    $query = "SELECT * FROM `student` WHERE email = '$email' AND password = '$password'";
-    $result = $conn->query($query);
+    $query = "SELECT * FROM `student` WHERE email = ? AND password = ?";
+    $stmt = $conn->prepare($query);
+    $stmt->bind_param("ss", $email, $password);
+    $stmt->execute();
+    $result = $stmt->get_result();
+
     if ($result->num_rows) {
         while ($row = $result->fetch_assoc()) {
-        
-     
             $_SESSION['id'] = $row['studid'];
             $_SESSION['name'] = $row['firstname'];
             $_SESSION['email'] = $row['email'];
             $_SESSION['avatar'] = $row['picture'];
-    
             header('Location: ../dashboard.php');
-          }
-     }
-   else {
+        }
+    } else {
         $_SESSION['message'] = 'Invalid email or password!';
         $_SESSION['success'] = 'error';
         $_SESSION['title'] = 'Error';
@@ -36,7 +35,6 @@ if (!empty($email) && !empty($password)) {
 }
 
 $conn->close();
-
 /*
 if ($result->num_rows) {
     $row = $result->fetch_assoc();

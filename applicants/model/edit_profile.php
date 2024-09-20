@@ -4,10 +4,10 @@
     session_start(); 
     error_reporting(E_ALL);
     ini_set('display_errors', 1);
-    if (strlen($_SESSION['id'] == 0)) {
+    if (strlen($_SESSION['id'] == 0) || !isset($_SESSION['id']) || !isset($_SESSION['email'])) {
         header('location:login.php');
         exit();
-    } 
+    }
    // if(!isset($_SESSION['id'])){
         //if (isset($_SERVER["HTTP_REFERER"])) {
            // header("Location: " . $_SERVER["HTTP_REFERER"]);

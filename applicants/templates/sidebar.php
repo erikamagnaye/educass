@@ -1,6 +1,6 @@
 <?php // function to get the current page name
 
-if (strlen($_SESSION['id'] == 0)) {
+if (strlen($_SESSION['id'] == 0) || !isset($_SESSION['id']) || !isset($_SESSION['email'])) {
 	header('location:login.php');
     exit();
 }

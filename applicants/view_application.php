@@ -5,8 +5,8 @@
 session_start();
 error_reporting(E_ALL);
 ini_set('display_errors', 1);
-if (strlen($_SESSION['id'] == 0)) {
-    header('location:login.php');
+if (strlen($_SESSION['id'] == 0) || !isset($_SESSION['id']) || !isset($_SESSION['email'])) {
+	header('location:login.php');
     exit();
 } else {
     $studid = $_SESSION['id'];
@@ -109,7 +109,8 @@ WHERE `application`.`appid` = $appid AND `application`.`educid` = $educid AND `a
         <?php include 'templates/header.php' ?>
         <title>Educational Assistance Student</title>
         <link rel="icon" href="assets/img/logo.png" type="image/x-icon"/>   <!-- THIS IS THE CODE TO DISPLAY AN ICON IN THE BROWASER TAB-->
-
+        <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.1.1/css/all.min.css" integrity="sha512-KfkfwYDsLkIlwQp6LFnl8zNdLGxu9YAA1QvwINks4PhcElQSvqcyVLLD9aMhXd13uQjoXtEKNosOWaZqXgel0g==" crossorigin="anonymous" referrerpolicy="no-referrer" />
+        <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
         <style>
             body {
                 font-family: Arial, sans-serif;
@@ -173,6 +174,23 @@ WHERE `application`.`appid` = $appid AND `application`.`educid` = $educid AND `a
                                                     <i class="fa fa-print"></i>
                                                     Print
                                                 </button>
+                                          
+<a href="<?php if ($appstatus == 'Pending' || $appstatus == 'Rejected') {
+    echo "update_apply_educ.php?educid=$educid&appid=$appid";
+} else {
+    echo "javascript:void(0)";
+} ?>" class="btn btn-success btn-border btn-round btn-sm"  onclick="<?php if ($appstatus == 'Approved') {
+    echo "Swal.fire({
+        title: 'Sorry!',
+        text: 'You can no longer update your application!',
+        icon: 'warning'
+      });";
+} ?>">
+    <i class="fa fa-reload"></i>
+    Update Application
+</a>
+<?php
+?>
                                             </div>
                                         </div>
                                     </div>

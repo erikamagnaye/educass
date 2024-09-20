@@ -1,3 +1,10 @@
+
+<?php
+if (strlen($_SESSION['id'] == 0) || !isset($_SESSION['id']) || !isset($_SESSION['email'])) {
+	header('location:login.php');
+    exit();
+}
+?>
 <footer class="footer text-center">
     <div class="container-fluid">
         <div class="copyright ml-auto">

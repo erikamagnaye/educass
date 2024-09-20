@@ -1,6 +1,6 @@
 <?php //include 'model/fetch_brgy_info.php' 
 
-if (strlen($_SESSION['id'] == 0)) {
+if (strlen($_SESSION['id'] == 0) || !isset($_SESSION['id']) || !isset($_SESSION['email'])) {
 	header('location:login.php');
     exit();
 }

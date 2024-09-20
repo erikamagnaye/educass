@@ -12,8 +12,9 @@ if (strlen($_SESSION['id'] == 0) || !isset($_SESSION['id']) || !isset($_SESSION[
 
 else {
 //we need to retrieve existing information of the students so they won't have to input their info again
-if (isset($_GET['educid'])) { // this is from educaids.php, this educid will be used for applying for the educ aids
-    $educid = $_GET['educid'];
+if (isset($_GET['educid']) && isset($_GET['appid'])) { // this is from educaids.php, this educid will be used for applying for the educ aids
+    $educationalid = $_GET['educid'];
+    $applicationid = $_GET['appid'];
 
 $studid = $_SESSION['id'];
 $email = $_SESSION['email'];
@@ -46,17 +47,20 @@ $major = ''; // initialize
 $school_name = ''; // initialize mjor
 $school_address = ''; // initialize 
 //CODE TO RETRIEVE DATA ABOUT COURSE/EDUCATIONAL BACKGROUND
-$educbg = "SELECT * FROM `studentcourse` where studid= $studid order by courseid desc limit 1"; // SQL query to fetch all table data
+$educbg = "SELECT * FROM `studentcourse` where studid= $studid and educid = $educationalid order by courseid desc limit 1"; // SQL query to fetch all table data
 $studcourse = mysqli_query($conn, $educbg); // sending the query to the database
 
 // displaying all the data retrieved from the database using while loop
 while ($data = mysqli_fetch_assoc($studcourse)) {
-    $_SESSION= $data['courseid'];         
+    $courseid= $data['courseid'];         
         
     $course = $data['course'];         
     $major = $data['major'];  
     $school_name = $data['school_name'];           
-    $school_address = $data['school_address'];        
+    $school_address = $data['school_address'];     
+    $semester = $data['sem'];  
+    $schoolyear = $data['sy'];  
+    $yearlevel = $data['year'];     
    
 }
 
@@ -89,22 +93,38 @@ while ($parents = mysqli_fetch_assoc($studparent)) {
      
    
 }
+$letter = '';
+$schoolid = '';
+$cor = '';
+$indigency = '';
+$grades = '';
+$req="SELECT *
+FROM `requirements` join application on requirements.reqid= application.reqid WHERE `application`.`appid` = $applicationid AND `requirements`.`educid` = $educationalid AND `requirements`.`studid` = $studid"; ;
+ $viewreq = mysqli_query($conn, $req);
+
+ if ($rowreq = mysqli_fetch_assoc($viewreq)) {
+    $reqid = $rowreq['reqid'];
+    $letter = $rowreq['letter'];
+    $schoolid = $rowreq['schoolid'];
+    $cor = $rowreq['cor'];
+    $indigency = $rowreq['indigency'];
+    $grades = $rowreq['grades'];
+ }
 }
 
 
-//THIS HANDLE SUBMISSION
+//====================================================================THIS HANDLE SUBMISSION    FOR UPDATING INFORMATION-----------------------------------------
 if (isset($_POST['submit'])) { // this is from apply_educ.php
 
  
 
-    //$gradesid = mt_rand(3, 1000000);
-    //$reqid = mt_rand(3, 1000000);
-    //$courseid = mt_rand(3, 1000000);
-   // $appid = mt_rand(3, 1000000);
+
     $studid = $_POST['studid'];
     $educid = $_POST['educid'];
-  
-   
+    $appid = $_POST['appid'];
+    $reqid = $_POST['reqid'];
+    $courseid = $_POST['courseid'];
+    $parentid = $_POST['parentid'];
 
      // PERSONAL INFO
      $lastname = $_POST['lastname'];
@@ -118,17 +138,47 @@ if (isset($_POST['submit'])) { // this is from apply_educ.php
      $province = $_POST['province'];
      $street_name = $_POST['street_name'];
      $gender = $_POST['gender'];
-     $citizenship = $_POST['citizenship'];
-     $religion = $_POST['religion'];
+     //$citizenship = $_POST['citizenship'];
+    // $religion = $_POST['religion'];
      $age = $_POST['age'];
-     $civilstatus = $_POST['civilstatus'];
+     //$civilstatus = $_POST['civilstatus'];
 
-     $student = "UPDATE student SET lastname='$lastname', firstname='$firstname', 
-     midname='$midname', email='$email', birthday='$birthday', contact_no='$contact_no', 
-     brgy='$brgy', municipality='$municipality', province='$province', street_name='$street_name', 
-     gender='$gender', citizenship='$citizenship', religion='$religion', age='$age', civilstatus='$civilstatus' 
-     WHERE studid='$studid'";
-     $conn->query($student);
+      // Track success of each update operation
+    $success = true;
+
+     $stmt = $conn->prepare("UPDATE student SET 
+    lastname = ?, 
+    firstname = ?, 
+    midname = ?, 
+    email = ?, 
+    birthday = ?, 
+    contact_no = ?, 
+    brgy = ?, 
+    municipality = ?, 
+    province = ?, 
+    street_name = ?, 
+    gender = ?, 
+    age = ?
+    WHERE studid = ?");
+
+$stmt->bind_param("sssssssssssii", 
+    $lastname, 
+    $firstname, 
+    $midname, 
+    $email, 
+    $birthday, 
+    $contact_no, 
+    $brgy, 
+    $municipality, 
+    $province, 
+    $street_name, 
+    $gender, 
+   $age,
+    $studid);
+
+    if (!$stmt->execute()) {
+        $success = false;
+    }
 
      // COURSE INFO
      $course = $_POST['course'];
@@ -139,53 +189,33 @@ if (isset($_POST['submit'])) { // this is from apply_educ.php
      $sy = $_POST['sy'];
      $year = $_POST['year'];
 
-     $courseQuery = "INSERT INTO studentcourse ( studid,educid, course, major, school_name, school_address, sem, `year`, sy) 
-     VALUES ('$studid','$educid', '$course', '$major', '$school_name', '$school_address', '$sem', '$year', '$sy')";
-     $conn->query($courseQuery);
-    $courseid = $conn->insert_id;
 
-     // GRADES
-  /*   $sub1 = $_POST['sub1'];
-     $sub2 = $_POST['sub2'];
-     $sub3 = $_POST['sub3'];
-     $sub4 = $_POST['sub4'];
-     $sub5 = $_POST['sub5'];
-     $sub6 = $_POST['sub6'];
-     $sub7 = $_POST['sub7'];
-     $sub8 = $_POST['sub8'];
-     $sub9 = $_POST['sub9'];
-     $sub10 = $_POST['sub10'];
-     $grade1 = $_POST['grade1'];
-     $grade2 = $_POST['grade2'];
-     $grade3 = $_POST['grade3'];
-     $grade4 = $_POST['grade4'];
-     $grade5 = $_POST['grade5'];
-     $grade6 = $_POST['grade6'];
-     $grade7 = $_POST['grade7'];
-     $grade8 = $_POST['grade8'];
-     $grade9 = $_POST['grade9'];
-     $grade10 = $_POST['grade10'];
+     $stmt = $conn->prepare("UPDATE studentcourse SET 
+     course = ?, 
+     major = ?, 
+     school_name = ?, 
+     school_address = ?, 
+     sem = ?, 
+     `year` = ?, 
+     sy = ? 
+     WHERE courseid = ?");
+ 
+ $stmt->bind_param("sssssssi", 
+     $course, 
+     $major, 
+     $school_name, 
+     $school_address, 
+     $sem, 
+     $year, 
+     $sy, 
+     $courseid);
+ 
+     if (!$stmt->execute()) {
+        $success = false;
+    }
+ 
 
-
-    ///$status = 'Rejected'; // Default status
-
-  if ($year == 'First Year' && $sem == 'First Semester' && $grade < 75) {
-         $_SESSION['success'] = 'error';
-         $_SESSION['mess'] = 'Minimum grade required did not meet';
-         $_SESSION['title'] = 'Error';
-     } elseif (($year == 'First Year' && $sem == 'Second Semester' && $grade < 3) || $grade < 3) {
-         $_SESSION['success'] = 'error';
-         $_SESSION['mess'] = 'Minimum grade required did not meet';
-         $_SESSION['title'] = 'Error';
-     } else {
-         $status = 'Approved'; // Set status to approved if all conditions are met
-     } 
-
-     $gradesQuery = "INSERT INTO grades (gradesid, studid, educid, grade1, grade2, grade3, grade4, grade5, grade6, grade7, grade8, grade9, grade10, sub1, sub2, sub3, sub4, sub5, sub6, sub7, sub9, sub10)
-      VALUES ('$gradesid','$studid','$educid', '$grade1', '$grade2', '$grade3', '$grade4', '$grade5', '$grade6', '$grade7', '$grade8', '$grade9', '$grade10', '$sub1', '$sub2', '$sub3', '$sub4', '$sub5', '$sub6', '$sub7', '$sub9', '$sub10')";
-     $conn->query($gradesQuery);
-     //$gradesid = $conn->insert_id;
-     */
+   
 
      // PARENT INFO
      $parentname = $_POST['parentname'];
@@ -200,123 +230,102 @@ if (isset($_POST['submit'])) { // this is from apply_educ.php
 
    
 
-     $parentcheck = $conn->query("SELECT * FROM parentinfo WHERE studid = '$studid'");
+ 
+     $stmt = $conn->prepare("UPDATE parentinfo SET 
+     parentname = ?, parentage = ?, parent_occu = ?, parent_income = ?, parent_status = ?, parent_educattain = ?, 
+     parent_address = ?, parent_contact = ? 
+     WHERE parentid = ?");
 
-     if ($parentcheck->num_rows == 0) {
-         $parentquery = "INSERT INTO parentinfo (studid, parentname, parentage, parent_occu, parent_income, parent_status, parent_educattain, parent_address, parent_contact) 
-         VALUES ('$studid', '$parentname', '$parentage', '$parent_occu', '$parent_income', '$parent_status', '$parent_educattain', '$parent_address', '$parent_contact')";
-         $conn->query($parentquery);
+// Bind the parameters
+$stmt->bind_param("ssssssssi", $parentname, $parentage, $parent_occu, $parent_income, $parent_status, $parent_educattain, $parent_address, $parent_contact, $parentid);
 
-     } else {
-         $parentquery = "UPDATE parentinfo SET 
-         parentname = '$parentname', parentage = '$parentage', parent_occu = '$parent_occu', parent_income = '$parent_income', parent_status = '$parent_status', parent_educattain = '$parent_educattain', 
-         parent_address = '$parent_address', parent_contact = '$parent_contact' 
-         WHERE studid = '$studid'";
-         $conn->query($parentquery);
-     }
-
-     //$parentsid = $conn->insert_id;
-     //retrieve parents
-     $parent = "SELECT * FROM `parentinfo` where studid= $studid"; // SQL query to fetch all table data
-$studparent = mysqli_query($conn, $parent); // sending the query to the database
-
-// displaying all the data retrieved from the database using while loop
-while ($parents = mysqli_fetch_assoc($studparent)) {
-    $parentid = $parents['parentid'];
-   
+// Execute the prepared statement
+if (!$stmt->execute()) {
+    $success = false;
 }
-
+     
 // FILE UPLOADS
 
-$coePath = 'assets/uploads/requirements/coe/' . basename($_FILES['coe']['name']);
-$coe = basename($_FILES['coe']['name']);
-$coemaxFileSize = 10000000; // 10MB
-$coeallowedTypes = ['image/png', 'image/jpeg', 'image/jpg', 'application/pdf', 'application/vnd.openxmlformats-officedocument.wordprocessingml.document'];
+    // Retrieve existing file paths from the database (before the update)
+    $existingQuery = "SELECT * FROM requirements WHERE reqid = '$reqid'";
+    $existingResult = mysqli_query($conn, $existingQuery);
+    $existingFiles = mysqli_fetch_assoc($existingResult);
 
-$schoolidPath = 'assets/uploads/requirements/schoolid/' . basename($_FILES['schoolid']['name']);
-$schoolid = basename($_FILES['schoolid']['name']);
-$coemaxFileSize = 10000000; // 10MB
-$schoolidallowedTypes = ['image/png', 'image/jpeg', 'image/jpg', 'application/pdf', 'application/vnd.openxmlformats-officedocument.wordprocessingml.document'];
+    $existing_coe = $existingFiles['cor'];
+    $existing_schoolid = $existingFiles['schoolid'];
+    $existing_grades = $existingFiles['grades'];
+    $existing_letter = $existingFiles['letter'];
+    $existing_indigent = $existingFiles['indigency'];
 
-$gradesPath = 'assets/uploads/requirements/grades/' . basename($_FILES['grades']['name']);
-$grades = basename($_FILES['grades']['name']);
-$gradesmaxFileSize = 10000000; // 10MB
-$gradesallowedTypes = ['image/png', 'image/jpeg', 'image/jpg', 'application/pdf', 'application/vnd.openxmlformats-officedocument.wordprocessingml.document'];
+    // FILE UPLOADS (Check if new file is uploaded or retain the old one)
 
-$letterPath = 'assets/uploads/requirements/letter/' . basename($_FILES['letter']['name']);
-$letter = basename($_FILES['letter']['name']);
-$lettermaxFileSize = 10000000; // 10MB
-$letterallowedTypes = ['image/png', 'image/jpeg', 'image/jpg', 'application/pdf', 'application/vnd.openxmlformats-officedocument.wordprocessingml.document'];
-
-$indigentPath = 'assets/uploads/requirements/indigent/' . basename($_FILES['indigent']['name']);
-$indigent = basename($_FILES['indigent']['name']);
-$indigentmaxFileSize = 10000000; // 10MB
-$indigentallowedTypes = ['image/png', 'image/jpeg', 'image/jpg', 'application/pdf', 'application/vnd.openxmlformats-officedocument.wordprocessingml.document'];
-
-if (!in_array($_FILES['coe']['type'], $coeallowedTypes) || 
-    !in_array($_FILES['letter']['type'], $letterallowedTypes) || 
-    !in_array($_FILES['schoolid']['type'], $schoolidallowedTypes) || 
-    !in_array($_FILES['grades']['type'], $gradesallowedTypes) || 
-    !in_array($_FILES['indigent']['type'], $indigentallowedTypes)) {
-    
-        echo '<script>
-        alert("Invalid file type. Only PNG, JPEG, DOCx, and JPG files are allowed.");
-      
-    </script>';
-   
-
-} elseif (
-    move_uploaded_file($_FILES['coe']['tmp_name'], $coePath) &&
-    move_uploaded_file($_FILES['letter']['tmp_name'], $letterPath) &&
-    move_uploaded_file($_FILES['schoolid']['tmp_name'], $schoolidPath) &&
-    move_uploaded_file($_FILES['grades']['tmp_name'], $gradesPath) &&
-    move_uploaded_file($_FILES['indigent']['tmp_name'], $indigentPath)
-) {
-    // Insert data into the database
-    $stmt = $conn->prepare("INSERT INTO requirements (reqid, educid, studid, letter, schoolid, `cor`, indigency, grades) VALUES (?,?, ?, ?, ?, ?, ?, ?)");
-    $stmt->bind_param("iiisssss", $reqid,$educid, $studid, $letter, $schoolid, $coe, $indigent, $grades);
-
-    if ($stmt->execute()) {
-        $reqid = $conn->insert_id;
-        
-       
+    // COE (Certificate of Enrollment)
+    if (!empty($_FILES['coe']['name'])) {
+        $coePath = 'assets/uploads/requirements/coe/' . basename($_FILES['coe']['name']);
+        $coe = basename($_FILES['coe']['name']);
+        move_uploaded_file($_FILES['coe']['tmp_name'], $coePath);
     } else {
-        echo '<script>
-        alert("Something went wrong. Please, Try again!");
-       
-    </script>';
+        $coe = $existing_coe; // Retain the original file
     }
-} else {
-    echo '<script>
-    alert("File upload failed");
- 
-</script>';
-}
-//if all data are inserted, insert the ids in application
-date_default_timezone_set('Asia/Manila'); // set the time zone to Philippine Standard Time (PST)
-$appdate = date('Y-m-d');
-$appstatus = 'Pending';
 
-$application =$conn->prepare( "INSERT INTO `application` ( studid, educid, reqid, courseid, parentsid, `appstatus`, `appdate`) 
-VALUES(?,?,?,?,?,?,?)");
-$application->bind_param("iiiiiss",$studid, $educid, $reqid, $courseid, $parentid, $appstatus,$appdate);
-  
-  if ($application->execute()) {
-         $appid = mysqli_insert_id($conn);
-    $_SESSION['alertmess'] = ' Your application ID is ' .$appid ;
-   $_SESSION['title'] = 'Successful';
-   $_SESSION['success'] = 'success';
-   header('Location: educaids.php');
-   exit;
-     
-  }
- else {
-    $_SESSION['appmessage'] = 'Error submitting application!';
-    $_SESSION['appheader'] = 'Error';
-    $_SESSION['appicon'] = 'error';
+    // School ID
+    if (!empty($_FILES['schoolid']['name'])) {
+        $schoolidPath = 'assets/uploads/requirements/schoolid/' . basename($_FILES['schoolid']['name']);
+        $schoolid = basename($_FILES['schoolid']['name']);
+        move_uploaded_file($_FILES['schoolid']['tmp_name'], $schoolidPath);
+    } else {
+        $schoolid = $existing_schoolid; // Retain the original file
+    }
+
+    // Grades
+    if (!empty($_FILES['grades']['name'])) {
+        $gradesPath = 'assets/uploads/requirements/grades/' . basename($_FILES['grades']['name']);
+        $grades = basename($_FILES['grades']['name']);
+        move_uploaded_file($_FILES['grades']['tmp_name'], $gradesPath);
+    } else {
+        $grades = $existing_grades; // Retain the original file
+    }
+
+    // Letter
+    if (!empty($_FILES['letter']['name'])) {
+        $letterPath = 'assets/uploads/requirements/letter/' . basename($_FILES['letter']['name']);
+        $letter = basename($_FILES['letter']['name']);
+        move_uploaded_file($_FILES['letter']['tmp_name'], $letterPath);
+    } else {
+        $letter = $existing_letter; // Retain the original file
+    }
+
+    // Indigent
+    if (!empty($_FILES['indigent']['name'])) {
+        $indigentPath = 'assets/uploads/requirements/indigent/' . basename($_FILES['indigent']['name']);
+        $indigent = basename($_FILES['indigent']['name']);
+        move_uploaded_file($_FILES['indigent']['tmp_name'], $indigentPath);
+    } else {
+        $indigent = $existing_indigent; // Retain the original file
+    }
+
+    // Proceed with the database insertion
+    $stmt = $conn->prepare("UPDATE requirements SET letter = ?, schoolid = ?, cor = ?, indigency = ?, grades = ? WHERE reqid = ?");
+    $stmt->bind_param("sssssi", $letter, $schoolid, $coe, $indigent, $grades, $reqid);
+
+    if (!$stmt->execute()) {
+        $success = false;
+    }
+
+    // Check if all updates were successful
+    if ($success) {
+        $_SESSION['alertmess'] = 'You have successfully updated your application.';
+        $_SESSION['title'] = 'Successful';
+        $_SESSION['success'] = 'success';
+    } else {
+        $_SESSION['alertmess'] = 'Something went wrong. Please try again.';
+        $_SESSION['title'] = 'Error';
+        $_SESSION['success'] = 'error';
+    }
+
     header('Location: educaids.php');
     exit;
-}
+
 
 }
 
@@ -459,16 +468,17 @@ $application->bind_param("iiiiiss",$studid, $educid, $reqid, $courseid, $parenti
   font-size: 16px;
   margin: 0 5px;
 }
+/*
 .form-control {
-  height: 40px; /* add this to make select options consistent height */
+  height: 40px; 
   padding: 10px;
  margin-left: 30px;margin-right:30px;
   width:350px;
 }
 select.form-control {
-  height: 40px; /* add this to make select options consistent height */
+  height: 40px; 
   padding: 10px;
-}
+} */
 .main-panel {
   font-family: Poppins, sans-serif;
 }
@@ -504,15 +514,15 @@ select.form-control {
 				</div>
 				<div class="page-inner">
 				
-					<div class="row mt--2">
+					<div class="row mt--2 row d-flex justify-content-center align-items-center">
 						
-						<div class="col-md-12">
+						<div class="col-md-10 ">
 						
 							<div class="card">
 
 <div class="card-header">
                                         <div class="card-head-row">
-                                            <div class="card-title"><strong><h1>Submit Application</h1></strong> </div>
+                                            <div class="card-title"><strong><h1>Update Application</h1></strong> </div>
 
                                             <div class="card-tools">
                                              
@@ -573,12 +583,18 @@ select.form-control {
   <!-- Step 1: Information -->
    
   <div class="form-step active">
-  
+  <div class="card-body mx-4">
     <h2 style="margin-left: 30px;margin-right:30px;">Information</h2>
+
     <div class="row">
-    
-    <input type="hidden" name="educid" value="<?php echo $educid; ?>">
+   
+
+    <input type="hidden" name="appid" value="<?php echo $applicationid; ?>">
+    <input type="hidden" name="educid" value="<?php echo $educationalid; ?>">
+    <input type="hidden" name="courseid" value="<?php echo $courseid; ?>">
+    <input type="hidden" name="parentid" value="<?php echo $parentid; ?>">
     <input type="hidden" name="studid" value="<?php echo $studid; ?>">
+    <input type="hidden" name="reqid" value="<?php echo $reqid; ?>">
     <div class="col-md-4">
                             
                           
@@ -591,31 +607,33 @@ select.form-control {
                                                 <input type="text" class="form-control" placeholder="Enter Lastname" value="<?php echo $lastname; ?>" name="lastname" required>
                                         </div>
     </div>
-    <div class="row">
+   <!-- <div class="row">
                                         <div class="col-md-4">                                      
                                                 <input type="text" class="form-control" placeholder="Enter Religion" value="<?php echo $religion; ?>" name="religion" required>                                         
                                         </div>
                                         <div class="col-md-4">                                       
                                                 <input type="text" class="form-control" placeholder="Enter Citizenship" value="<?php echo $citizenship; ?>" name="citizenship" required>                                       
                                         </div>
-                                        <div class="col-md-4">                                       
+                                        <div class="col-md-4" >
+                                                
+                                                <select class="form-control form-control form-control-select" name="civilstatus" required>
+                <option disabled selected>Select Civil Status</option>
+                <option value="Single" <?php echo ($civilstatus == 'Single') ? 'selected' : ''; ?>>Single</option>
+                <option value="Married" <?php echo ($civilstatus == 'Married') ? 'selected' : ''; ?>>Married</option>
+                <option value="Widow" <?php echo ($civilstatus == 'Widow') ? 'selected' : ''; ?>>Widow</option>
+            </select>
+                                               
+                                            </div>
+                                        
+                                    </div> -->
+									<div class="row">
+                                    <div class="col-md-4">                                       
                                                 <input type="date" class="form-control" placeholder="Enter Birthdate" value="<?php echo $birthday; ?>" name="birthday" required>                                       
                                         </div>
-                                    </div>
-									<div class="row">
                                         <div class="col-md-4">                                  
                                                 <input type="number" class="form-control" placeholder="Enter Age" min="1" value="<?php echo $age; ?>" name="age" required>                                           
                                             </div>
-                                            <div class="col-md-4" >
-                                                
-                                            <select class="form-control form-control form-control-select" name="civilstatus" required>
-            <option disabled selected>Select Civil Status</option>
-            <option value="Single" <?php echo ($civilstatus == 'Single') ? 'selected' : ''; ?>>Single</option>
-            <option value="Married" <?php echo ($civilstatus == 'Married') ? 'selected' : ''; ?>>Married</option>
-            <option value="Widow" <?php echo ($civilstatus == 'Widow') ? 'selected' : ''; ?>>Widow</option>
-        </select>
-                                           
-                                        </div>
+                                         
                                         <div class="col-md-4">
                                             
                                         <select class="form-control form-control" required name="gender" style="font-family: 'Poppins', Times, serif;">
@@ -688,7 +706,7 @@ $barangays = array(
     <div class="btn-container">
       <button type="button" class="next-step mb-3">Next<i class="fa fa-caret-right"></i></button>
     </div>
-    
+   </div>
 </div>
    
 <div class="form-step ">
@@ -715,13 +733,13 @@ $barangays = array(
                                                
                                                <select class="form-control form-control form-control-select" name="sem" required>
            <option disabled selected>Select Semester</option>
-           <option value="First Semester">First Semester</option>
-           <option value="Second Semester">Second Semester</option>
-           
+           <option value="First Semester" <?php echo ($semester == 'First Semester') ? 'selected' : '';  ?>>First Semester</option>
+           <option value="Second Semester"<?php echo ($semester == 'Second Semester') ? 'selected' : '';  ?>>Second Semester</option>
+
        </select>
                                            </div>
                                        <div class="col-md-4">
-                                               <input type="text" class="form-control" placeholder="Enter School Year (ex. 2024-2025)" name="sy" required>
+                                               <input type="text" class="form-control" value="<?=$schoolyear?>" placeholder="Enter School Year (ex. 2024-2025)" name="sy" required>
                                        </div>
                                     </div>
                                    
@@ -729,13 +747,13 @@ $barangays = array(
 
                                         <div class="col-md-4">
                                                 
-                                                <select class="form-control form-control form-control-select" name="year" required>
+                                                <select class="form-control  form-control-select" name="year" required>
             <option disabled selected>Select Year Level</option>
-            <option value="First Year">First Year</option>
-            <option value="Second Year">Second Year</option>
-            <option value="Third Year">third Year</option>
-            <option value="Fourth Year">Fourth Year</option>
-            <option value="Fifth Year">Fifth Year</option>
+            <option value="First Year" <?php echo ($yearlevel == 'First Year') ? 'selected' : '' ;?>>First Year</option>
+            <option value="Second Year" <?php echo ($yearlevel == 'Second Year') ? 'selected' : '' ;?>>Second Year</option>
+            <option value="Third Year"<?php echo ($yearlevel == 'Third Year') ? 'selected' : '' ;?>>Third Year</option>
+            <option value="Fourth Year"<?php echo ($yearlevel == 'Fourth Year') ? 'selected' : '' ;?>>Fourth Year</option>
+            <option value="Fifth Year"<?php echo ($yearlevel == 'Fifth Year') ? 'selected' : '' ;?>>Fifth Year</option>
         </select>
                                             </div>
               
@@ -808,32 +826,73 @@ $barangays = array(
     </div>
     <div class="form-step ">
   <div class="card-body mx-4">
-    <h2>Upload Requirements</h2>
+    <h2>Update Requirements</h2>
    
 
-								  
+								  <div class="row">
+                                  <div class="col-md-2">
+                                  <?php if (!empty($cor)) { ?>
+        <p>  <a href="<?= 'assets/uploads/requirements/coe/' . $cor ?>" target="_blank">Enrollment Form</a></p>
+        
+    <?php } else{
+        echo '<p>No Enrollment</p>';
+    }?>                                    
+                                </div>
+                                <div class="col-md-2">
+                                  <?php if (!empty($indigency)) { ?>
+        <p>  <a href="<?= 'assets/uploads/requirements/indigent/' . $indigent ?>" target="_blank">Brgy Indigency</a></p>
+        
+    <?php } else{
+        echo '<p>No Indigency</p>';
+    }?>                                    
+                                </div>
+                                <div class="col-md-2">
+                                  <?php if (!empty($grades)) { ?>
+        <p>  <a href="<?= 'assets/uploads/requirements/grades/' . $grades ?>" target="_blank">Grades</a></p>
+        
+    <?php } else{
+        echo '<p>No Grades</p>';
+    }?>                                    
+                                </div>
+                                <div class="col-md-2">
+                                  <?php if (!empty($letter)) { ?>
+        <p>  <a href="<?= 'assets/uploads/requirements/indigent/' . $letter ?>" target="_blank">Letter</a></p>
+        
+    <?php } else{
+        echo '<p>No Letter</p>';
+    }?>                                    
+                                </div>
+                                <div class="col-md-2">
+                                  <?php if (!empty($schoolid)) { ?>
+        <p>  <a href="<?= 'assets/uploads/requirements/indigent/' . $schoolid ?>" target="_blank">School ID</a></p>
+        
+    <?php } else{
+        echo '<p>No School ID</p>';
+    }?>                                    
+                                </div>
+                                  </div>
                                     <div class="row">
                                         <div class="col-md-4">
                                         <label for="formFile" class="form-label">Certificate of Enrollment</label>
-                                        <input class=" form-control form-control-sm" type="file" id="formFile" name="coe" accept=".png, .jpg, .jpeg, .docx, .pdf" required>
+                                        <input class=" form-control form-control-sm" type="file" id="formFile" name="coe" accept=".png, .jpg, .jpeg, .docx, .pdf" >
                                         </div>
                                         <div class="col-md-4">
                                         <label for="formFile" class="form-label">Barangay Indigent</label>
-                                        <input class=" form-control form-control-sm" type="file" id="formFile" name="indigent" accept=".png, .jpg, .jpeg, .docx, .pdf" required>
+                                        <input class=" form-control form-control-sm" type="file" id="formFile" name="indigent" accept=".png, .jpg, .jpeg, .docx, .pdf" >
                                         </div>
                                         <div class="col-md-4">
                                         <label for="formFile" class="form-label">Grades</label>
-                                        <input class=" form-control form-control-sm" type="file" id="formFile" name="grades" accept=".png, .jpg, .jpeg, .docx, .pdf" required>
+                                        <input class=" form-control form-control-sm" type="file" id="formFile" name="grades" accept=".png, .jpg, .jpeg, .docx, .pdf" >
                                         </div>
                                     </div>
                                     <div class="row">
                                         <div class="col-md-4">                                      
                                         <label for="formFile" class="form-label">Letter</label>
-                                        <input class=" form-control form-control-sm" type="file" id="formFile" name="letter" accept=".png, .jpg, .jpeg, .docx, .pdf" required>                                         
+                                        <input class=" form-control form-control-sm" type="file" id="formFile" name="letter" accept=".png, .jpg, .jpeg, .docx, .pdf" >                                         
                                         </div>
                                         <div class="col-md-4">                                       
                                         <label for="formFile" class="form-label">School ID</label>
-                                        <input class=" form-control form-control-sm" type="file" id="formFile" name="schoolid" accept=".png, .jpg, .jpeg, .docx, .pdf" required>                                      
+                                        <input class=" form-control form-control-sm" type="file" id="formFile" name="schoolid" accept=".png, .jpg, .jpeg, .docx, .pdf">                                      
                                         </div>
                                       
                                     </div>
