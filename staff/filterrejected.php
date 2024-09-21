@@ -6,7 +6,32 @@
 session_start(); 
 error_reporting(E_ALL);
 ini_set('display_errors', 1);
-
+$skTypes = array(
+    'SK-Arawan',
+    'SK-Bagong Niing',
+    'SK-Balat Atis',
+    'SK-Briones',
+    'SK-Bulihan',
+    'SK-Buliran',
+    'SK-Callejon',
+    'SK-Corazon',
+    'SK-Del Valle',
+    'SK-Loob',
+    'SK-Magsaysay',
+    'SK-Matipunso',
+    'SK-Niing',
+    'SK-Poblacion',
+    'SK-Pulo',
+    'SK-Pury',
+    'SK-Sampaga',
+    'SK-Sampaguita',
+    'SK-San Jose',
+    'SK-Sinturisan'
+);
+if (!isset($_SESSION['staffid']) || strlen($_SESSION['staffid']) == 0 || in_array($_SESSION['role'], $skTypes)) {
+    header('location:index.php');
+    exit();
+}
 if (isset($_POST['filter'])) {
     $recent = $_POST['recent'];
     $filbrgy = $_POST['brgy'];
@@ -73,15 +98,15 @@ if (isset($_POST['filter'])) {
 										<div class="card-title" style=" margin-right: 10px;"><?php echo $filbrgy?></div>
                                      
 											<div class="card-tools">
-                                            <a href="print_filter_approved_current.php?recent=<?=$recent?>&filbrgy=<?=$filbrgy?>&year=<?=$level_condition?>" class="btn btn-danger btn-border btn-round btn-sm" title="view and print">
+                                            <a href="print_filter_rejected_current.php?recent=<?=$recent?>&filbrgy=<?=$filbrgy?>&year=<?=$level_condition?>" class="btn btn-danger btn-border btn-round btn-sm" title="view and print">
 												<i class="fa fa-print"></i>
 												Print
 											</a>
-                                            <a href="model/export_educprovided_csv.php" class="btn btn-success btn-border btn-round btn-sm" title="Download">
+                                            <a href="model/export.php" class="btn btn-success btn-border btn-round btn-sm" title="Download">
 												<i class="fa fa-file"></i>
 												Export CSV
 											</a>
-											    <a href="all_current_applicants.php" class="btn btn-danger btn-border btn-round btn-sm" title="Download">
+											    <a href="rejected_current_applicants.php" class="btn btn-danger btn-border btn-round btn-sm" title="Download">
 												<i class="fa fa-chevron-left"></i>
 												Back
 											</a>
@@ -116,7 +141,7 @@ if (isset($_POST['filter'])) {
     $query = "SELECT *, CONCAT(lastname, ', ', firstname, ' ' , midname, '.' ) AS fullname 
     FROM student join studentcourse on student.studid=studentcourse.studid 
     join application on studentcourse.courseid=application.courseid 
-    where application.educid=? and brgy=? and `year` LIKE ? and application.appstatus = 'Approved' ORDER BY `year` ASC, lastname ASC";
+    where application.educid=? and brgy=? and `year` LIKE ? and application.appstatus = 'Rejected' ORDER BY `year` ASC, lastname ASC";
 
     $stmt = mysqli_prepare($conn, $query);
     mysqli_stmt_bind_param($stmt, 'sss', $recent, $filbrgy, $level_condition);

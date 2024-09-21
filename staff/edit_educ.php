@@ -8,7 +8,7 @@ session_start();
 error_reporting(E_ALL);
 ini_set('display_errors', 1);
 $skTypes = array('SK-Arawan','SK-Bagong Niing', 'SK-Balat Atis','SK-Briones','SK-Bulihan','SK-Buliran','SK-Callejon',
-'SK-Corazon', 'SK-Del Valle','SK-loob','SK-Magsaysay','SK-Matipunso','SK-Niing','SK-Poblacion','SK-Pulo',
+'SK-Corazon', 'SK-Del Valle','SK-Loob','SK-Magsaysay','SK-Matipunso','SK-Niing','SK-Poblacion','SK-Pulo',
  'SK-Pury','SK-Sampaga','SK-Sampaguita', 'SK-San Jose', 'SK-Sinturisan'); 
 if (!isset($_SESSION['staffid']) || strlen($_SESSION['staffid']) == 0 ||in_array($_SESSION['role'], $skTypes)) {
 	header('location:index.php');
@@ -77,7 +77,14 @@ $conn->close();
 	<?php include 'templates/header.php' ?>
 	<title>Educational Assistance</title>
 	<link rel="icon" href="assets/img/logo.png" type="image/x-icon"/>   <!-- THIS IS THE CODE TO DISPLAY AN ICON IN THE BROWASER TAB-->
+<style>
+           body{
+    background: url('assets/img/saqbound.jpg') no-repeat center center fixed; 
+    background-size: cover;
+  
+}
 
+</style>
 
 </head>
 <body>
@@ -114,9 +121,10 @@ $conn->close();
 
 						<?//php endif ?>
 						<div class="row mt--2 justify-content-center">
-                    <div class="col-md-8">
+                    <div class="col-md-6">
                         <div class="card">
-                            <div class="card-header bg-success" style="border-radius: 8px;">
+                        <img src="assets/img/announcement.jpg" class="card-img-top" alt="...">
+                            <div class="card-header ">
                                 <div class="card-head-row">
                                     <div class="card-title text-center"  style=" color: #ffffff;">Update Educational Assistance Information</div>
                                 </div>

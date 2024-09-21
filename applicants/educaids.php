@@ -240,11 +240,8 @@ else {
                 $appid = $appid_row['appid'];
                 $appstatus = $appid_row['appstatus']; 
                 $has_applied = true;
-            } else {
-                $has_applied = false;
-                $appid = null;
-            }
-    // Determine the button color based on the status
+
+                  // Determine the button color based on the status
     if ($appstatus == 'Pending') {
         $btn_color = 'btn-yellow';
     } elseif ($appstatus == 'Approved') {
@@ -254,6 +251,11 @@ else {
     } else {
         $btn_color = 'btn-default'; // default color
     }
+            } else {
+                $has_applied = false;
+                $appid = null;
+            }
+  
             ?>
             <div class="card mb-2" style="border-width: 1px; border-radius: 10px;">
                 <div class="card-body py-2">

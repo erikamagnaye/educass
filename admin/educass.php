@@ -53,7 +53,8 @@ $stmtSelect->close();
     <link rel="stylesheet" type="text/css" href="https://cdn.datatables.net/2.1.2/css/dataTables.bootstrap5.min.css"/>
     <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11.12.3/dist/sweetalert2.all.min.js"></script>
         <link href="https://cdn.jsdelivr.net/npm/sweetalert2@11.12.3/dist/sweetalert2.min.css" rel="stylesheet">
-     
+        <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.1.1/css/all.min.css" integrity="sha512-KfkfwYDsLkIlwQp6LFnl8zNdLGxu9YAA1QvwINks4PhcElQSvqcyVLLD9aMhXd13uQjoXtEKNosOWaZqXgel0g==" crossorigin="anonymous" referrerpolicy="no-referrer" />
+   
 <style>
     .btn-link + .btn-link {
     margin-left: 5px;
@@ -191,9 +192,9 @@ $stmtSelect->close();
                                         <td><?php echo htmlspecialchars($sy); ?></td>
                                         <td><?php echo htmlspecialchars($status); ?></td>
                                         <td>
-                                            <a type="button" href="educ_report.php?educreportid=<?php echo $educid; ?>"   class="btn btn-link btn-success mr-1" 
+                                            <a type="button" href="educ_report.php?educreportid=<?php echo $educid; ?>"   class="btn btn-link btn-primary mr-1" 
                                                 title="view report">
-                                                <i class="fa fa-file"></i>
+                                                <i class="fa-solid fa-chart-simple"></i>
 
                                             </a>
                                             <a type="button" href="edit_educ.php?update&educid=<?php echo $educid; ?>"   class="btn btn-link btn-success mr-1" 

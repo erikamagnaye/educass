@@ -15,7 +15,7 @@ $skTypes = array(
     'SK-Callejon',
     'SK-Corazon',
     'SK-Del Valle',
-    'SK-loob',
+    'SK-Loob',
     'SK-Magsaysay',
     'SK-Matipunso',
     'SK-Niing',

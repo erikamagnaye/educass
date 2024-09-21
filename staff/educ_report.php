@@ -3,20 +3,41 @@
 session_start();
 error_reporting(E_ALL);
 ini_set('display_errors', 1);
-if (!isset($_SESSION['id']) || strlen($_SESSION['id']) == 0 || $_SESSION['role'] !== 'admin') {
-    header('location:login.php');
+$skTypes = array(
+    'SK-Arawan',
+    'SK-Bagong Niing',
+    'SK-Balat Atis',
+    'SK-Briones',
+    'SK-Bulihan',
+    'SK-Buliran',
+    'SK-Callejon',
+    'SK-Corazon',
+    'SK-Del Valle',
+    'SK-Loob',
+    'SK-Magsaysay',
+    'SK-Matipunso',
+    'SK-Niing',
+    'SK-Poblacion',
+    'SK-Pulo',
+    'SK-Pury',
+    'SK-Sampaga',
+    'SK-Sampaguita',
+    'SK-San Jose',
+    'SK-Sinturisan'
+);
+if (!isset($_SESSION['staffid']) || strlen($_SESSION['staffid']) == 0 || in_array($_SESSION['role'], $skTypes)) {
+    header('location:index.php');
     exit();
 } else {
 
 
-    $id = $_SESSION['id'];
-    $query = "SELECT * FROM `admin` join staff on staff.staffid=admin.empid WHERE adminid= '$id'";
+    $staffid = $_SESSION['staffid'];
+    $query = "SELECT * FROM  staff  WHERE staffid= '$staffid'";
     $result = $conn->query($query);
 
     if ($result->num_rows) {
         while ($row = $result->fetch_assoc()) {
-            $adminid = $row['adminid'];
-            $username = $row['username'];
+            $staffid = $row['staffid'];
             $role = $row['position'];
         }
     }
@@ -101,7 +122,7 @@ if (!isset($_SESSION['id']) || strlen($_SESSION['id']) == 0 || $_SESSION['role']
 
     <head>
         <?php include 'templates/header.php' ?>
-        <title>Admin Dashboard</title>
+        <title>Staff Dashboard</title>
         <link rel="icon" href="assets/img/logo.png" type="image/x-icon" />
         <!-- THIS IS THE CODE TO DISPLAY AN ICON IN THE BROWASER TAB-->
         <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.1.1/css/all.min.css"
@@ -522,7 +543,7 @@ if (!isset($_SESSION['id']) || strlen($_SESSION['id']) == 0 || $_SESSION['role']
                     <div class="page-inner">
                         <div class="d-flex align-items-left align-items-md-center flex-column flex-md-row">
                             <div>
-                                <h2 class="text-black fw-bold">Admin Dashboard</h2>
+                                <h2 class="text-black fw-bold">Staff Dashboard</h2>
 
 
                             </div>
@@ -756,51 +777,7 @@ if (!isset($_SESSION['id']) || strlen($_SESSION['id']) == 0 || $_SESSION['role']
                                                                                     letter</a> <?php endif; ?></td>
 
                                                                         <td>
-                                                                            <a type="button" href="javascript:void(0);"
-                                                                                onclick="checkEducationStatus('<?php echo $educstatus; ?>', <?php echo $educreportid; ?>)"
-                                                                                class="btn btn-outline-danger mr-1"
-                                                                                title="Remove">
-                                                                                <i class="fa fa-trash"></i> Delete all
-                                                                            </a>
-
-                                                                            <script>
-                                                                                function checkEducationStatus(educstatus, educreportid) {
-                                                                                    if (educstatus === 'Open') {
-                                                                                        // Alert when the education status is 'Open'
-                                                                                        Swal.fire({
-                                                                                            title: "Ooops!",
-                                                                                            text: "You cannot delete files while the educational status is Open.",
-                                                                                            icon: "info",
-
-                                                                                            confirmButtonColor: "blue",
-                                                                                            confirmButtonText: "OK",
-
-                                                                                            closeOnConfirm: true
-                                                                                        });
-                                                                                    } else {
-                                                                                        // If not 'Open', proceed with confirmation dialog
-                                                                                        confirmDeletefile(educreportid);
-                                                                                    }
-                                                                                }
-
-                                                                                function confirmDeletefile(educreportid) {
-                                                                                    Swal.fire({
-                                                                                        title: "Are you sure?",
-                                                                                        text: "This action will delete  files for this educational assistance.",
-                                                                                        icon: "warning",
-                                                                                        showCancelButton: true,
-                                                                                        confirmButtonColor: "#DD6B55",
-                                                                                        confirmButtonText: "Yes, delete it!",
-                                                                                        cancelButtonText: "Cancel",
-                                                                                        closeOnConfirm: true
-                                                                                    }).then((result) => {
-                                                                                        if (result.isConfirmed) {
-                                                                                            // Redirect if user confirms deletion
-                                                                                            window.location.href = 'deleteallfiles.php?deleteid=' + educreportid + '&confirm=true';
-                                                                                        }
-                                                                                    });
-                                                                                }
-                                                                            </script>
+                                                                            
 
                                                                             <a type="button" href="javascript:void(0);"
                                                                                 onclick="checkeducstatus(<?php echo $educstatus; ?>,<?php echo $educreportid; ?>, <?php echo $studid ?>)"

@@ -1,55 +1,64 @@
-<?php 
-    include '../server/server.php';
+<?php
+include '../server/server.php';
 
-    session_start();
-    error_reporting(E_ALL);
-    ini_set('display_errors', 1);
+session_start();
+error_reporting(E_ALL);
+ini_set('display_errors', 1);
 
-    if (strlen($_SESSION['id'] == 0)) {
-        header('location:login.php');
-        exit();
-    }
+if (strlen($_SESSION['id']) == 0) {
+    header('location:login.php');
+    exit();
+}
 
-    $username = $_SESSION['username'];
-    $id = $_SESSION['id'];
-    $cur_pass = md5($conn->real_escape_string($_POST['cur_pass']));
-    $new_pass = md5($conn->real_escape_string($_POST['new_pass']));
-    $con_pass = md5($conn->real_escape_string($_POST['con_pass']));
+$role = $_SESSION['role'];
+$id = $_SESSION['id'];
 
-    if (!empty($username)) {
-        if ($new_pass == $con_pass) {
-            $check = "SELECT * FROM admin 
+if (!empty($_POST['cur_pass']) && !empty($_POST['new_pass']) && !empty($_POST['con_pass'])) {
+    $cur_pass = $_POST['cur_pass'];
+    $new_pass = password_hash($_POST['new_pass'], PASSWORD_DEFAULT);
+    $con_pass = $_POST['con_pass'];
+
+    if ($con_pass == $_POST['new_pass']) {
+        $checkQuery = "SELECT * FROM admin 
                       JOIN staff ON admin.empid = staff.staffid 
-                      WHERE admin.username = '$username' AND admin.adminid = '$id' AND staff.password = '$cur_pass'";
-            $res = $conn->query($check);
+                      WHERE staff.position = ? AND admin.adminid = ?";
+        $stmt = $conn->prepare($checkQuery);
+        $stmt->bind_param("si", $role, $id);
+        $stmt->execute();
+        $result = $stmt->get_result();
 
-            if ($res->num_rows) {
-                $query = "UPDATE staff SET password = '$new_pass' WHERE staffid = (SELECT empid FROM admin WHERE username = '$username' AND adminid = '$id')";
-                $result = $conn->query($query);
-
-                if ($result === true) {
+        if ($result->num_rows) {
+            $row = $result->fetch_assoc();
+            if (password_verify($cur_pass, $row['password'])) {
+                $updateQuery = "UPDATE staff SET password = ? WHERE staffid = (SELECT empid FROM admin WHERE adminid = ?)";
+                $stmt = $conn->prepare($updateQuery);
+                $stmt->bind_param("si", $new_pass, $id);
+                if ($stmt->execute()) {
                     $_SESSION['message'] = 'Password has been updated!';
                     $_SESSION['success'] = 'success';
                 } else {
                     $_SESSION['message'] = 'Something went wrong!';
-                    $_SESSION['success'] = 'danger';
+                    $_SESSION['success'] = 'error';
                 }
             } else {
                 $_SESSION['message'] = 'Current Password is incorrect!';
-                $_SESSION['success'] = 'danger';
+                $_SESSION['success'] = 'error';
             }
         } else {
-            $_SESSION['message'] = 'Passwords did not match!';
-            $_SESSION['success'] = 'danger';
+            $_SESSION['message'] = 'No Username found!';
+            $_SESSION['success'] = 'error';
         }
     } else {
-        $_SESSION['message'] = 'No Username found!';
-        $_SESSION['success'] = 'danger';
+        $_SESSION['message'] = 'Passwords did not match!';
+        $_SESSION['success'] = 'error';
     }
+} else {
+    $_SESSION['message'] = 'Please fill in all fields!';
+    $_SESSION['success'] = 'error';
+}
 
-    if (isset($_SERVER["HTTP_REFERER"])) {
-        header("Location: " . $_SERVER["HTTP_REFERER"]);
-    }
+if (isset($_SERVER["HTTP_REFERER"])) {
+    header("Location: " . $_SERVER["HTTP_REFERER"]);
+}
 
-    $conn->close();
-
+$conn->close();

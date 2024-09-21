@@ -489,6 +489,40 @@ select.form-control {
 .main-panel select.form-control {
   font-family: 'Poppins', sans-serif;
 }
+@media (max-width: 768px) {
+    .progressbar .step .icon {
+        width: 30px;  /* Reduced icon size */
+        height: 30px; /* Reduced icon size */
+        padding: 5px; /* Adjust padding to fit smaller icon */
+    }
+
+    .progressbar .step .line {
+        height: 1px; /* Reduced line thickness */
+    }
+
+    .step {
+        width: 45%; /* Adjust step width for medium screens */
+    }
+}
+
+@media (max-width: 480px) {
+    .progressbar .step .icon {
+        width: 20px;  /* Further reduced icon size */
+        height: 20px; /* Further reduced icon size */
+        padding: 2px; /* Adjust padding for smaller icons */
+    }
+
+    .progressbar .step .line {
+        height: 1px; /* Keep line thickness reduced for small screens */
+    }
+    .progressbar p{
+        font-size: 5px;
+    }
+
+    .step {
+        width: 100%; /* Full width for small screens */
+    }
+}
 </style>
 </head>
 <body>
@@ -791,9 +825,12 @@ $barangays = array(
                                         <div class="col-md-4">                                      
                                                 <input type="text" class="form-control" placeholder="Enter Income" value="<?php echo $parent_income; ?>"name="parent_income" required>                                         
                                         </div>
-                                        <div class="col-md-4">                                       
-                                                <input type="text" class="form-control" placeholder="Educational Attainment" value="<?php echo $parent_educattain; ?>" name="parent_educattain" required>                                       
+                                        <div class="col-md-4">
+                                                <input type="text" class="form-control" placeholder="Contact Number" value="<?php echo $parent_contact; ?>" name="parent_contact" required>
                                         </div>
+                                       <!-- <div class="col-md-4">                                       
+                                                <input type="text" class="form-control" placeholder="Educational Attainment" value="<?php echo $parent_educattain; ?>" name="parent_educattain" required>                                       
+                                        </div>-->
                                         <div class="col-md-4">                                       
                                         <select class="form-control form-control" name="parent_status" required>
                                                     <option disabled selected disabled selected value="">Select Status</option>
@@ -805,12 +842,10 @@ $barangays = array(
                                     </div>
                                 
                                     <div class="row">
-                                        <div class="col-md-4">
+                                        <div class="col-md-12">
                                                 <input type="text" class="form-control" placeholder="Address" value="<?php echo $parent_address; ?>" name="parent_address" required>
                                         </div>
-                                        <div class="col-md-4">
-                                                <input type="text" class="form-control" placeholder="Contact Number" value="<?php echo $parent_contact; ?>" name="parent_contact" required>
-                                        </div>
+                                       
                                        
                                     </div>
 								

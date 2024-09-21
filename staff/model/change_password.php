@@ -1,28 +1,35 @@
-<?php 
-    include '../server/server.php';
+<?php
+include '../server/server.php';
 
-    session_start();
-    error_reporting(E_ALL);
-    ini_set('display_errors', 1);
+session_start();
+error_reporting(E_ALL);
+ini_set('display_errors', 1);
 
+$email = $_SESSION['email'];
+$staffid = $_SESSION['staffid'];
 
-    $email = $_SESSION['email'];
-    $staffid = $_SESSION['staffid'];
-    $cur_pass = md5($conn->real_escape_string($_POST['cur_pass']));
-    $new_pass = md5($conn->real_escape_string($_POST['new_pass']));
-    $con_pass = md5($conn->real_escape_string($_POST['con_pass']));
+if (!empty($email) && !empty($staffid)) {
+    $cur_pass = $_POST['cur_pass'];
+    $new_pass = $_POST['new_pass'];
+    $con_pass = $_POST['con_pass'];
 
-    if (!empty($username)) {
-        if ($new_pass == $con_pass) {
-            $check = "SELECT * FROM  staff 
-                      WHERE email = '$email' AND staffid = '$staffid' AND password = '$cur_pass'";
-            $res = $conn->query($check);
+    if ($new_pass == $con_pass) {
+        // Prepare the query to check the current password
+        $query = "SELECT * FROM staff WHERE email = ? AND staffid = ?";
+        $stmt = $conn->prepare($query);
+        $stmt->bind_param("si", $email, $staffid);
+        $stmt->execute();
+        $result = $stmt->get_result();
 
-            if ($res->num_rows) {
-                $query = "UPDATE staff SET password = '$new_pass' WHERE staffid = $staffid";
-                $result = $conn->query($query);
-
-                if ($result === true) {
+        if ($result->num_rows) {
+            $staffData = $result->fetch_assoc();
+            if (password_verify($cur_pass, $staffData['password'])) {
+                // Update the password using password hashing
+                $newPassHash = password_hash($new_pass, PASSWORD_DEFAULT);
+                $updateQuery = "UPDATE staff SET password = ? WHERE staffid = ?";
+                $stmt = $conn->prepare($updateQuery);
+                $stmt->bind_param("si", $newPassHash, $staffid);
+                if ($stmt->execute()) {
                     $_SESSION['message'] = 'Password has been updated!';
                     $_SESSION['title'] = 'Good Job!';
                     $_SESSION['success'] = 'success';
@@ -41,23 +48,29 @@
                 exit();
             }
         } else {
-            $_SESSION['message'] = 'Passwords did not match!';
+            $_SESSION['message'] = 'No staff found!';
             $_SESSION['success'] = 'error';
-            $_SESSION['title'] = 'Error';
+            $_SESSION['title'] = 'Error!';
             header("Location: ../employeedashboard.php");
             exit();
         }
     } else {
-        $_SESSION['message'] = 'No Username found!';
+        $_SESSION['message'] = 'Passwords did not match!';
         $_SESSION['success'] = 'error';
-        $_SESSION['title'] = 'Error!';
+        $_SESSION['title'] = 'Error';
         header("Location: ../employeedashboard.php");
         exit();
     }
+} else {
+    $_SESSION['message'] = 'No email or staffid found!';
+    $_SESSION['success'] = 'error';
+    $_SESSION['title'] = 'Error!';
+    header("Location: ../employeedashboard.php");
+    exit();
+}
 
-    if (isset($_SERVER["HTTP_REFERER"])) {
-        header("Location: " . $_SERVER["HTTP_REFERER"]);
-    }
+if (isset($_SERVER["HTTP_REFERER"])) {
+    header("Location: " . $_SERVER["HTTP_REFERER"]);
+}
 
-    $conn->close();
-
+$conn->close();

@@ -33,7 +33,7 @@
     </style>
 </head>
 <body >
-<?php include 'templates/loading_screen.php' ?>
+<?//php include 'templates/loading_screen.php' ?>
 	
 
 	<div class="row d-flex justify-content-center align-items-center" style="height: 100vh;">

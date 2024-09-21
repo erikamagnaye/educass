@@ -130,6 +130,19 @@ WHERE `application`.`appid` = $appid AND `application`.`educid` = $educid AND `a
             td {
                 font-size: 14px;
             }
+            @media only screen and (max-width: 480px) {
+  table {
+    font-size: 5px;
+  }
+ table th, td {
+    padding: 3px;
+    font-size: 1px;
+  }
+  img {
+    width: 40px;
+    height: 40px;
+  }
+}
         </style>
 
     </head>
@@ -213,12 +226,14 @@ WHERE `application`.`appid` = $appid AND `application`.`educid` = $educid AND `a
 
 
 
-                                        <div class="row mt-2">
+                                        <div class="row mt-2 d-flex justify-content-center align-items-center">
 
 
-                                            <div class="col-md-12">
+                                            <div class="table-responsive col-md-12">
 
                                                 <br>
+
+
 
 
 
@@ -375,7 +390,7 @@ WHERE `application`.`appid` = $appid AND `application`.`educid` = $educid AND `a
                                                     </tr>
 
                                                 </table>
-
+                                                
 
                                                 <p class="ml-3 text-center"><i>&copy Web Based Educational Assistance Application System for San Antonio, Quezon</i></p>
 

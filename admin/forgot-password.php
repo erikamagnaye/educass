@@ -3,23 +3,28 @@ session_start();
 include ('server/server.php');
 
 if (isset($_POST['reset'])) {
-    $email = $conn->real_escape_string($_POST['email']);
-    $username = $conn->real_escape_string($_POST['username']);
-    $newpass = md5($conn->real_escape_string($_POST['newpassword']));
+    $email = $_POST['email'];
+    $username = $_POST['username'];
+    $newpass = password_hash($_POST['newpassword'], PASSWORD_DEFAULT);
 
     if (!empty($email) && !empty($username) && !empty($newpass)) {
         // Join admin and staff tables to check for email and username
         $query = "SELECT admin.*, staff.* FROM admin 
                   JOIN staff ON staff.staffid = admin.empid 
-                  WHERE staff.email = '$email' AND admin.username = '$username'";
-        $result = $conn->query($query);
+                  WHERE staff.email = ? AND admin.username = ?";
+        $stmt = $conn->prepare($query);
+        $stmt->bind_param("ss", $email, $username);
+        $stmt->execute();
+        $result = $stmt->get_result();
 
         if ($result->num_rows > 0) {
             // User found, update password
             $updateQuery = "UPDATE `staff` 
-                            SET `password` = '$newpass' 
-                            WHERE `email`= '$email'";
-            if ($conn->query($updateQuery) === TRUE) {
+                            SET `password` = ? 
+                            WHERE `email`= ?";
+            $stmt = $conn->prepare($updateQuery);
+            $stmt->bind_param("ss", $newpass, $email);
+            if ($stmt->execute()) {
                 $_SESSION['message'] = 'Password successfully reset!';
                 $_SESSION['success'] = 'success';
             } else {
@@ -35,8 +40,6 @@ if (isset($_POST['reset'])) {
         $_SESSION['message'] = 'Please fill in all fields!';
         $_SESSION['success'] = 'danger';
     }
-
-
 }
 ?>
 <!DOCTYPE html>

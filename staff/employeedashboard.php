@@ -5,7 +5,7 @@ session_start();
 error_reporting(E_ALL);
 ini_set('display_errors', 1);
 $skTypes = array('SK-Arawan','SK-Bagong Niing', 'SK-Balat Atis','SK-Briones','SK-Bulihan','SK-Buliran','SK-Callejon',
-'SK-Corazon', 'SK-Del Valle','SK-loob','SK-Magsaysay','SK-Matipunso','SK-Niing','SK-Poblacion','SK-Pulo',
+'SK-Corazon', 'SK-Del Valle','SK-Loob','SK-Magsaysay','SK-Matipunso','SK-Niing','SK-Poblacion','SK-Pulo',
  'SK-Pury','SK-Sampaga','SK-Sampaguita', 'SK-San Jose', 'SK-Sinturisan'); 
 if (!isset($_SESSION['staffid']) || strlen($_SESSION['staffid']) == 0 ||in_array($_SESSION['role'], $skTypes)) {
 	header('location:index.php');
@@ -621,18 +621,18 @@ h5 {
                                                     </a>
 
                                                 </div>
-        <div class="card">
-            <div class="card-icon" style="color: red;"><i class="fa-solid fa-clipboard-question"></i></div>
-			<a href="complaint.php" class="btn"><h5><?= $complaints ?> <br>Complaints</h5></a>
+        <div class="card" style="background-color: #800000;">
+            <div class="card-icon" style="color: white;"><i class="fa-solid fa-clipboard-question"></i></div>
+			<a href="complaint.php" class="btn"><h5 style="color: white;"><?= $complaints ?> <br>Complaints</h5></a>
      
         </div>
-        <div class="card">
-            <div class="card-icon" style="color: green;"><i class="fa-solid fa-user-tie"></i></div>
-			<a href="staff.php" class="btn"> <h5><?=$skcount?><br> SK Officials</h5></a>
+        <div class="card"style="background-color: #ED3EF7;">
+            <div class="card-icon" style="color: white;"><i class="fa-solid fa-user-tie"></i></div>
+			<a href="staff.php" class="btn"> <h5 style="color: white;"><?=$skcount?><br> SK Officials</h5></a>
            
-        </div> <div class="card">
-            <div class="card-icon" style="color: yellow;"><i class="fa-solid fa-book-open-reader"></i></div>
-			<a href="educass.php" class="btn"> <h5><?=$totaleduc?><br> Educational Assistance</h5></a>      
+        </div> <div class="card"style="background-color: #185519;">
+            <div class="card-icon" style="color: white;"><i class="fa-solid fa-book-open-reader"></i></div>
+			<a href="educass.php" class="btn"> <h5 style="color: white;"><?=$totaleduc?><br> Educational Assistance</h5></a>      
         </div>
   <!--      <div class="card">
             <div class="card-icon"style="color: blue;"><i class="fa-solid fa-user-graduate"></i></div>

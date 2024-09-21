@@ -6,7 +6,32 @@
 session_start(); 
 error_reporting(E_ALL);
 ini_set('display_errors', 1);
-
+$skTypes = array(
+    'SK-Arawan',
+    'SK-Bagong Niing',
+    'SK-Balat Atis',
+    'SK-Briones',
+    'SK-Bulihan',
+    'SK-Buliran',
+    'SK-Callejon',
+    'SK-Corazon',
+    'SK-Del Valle',
+    'SK-Loob',
+    'SK-Magsaysay',
+    'SK-Matipunso',
+    'SK-Niing',
+    'SK-Poblacion',
+    'SK-Pulo',
+    'SK-Pury',
+    'SK-Sampaga',
+    'SK-Sampaguita',
+    'SK-San Jose',
+    'SK-Sinturisan'
+);
+if (!isset($_SESSION['staffid']) || strlen($_SESSION['staffid']) == 0 || in_array($_SESSION['role'], $skTypes)) {
+    header('location:index.php');
+    exit();
+}
 if (isset($_POST['filter'])) {
     $recent = $_POST['recent'];
     $filbrgy = $_POST['brgy'];
@@ -81,7 +106,7 @@ if (isset($_POST['filter'])) {
 												<i class="fa fa-file"></i>
 												Export CSV
 											</a>
-											    <a href="all_current_applicants.php" class="btn btn-danger btn-border btn-round btn-sm" title="Download">
+											    <a href="approved_current_applicants.php" class="btn btn-danger btn-border btn-round btn-sm" title="Download">
 												<i class="fa fa-chevron-left"></i>
 												Back
 											</a>

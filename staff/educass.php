@@ -15,7 +15,7 @@ $skTypes = array(
     'SK-Callejon',
     'SK-Corazon',
     'SK-Del Valle',
-    'SK-loob',
+    'SK-Loob',
     'SK-Magsaysay',
     'SK-Matipunso',
     'SK-Niing',
@@ -181,11 +181,11 @@ if (!isset($_SESSION['staffid']) || strlen($_SESSION['staffid']) == 0 || in_arra
                                                             <td><?php echo htmlspecialchars($sy); ?></td>
                                                             <td><?php echo htmlspecialchars($status); ?></td>
                                                             <td>
-                                                                <a type="button" href="edit_educ.php?update&educid=<?php echo $educid; ?>" class="btn btn-link btn-success mr-1"
-                                                                    title="view report">
-                                                                    <i class="fa fa-file"></i>
+                                                            <a type="button" href="educ_report.php?educreportid=<?php echo $educid; ?>"   class="btn btn-link btn-primary mr-1" 
+                                                title="view report">
+                                                <i class="fa-solid fa-chart-simple"></i>
 
-                                                                </a>
+                                            </a>
                                                                 <a type="button" href="edit_educ.php?update&educid=<?php echo $educid; ?>" class="btn btn-link btn-success mr-1"
                                                                     title="Edit Data">
                                                                     <i class="fa fa-edit"></i>

@@ -5,8 +5,30 @@
 session_start();
 error_reporting(E_ALL);
 ini_set('display_errors', 1);
-if (!isset($_SESSION['id']) || strlen($_SESSION['id']) == 0 || $_SESSION['role'] !== 'admin') {
-	header('location:login.php');
+$skTypes = array(
+    'SK-Arawan',
+    'SK-Bagong Niing',
+    'SK-Balat Atis',
+    'SK-Briones',
+    'SK-Bulihan',
+    'SK-Buliran',
+    'SK-Callejon',
+    'SK-Corazon',
+    'SK-Del Valle',
+    'SK-Loob',
+    'SK-Magsaysay',
+    'SK-Matipunso',
+    'SK-Niing',
+    'SK-Poblacion',
+    'SK-Pulo',
+    'SK-Pury',
+    'SK-Sampaga',
+    'SK-Sampaguita',
+    'SK-San Jose',
+    'SK-Sinturisan'
+);
+if (!isset($_SESSION['staffid']) || strlen($_SESSION['staffid']) == 0 || in_array($_SESSION['role'], $skTypes)) {
+    header('location:index.php');
     exit();
 } else {
     //$studid = $_GET['studidid'];
@@ -167,7 +189,7 @@ WHERE `application`.`appid` = $appid AND `application`.`educid` = $educid AND `a
 
 
 
-                            <div class="card " style="justify-content:center">
+                                <div class="card " style="justify-content:center">
                                     <div class="card-header">
                                         <div class="card-head-row">
                                             <div class="card-title">Educational Assistance Applicant</div>

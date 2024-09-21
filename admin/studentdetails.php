@@ -61,7 +61,23 @@ else{
     body {
         font-family: Arial, sans-serif;
     }
-
+    @media only screen and (max-width: 480px) {
+  table {
+    font-size: 5px;
+  }
+ table th, td {
+    padding: 3px;
+    font-size: 1px;
+  }
+  img {
+    width: 40px;
+    height: 40px;
+  }
+  table .avatar-img{
+    width: 40px;
+    height: 40px;
+  }
+}
    
 </style>
 
@@ -130,7 +146,7 @@ else{
                                     <div class="row mt-2">
                                     
             
-            <div class="col-md-12">
+            <div class="col-md-12 table-responsive">
         
             <br>
      
