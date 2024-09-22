@@ -167,7 +167,7 @@ if (strlen($_SESSION['id'] == 0) || !isset($_SESSION['id']) || !isset($_SESSION[
             </div>
             <div class="modal-footer">
                 <button type="button" class="btn btn-secondary" data-dismiss="modal">Cancel</button>
-                <button type="submit" class="btn btn-primary">Change</button>
+                <button type="submit"  class="btn btn-primary">Change</button>
             </div>
             </form>
         </div>

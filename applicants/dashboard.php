@@ -60,7 +60,9 @@ if (strlen($_SESSION['id'] == 0) || !isset($_SESSION['id']) || !isset($_SESSION[
     <link rel="icon" href="assets/img/logo.png" type="image/x-icon"/>   <!-- THIS IS THE CODE TO DISPLAY AN ICON IN THE BROWASER TAB-->
 	<script type="text/javascript" src="https://www.gstatic.com/charts/loader.js"></script>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.1.1/css/all.min.css" integrity="sha512-KfkfwYDsLkIlwQp6LFnl8zNdLGxu9YAA1QvwINks4PhcElQSvqcyVLLD9aMhXd13uQjoXtEKNosOWaZqXgel0g==" crossorigin="anonymous" referrerpolicy="no-referrer" />
-   
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11.12.3/dist/sweetalert2.all.min.js"></script>
+        <link href="https://cdn.jsdelivr.net/npm/sweetalert2@11.12.3/dist/sweetalert2.min.css" rel="stylesheet">
+        
 	<style>
         .btn-yellow {
   background-color: orange;
@@ -228,7 +230,7 @@ h5 {
 	</style>
 </head>
 <body>
-	<?php include 'templates/loading_screen.php' ?>
+	<?//php include 'templates/loading_screen.php' ?>
 
 	<div class="wrapper">
 		<!-- Main Header -->
@@ -409,6 +411,20 @@ if ($applicationstatus == 'Pending') {
 
 				</div>
 			</div>
+ <!-- alert for UPDATEEEEEEEEE -->
+ <?php if (isset($_SESSION['message'])) : ?> 
+                                <script>
+                                    Swal.fire({
+                                        title: '<?php echo $_SESSION['success']; ?>',
+                                        text: '<?php echo $_SESSION['message']; ?>',
+                                        icon: '<?php echo $_SESSION['success']; ?>',
+                                        confirmButtonText: 'OK'
+                                    });
+                                </script>
+                                <?php unset($_SESSION['message']);
+                                unset($_SESSION['success']); ?>
+                            <?php endif; ?>
+
 			<script type="text/javascript">
     google.charts.load("current", {packages:["corechart"]});
     google.charts.setOnLoadCallback(drawChart);

@@ -1,25 +1,26 @@
 
-<?php 
-session_start(); 
-include ('server/server.php');
+<?php
+session_start();
+include('server/server.php');
 
 if (isset($_POST['reset'])) {
-    $email = $conn->real_escape_string($_POST['email']);
-    $contact_no = $conn->real_escape_string($_POST['contact_no']);
-    $newpass = md5($conn->real_escape_string($_POST['newpassword']));
+    $email = $_POST['email'];
+    $contact_no = $_POST['contact_no'];
+    $newpass = $_POST['newpassword'];
 
     if (!empty($email) && !empty($contact_no) && !empty($newpass)) {
-        // Join admin and staff tables to check for email and username
-        $query = "SELECT * FROM student
-                   WHERE email = '$email' AND contact_no = '$contact_no' ";
-        $result = $conn->query($query);
+        // Check if user exists
+        $checkStmt = $conn->prepare("SELECT * FROM student WHERE email = ? AND contact_no = ?");
+        $checkStmt->bind_param("ss", $email, $contact_no);
+        $checkStmt->execute();
+        $result = $checkStmt->get_result();
 
         if ($result->num_rows > 0) {
             // User found, update password
-            $updateQuery = "UPDATE `student` 
-                            SET `password` = '$newpass' 
-                            WHERE `email`= '$email' AND `contact_no` = '$contact_no'";
-            if ($conn->query($updateQuery) === TRUE) {
+            $hashed_password = password_hash($newpass, PASSWORD_DEFAULT);
+            $updateStmt = $conn->prepare("UPDATE `student` SET `password` = ? WHERE `email` = ? AND `contact_no` = ?");
+            $updateStmt->bind_param("sss", $hashed_password, $email, $contact_no);
+            if ($updateStmt->execute()) {
                 $_SESSION['message'] = 'Password successfully reset!';
                 $_SESSION['success'] = 'success';
             } else {
@@ -35,8 +36,6 @@ if (isset($_POST['reset'])) {
         $_SESSION['message'] = 'Please fill in all fields!';
         $_SESSION['success'] = 'danger';
     }
-
-
 }
 ?>
 <!DOCTYPE html>

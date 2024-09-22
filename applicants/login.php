@@ -99,7 +99,7 @@
 					</div><br>
                                         <br>
 										<div class="form-action mb-3">
-						<button type="submit" class="btn btn-primary btn-rounded btn-login">Login</button>
+						<button type="submit" name="login" class="btn btn-primary btn-rounded btn-login">Login</button>
                         <br>
                      	</div>
                          <div class=" align-items-center text-center">

@@ -10,66 +10,63 @@ $accstatus = ' ';
 
 if (isset($_POST['save'])) {
     // Retrieve form data
-    $fname = $conn->real_escape_string($_POST['fname']);
-    $mname = $conn->real_escape_string($_POST['mname']);
-    $lname = $conn->real_escape_string($_POST['lname']);
-    //$religion = $conn->real_escape_string($_POST['religion']);
-   // $bplace = $conn->real_escape_string($_POST['bplace']);
-    $bdate = $conn->real_escape_string($_POST['bdate']);
-    $age = $conn->real_escape_string($_POST['age']);
-   // $cstatus = $conn->real_escape_string($_POST['cstatus']);
-    $gender = $conn->real_escape_string($_POST['gender']);
-    $street = $conn->real_escape_string($_POST['street']);
-    $brgy = $conn->real_escape_string($_POST['vstatus']);
-    $municipality = $conn->real_escape_string($_POST['municipality']);
-    $email = $conn->real_escape_string($_POST['email']);
-    $contact_no = $conn->real_escape_string($_POST['contact_no']);
-    $province = $conn->real_escape_string($_POST['province']);
-    $password = md5($_POST['password']);
-    //$valididPath = 'assets/uploads/validid_file' . basename($_FILES['validid']['name']);
+    $fname = $_POST['fname'];
+    $mname = $_POST['mname'];
+    $lname = $_POST['lname'];
+    $bdate = $_POST['bdate'];
+    $age = $_POST['age'];
+    $gender = $_POST['gender'];
+    $street = $_POST['street'];
+    $brgy = $_POST['vstatus'];
+    $municipality = $_POST['municipality'];
+    $email = $_POST['email'];
+    $contact_no = $_POST['contact_no'];
+    $province = $_POST['province'];
+    $password = $_POST['password'];
+
+    // Check if a student with the same firstname, lastname, and email already exists
+    $checkStmt = $conn->prepare("SELECT COUNT(*) FROM student WHERE firstname = ? AND lastname = ?  AND midname = ? AND brgy = ? AND contact_no = ? AND birthday = ? or email = ?");
+    $checkStmt->bind_param("ssssiss", $fname, $lname,  $mname, $brgy, $contact_no, $bdate, $email );
+    $checkStmt->execute();
+    $checkStmt->bind_result($count);
+    $checkStmt->fetch();
+    $checkStmt->close();
+
+    if ($count > 0) {
+        $_SESSION['success'] = 'danger';
+        $_SESSION['mess'] = 'There is an existing account with the same information';
+    } else {
+        // Hash the password
+        $hashed_password = password_hash($password, PASSWORD_DEFAULT);
+
+        // Insert data into database
+        $stmt = $conn->prepare("INSERT INTO student (lastname, firstname, midname, email, `password`, birthday, contact_no, brgy, municipality, province, street_name, gender, age) VALUES ( ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)");
+        $stmt->bind_param("ssssssssssssi", $lname, $fname, $mname, $email, $hashed_password, $bdate, $contact_no, $brgy, $municipality, $province, $street, $gender,  $age);
+
+        if ($stmt->execute()) {
+            $_SESSION['success'] = 'success';
+            $_SESSION['mess'] = 'Account created successfully! Go to login';
+        } else {
+            $_SESSION['success'] = 'danger';
+            $_SESSION['mess'] = 'There was an error creating your account.';
+        }
+        $stmt->close();
+    }
+} else {
+    $_SESSION['success'] = 'danger';
+    $_SESSION['mess'] = 'This is for college students of San Antonio, Quezon only!';
+}
+    
+
+    //THIS IS THE ORIGINAL CODE WITH VALID ID
+   //$valididPath = 'assets/uploads/validid_file' . basename($_FILES['validid']['name']);
    // $valididPath = 'assets/uploads/validid_file/' . basename($_FILES['validid']['name']);
    // $validid = basename($_FILES['validid']['name']);
    // $maxFileSize = 10000000; // 10MB
    // $allowedTypes = ['image/png', 'image/jpeg', 'image/jpg', 'application/pdf', 'application/vnd.openxmlformats-officedocument.wordprocessingml.document'];
 
-   //check  municipality and  province 
-   if ( $municipality == 'San Antonio' && $province == 'Quezon'){
 
-        // Check if a student with the same firstname, lastname, and email already exists
-        $checkStmt = $conn->prepare("SELECT COUNT(*) FROM student WHERE firstname = ? AND lastname = ?  AND midname = ? AND brgy = ? AND contact_no = ? AND birthday = ? or email = ?");
-        $checkStmt->bind_param("ssssiss", $fname, $lname,  $mname, $brgy, $contact_no, $bdate, $email );
-        $checkStmt->execute();
-        $checkStmt->bind_result($count);
-        $checkStmt->fetch();
-        $checkStmt->close();
-    
-        if ($count > 0) {
-            $_SESSION['success'] = 'danger';
-            $_SESSION['mess'] = 'There is an existing account with the same information';
-        } 
-    else {
-         // Insert data into database
-         $stmt = $conn->prepare("INSERT INTO student (lastname, firstname, midname, email, `password`, birthday, contact_no, brgy, municipality, province, street_name, gender, age) VALUES ( ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)");
-         $stmt->bind_param("ssssssssssssi", $lname, $fname, $mname, $email, $password, $bdate, $contact_no, $brgy, $municipality, $province, $street, $gender,  $age);
-    
-         if ($stmt->execute()) {
-             $_SESSION['success'] = 'success';
-             $_SESSION['mess'] = 'Account created successfully! Go to login';
-         } else {
-             $_SESSION['success'] = 'danger';
-             $_SESSION['mess'] = 'There was an error creating your account.';
-         }
-         $stmt->close();
-    }
-   }
-else{
 
- $_SESSION['success'] = 'danger';
-$_SESSION['mess'] = 'This is for college student of San Antonio, Quezon only!';
-}
-    
-
-    //THIS IS THE ORIGINAL CODE WITH VALID ID
 
     /*elseif ($_FILES['validid']['size'] > $maxFileSize) {
         $_SESSION['success'] = 'danger';
@@ -96,7 +93,7 @@ $_SESSION['mess'] = 'This is for college student of San Antonio, Quezon only!';
         $_SESSION['success'] = 'danger';
         $_SESSION['mess'] = 'File upload failed.';
     } */
-}
+
 
 
 $conn->close();
@@ -317,26 +314,7 @@ label {
                                                 <label>Barangay</label>
                                                 <select class="form-control vstatus" required name="vstatus">
                                                     <option disabled selected>Select Barangay</option>
-                                                    <option value="Arawan">Arawan</option>
-                                                    <option value="Bagong Niing">Bagong Niing</option>
-                                                    <option value="Balat Atis">Balat Atis</option>
-                                                    <option value="Briones">Briones</option>
-                                                    <option value="Bulihan">Bulihan</option>
-                                                    <option value="Buliran">Buliran</option>
-                                                    <option value="Callejon">Callejon</option>
-                                                    <option value="Corazon">Corazon</option>
-                                                    <option value="Del Valle">Del Valle</option>
-                                                    <option value="Loob">Loob</option>
-                                                    <option value="Magsaysay">Magsaysay</option>
-                                                    <option value="Matipunso">Matipunso</option>
-                                                    <option value="Niing">Niing</option>
-                                                    <option value="Poblacion">Poblacion</option>
-                                                    <option value="Pulo">Pulo</option>
-                                                    <option value="Pury">Pury</option>
-                                                    <option value="Sampaga">Sampaga</option>
-                                                    <option value="Sampaguita">Sampaguita</option>
-                                                    <option value="San Jose">San Jose</option>
-                                                    <option value="Sintorisan">Sintorisan</option>
+                                                
                                                     
                                                 </select>
                                             </div>
