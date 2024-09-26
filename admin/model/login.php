@@ -20,6 +20,7 @@ if (!empty($username) && !empty($password)) {
                 $_SESSION['username'] = $adminData['username'];
                 $_SESSION['role'] = $adminData['position'];
                 $_SESSION['avatar'] = $adminData['image'];
+                $_SESSION['email'] = $adminData['email'];
                 header('location: ../dashboard.php');
                 exit();
             } else {

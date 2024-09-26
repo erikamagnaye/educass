@@ -67,7 +67,7 @@ if (!isset($_SESSION['id']) || strlen($_SESSION['id']) == 0 || $_SESSION['role']
 
     <body>
         <div class="row d-flex justify-content-center align-items-center" style="height: 100vh;">
-            <div class="col-md-12">
+            <div class="col-md-8">
                 <div class="card mb-3 mt-3" style="width: 80%; margin: 0 auto;">
                     <img src="assets/img/updateeduc.jpg" class="card-img-top" alt="...">
                     <div class="card-header " style="border-radius: 8px;">
