@@ -21,14 +21,14 @@
 
             if ($result === true) {
                 $_SESSION['message'] = 'Record has been Deleted!';
-                $_SESSION['success'] = 'danger';
+                $_SESSION['success'] = 'success';
             } else {
                 $_SESSION['message'] = 'Something went wrong!';
-                $_SESSION['success'] = 'danger';
+                $_SESSION['success'] = 'error';
             }
         } else {
             $_SESSION['message'] = 'No Such Record Found!';
-            $_SESSION['success'] = 'danger';
+            $_SESSION['success'] = 'error';
         }
 
         header("Location: educass.php"); // Adjust the path as needed
