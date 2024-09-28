@@ -234,62 +234,76 @@ if (!isset($_SESSION['staffid']) || strlen($_SESSION['staffid']) == 0 || in_arra
 
                 <!-- Modal ADD NEW POST FOR EDUCATIONAL ASSISTANCE -->
                 <div class="modal fade" id="add" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
-                    <div class="modal-dialog" role="document">
-                        <div class="modal-content">
-                            <div class="modal-header">
-                                <h5 class="modal-title" id="exampleModalLabel">Post Educational Assistance</h5>
-                                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                                    <span aria-hidden="true">&times;</span>
-                                </button>
-                            </div>
-                            <div class="modal-body">
-                                <form method="POST" action="model/addeduc.php">
-                                    <div class="form-group">
-                                        <label>Title</label>
-                                        <input type="text" class="form-control" placeholder="Enter Title" name="title" required>
-                                    </div>
-                                    <div class="form-group">
-                                        <label>Semester</label>
-                                        <input type="text" class="form-control" placeholder="Enter Semester" name="sem" required>
-                                    </div>
-                                    <div class="form-group">
-                                        <label>School Year</label>
-                                        <input type="text" class="form-control" placeholder="Enter Title" name="sy" required>
-                                    </div>
-                                    <div class="form-group">
-                                        <label>Start of Application</label>
-                                        <input type="date" class="form-control" name="start" required>
-                                    </div>
-                                    <div class="form-group">
-                                        <label>End of Application</label>
-                                        <input type="date" class="form-control" name="end" required>
-                                    </div>
-                                    <div class="form-group">
-                                        <label>Minimum Grade needed</label>
-                                        <input type="text" class="form-control" name="min_grade" required>
-                                    </div>
-                                    <div class="form-group">
-                                        <label>Date Created</label>
-                                        <input type="date" class="form-control" name="date" required>
-                                    </div>
-                                    <div class="form-group">
-                                        <label>Status</label>
-                                        <select class="form-control" id="" required name="status">
-                                            <option value="Open">Open</option>
-                                            <option value="Closed">Closed</option>
-                                        </select>
-                                    </div>
-
-                            </div>
-                            <div class="modal-footer">
-                                <!--  <input type="hidden" id="pos_id" name="id"> -->
-                                <button type="button" class="btn btn-danger" data-dismiss="modal">Close</button>
-                                <button type="submit" class="btn btn-primary" name="create">Create</button>
-                            </div>
-                            </form>
+                <div class="modal-dialog" role="document">
+                    <div class="modal-content">
+                        <div class="modal-header">
+                            <h5 class="modal-title" id="exampleModalLabel">Post Educational Assistance</h5>
+                            <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                <span aria-hidden="true">&times;</span>
+                            </button>
                         </div>
+                        <div class="modal-body">
+                            <form method="POST" action="model/addeduc.php" >
+                                <div class="row">
+                                <div class="form-group col-md-12">
+                                    <label>Title</label>
+                                    <input type="text" class="form-control" placeholder="Enter Title" name="title" required>
+                                </div>
+                                
+                              
+                                </div>
+                                <div class="row">
+                                <div class="form-group col-md-6">
+                                    <label>Semester</label>
+                                    <input type="text" class="form-control" placeholder="Enter Semester" name="sem" required>
+                                    </div>
+                                    <div class="form-group col-md-6">
+                                    <label>School Year</label>
+                                    <input type="text" class="form-control" placeholder="Enter Title" name="sy" required>
+                                </div>
+                                
+                                </div>
+                                <div class="row">
+                                <div class="form-group col-md-6">
+                                    <label>Start of Application</label>
+                                    <input type="date" class="form-control" name="start" required>
+                                </div>
+								<div class="form-group col-md-6">
+                                    <label>End of Application</label>
+                                    <input type="date" class="form-control" name="end" required>
+                                </div>
+                                </div>
+                                
+								
+                              <!--  <div class="form-group">
+                                    <label>Minimum Grade needed</label>
+                                    <input type="text" class="form-control" name="min_grade" required>
+                                </div>-->
+                                <div class="row">
+                                <div class="form-group col-md-6">
+                                    <label>Date Created</label>
+                                    <input type="date" class="form-control" name="date" required>
+                                </div>
+								<div class="form-group col-md-6">
+                                    <label>Status</label>
+                                    <select class="form-control" id="" required name="status">
+                                        <option value="Open">Open</option>
+                                        <option value="Closed">Closed</option>
+                                    </select>
+                                </div>
+                                </div>
+								
+                            
+                        </div>
+                        <div class="modal-footer">
+                          <!--  <input type="hidden" id="pos_id" name="id"> -->
+                            <button type="button" class="btn btn-danger" data-dismiss="modal">Close</button>
+                            <button type="submit" class="btn btn-primary" name="create">Create</button>
+                        </div>
+                        </form>
                     </div>
                 </div>
+            </div>
 
                 <!-- Modal EDIT EDUCATIONAL ASSISTANCE -->
                 <!-- Modal EDIT EDUCATIONAL ASSISTANCE 
@@ -359,6 +373,20 @@ if (!isset($_SESSION['staffid']) || strlen($_SESSION['staffid']) == 0 || in_arra
 
         </div>
         <?php include 'templates/footer.php' ?>
+
+        <?php if (isset($_SESSION['message'])) : ?>
+            <script>
+                Swal.fire({
+                    title: '<?php echo $_SESSION['success']; ?>',
+                    text: '<?php echo $_SESSION['message']; ?>',
+                    icon: '<?php echo $_SESSION['success']; ?>',
+                    confirmButtonText: 'OK'
+                });
+            </script>
+            <?php unset($_SESSION['message']);
+            unset($_SESSION['success']);
+            ?>
+        <?php endif; ?>
 
         <!-- alert for UPDATEEEEEEEEE -->
         <?php if (isset($_SESSION['alertmess'])) : ?>
