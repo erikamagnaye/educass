@@ -161,42 +161,53 @@ if (!isset($_SESSION['id']) || strlen($_SESSION['id']) == 0 || $_SESSION['role']
         // Close the database connection
     
         ?>
-        <script type="text/javascript">
-            // Load the Google Charts library
-            google.charts.load('current', {
-                'packages': ['bar']
-            });
-            google.charts.setOnLoadCallback(drawbarChart);
+      <script type="text/javascript">
+    // Load the Google Charts library
+    google.charts.load('current', {
+        'packages': ['corechart', 'bar']
+    });
+    google.charts.setOnLoadCallback(drawbarChart);
 
-            // Draw the chart
-            function drawbarChart() {
-                // Create the data table
-                var data = google.visualization.arrayToDataTable([
-                    ['Year', 'Applicants'],
-                    <?php foreach ($data as $row) { ?>['<?php echo $row[0]; ?>', <?php echo $row[1]; ?>],
-                    <?php } ?>
-                ]);
+    // Draw the chart
+    function drawbarChart() {
+        // Create the data table with year and applicants
+        var data = new google.visualization.DataTable();
+        data.addColumn('string', 'Year');        // Year (category axis)
+        data.addColumn('number', 'Applicants');  // Applicants (numeric axis)
+        data.addColumn({ type: 'string', role: 'style' }); // Style column for custom color
 
-                // Create the chart options
-                var options = {
-                    title: 'Applicants per Year Level',
-                    chartArea: {
-                        width: '40%',
-                        height: '20%'
-                    },
-                    hAxis: {
-                        minValue: 0
-                    },
-                    vAxis: {
-                        title: ''
-                    }
-                };
+        data.addRows([
+            <?php foreach ($data as $row) {
+                // Set transparent color if no applicants
+                $color = ($row[1] == 0) ? 'opacity: 0;' : ''; 
+            ?>
+                ['<?php echo $row[0]; ?>', <?php echo $row[1]; ?>, '<?php echo $color; ?>'],
+            <?php } ?>
+        ]);
 
-                // Create the chart
-                var chart = new google.visualization.BarChart(document.getElementById('barchart_div'));
-                chart.draw(data, options);
+        // Create the chart options
+        var options = {
+            title: 'Applicants per Year Level',
+            chartArea: {
+                width: '40%',
+                height: '20%'
+            },
+            hAxis: {
+                minValue: 0
+            },
+            vAxis: {
+                title: ''
+            },
+            legend: {
+                position: 'none' // Hide the legend since we're using colors dynamically
             }
-        </script>
+        };
+
+        // Create the chart
+        var chart = new google.visualization.BarChart(document.getElementById('barchart_div'));
+        chart.draw(data, options);
+    }
+</script>
         </script>
         <style>
             .dashboard {
@@ -583,21 +594,21 @@ if (!isset($_SESSION['id']) || strlen($_SESSION['id']) == 0 || $_SESSION['role']
                                                 <div class="stats-card bg-warning mb-2">
                                                     <div class="stats-card-icon" style="color: white;"><i
                                                             class="fa-solid fa-spinner fa-spin"></i></div>
-                                                    <a href="educ_report_pending_applicants.php" class="btn">
+                                                    <a href="educ_report_pending_applicants.php?educreportid=<?php echo $educreportid ?>" class="btn">
                                                         <h5 style="color: white;"><?= $pending ?> <br> Pending</h5>
                                                     </a>
                                                 </div>
                                                 <div class="stats-card bg-success mb-2">
                                                     <div class="stats-card-icon" style="color: white;"><i
                                                             class="fa-regular fa-thumbs-up"></i></div>
-                                                    <a href="educ_report_approved_applicants.php" class="btn">
+                                                    <a href="educ_report_approved_applicants.php?educreportid=<?php echo $educreportid ?>" class="btn">
                                                         <h5 style="color: white;"><?= $approved ?> <br> Approved</h5>
                                                     </a>
                                                 </div>
                                                 <div class="stats-card bg-danger mb-2">
                                                     <div class="stats-card-icon" style="color: white;"><i
                                                             class="fa-regular fa-thumbs-down"></i></div>
-                                                    <a href="educ_report_rejected_applicants.php" class="btn">
+                                                    <a href="educ_report_rejected_applicants.php?educreportid=<?php echo $educreportid ?>" class="btn">
                                                         <h5 style="color: white;"><?= $rejected ?> <br> Rejected</h5>
                                                     </a>
                                                 </div>
@@ -756,54 +767,12 @@ if (!isset($_SESSION['id']) || strlen($_SESSION['id']) == 0 || $_SESSION['role']
                                                                                     letter</a> <?php endif; ?></td>
 
                                                                         <td>
-                                                                            <a type="button" href="javascript:void(0);"
-                                                                                onclick="checkEducationStatus('<?php echo $educstatus; ?>', <?php echo $educreportid; ?>)"
-                                                                                class="btn btn-outline-danger mr-1"
-                                                                                title="Remove">
-                                                                                <i class="fa fa-trash"></i> Delete all
-                                                                            </a>
+                                                                         
 
-                                                                            <script>
-                                                                                function checkEducationStatus(educstatus, educreportid) {
-                                                                                    if (educstatus === 'Open') {
-                                                                                        // Alert when the education status is 'Open'
-                                                                                        Swal.fire({
-                                                                                            title: "Ooops!",
-                                                                                            text: "You cannot delete files while the educational status is Open.",
-                                                                                            icon: "info",
-
-                                                                                            confirmButtonColor: "blue",
-                                                                                            confirmButtonText: "OK",
-
-                                                                                            closeOnConfirm: true
-                                                                                        });
-                                                                                    } else {
-                                                                                        // If not 'Open', proceed with confirmation dialog
-                                                                                        confirmDeletefile(educreportid);
-                                                                                    }
-                                                                                }
-
-                                                                                function confirmDeletefile(educreportid) {
-                                                                                    Swal.fire({
-                                                                                        title: "Are you sure?",
-                                                                                        text: "This action will delete  files for this educational assistance.",
-                                                                                        icon: "warning",
-                                                                                        showCancelButton: true,
-                                                                                        confirmButtonColor: "#DD6B55",
-                                                                                        confirmButtonText: "Yes, delete it!",
-                                                                                        cancelButtonText: "Cancel",
-                                                                                        closeOnConfirm: true
-                                                                                    }).then((result) => {
-                                                                                        if (result.isConfirmed) {
-                                                                                            // Redirect if user confirms deletion
-                                                                                            window.location.href = 'deleteallfiles.php?deleteid=' + educreportid + '&confirm=true';
-                                                                                        }
-                                                                                    });
-                                                                                }
-                                                                            </script>
+                                                                        
 
                                                                             <a type="button" href="javascript:void(0);"
-                                                                                onclick="checkeducstatus(<?php echo $educstatus; ?>,<?php echo $educreportid; ?>, <?php echo $studid ?>)"
+                                                                                onclick="checkeducstatus('<?php echo $educstatus; ?>',<?php echo $educreportid; ?>, <?php echo $studid ?>)"
                                                                                 class="btn btn-link btn-danger mr-1"
                                                                                 title="Remove">
                                                                                 <i class="fa fa-times"></i>

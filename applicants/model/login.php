@@ -17,7 +17,7 @@ if (isset($_POST['login'])) {
             $row = $result->fetch_assoc();
             $hashed_password = $row['password'];
             if (password_verify($password, $hashed_password)) {
-                $_SESSION['id'] = $row['studid'];
+                $_SESSION['studentid'] = $row['studid'];
                 $_SESSION['name'] = $row['firstname'];
                 $_SESSION['email'] = $row['email'];
                 $_SESSION['avatar'] = $row['picture'];

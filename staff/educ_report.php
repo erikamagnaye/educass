@@ -604,21 +604,21 @@ if (!isset($_SESSION['staffid']) || strlen($_SESSION['staffid']) == 0 || in_arra
                                                 <div class="stats-card bg-warning mb-2">
                                                     <div class="stats-card-icon" style="color: white;"><i
                                                             class="fa-solid fa-spinner fa-spin"></i></div>
-                                                    <a href="educ_report_pending_applicants.php" class="btn">
+                                                    <a href="educ_report_pending_applicants.php?educreportid=<?php echo $educreportid ?></a>" class="btn">
                                                         <h5 style="color: white;"><?= $pending ?> <br> Pending</h5>
                                                     </a>
                                                 </div>
                                                 <div class="stats-card bg-success mb-2">
                                                     <div class="stats-card-icon" style="color: white;"><i
                                                             class="fa-regular fa-thumbs-up"></i></div>
-                                                    <a href="educ_report_approved_applicants.php" class="btn">
+                                                    <a href="educ_report_approved_applicants.php?educreportid=<?php echo $educreportid ?></a>" class="btn">
                                                         <h5 style="color: white;"><?= $approved ?> <br> Approved</h5>
                                                     </a>
                                                 </div>
                                                 <div class="stats-card bg-danger mb-2">
                                                     <div class="stats-card-icon" style="color: white;"><i
                                                             class="fa-regular fa-thumbs-down"></i></div>
-                                                    <a href="educ_report_rejected_applicants.php" class="btn">
+                                                    <a href="educ_report_rejected_applicants.php?educreportid=<?php echo $educreportid ?>" class="btn">
                                                         <h5 style="color: white;"><?= $rejected ?> <br> Rejected</h5>
                                                     </a>
                                                 </div>
@@ -780,7 +780,7 @@ if (!isset($_SESSION['staffid']) || strlen($_SESSION['staffid']) == 0 || in_arra
                                                                             
 
                                                                             <a type="button" href="javascript:void(0);"
-                                                                                onclick="checkeducstatus(<?php echo $educstatus; ?>,<?php echo $educreportid; ?>, <?php echo $studid ?>)"
+                                                                                onclick="checkeducstatus('<?php echo $educstatus; ?>',<?php echo $educreportid; ?>, <?php echo $studid ?>)"
                                                                                 class="btn btn-link btn-danger mr-1"
                                                                                 title="Remove">
                                                                                 <i class="fa fa-times"></i>

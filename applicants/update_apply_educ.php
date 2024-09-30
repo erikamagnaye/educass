@@ -5,7 +5,7 @@
 session_start(); 
 error_reporting(E_ALL);
 ini_set('display_errors', 1);
-if (strlen($_SESSION['id'] == 0) || !isset($_SESSION['id']) || !isset($_SESSION['email'])) {
+if (strlen($_SESSION['studentid'] == 0) || !isset($_SESSION['studentid']) || !isset($_SESSION['email'])) {
 	header('location:login.php');
     exit();
 }
@@ -16,7 +16,7 @@ if (isset($_GET['educid']) && isset($_GET['appid'])) { // this is from educaids.
     $educationalid = $_GET['educid'];
     $applicationid = $_GET['appid'];
 
-$studid = $_SESSION['id'];
+$studid = $_SESSION['studentid'];
 $email = $_SESSION['email'];
 $query = "SELECT * FROM `student` where studid= $studid"; // SQL query to fetch all table data
 $student_data = mysqli_query($conn, $query); // sending the query to the database

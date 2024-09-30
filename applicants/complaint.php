@@ -5,11 +5,11 @@
 session_start();
 error_reporting(E_ALL);
 ini_set('display_errors', 1);
-if (strlen($_SESSION['id'] == 0) || !isset($_SESSION['id']) || !isset($_SESSION['email'])) {
+if (strlen($_SESSION['studentid'] == 0) || !isset($_SESSION['studentid']) || !isset($_SESSION['email'])) {
 	header('location:login.php');
     exit();
 }else {
-    $id = $_SESSION['id'] ;
+    $id = $_SESSION['studentid'] ;
     $allcomplaints = 1;
     $pending = 1;
     $approved = 1;

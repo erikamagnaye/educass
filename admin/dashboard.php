@@ -262,62 +262,75 @@ if (!isset($_SESSION['id']) || strlen($_SESSION['id']) == 0 || $_SESSION['role']
             }
         </script>
         <!--START OF CODE FOR bar chart CHART TO DISPLAY ALL APPLICANTS PER year level-->
+<!-- START OF CODE FOR bar chart CHART TO DISPLAY ALL APPLICANTS PER YEAR LEVEL -->
+<?php
+    // Execute the query to retrieve the data
+    $query = "SELECT sc.year, COUNT(*) AS count 
+              FROM application 
+              JOIN studentcourse sc ON application.courseid = sc.courseid 
+              WHERE application.educid = (SELECT educid FROM `educ aids` ORDER BY educid DESC LIMIT 1) 
+              GROUP BY sc.year 
+              ORDER BY sc.year ASC";
+    $result = $conn->query($query);
 
-        <?php
-        // Execute the query to retrieve the data
-        $query = "SELECT sc.year, COUNT(*) AS count 
-          FROM application 
-          JOIN studentcourse sc ON application.courseid = sc.courseid 
-          WHERE application.educid = (SELECT educid FROM `educ aids` ORDER BY educid DESC LIMIT 1) 
-          GROUP BY sc.year 
-          ORDER BY sc.year ASC";
-        $result = $conn->query($query);
+    // Create an array to store the data for the chart
+    $data = array();
+    while ($row = $result->fetch_assoc()) {
+        $data[] = array($row['year'], (int)$row['count']); // Cast count to integer
+    }
 
-        // Create an array to store the data for the chart
-        $data = array();
-        while ($row = $result->fetch_assoc()) {
-            $data[] = array($row['year'], $row['count']);
-        }
+    // Close the database connection
+?>
 
-        // Close the database connection
+<script type="text/javascript">
+    // Load the Google Charts library
+    google.charts.load('current', {
+        'packages': ['corechart', 'bar']
+    });
+    google.charts.setOnLoadCallback(drawbarChart);
 
-        ?>
-        <script type="text/javascript">
-            // Load the Google Charts library
-            google.charts.load('current', {
-                'packages': ['bar']
-            });
-            google.charts.setOnLoadCallback(drawbarChart);
+    // Draw the chart
+    function drawbarChart() {
+        // Create the data table with year and applicants
+        var data = new google.visualization.DataTable();
+        data.addColumn('string', 'Year');        // Year (category axis)
+        data.addColumn('number', 'Applicants');  // Applicants (numeric axis)
+        data.addColumn({ type: 'string', role: 'style' }); // Style column for custom color
 
-            // Draw the chart
-            function drawbarChart() {
-                // Create the data table
-                var data = google.visualization.arrayToDataTable([
-                    ['Year', 'Applicants'],
-                    <?php foreach ($data as $row) { ?>['<?php echo $row[0]; ?>', <?php echo $row[1]; ?>],
-                    <?php } ?>
-                ]);
+        data.addRows([
+            <?php foreach ($data as $row) {
+                // Set transparent color if no applicants
+                $color = ($row[1] == 0) ? 'opacity: 0;' : ''; 
+            ?>
+                ['<?php echo $row[0]; ?>', <?php echo $row[1]; ?>, '<?php echo $color; ?>'],
+            <?php } ?>
+        ]);
 
-                // Create the chart options
-                var options = {
-                    title: 'Applicants per Year Level',
-                    chartArea: {
-                        width: '40%',
-                        height: '20%'
-                    },
-                    hAxis: {
-                        minValue: 0
-                    },
-                    vAxis: {
-                        title: ''
-                    }
-                };
-
-                // Create the chart
-                var chart = new google.visualization.BarChart(document.getElementById('barchart_div'));
-                chart.draw(data, options);
+        // Create the chart options
+        var options = {
+            title: 'Applicants per Year Level',
+            chartArea: {
+                width: '40%',
+                height: '20%'
+            },
+            hAxis: {
+                minValue: 0
+            },
+            vAxis: {
+                title: ''
+            },
+            legend: {
+                position: 'none' // Hide the legend since we're using colors dynamically
             }
-        </script>
+        };
+
+        // Create the chart
+        var chart = new google.visualization.BarChart(document.getElementById('barchart_div'));
+        chart.draw(data, options);
+    }
+</script>
+
+
         <style>
             .dashboard {
                 display: grid;

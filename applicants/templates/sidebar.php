@@ -1,12 +1,12 @@
 <?php // function to get the current page name
 
-if (strlen($_SESSION['id'] == 0) || !isset($_SESSION['id']) || !isset($_SESSION['email'])) {
+if (strlen($_SESSION['studentid'] == 0) || !isset($_SESSION['studentid']) || !isset($_SESSION['email'])) {
 	header('location:login.php');
     exit();
 }
 
 else{
-$id = $_SESSION['id'] ;
+$id = $_SESSION['studentid'] ;
 //$name = $_SESSION['name'] ;
 //$email = $_SESSION['email'] ;
 		$query 		= "SELECT * FROM `student` WHERE studid= '$id'";
