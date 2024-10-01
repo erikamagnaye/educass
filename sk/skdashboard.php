@@ -621,8 +621,8 @@ if (!isset($_SESSION['skid']) || strlen($_SESSION['skid']) == 0 || !in_array($_S
                                                                     <i class="fa fa-print"></i>
                                                                    Print
                                                                 </a>
-                                                                <a href="model/export_student_csv.php" class="btn btn-danger btn-border btn-round btn-sm" title="Download">
-                                                                    <i class="fa fa-file"></i>
+                                                                <a href="model/export_student_csv.php" class="btn btn-secondary btn-border btn-round btn-sm" title="Download">
+                                                                <i class="fa-solid fa-file-arrow-down"></i>
                                                                     Export CSV
                                                                 </a>
 

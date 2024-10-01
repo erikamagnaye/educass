@@ -40,12 +40,11 @@ if (isset($_POST['create'])) {
             while ($row = $result->fetch_assoc()) {
                 $to = $row['email'];
                 $subject = "$title";
-                $message = "$details";
+                $message = "<html><body><pre>$details</pre></body></html>";
 
                 // Build the headers with the 'From' name and email
                 $headers  = "From: " . $from_name . " <" . $from_email . ">\r\n";
-                $headers .= "Reply-To: $from_email\r\n";
-                $headers .= "MIME-Version: 1.0\r\n";
+                 $headers .= "MIME-Version: 1.0\r\n";
                 $headers .= "Content-Type: text/html; charset=UTF-8\r\n";
 
                 // Send email to each user

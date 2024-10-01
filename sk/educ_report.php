@@ -43,33 +43,29 @@ if (!isset($_SESSION['skid']) || strlen($_SESSION['skid']) == 0 || !in_array($_S
         }
     }
 
+    $educreportid = mysqli_real_escape_string($conn, $_GET['educid']);
 
 
-    //get the recent educational
-    $query = "SELECT educid FROM `educ aids` ORDER BY date DESC LIMIT 1";
-    $result = $conn->query($query);
-    $row = $result->fetch_assoc();
-    $recent = $row['educid'];
 
     //all applicants for recent assistance	
 
-
-    $app = "SELECT COUNT(*) FROM application   join student on application.studid =student.studid where educid = '$recent' AND brgy = '$skpos'";
+    $app = "SELECT COUNT(*) FROM application   join student on application.studid =student.studid where educid = '$educreportid' AND brgy = '$skpos'";
     $resultapp = $conn->query($app);
     $row = $resultapp->fetch_assoc();
     $totalapp = $row['COUNT(*)'];
+   
     //pending applicants    
-    $query2 = "SELECT COUNT(*) FROM application  join student on application.studid =student.studid where educid = '$recent' AND brgy = '$skpos'  and appstatus ='Pending' ";
+    $query2 = "SELECT COUNT(*) FROM application  join student on application.studid =student.studid where educid = '$educreportid' AND brgy = '$skpos'  and appstatus ='Pending' ";
     $result2 = $conn->query($query2);
     $row = $result2->fetch_assoc();
     $pendingapp = $row['COUNT(*)'];
     //approved applicants    
-    $query3 = "SELECT  COUNT(*) FROM application  join student on application.studid =student.studid where educid = '$recent' AND brgy = '$skpos'  and appstatus ='Approved'";
+    $query3 = "SELECT  COUNT(*) FROM application  join student on application.studid =student.studid where educid = '$educreportid' AND brgy = '$skpos'  and appstatus ='Approved'";
     $result3 = $conn->query($query3);
     $row = $result3->fetch_assoc();
     $approved = $row['COUNT(*)'];
     //rejected applicants
-    $query4 = "SELECT COUNT(*) FROM application  join student on application.studid =student.studid where educid = '$recent' AND brgy = '$skpos'  and appstatus ='Rejected'";
+    $query4 = "SELECT COUNT(*) FROM application  join student on application.studid =student.studid where educid = '$educreportid' AND brgy = '$skpos'  and appstatus ='Rejected'";
     $result4 = $conn->query($query4);
     $row = $result4->fetch_assoc();
     $rejected = $row['COUNT(*)'];
@@ -78,24 +74,23 @@ if (!isset($_SESSION['skid']) || strlen($_SESSION['skid']) == 0 || !in_array($_S
     $result6 = $conn->query($query6);
     $totaleduc = $result6->num_rows;
 
-
- //all student each barangay
- $stud = "SELECT COUNT(*) FROM student where brgy = '$skpos' ";
- $resultstud = $conn->query($stud);
- $data = $resultstud->fetch_assoc();
- $brgystudent = $data['COUNT(*)'];
+    //all student each barangay
+    $stud = "SELECT COUNT(*) FROM student where brgy = '$skpos' ";
+    $resultstud = $conn->query($stud);
+    $data = $resultstud->fetch_assoc();
+    $brgystudent = $data['COUNT(*)'];
 //announcement
- $announce = "SELECT COUNT(*) FROM announcement ";
- $resultann = $conn->query($announce);
- $rows = $resultann->fetch_assoc();
- $announcement = $rows['COUNT(*)'];
+    $announce = "SELECT COUNT(*) FROM announcement ";
+    $resultann = $conn->query($announce);
+    $rows = $resultann->fetch_assoc();
+    $announcement = $rows['COUNT(*)'];
     //verified account
     $verified = "SELECT COUNT(*) FROM student WHERE accstatus ='Verified' and brgy='$skpos'";
     $resultvacc = $conn->query($verified);
     $row = $resultvacc->fetch_assoc();
     $vacc = $row['COUNT(*)'];
     //not verified account
-    $notverified = "SELECT COUNT(*) FROM student WHERE accstatus = '' OR accstatus IS NULL and brgy='$skpos'";
+    $notverified = "SELECT COUNT(*) FROM student WHERE accstatus = '' and brgy='$skpos'";
     $resultnotvacc = $conn->query($notverified);
     $row = $resultnotvacc->fetch_assoc();
     $notvacc = $row['COUNT(*)'];
@@ -109,7 +104,7 @@ if (!isset($_SESSION['skid']) || strlen($_SESSION['skid']) == 0 || !in_array($_S
     $sy = 'N/A';
     $sem = 'N/A';
 
-    $query1         = "SELECT * FROM `educ aids` ORDER BY educid DESC LIMIT 1;";
+    $query1         = "SELECT * FROM `educ aids` where educid = $educreportid;";
     $result5     = $conn->query($query1);
 
     if ($result5->num_rows) {
@@ -119,43 +114,7 @@ if (!isset($_SESSION['skid']) || strlen($_SESSION['skid']) == 0 || !in_array($_S
         }
     }
 
-    // Retrieve data from database  THIS IS FOR PIE CHART FOR APPLICANTS PER BRGY
-
-    // Fetch the most recent educational assistance ID based on the date
-    $query1 = "SELECT educid, sem, sy FROM `educ aids` ORDER BY `date` DESC LIMIT 1";
-    $result1 = mysqli_query($conn, $query1);
-    $latest_educid = null;
-    $sem = '';
-    $sy = '';
-
-    if ($result1 && mysqli_num_rows($result1) > 0) {
-        $row = mysqli_fetch_assoc($result1);
-        $latest_educid = $row['educid'];
-        $sem = $row['sem'];
-        $sy = $row['sy'];
-    }
-
-    if ($latest_educid) {
-        // Retrieve data from the database for the most recent educational assistance
-        $sql = "SELECT student.brgy, COUNT(*) AS count 
-            FROM student 
-            JOIN application ON student.studid = application.studid
-            JOIN `educ aids` ON application.educid = `educ aids`.educid 
-            WHERE `educ aids`.educid = '$latest_educid' 
-            GROUP BY student.brgy 
-            ORDER BY brgy ASC";
-
-        $result = mysqli_query($conn, $sql);
-
-        $dataArray = array();
-        $dataArray[] = ['Barangay', 'Number of Applicants'];
-
-        // Format data for Google Charts
-        while ($row = mysqli_fetch_assoc($result)) {
-            $dataArray[] = [$row['brgy'], (int)$row['count']];
-        }
-    }
-    // END OF CODE FOR PIE CHART
+  
 
 
 
@@ -175,82 +134,7 @@ if (!isset($_SESSION['skid']) || strlen($_SESSION['skid']) == 0 || !in_array($_S
         <link rel="stylesheet" type="text/css" href="https://cdn.datatables.net/2.1.2/css/dataTables.bootstrap5.min.css" />
 
         <script type="text/javascript" src="https://www.gstatic.com/charts/loader.js"></script>
-        <script type="text/javascript">
-            // Load the Visualization API and the corechart package
-            google.charts.load('current', {
-                'packages': ['corechart']
-            });
-
-            // Set a callback to run when the Google Visualization API is loaded
-            google.charts.setOnLoadCallback(drawChart);
-
-            function drawChart() {
-                // Create the data table
-                var data = google.visualization.arrayToDataTable(<?= json_encode($dataArray) ?>);
-
-                // Set chart options
-                var options = {
-                    title: 'Number of Applicants per Barangay',
-                    is3D: true,
-                    width: 1000,
-                    height: 600
-                };
-
-                // Instantiate and draw the chart, passing in some options
-                var chart = new google.visualization.PieChart(document.getElementById('piechart'));
-                chart.draw(data, options);
-            }
-        </script>
-
-        <!--START OF CODE FOR LINE CHART TO DISPLAY ALL APPLICANTS PER EDUCATIONAL ASSISTANCE -->
-        <script>
-            google.charts.load('current', {
-                packages: ['corechart', 'line']
-            });
-            google.charts.setOnLoadCallback(drawBasic);
-
-            function drawBasic() {
-                var data = new google.visualization.DataTable();
-                data.addColumn('string', 'EA');
-                data.addColumn('number', 'Applicants');
-
-                var chartData = <?php
-                                $allapp = "SELECT ea.sy, ea.sem, COUNT(a.appid) AS total_applicants
-              FROM `educ aids` ea
-              LEFT JOIN `application` a ON ea.educid = a.educid
-              LEFT JOIN `student` s ON a.studid = s.studid
-          WHERE s.brgy = '$skpos'
-              GROUP BY ea.sy, ea.sem";
-
-                                $result = $conn->query($allapp);
-
-                                $all = [];
-                                while ($row = $result->fetch_assoc()) {
-                                    $total_applicants = isset($row['total_applicants']) ? (int)$row['total_applicants'] : 0;
-                                    $all[] = [$row['sy'] . ' ' . $row['sem'], $total_applicants];
-                                }
-
-                                echo json_encode($all);
-                                ?>;
-
-                data.addRows(chartData);
-
-                var options = {
-                    title: 'Total Applicants per Educational Assistance for <?php echo $skpos ?>',
-                    hAxis: {
-                        title: 'Educational Assistance'
-                    },
-                    vAxis: {
-                        title: 'Applicants'
-                    }
-                };
-
-                var chart = new google.visualization.LineChart(document.getElementById('chart_div'));
-
-                chart.draw(data, options);
-            }
-        </script>
-        <!--START OF CODE FOR bar chart CHART TO DISPLAY ALL APPLICANTS PER year level-->
+     
 
 
 
@@ -466,102 +350,7 @@ if (!isset($_SESSION['skid']) || strlen($_SESSION['skid']) == 0 || !in_array($_S
                     </div>
 
                     <div class="page-inner mt--2">
-                        <!--   <div class="container-fluid mt-5">
-                <div class="dashboard" >
-        <div class="card">
-            <div class="card-icon"><i class="fas fa-user"></i></div>
-          <a href="applications.php" class="btn">  <h5><?= $vacc ?> <br>Verified Account</h5></a>
-          
-        </div>
-        <div class="card">
-            <div class="card-icon"><i class="fas fa-chart-line"></i></div>
-			<a href="applications.php" class="btn"><h5><?= $notvacc ?> <br>Not Verified Account</h5></a>
-         
-        </div>
-        <div class="card">
-            <div class="card-icon"><i class="fas fa-cogs"></i></div>
-			<a href="applications.php" class="btn"><h5><?= $complaints ?> <br>Complaints</h5></a>
-     
-        </div>
-        <div class="card">
-            <div class="card-icon"><i class="fas fa-comments"></i></div>
-			<a href="staff.php" class="btn"> <h5><?= $staffcount ?><br> staff</h5></a>
-           
-        </div> <div class="card">
-            <div class="card-icon"><i class="fas fa-comments"></i></div>
-			<a href="educaids.php" class="btn"> <h5><?= $totaleduc ?><br> Educational Assistance</h5></a>      
-        </div>
-	
-    </div>
-    </div>-->
-                        <div class="row">
-                            <div class="col-md-12">
-                                <div class="card" style="padding:0px; margin:0px;background-color:#F5F7F8;">
-                                    <!-- <div class="card-header card-header-border bg-success" style="border-radius: 8px;">
-									<div class="card-head-row">
-										<div class="card-title fw" style=" color: #ffffff;">EUCATIONAL ASSISTANCE APPLICATION SYSTEM</div>
-									</div>
-								</div>-->
-                                    <div class="card-body col-md-12">
-                                        <div class="container-fluid">
-
-
-
-                                            <div class="dashboard">
-                                            <div class="card bg-info">
-                                                    <div class="card-icon" style="color: white;"><i class="fa-solid fa-graduation-cap"></i></div>
-                                                    <a href="student.php" class="btn">
-                                                        <h5 style="color: white;"><?= $brgystudent ?> <br>Students</h5>
-                                                    </a>
-
-                                                </div>
-                                          <div class="card" style="background-color: orange;">
-                                                    <div class="card-icon" style="color: white;"><i class="fa-solid fa-bullhorn"></i></div>
-                                                    <a href="announcement.php" class="btn">
-                                                        <h5 style="color: white;"><?= $announcement ?> <br>Announcement</h5>
-                                                    </a>
-
-                                                </div> 
-                                                <div class="card" style="background-color: #800000;">
-                                                    <div class="card-icon" style="color: white;"><i class="fa-solid fa-clipboard-question"></i></div>
-                                                    <a href="complaint.php" class="btn">
-                                                        <h5 style="color: white;"><?= $complaints ?> <br>Complaints</h5>
-                                                    </a>
-
-                                                </div>
-                                                <div class="card" style="background-color: #185519;">
-                                                    <div class="card-icon" style="color: white;"><i class="fa-solid fa-book-open-reader"></i></div>
-                                                    <a href="educass.php" class="btn">
-                                                        <h5 style="color: white;"><?= $totaleduc ?><br> Educational Assistance</h5>
-                                                    </a>
-                                                </div>
-                                                <!--      <div class="card">
-            <div class="card-icon"style="color: blue;"><i class="fa-solid fa-user-graduate"></i></div>
-			<a href="educaids.php" class="btn"> <h5><?= $totaleduc ?><br> Beneficiaries</h5></a>      
-        </div> -->
-                                            </div>
-                                            <br>
-                                            <div id="chart_div" class="linechart"></div>
-
-                                        </div>
-
-
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                        <br>
-
-                        <div class="row">
-                            <div class="col-md-12">
-                                <div class="card" style="padding:0px; margin:0px;background-color:#F5F7F8;">
-                                 
-
-
-
-                                </div>
-                            </div>
-                        </div>
+ 
                         <br>
                         <div class="row">
                             <div class="col-md-12">
@@ -575,24 +364,24 @@ if (!isset($_SESSION['skid']) || strlen($_SESSION['skid']) == 0 || !in_array($_S
                                         <div class="container-fluid mt-5">
                                             
                                             <div class="dashboard">
-                                                <div class="card ">
-                                                    <div class="card-icon" style="color: skyblue;"> <i class="fa-solid fa-user-graduate"></i></div>
+                                                <div class="card card-primary">
+                                                    <div class="card-icon" style="color: white;"> <i class="fa-solid fa-user-graduate"></i></div>
                                                     <a href="skdashboard.php" class="btn">
-                                                        <h5 ><?= $totalapp ?>  <br>All Applicants</h5>
+                                                        <h5 style="color:white;"><?= $totalapp ?>  <br>All Applicants</h5>
                                                     </a>
 
                                                 </div>
-                                                <div class="card ">
-                                                    <div class="card-icon" style="color: yellow;"><i class="fa-solid fa-spinner fa-spin"></i></div>
+                                                <div class="card">
+                                                    <div class="card-icon" style="color: orange;"><i class="fa-solid fa-spinner fa-spin"></i></div>
                                                     <a href="pendingapplication.php" class="btn">
-                                                        <h5 ><?= $pendingapp ?> <br>Pending</h5>
+                                                        <h5><?= $pendingapp ?> <br>Pending</h5>
                                                     </a>
 
                                                 </div>
-                                                <div class="card card-success">
-                                                    <div class="card-icon" style="color: white;"><i class="fa-regular fa-thumbs-up"></i></div>
+                                                <div class="card">
+                                                    <div class="card-icon" style="color: green;"><i class="fa-regular fa-thumbs-up"></i></div>
                                                     <a href="approvedapplication.php" class="btn">
-                                                        <h5 style="color:white;"><?= $approved ?> <br>Approved</h5>
+                                                        <h5><?= $approved ?> <br>Approved</h5>
                                                     </a>
 
                                                 </div>
@@ -614,13 +403,13 @@ if (!isset($_SESSION['skid']) || strlen($_SESSION['skid']) == 0 || !in_array($_S
                                                     <div class="card-header">
                                                         <div class="card-head-row">
                                                             <div class="card-title">
-                                                                <h2>All Pending Applicants</h2>
+                                                                <h2>All Applicants</h2>
                                                             </div>
 
                                                             <div class="card-tools">
-                                                                <a href="printapprovedstudent.php" class="btn btn-danger btn-border btn-round btn-sm" title="view and print">
+                                                                <a href="viewstudent.php" class="btn btn-danger btn-border btn-round btn-sm" title="view and print">
                                                                     <i class="fa fa-print"></i>
-                                                                    Print
+                                                                   Print
                                                                 </a>
                                                                 <a href="model/export_student_csv.php" class="btn btn-secondary btn-border btn-round btn-sm" title="Download">
                                                                 <i class="fa-solid fa-file-arrow-down"></i>
@@ -651,13 +440,12 @@ if (!isset($_SESSION['skid']) || strlen($_SESSION['skid']) == 0 || !in_array($_S
                                                                 <tbody>
                                                                     <?php
 
-                                                                    $query = " SELECT *, CONCAT(lastname, ', ', firstname, ' ' , midname, '.' ) AS fullname 
-                                                                    FROM student join studentcourse on student.studid=studentcourse.studid 
+                                                                    $query = " SELECT *, CONCAT(lastname, ', ', firstname, ' ' , midname, '.' ) AS fullname FROM student join studentcourse on student.studid=studentcourse.studid 
                                                     join application on studentcourse.courseid=application.courseid 
-                                                    where application.educid=$recent and brgy = '$skpos' AND appstatus= 'Approved' ORDER BY lastname ASC";
+                                                    where application.educid=$educreportid and brgy = '$skpos' ORDER BY lastname ASC";
                                                                     $view_data = mysqli_query($conn, $query); // sending the query to the database
 
-                                                                     $count =1; 
+                                                                    $count =1;
                                                                     // displaying all the data retrieved from the database using while loop
                                                                     while ($row = mysqli_fetch_assoc($view_data)) {
                                                                         $studid = $row['studid'];
@@ -714,14 +502,15 @@ if (!isset($_SESSION['skid']) || strlen($_SESSION['skid']) == 0 || !in_array($_S
                                                                                 <?php echo htmlspecialchars($appstatus); ?>
                                                                             </td>
                                                                             <td>
-                                                                                <a type="button" href="view_approved_application.php?studid=<?php echo $studid; ?>&educid=<?php echo $recent; ?>&appid=<?php echo $appid; ?>" class="btn btn-link btn-info" title="Edit Data">
+                                                                                <a type="button" href="view_application.php?studid=<?php echo $studid; ?>&educid=<?php echo $educreportid; ?>&appid=<?php echo $appid; ?>" class="btn btn-link btn-info" title="Edit Data">
                                                                                     <i class="fa fa-file"></i></a>
 
 
 
                                                                             </td>
                                                                         </tr>
-                                                                    <?php $count++; } ?>
+                                                                     
+                                                                    <?php    $count++; } ?>
 
                                                                 </tbody>
 
