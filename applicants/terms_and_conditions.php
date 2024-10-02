@@ -38,7 +38,7 @@
 
 
 	<div class="row d-flex justify-content-center align-items-center" style="height: 100vh;">
-        <div class="col-md-12">
+        <div class="col-md-8">
             <div class="card mb-3 mt-3" style="width: 80%; margin: 0 auto;">
             <div class="card-header">
 									<div class="card-head-row">

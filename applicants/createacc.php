@@ -1,12 +1,14 @@
 
-<?php 
+<?php
 include 'server/server.php';
 session_start();
 error_reporting(E_ALL);
 ini_set('display_errors', 1);
 
-$profile = ' ';
-$accstatus = ' ';
+use PHPMailer\PHPMailer\PHPMailer;
+use PHPMailer\PHPMailer\Exception;
+
+require '../vendor/autoload.php';  // this is from phpmailer from vendor folder
 
 if (isset($_POST['save'])) {
     // Retrieve form data
@@ -17,47 +19,81 @@ if (isset($_POST['save'])) {
     $age = $_POST['age'];
     $gender = $_POST['gender'];
     $street = $_POST['street'];
-    $brgy = $_POST['vstatus'];
+    $brgy = $_POST['brgy'];
     $municipality = $_POST['municipality'];
     $email = $_POST['email'];
     $contact_no = $_POST['contact_no'];
     $province = $_POST['province'];
     $password = $_POST['password'];
 
-    // Check if a student with the same firstname, lastname, and email already exists
-    $checkStmt = $conn->prepare("SELECT COUNT(*) FROM student WHERE firstname = ? AND lastname = ?  AND midname = ? AND brgy = ? AND contact_no = ? AND birthday = ? or email = ?");
-    $checkStmt->bind_param("ssssiss", $fname, $lname,  $mname, $brgy, $contact_no, $bdate, $email );
-    $checkStmt->execute();
-    $checkStmt->bind_result($count);
-    $checkStmt->fetch();
-    $checkStmt->close();
-
-    if ($count > 0) {
+    // Check if the user is from San Antonio
+    if (strcasecmp($municipality, 'San Antonio') !== 0) {
         $_SESSION['success'] = 'danger';
-        $_SESSION['mess'] = 'There is an existing account with the same information';
+        $_SESSION['mess'] = 'This is for College students from San Antonio, Quezon only!';
     } else {
-        // Hash the password
-        $hashed_password = password_hash($password, PASSWORD_DEFAULT);
+        // Check if student already exists
+        $checkStmt = $conn->prepare("SELECT COUNT(*) FROM student WHERE firstname = ? AND lastname = ? OR email = ?");
+        $checkStmt->bind_param("sss", $fname, $lname, $email);
+        $checkStmt->execute();
+        $checkStmt->bind_result($count);
+        $checkStmt->fetch();
+        $checkStmt->close();
 
-        // Insert data into database
-        $stmt = $conn->prepare("INSERT INTO student (lastname, firstname, midname, email, `password`, birthday, contact_no, brgy, municipality, province, street_name, gender, age) VALUES ( ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)");
-        $stmt->bind_param("ssssssssssssi", $lname, $fname, $mname, $email, $hashed_password, $bdate, $contact_no, $brgy, $municipality, $province, $street, $gender,  $age);
-
-        if ($stmt->execute()) {
-            $_SESSION['success'] = 'success';
-            $_SESSION['mess'] = 'Account created successfully! Go to login';
-        } else {
+        if ($count > 0) {
             $_SESSION['success'] = 'danger';
-            $_SESSION['mess'] = 'There was an error creating your account.';
-        }
-        $stmt->close();
-    }
-} else {
-    $_SESSION['success'] = 'danger';
-    $_SESSION['mess'] = 'This is for college students of San Antonio, Quezon only!';
-}
-    
+            $_SESSION['mess'] = 'An account with the same information already exists';
+        } else {
+            // Hash the password
+            $hashed_password = password_hash($password, PASSWORD_DEFAULT);
 
+            // Generate activation token
+            $activation_token = bin2hex(random_bytes(16));  // Generates a random token
+
+            // Insert data into database
+            $stmt = $conn->prepare("INSERT INTO student (lastname, firstname, midname, email, `password`, birthday, contact_no, brgy, municipality, province, street_name, gender, age, activation_token, is_activated) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, 0)");
+            $stmt->bind_param("ssssssssssssis", $lname, $fname, $mname, $email, $hashed_password, $bdate, $contact_no, $brgy, $municipality, $province, $street, $gender, $age, $activation_token);
+
+            if ($stmt->execute()) {
+                // Send Activation Email
+                $activation_link = "http://localhost/educass/applicants/activate.php?token=$activation_token";  // Change this to your actual URL
+
+                $mail = new PHPMailer(true);
+                try {
+                    // Server settings
+                    $mail->isSMTP();
+                    $mail->Host = 'smtp.gmail.com';
+                    $mail->SMTPAuth = true;
+                    $mail->Username = 'educationalassistancesaq@gmail.com'; 
+                    $mail->Password = 'guer fsju uyvi fcuh';  
+                    $mail->SMTPSecure = PHPMailer::ENCRYPTION_STARTTLS;
+                    $mail->Port = 587;
+
+                    // Recipients
+                    $mail->setFrom('educationalassistancesaq@gmail.com', 'Educational Assistance'); // Sender
+                    $mail->addAddress($email);  // Add a recipient
+
+                    // Content
+                    $mail->isHTML(true);
+                    $mail->Subject = 'Account Activation Required';
+                    $mail->Body = "Hello $fname $lname,<br><br>Thank you for registering! Please activate your account by clicking the link below:<br><a href='$activation_link'>Activate Account</a>";
+
+                    $mail->send();
+                    $_SESSION['success'] = 'success';
+                    $_SESSION['mess'] = 'Account created successfully! Please check your email to activate your account.';
+                } catch (Exception $e) {
+                    $_SESSION['success'] = 'danger';
+                    $_SESSION['mess'] = 'Account created, but the email could not be sent. Error: ' . $mail->ErrorInfo;
+                }
+            } else {
+                $_SESSION['success'] = 'danger';
+                $_SESSION['mess'] = 'There was an error creating your account.';
+            }
+            $stmt->close();
+        }
+    }
+    $conn->close();
+
+    
     //THIS IS THE ORIGINAL CODE WITH VALID ID
    //$valididPath = 'assets/uploads/validid_file' . basename($_FILES['validid']['name']);
    // $valididPath = 'assets/uploads/validid_file/' . basename($_FILES['validid']['name']);
@@ -95,9 +131,12 @@ if (isset($_POST['save'])) {
     } */
 
 
-
-$conn->close();
+}
 ?>
+
+
+
+
 
    <!DOCTYPE html>
 <html lang="en">
@@ -312,9 +351,28 @@ label {
                                         <div class="col-md-4">
                                             <div class="form-group">
                                                 <label>Barangay</label>
-                                                <select class="form-control vstatus" required name="vstatus">
+                                                <select class="form-control vstatus" required name="brgy">
                                                     <option disabled selected>Select Barangay</option>
-                                                
+                                                    <option value="Arawan">Arawan</option>
+    <option value="Bagong Niing">Bagong Niing</option>
+    <option value="Balat Atis">Balat Atis</option>
+    <option value="Briones">Briones</option>
+    <option value="Bulihan">Bulihan</option>
+    <option value="Buliran">Buliran</option>
+    <option value="Callejon">Callejon</option>
+    <option value="Corazon">Corazon</option>
+    <option value="Del Valle">Del Valle</option>
+    <option value="Loob">Loob</option>
+    <option value="Magsaysay">Magsaysay</option>
+    <option value="Matipunso">Matipunso</option>
+    <option value="Niing">Niing</option>
+    <option value="Poblacion">Poblacion</option>
+    <option value="Pulo">Pulo</option>
+    <option value="Pury">Pury</option>
+    <option value="Sampaga">Sampaga</option>
+    <option value="Sampaguita">Sampaguita</option>
+    <option value="San Jose">San Jose</option>
+    <option value="Sinturisan">Sinturisan</option>
                                                     
                                                 </select>
                                             </div>
