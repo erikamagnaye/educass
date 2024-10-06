@@ -7,7 +7,10 @@ ini_set('display_errors', 1);
 if (strlen($_SESSION['id'] == 0)) {
     header('location:login.php');
     exit();
-}
+}use PHPMailer\PHPMailer\PHPMailer;
+use PHPMailer\PHPMailer\Exception;
+
+require '../../vendor/autoload.php';  // this is from PHPMailer
 
 if (isset($_POST['create'])) {
     $title     = $_POST['title'];
@@ -15,7 +18,7 @@ if (isset($_POST['create'])) {
     date_default_timezone_set('Asia/Manila');
     $date = date("Y-m-d h:i:sa");
 
-    // Set the 'From' email and name (no-reply and Educational Assistance)
+    // Set the 'From' email and name
     $from_email = 'educationalassistancesaq@gmail.com';  
     $from_name  = 'Educational Assistance';
 
@@ -35,30 +38,60 @@ if (isset($_POST['create'])) {
         $result = $conn->query($email_query);
 
         if ($result->num_rows > 0) {
+            $batch_size = 200; // Number of emails to send in each batch
+            $batch_counter = 0;
             $email_errors = [];
-            // Loop through each email and send the announcement
-            while ($row = $result->fetch_assoc()) {
-                $to = $row['email'];
-                $subject = "$title";
-                $message = "<html><body><pre>$details</pre></body></html>";
 
-                // Build the headers with the 'From' name and email
-                $headers  = "From: " . $from_name . " <" . $from_email . ">\r\n";
-                 $headers .= "MIME-Version: 1.0\r\n";
-                $headers .= "Content-Type: text/html; charset=UTF-8\r\n";
+            $mail = new PHPMailer(true);  // Passing 'true' enables exceptions
+            try {
+                // Server settings
+                $mail->isSMTP();
+                $mail->Host       = 'smtp.gmail.com'; 
+                $mail->SMTPAuth   = true;
+                $mail->Username   = $from_email;      
+                $mail->Password   = 'guer fsju uyvi fcuh';    
+                $mail->SMTPSecure = PHPMailer::ENCRYPTION_STARTTLS;
+                $mail->Port       = 587;
 
-                // Send email to each user
-                if (!mail($to, $subject, $message, $headers)) {
-                    $error = error_get_last();
-                    $email_errors[] = 'Email not sent to ' . $to . ' Error: ' . $error['message'];
+                // Recipients
+                $mail->setFrom($from_email, $from_name);
+                $mail->isHTML(true);
+            
+                // Loop through each email and send the announcement
+                while ($row = $result->fetch_assoc()) {
+                    $mail->addAddress($row['email']);  // Add recipient
+
+                    // Content
+                    $mail->isHTML(true);  // Set email format to HTML
+                    $mail->Subject = $title;
+                    $mail->Body    = "<html><body><h3>Good Day! </h3><br><pre><p style='  font-family: Arial, Helvetica, sans-serif; font-size:14px;'>$details</pre></body></html>";
+
+                    try {
+                        $mail->send();  // Attempt to send the email
+                    } catch (Exception $e) {
+                        $email_errors[] = 'Email not sent to ' . $row['email'] . ' Error: ' . $mail->ErrorInfo;
+                    }
+
+                    $mail->clearAddresses();  // Clear the recipient to avoid issues in the loop
+                    $batch_counter++;
+
+                    if ($batch_counter % $batch_size == 0) {
+                        sleep(5);  // Pause for 5 seconds between batches
+                    }
+                
                 }
-            }
 
-            // If there were email errors, display them
-            if (!empty($email_errors)) {
-                $_SESSION['message'] = 'Announcement posted but some emails were not sent: ' . implode(', ', $email_errors);
-                $_SESSION['title'] = 'Partial Success';
-                $_SESSION['success'] = 'warning';
+                // Handle email errors
+                if (!empty($email_errors)) {
+                    $_SESSION['message'] = 'Announcement posted but some emails were not sent: ' . implode(', ', $email_errors);
+                    $_SESSION['title'] = 'Partial Success';
+                    $_SESSION['success'] = 'warning';
+                }
+
+            } catch (Exception $e) {
+                $_SESSION['message'] = 'Mailer Error: ' . $mail->ErrorInfo;
+                $_SESSION['title'] = 'Error';
+                $_SESSION['success'] = 'error';
             }
 
         } else {
@@ -81,4 +114,5 @@ if (isset($_POST['create'])) {
 header("Location: ../announcement.php");
 $conn->close();
 exit();
+
 ?>
