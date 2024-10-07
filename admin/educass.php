@@ -90,7 +90,7 @@ $stmtSelect->close();
 					<div class="row mt--2">
 						
 						<div class="col-md-12">
-                        <img src="assets/img/educ.jpg" class="card-img-top" alt="...">
+
 							<div class="card">
 								<div class="card-header">
 									<div class="card-head-row">

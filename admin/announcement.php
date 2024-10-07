@@ -58,7 +58,7 @@ if (!isset($_SESSION['id']) || strlen($_SESSION['id']) == 0 || $_SESSION['role']
     <div class="row mt--2">
         <div class="col-md-12">
             <div class="card">
-            <img src="assets/img/announcement.jpg" class="card-img-top" alt="...">
+           
                 <div class="card-header">
                     <div class="card-head-row">
                    
@@ -69,7 +69,7 @@ if (!isset($_SESSION['id']) || strlen($_SESSION['id']) == 0 || $_SESSION['role']
                                 New announcement
                             </a>
                         </div>
-                    </div><br>
+                    </div>
              
                 </div>
                 <div class="card-body">

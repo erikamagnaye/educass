@@ -83,7 +83,7 @@ if (isset($_POST['create'])) {
 
                 // Handle email errors
                 if (!empty($email_errors)) {
-                    $_SESSION['message'] = 'Announcement posted but some emails were not sent: ' . implode(', ', $email_errors);
+                    $_SESSION['message'] = 'Announcement posted but some emails were not sent: <br> ' . implode(', ', $email_errors);
                     $_SESSION['title'] = 'Partial Success';
                     $_SESSION['success'] = 'warning';
                 }

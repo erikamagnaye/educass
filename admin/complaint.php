@@ -243,7 +243,7 @@ if (!isset($_SESSION['id']) || strlen($_SESSION['id']) == 0 || $_SESSION['role']
                             <div class="col-md-12">
 
                                 <div class="card">
-                                <img src="assets/img/queries.jpg" class="card-img-top" alt="...">
+                               
                                     <div class="card-header">
                                         <div class="card-head-row">
                                             <div class="card-title">Concerns/Queries</div>
