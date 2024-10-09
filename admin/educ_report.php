@@ -572,7 +572,7 @@ if (!isset($_SESSION['id']) || strlen($_SESSION['id']) == 0 || $_SESSION['role']
                                                 for <?= $sem ?> Report</div>
                                             <div class="card-tools">
                                                 <a href="educass.php" class="btn btn-danger btn-border btn-round btn-sm"
-                                                    title="view and print">
+                                                    title="back">
                                                     <i class="fa fa-chevron-left"></i>
                                                     Back
                                                 </a>

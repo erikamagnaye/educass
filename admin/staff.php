@@ -117,6 +117,7 @@ if (!isset($_SESSION['id']) || strlen($_SESSION['id']) == 0 || $_SESSION['role']
                                             <table id="myTable" class="table table-striped">
                                                 <thead>
                                                     <tr>
+                                                    <th scope="col">No</th>
                                                         <th scope="col">Staff</th>
                                                         <th scope="col">Position</th>
                                                         <th scope="col">Address</th>
@@ -129,6 +130,7 @@ if (!isset($_SESSION['id']) || strlen($_SESSION['id']) == 0 || $_SESSION['role']
                                                     <?php
                                                     $query = "SELECT *, CONCAT(lastname, ', ', firstname) AS fullname FROM staff ORDER BY lastname ASC"; // SQL query to fetch all table data
                                                     $view_data = mysqli_query($conn, $query); // sending the query to the database
+                                                    $count = 1;
 
                                                     // displaying all the data retrieved from the database using while loop
                                                     while ($row = mysqli_fetch_assoc($view_data)) {
@@ -147,6 +149,7 @@ if (!isset($_SESSION['id']) || strlen($_SESSION['id']) == 0 || $_SESSION['role']
                                                        // $fullname = $lastname . ', ' . $firstname;
                                                     ?>
                                                         <tr>
+                                                        <td><?php echo $count; ?></td>
                                                             <td><?php echo htmlspecialchars($fullname); ?></td>
                                                             <td><?php echo htmlspecialchars($position); ?></td>
                                                             <td><?php echo htmlspecialchars($address); ?></td>
@@ -170,7 +173,7 @@ if (!isset($_SESSION['id']) || strlen($_SESSION['id']) == 0 || $_SESSION['role']
                                                                 </script>
                                                             </td>
                                                         </tr>
-                                                    <?php } ?>
+                                                    <?php $count++; } ?>
 
                                                 </tbody>
 
@@ -349,7 +352,7 @@ if (!isset($_SESSION['id']) || strlen($_SESSION['id']) == 0 || $_SESSION['role']
                     "pageLength": 10,
                     "lengthChange": true,
                     "order": [
-                        [0, "asc"]
+                        [1, "asc"]
                     ],
                     "searching": true,
                     "ordering": true,

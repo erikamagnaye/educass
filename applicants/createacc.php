@@ -212,7 +212,7 @@ label {
     </style>
 </head>
 <body class="login">
-<?php include 'templates/loading_screen.php' ?>
+<?//php include 'templates/loading_screen.php' ?>
 <br>
 	<div class="wrapper ">
 

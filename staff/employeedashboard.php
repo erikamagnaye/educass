@@ -609,7 +609,7 @@ h5 {
 <div class="card bg-info">
                                                     <div class="card-icon" style="color: white;"><i class="fa-solid fa-graduation-cap"></i></div>
                                                     <a href="student.php" class="btn">
-                                                        <h5 style="color: white;"><?= $regstudent ?> <br>Students</h5>
+                                                        <h2 style="color: white;"><?= $regstudent ?> </h2><h5 style="color: white;">Students</h5>
                                                     </a>
 
                                                 </div>
@@ -617,22 +617,22 @@ h5 {
                                                 <div class="card" style="background-color: orange;">
                                                     <div class="card-icon" style="color: white;"><i class="fa-solid fa-bullhorn"></i></div>
                                                     <a href="announcement.php" class="btn">
-                                                        <h5 style="color: white;"><?= $announcement ?> <br>Announcement</h5>
+                                                        <h2 style="color: white;"><?= $announcement ?> </h2><h5 style="color: white;">Announcement</h5>
                                                     </a>
 
                                                 </div>
         <div class="card" style="background-color: #800000;">
             <div class="card-icon" style="color: white;"><i class="fa-solid fa-clipboard-question"></i></div>
-			<a href="complaint.php" class="btn"><h5 style="color: white;"><?= $complaints ?> <br>Complaints</h5></a>
+			<a href="complaint.php" class="btn"><h2 style="color: white;"><?= $complaints ?></h2> <h5 style="color: white;">Complaints</h5></a>
      
         </div>
         <div class="card"style="background-color: #ED3EF7;">
             <div class="card-icon" style="color: white;"><i class="fa-solid fa-user-tie"></i></div>
-			<a href="staff.php" class="btn"> <h5 style="color: white;"><?=$skcount?><br> SK Officials</h5></a>
+			<a href="staff.php" class="btn"> <h2 style="color: white;"><?=$skcount?></h2><h5 style="color: white;"> SK Officials</h5></a>
            
         </div> <div class="card"style="background-color: #185519;">
             <div class="card-icon" style="color: white;"><i class="fa-solid fa-book-open-reader"></i></div>
-			<a href="educass.php" class="btn"> <h5 style="color: white;"><?=$totaleduc?><br> Educational Assistance</h5></a>      
+			<a href="educass.php" class="btn"> <h2 style="color: white;"><?=$totaleduc?></h2><h5 style="color: white;"> Educational Assistance</h5></a>      
         </div>
   <!--      <div class="card">
             <div class="card-icon"style="color: blue;"><i class="fa-solid fa-user-graduate"></i></div>
@@ -671,9 +671,9 @@ h5 {
                         <div class="row">
 						<div class="col-md-12">
 							<div class="card">
-								<div class="card-header bg-success" style="border-radius: 8px;">
+								<div class="card-header" style="border-radius: 1px;">
 									<div class="card-head-row">
-										<div class="card-title fw-regular " style="color:#ffffff">Educational Assistance for SY: <?= $sy ?> for <?= $sem ?>  Report</div>
+										<div class="card-title fw-regular ">Educational Assistance for SY: <?= $sy ?> for <?= $sem ?>  Report</div>
 									</div>
 								</div>
 								<div class="card-body">

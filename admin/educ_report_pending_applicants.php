@@ -71,11 +71,11 @@ else {
                                                    Filter Option
                                                 </a>
 											<div class="card-tools">
-                                            <a href="print_pending_current.php" class="btn btn-success btn-border btn-round btn-sm" title="view and print">
+                                            <a href="print_pending_previous.php?educreportid=<?php echo $educreportid ?>" class="btn btn-success btn-border btn-round btn-sm" title="view and print">
 												<i class="fa fa-eye"></i>
 												View
 											</a>
-                                            <a href="model/export.php" class="btn btn-danger btn-border btn-round btn-sm" title="Download">
+                                            <a href="model/export_previous_pending.php" class="btn btn-danger btn-border btn-round btn-sm" title="Download">
 												<i class="fa fa-file"></i>
 												Export CSV
 											</a>

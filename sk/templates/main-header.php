@@ -11,7 +11,7 @@ if (!isset($_SESSION['skid']) || strlen($_SESSION['skid']) == 0 ||!in_array($_SE
 else { ?>
 <div class="main-header">
     <!-- Logo Header -->
-    <div class="logo-header" data-background-color="green">
+    <div class="logo-header" data-background-color="" style="background-color:#B8001F;">
         
         <a href="dashboard.php" class="logo">
             <img src="assets/img/logo.png" alt="navbar brand" class="navbar-brand" style="height: 45px; width: 45px;"> <span class="text-light ml-2 fw-bold" style="font-size:20px">EAAS SAQ</span>
@@ -31,7 +31,7 @@ else { ?>
     <!-- End Logo Header -->
 
     <!-- Navbar Header -->
-    <nav class="navbar navbar-header navbar-expand-lg" data-background-color="green">
+    <nav class="navbar navbar-header navbar-expand-lg" data-background-color="" style="background-color:#B8001F;">
         
         <div class="container-fluid"><span class="text-light ml-2 fw-medium" style="font-size:15px">Educational Assistance Application System for San Antonio, Quezon</span>
             <ul class="navbar-nav topbar-nav ml-md-auto align-items-center">

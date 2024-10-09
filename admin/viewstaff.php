@@ -154,6 +154,7 @@ else {
     ?>
             <thead>
                 <tr>
+                <th>No</th>
                     <th>Fullname</th>
                     <th>Position</th>
                     <th>Email</th>
@@ -168,11 +169,13 @@ else {
                 <?php
                 // Display each record in the table
                 $count = 0;
+                $no =1;
                 while ($row = mysqli_fetch_assoc($result)) {
                     if ($count % 20 === 0 && $count !== 0) {
                         echo '</tbody></table><div class="page-break"></div><h2>Educational  (Page ' . ($count / 25 + 1) . ')</h2><table class="table table-bordered"><thead><tr><th>ID</th><th>Name</th><th>Year</th><th>Course</th><th>Barangay</th><th>Gender</th></tr></thead><tbody>';
                     }
                     echo "<tr>";
+                    echo "<td>" . $no . "</td>";
                     echo "<td>" . $row['fullname'] . "</td>";
                     echo "<td>" . $row['position'] . "</td>";
                     echo "<td>" . $row['email'] . "</td>";
@@ -183,6 +186,7 @@ else {
                     echo "<td>" . $row['gender'] . "</td>";
                     echo "</tr>";
                     $count++;
+                    $no++;
                 }
                 ?>
             </tbody>

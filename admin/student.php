@@ -132,27 +132,43 @@ if (!isset($_SESSION['id']) || strlen($_SESSION['id']) == 0 || $_SESSION['role']
                                                     ?>
                                                         <tr>
                                                         <td><?php echo $count; ?></td>
-                                                        <td><img src="<?php echo htmlspecialchars($imageUrl); ?>" alt="Picture" class="avatar-img rounded-circle" style="height: 50px;width:50px;"> <?php echo htmlspecialchars($fullname); ?></td>
+                                                        <td><img src="<?php echo htmlspecialchars($imageUrl); ?>" alt="" class="avatar-img rounded-circle" style="height: 50px;width:50px;"> <?php echo htmlspecialchars($fullname); ?></td>
                                                             <td><?php echo htmlspecialchars($brgy); ?></td>
                                                             <td><?php echo htmlspecialchars($email); ?></td>
                                                             <td><?php echo htmlspecialchars($gender); ?></td>
                                                             <td>
-                                                                <a type="button" href="studentdetails.php?studid=<?php echo $studid; ?>" class="btn btn-link btn-info" title="Edit Data">
-                                                                    <i class="fa fa-file"></i></a>
-
-                                                            <!--    <a type="button" href="#" data-toggle="modal" data-target="#edit" data-staffid="<?php echo $staffid;?>" class="btn btn-link btn-success" title="Edit Data">
-                                                                    <i class="fa fa-edit"></i></a> -->
+                                                                <div style ="display:flex;">
+                                                                <a type="button" href="studentdetails.php?studid=<?php echo $studid; ?>" class="btn btn-link btn-info" title="View">
+                                                                    <i class="fa fa-file"></i></a>                                                       
 </a>        
-                                                                <a type="button" href="javascript:void(0);" onclick="confirmDeletion(<?php echo $studid; ?>)" class="btn btn-link btn-danger" title="Delete">
-                                                                    <i class="fa fa-times"></i>
-                                                                </a>
-                                                                <script>
-                                                                    function confirmDeletion(studid) {
-                                                                        if (confirm('Are you sure you want to delete this record?')) {
-                                                                            window.location.href = 'remove_student.php?deleteid=' + studid + '&confirm=true';
-                                                                        }
-                                                                    }
-                                                                </script>
+                                                           
+                                                            
+
+                                                                
+                                                            <a href="javascript:void(0);" class="btn btn-outline-danger btn-sm border-0" title="Delete" onclick="confirmDeletion(<?php echo $studid; ?>)">
+    <i class="fa fa-trash"></i>
+</a>
+
+<script>
+    function confirmDeletion(studid) {
+        Swal.fire({
+            title: "Are you sure?",
+            text: "You want to delete this record?",
+            icon: "warning",
+            showCancelButton: true,
+            confirmButtonColor: "#DD6B55",
+            confirmButtonText: "Yes, delete it!",
+            cancelButtonText: "Cancel",
+            closeOnConfirm: true
+        }).then((result) => {
+            if (result.isConfirmed) {
+                window.location.href = 'remove_student.php?deleteid=' + studid + '&confirm=true';
+            }
+        });
+    }
+</script>
+                                                                </div>
+                                                                
                                                             </td>
                                                         </tr>
                                                     <?php $count++;  }?>

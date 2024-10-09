@@ -61,9 +61,9 @@
                                             <!-- <input type="checkbox" name="remember" <?php if (isset($_COOKIE['username'])) { ?> checked <?php } ?> /> Remember me -->
                                             <a href="forgot-password.php" class="auth-link" style="color:green;text-decoration:none;">Forgot password?</a>
                                         </div><br>
-                                        <div class="form-action mb-3">
+                                        <div class="form-action mb-3"style="padding: 5px; margin-:0, 10px;">
                                           
-                                            <button type="submit" class="btn btn-round btn-primary" name="submit">Login</button>
+                                            <button type="submit" class="btn btn-round btn-primary"  name="submit">Login</button>
 
                                         </div>
                                     </form>

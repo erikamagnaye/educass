@@ -510,28 +510,28 @@ if (!isset($_SESSION['skid']) || strlen($_SESSION['skid']) == 0 || !in_array($_S
                                                 <div class="card bg-info">
                                                     <div class="card-icon" style="color: white;"><i class="fa-solid fa-graduation-cap"></i></div>
                                                     <a href="student.php" class="btn">
-                                                        <h5 style="color: white;"><?= $brgystudent ?> <br>Students</h5>
+                                                        <h2 style="color: white;"><?= $brgystudent ?> </h2><h5 style="color: white;">Students</h5>
                                                     </a>
 
                                                 </div>
                                           <div class="card" style="background-color: orange;">
                                                     <div class="card-icon" style="color: white;"><i class="fa-solid fa-bullhorn"></i></div>
                                                     <a href="announcement.php" class="btn">
-                                                        <h5 style="color: white;"><?= $announcement ?> <br>Announcement</h5>
+                                                        <h2 style="color: white;"><?= $announcement ?> </h2><h5 style="color: white;">Announcement</h5>
                                                     </a>
 
                                                 </div> 
                                                 <div class="card" style="background-color: #800000;">
                                                     <div class="card-icon" style="color: white;"><i class="fa-solid fa-clipboard-question"></i></div>
                                                     <a href="complaint.php" class="btn">
-                                                        <h5 style="color: white;"><?= $complaints ?> <br>Complaints</h5>
+                                                        <h2 style="color: white;"><?= $complaints ?> </h2><h5 style="color: white;">Complaints</h5>
                                                     </a>
 
                                                 </div>
                                                 <div class="card" style="background-color: #185519;">
                                                     <div class="card-icon" style="color: white;"><i class="fa-solid fa-book-open-reader"></i></div>
                                                     <a href="educass.php" class="btn">
-                                                        <h5 style="color: white;"><?= $totaleduc ?><br> Educational Assistance</h5>
+                                                        <h2 style="color: white;"><?= $totaleduc ?></h2><h5 style="color: white;">Educational Assistance</h5>
                                                     </a>
                                                 </div>
                                                 <!--      <div class="card">
@@ -565,9 +565,9 @@ if (!isset($_SESSION['skid']) || strlen($_SESSION['skid']) == 0 || !in_array($_S
                         <div class="row">
                             <div class="col-md-12">
                                 <div class="card">
-                                    <div class="card-header bg-success" style="border-radius: 8px;">
+                                    <div class="card-header " style="border-radius: 1px;">
                                         <div class="card-head-row">
-                                            <div class="card-title fw-regular " style="color:#ffffff">Educational Assistance for SY: <?= $sy ?> for <?= $sem ?> Report for <?= $skpos ?> </div>
+                                            <div class="card-title fw-regular " style="">Educational Assistance for SY: <?= $sy ?> for <?= $sem ?> Report for <?= $skpos ?> </div>
                                         </div>
                                     </div>
                                     <div class="card-body">

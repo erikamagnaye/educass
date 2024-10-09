@@ -102,10 +102,10 @@
 						<button type="submit" name="login" class="btn btn-primary btn-rounded btn-login">Login</button>
                         <br>
                      	</div>
-                         <div class=" align-items-center text-center">
+                       <!--  <div class=" align-items-center text-center">
                     <a href="index.php" class="auth-link text-red" style="color: red;"> Cancel</a>
 						
-					</div>
+					</div>-->
                                     </form>
                                 </div>
                             </div>
