@@ -86,7 +86,7 @@ $current_page = PageName();
                     </span>
                   <!--   <h4 class="text-section">Menu</h4>-->
                 </li>
-                <li class="nav-item <?= $current_page=='educass.php' || $current_page=='viewprinteduc.php' ? 'active' : null ?>">
+                <li class="nav-item <?= $current_page=='educass.php' || $current_page=='viewprinteduc.php' || $current_page=='educ_report.php' ? 'active' : null ?>">
                     <a href="educass.php">
                         <i class="fa fa-graduation-cap"></i>
                         <p>Educational Aids</p>

@@ -77,11 +77,11 @@ if (isset($_POST['filter'])) {
 												<i class="fa fa-print"></i>
 												Print
 											</a>
-                                            <a href="model/export.php" class="btn btn-success btn-border btn-round btn-sm" title="Download">
+                                            <a href="model/exportfilterpending.php?recent=<?=$recent?>&filbrgy=<?=$filbrgy?>&year=<?=$level_condition?>" class="btn btn-success btn-border btn-round btn-sm" title="Download">
 												<i class="fa fa-file"></i>
 												Export CSV
 											</a>
-											    <a href="all_current_applicants.php" class="btn btn-danger btn-border btn-round btn-sm" title="Download">
+											    <a href="<?php echo $_SERVER['HTTP_REFERER']; ?>" class="btn btn-danger btn-border btn-round btn-sm" title="Download">
 												<i class="fa fa-chevron-left"></i>
 												Back
 											</a>

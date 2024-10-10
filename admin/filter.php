@@ -76,7 +76,7 @@ if (isset($_POST['filter'])) {
 												<i class="fa fa-print"></i>
 												Print
 											</a>
-                                            <a href="model/export_educprovided_csv.php" class="btn btn-success btn-border btn-round btn-sm" title="Download">
+                                            <a href="model/exportfilter.php?recent=<?=$recent?>&filbrgy=<?=$filbrgy?>&year=<?=$level_condition?>" class="btn btn-success btn-border btn-round btn-sm" title="Download">
 												<i class="fa fa-file"></i>
 												Export CSV
 											</a>

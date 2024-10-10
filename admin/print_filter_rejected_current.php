@@ -128,10 +128,7 @@ else {
 												<i class="fa fa-print"></i>
 												Print 
 											</button>
-                                            <a href="model/export.php" class="btn btn-success btn-border btn-round btn-sm" title="Download">
-												<i class="fa fa-file"></i>
-												Export CSV
-											</a>
+                                       
 											    <a href="rejected_current_applicants.php" class="btn btn-danger btn-border btn-round btn-sm" title="Download">
 												<i class="fa fa-chevron-left"></i>
 												Back
