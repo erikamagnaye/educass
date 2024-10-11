@@ -33,6 +33,10 @@ else {
     .btn-link + .btn-link {
     margin-left: 5px;
 }
+.modal-body {
+    max-height: 70vh; /* Set a maximum height for the modal body */
+    overflow-y: auto; /* Enable vertical scrolling */
+}
 </style>
 
 </head>
@@ -270,10 +274,11 @@ where application.educid=$educreportid and appstatus = 'Rejected' ORDER BY brgy 
       
 <!-- Modal -->
 <div class="modal fade" id="printModal" tabindex="-1" role="dialog" aria-labelledby="printModalLabel" aria-hidden="true">
-    <div class="modal-dialog modal-lg" role="document">
+    <div class="modal-dialog modal-scrollable modal-lg" role="document">
         <div class="modal-content">
             <div class="modal-header">
-                <h5 class="modal-title" id="printModalLabel">Print Educational Assistance Applicants</h5>
+                 <button type="button" class="btn btn-round btn-sm btn-danger" onclick="printDiv('printModalBody')"><i class="fa fa-print"></i> Print</button>
+            
                 <button type="button" class="close" data-dismiss="modal" aria-label="Close">
                     <span aria-hidden="true">&times;</span>
                 </button>
@@ -281,10 +286,7 @@ where application.educid=$educreportid and appstatus = 'Rejected' ORDER BY brgy 
             <div class="modal-body" id="printModalBody">
                 <!-- Content to be printed will be injected here -->
             </div>
-            <div class="modal-footer">
-                <button type="button" class="btn btn-round btn-secondary" data-dismiss="modal">Close</button>
-                <button type="button" class="btn btn-round btn-danger" onclick="printDiv('printModalBody')"><i class="fa fa-print"></i> Print</button>
-            </div>
+     
         </div>
     </div>
 </div>		

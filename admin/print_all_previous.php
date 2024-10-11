@@ -18,6 +18,33 @@ if (isset($_GET['educreportid'])) {
     ob_start(); // Start output buffering
 
     ?>
+    
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<?php include 'templates/header.php' ?>
+	<title>Educational Assistance</title>
+   
+    <style>
+    body {
+        font-family: Arial, sans-serif;
+    }
+
+    /* Table styles */
+    .table {
+        font-size: 14px;
+    }
+    .table th, .table td {
+        font-size: 12px;
+        height:40px;
+    }
+    .table h2 {
+        font-size: 18px;
+    }
+    </style>
+
+</head>
+<body>
     <div class="d-flex flex-wrap justify-content-around" style="border-bottom:1px solid green">
         <div class="text-center">
             <img src="assets/img/logo.png" class="img-fluid" width="100">
@@ -78,6 +105,8 @@ if (isset($_GET['educreportid'])) {
             </div> <!-- End of table-responsive -->
         </div> <!-- End of col-md-12 -->
     </div> <!-- End of row -->
+    </body>
+</html>
     <?php
 
     // Get contents and clean buffer
