@@ -29,7 +29,11 @@ else {
     <link rel="stylesheet" type="text/css" href="https://cdn.datatables.net/2.1.2/css/dataTables.bootstrap5.min.css"/>
     <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11.12.3/dist/sweetalert2.all.min.js"></script>
         <link href="https://cdn.jsdelivr.net/npm/sweetalert2@11.12.3/dist/sweetalert2.min.css" rel="stylesheet">
-     
+             <!-- jQuery -->
+<script src="https://code.jquery.com/jquery-3.5.1.min.js"></script>
+<!-- Bootstrap JS -->
+<script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.bundle.min.js"></script>
+  
 <style>
     .btn-link + .btn-link {
     margin-left: 5px;
@@ -75,11 +79,13 @@ else {
                                                    Filter Option
                                                 </a>
 											<div class="card-tools">
-                                            <a href="print_pending_current.php" class="btn btn-success btn-border btn-round btn-sm" title="view and print">
-												<i class="fa fa-eye"></i>
-												View
-											</a>
-                                            <a href="model/export.php" class="btn btn-danger btn-border btn-round btn-sm" title="Download">
+                                         
+                                            <a href="#" class="btn btn-success btn-border btn-round btn-sm"
+                                                    title="view and print" onclick="openPrintModal()">
+                                                    <i class="fa fa-eye"></i>
+                                                    View
+                                                </a>
+                                            <a href="model/export_pending_current.php?recent=<?=$recent?>" class="btn btn-danger btn-border btn-round btn-sm" title="Download">
 												<i class="fa fa-file"></i>
 												Export CSV
 											</a>
@@ -265,6 +271,33 @@ where application.educid=$recent and appstatus = 'Pending' ORDER BY brgy ASC, `y
                     </div>
                 </div>
 		
+                 <!--PRINT -->
+
+                <!-- Modal -->
+                <div class="modal fade" id="printModal" tabindex="-1" role="dialog" aria-labelledby="printModalLabel"
+                    aria-hidden="true">
+                    <div class="modal-dialog modal-lg" role="document">
+                        <div class="modal-content">
+                            <div class="modal-header">
+                            <button type="button" class="btn btn-round btn-sm btn-danger"
+                                    onclick="printDiv('printModalBody')"><i class="fa fa-print"></i> Print</button>
+                          
+                                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                    <span aria-hidden="true">&times;</span>
+                                </button>
+                            </div>
+                            <div class="modal-body" id="printModalBody">
+                                <!-- Content to be printed will be injected here -->
+                            </div>
+                            <div class="modal-footer">
+                                <button type="button" class="btn btn-round btn-secondary"
+                                    data-dismiss="modal">Close</button>
+                                <button type="button" class="btn btn-round btn-danger"
+                                    onclick="printDiv('printModalBody')"><i class="fa fa-print"></i> Print</button>
+                            </div>
+                        </div>
+                    </div>
+                </div>	
 
 			<!-- Main Footer -->
 			<?php include 'templates/main-footer.php' ?>
@@ -311,6 +344,40 @@ where application.educid=$recent and appstatus = 'Pending' ORDER BY brgy ASC, `y
                     },
                 });
             });
+
+              //PRINT 
+              function openPrintModal() {
+              
+              $.ajax({
+                  url: 'print_pending_current.php', // Create this PHP file to return HTML content
+                  type: 'GET',
+
+                  success: function (response) {
+                      // Injecting the fetched content into the modal body
+                      document.getElementById('printModalBody').innerHTML = response;
+                      // Show the modal
+                      $('#printModal').modal('show');
+                  },
+                  error: function () {
+                      alert('Error fetching report data.');
+                  }
+              });
+          }
+
+          function printDiv(divName) {
+              var printContents = document.getElementById(divName).innerHTML;
+              var originalContents = document.body.innerHTML;
+
+              // Replace body content with the content to print
+              document.body.innerHTML = printContents;
+
+              // Trigger print dialog
+              window.print();
+
+              // Restore original body content
+              document.body.innerHTML = originalContents;
+              location.reload();
+          }
         </script>
 <script type="text/javascript" src="https://cdn.datatables.net/2.1.2/js/dataTables.min.js"></script>
 <script type="text/javascript" src="https://cdn.datatables.net/2.1.2/js/dataTables.bootstrap5.min.js"></script>
