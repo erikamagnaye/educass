@@ -34,311 +34,375 @@ if (!isset($_SESSION['staffid']) || strlen($_SESSION['staffid']) == 0 || in_arra
 else {
 
 
-  //get the recent educational
-  $query = "SELECT educid FROM `educ aids` ORDER BY date DESC LIMIT 1";
-  $result = $conn->query($query);
-  $row = $result->fetch_assoc();
-  $recent = $row['educid'];
-
-//end of code to update educ ass digitally
-
-?>
-<!DOCTYPE html>
-<html lang="en">
-<head>
-	<?php include 'templates/header.php' ?>
-	<title>Educational Assistance</title>
-    <link rel="stylesheet" type="text/css" href="https://cdn.datatables.net/2.1.2/css/dataTables.bootstrap5.min.css"/>
-    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11.12.3/dist/sweetalert2.all.min.js"></script>
-        <link href="https://cdn.jsdelivr.net/npm/sweetalert2@11.12.3/dist/sweetalert2.min.css" rel="stylesheet">
-        <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.1.1/css/all.min.css" integrity="sha512-KfkfwYDsLkIlwQp6LFnl8zNdLGxu9YAA1QvwINks4PhcElQSvqcyVLLD9aMhXd13uQjoXtEKNosOWaZqXgel0g==" crossorigin="anonymous" referrerpolicy="no-referrer" />
- 
-<style>
-    .btn-link + .btn-link {
-    margin-left: 5px;
-}
-</style>
-
-</head>
-<body>
-	<?//php include 'templates/loading_screen.php' ?>
-
-	<div class="wrapper">
-		<!-- Main Header -->
-		<?php include 'templates/main-header.php' ?>
-		<!-- End Main Header -->
-
-		<!-- Sidebar -->
-		<?php include 'templates/sidebar.php' ?>
-		<!-- End Sidebar -->
- 
-		<div class="main-panel">
-			<div class="content">
-				<div class="panel-header ">
-					<div class="page-inner">
-						<div class="d-flex align-items-left align-items-md-center flex-column flex-md-row">
-							<div>
-								<h2 class="text-black fw-bold">Admin</h2>
-							</div>
-						</div>
-					</div>
-				</div>
-				<div class="page-inner">
-				
-					<div class="row mt--2">
-						
-						<div class="col-md-12">
-						
-							<div class="card">
-								<div class="card-header">
-									<div class="card-head-row">
-                                    <div class="card-title" style="margin:2px;">Pending Applicants </div>
-										<a href="#add" data-toggle="modal" class="btn btn-secondary btn-border btn-round btn-sm" title="Post Assistance">
-                                                    <i class="fa fa-filter"></i>
-                                                   Filter Option
-                                                </a>
-											<div class="card-tools">
-                                            <a href="print_all_current.php" class="btn btn-success btn-border btn-round btn-sm" title="view and print">
-												<i class="fa fa-eye"></i>
-												View
-											</a>
-                                            <a href="model/export_educprovided_csv.php" class="btn btn-danger btn-border btn-round btn-sm" title="Download">
-												<i class="fa fa-file"></i>
-												Export CSV
-											</a>
-                                            <a href="employeedashboard.php" class="btn btn-danger btn-border btn-round btn-sm" >
-												<i class="fa fa-chevron-left"></i>
-												Back
-											</a>
-											</div>
-									
-									</div>
-								</div>
-								<div class="card-body">
-									<div class="table-responsive">
-
-
-
-
-
-                                    <table id="dataTable" class="table table-striped">
-
-<thead>
-    <tr>
-    <th scope="col">No</th>
-        <th scope="col">Full Name</th>
-        <th scope="col">Year</th>
-        <th scope="col">Barangay</th>
-        <th scope="col">Status</th>
-        <th>Action</th>
-
-    </tr>
-</thead>
-<tbody>
-    <?php
-
-    $query = " SELECT *, CONCAT(lastname, ', ', firstname, ' ' , midname, '.' ) AS fullname 
-    FROM student join studentcourse on student.studid=studentcourse.studid 
-join application on studentcourse.courseid=application.courseid 
-where application.educid=$recent and appstatus = 'Pending' ORDER BY brgy ASC, `year` ASC, lastname ASC";
-    $view_data = mysqli_query($conn, $query); // sending the query to the database
-
-    $count =1;
-    // displaying all the data retrieved from the database using while loop
-    while ($row = mysqli_fetch_assoc($view_data)) {
-        $studid = $row['studid'];
-        $lastname = $row['lastname'];
-        $firstname = $row['firstname'];
-        $midname = $row['midname'];
-        $email = $row['email'];
-        $contact_no = $row['contact_no'];
-        $age = $row['age'];
-        $birthday = $row['birthday'];
-
-        $gender = $row['gender'];
-        $brgy = $row['brgy'];
-        $municipality = $row['municipality'];
-        $province = $row['province'];
-        $street_name = $row['street_name'];
-        $validid = $row['validid'];
-        //$picture = $row['picture'];
-        $citizenship = $row['citizenship'];
-        $religion = $row['religion'];
-        $civilstatus = $row['civilstatus'];
-        $accstatus = $row['accstatus'];
-        $fullname = $row['fullname'];
-        $appstatus = $row['appstatus'];
-
-        $year = $row['year'];
-        $school_name = $row['school_name'];
-        $appid = $row['appid'];
-
-        $imagePath = $row['picture'];
-        if (empty($imagePath)) {
-            $imageUrl = '../applicants/assets/img/pic.jpg/';
-        } elseif (filter_var($imagePath, FILTER_VALIDATE_URL)) {
-            $imageUrl = $imagePath;
-        } else {
-            $imageUrl = '../applicants/assets/uploads/applicant_profile/' . $imagePath;
-        }
-        // $fullname = $lastname . ', ' . $firstname;
-    ?>
-        <tr>
-        <td><?php echo $count; ?></td>
-            <td><img src="<?php echo htmlspecialchars($imageUrl); ?>" alt="" class="avatar-img rounded-circle" style="height: 50px;width:50px;"> <?php echo htmlspecialchars($fullname); ?></td>
-            <td><?php echo htmlspecialchars($year); ?></td>
-            <td><?php echo htmlspecialchars($brgy); ?></td>
-            <td style="<?php
-                        if ($appstatus == 'Pending') {
-                            echo 'color: #FFC107'; // yellow-orange color for pending
-                        } elseif ($appstatus == 'Approved') {
-                            echo 'color: #4CAF50'; // green color for approved
-                        } elseif ($appstatus == 'Rejected') {
-                            echo 'color: #FF0000'; // red color for rejected
-                        }
-                        ?>">
-                <?php echo htmlspecialchars($appstatus); ?>
-            </td>
-            <td>
-                <a type="button" href="applicant_info.php?studid=<?php echo $studid; ?>&educid=<?php echo $recent; ?>&appid=<?php echo $appid; ?>" class="btn btn-link btn-info" title="Edit Data">
-                    <i class="fa fa-file"></i></a>
-
-
-
-            </td>
-        </tr>
-     
-    <?php    $count++; } ?>
-
-</tbody>
-
-
-</table>
-									</div>
-								</div>
-							</div>
-						</div>
-					</div>
-				</div>
-			</div>
-            <div class="modal fade" id="add" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
-                    <div class="modal-dialog modal-md" role="document">
-                        <div class="modal-content">
-                            <div class="modal-header " >
-                                <h5 class="modal-title" id="exampleModalLabel">Filter Options</h5>
-                                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                                    <span aria-hidden="true">&times;</span>
-                                </button>
-                            </div>
-                            <div class="modal-body">
-                                <form method="POST" action="filterpending.php">
-                                  
-                                   
-                                  
-                                    <div class="form-group col-md-12">
-                                       
-                                        <input type="hidden" value="<?php echo $recent ?>" name="recent">
+    //get the recent educational
+    $query = "SELECT educid FROM `educ aids` ORDER BY date DESC LIMIT 1";
+    $result = $conn->query($query);
+    $row = $result->fetch_assoc();
+    $recent = $row['educid'];
+  
+  //end of code to update educ ass digitally
+  
+  ?>
+  <!DOCTYPE html>
+  <html lang="en">
+  <head>
+      <?php include 'templates/header.php' ?>
+      <title>Educational Assistance</title>
+      <link rel="stylesheet" type="text/css" href="https://cdn.datatables.net/2.1.2/css/dataTables.bootstrap5.min.css"/>
+      <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.1.1/css/all.min.css" integrity="sha512-KfkfwYDsLkIlwQp6LFnl8zNdLGxu9YAA1QvwINks4PhcElQSvqcyVLLD9aMhXd13uQjoXtEKNosOWaZqXgel0g==" crossorigin="anonymous" referrerpolicy="no-referrer" />
+           <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11.12.3/dist/sweetalert2.all.min.js"></script>
+          <link href="https://cdn.jsdelivr.net/npm/sweetalert2@11.12.3/dist/sweetalert2.min.css" rel="stylesheet">
+               <!-- jQuery -->
+  <script src="https://code.jquery.com/jquery-3.5.1.min.js"></script>
+  <!-- Bootstrap JS -->
+  <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.bundle.min.js"></script>
+    
+  <style>
+      .btn-link + .btn-link {
+      margin-left: 5px;
+  }
+  </style>
+  
+  </head>
+  <body>
+      <?//php include 'templates/loading_screen.php' ?>
+  
+      <div class="wrapper">
+          <!-- Main Header -->
+          <?php include 'templates/main-header.php' ?>
+          <!-- End Main Header -->
+  
+          <!-- Sidebar -->
+          <?php include 'templates/sidebar.php' ?>
+          <!-- End Sidebar -->
+   
+          <div class="main-panel">
+              <div class="content">
+                  <div class="panel-header ">
+                      <div class="page-inner">
+                          <div class="d-flex align-items-left align-items-md-center flex-column flex-md-row">
+                              <div>
+                                  <h2 class="text-black fw-bold">Admin</h2>
+                              </div>
+                          </div>
+                      </div>
+                  </div>
+                  <div class="page-inner">
+                  
+                      <div class="row mt--2">
+                          
+                          <div class="col-md-12">
+                          
+                              <div class="card">
+                                  <div class="card-header">
+                                      <div class="card-head-row">
+                                          <div class="card-title">Pending Applicants</div>
+                                          <a href="#add" data-toggle="modal" class="btn btn-secondary btn-border btn-round btn-sm" title="Post Assistance">
+                                                      <i class="fa fa-filter"></i>
+                                                     Filter Option
+                                                  </a>
+                                              <div class="card-tools">
+                                           
+                                              <a href="#" class="btn btn-success btn-border btn-round btn-sm"
+                                                      title="view and print" onclick="openPrintModal()">
+                                                      <i class="fa fa-eye"></i>
+                                                      View
+                                                  </a>
+                                              <a href="model/export_pending_current.php?recent=<?=$recent?>" class="btn btn-danger btn-border btn-round btn-sm" title="Download">
+                                                  <i class="fa fa-file"></i>
+                                                  Export CSV
+                                              </a>
+                                              
+                                              </div>
                                       
-                                            <label>Barangay</label>
-                                            <select class="form-control" id="" required name="brgy">
-                                          
-                                                    <option value="Arawan">Arawan</option>
-                                                    <option value="Bagong Niing">Bagong Niing</option>
-                                                    <option value="Balat Atis">Balat Atis</option>
-                                                    <option value="Briones">Briones</option>
-                                                    <option value="Bulihan">Bulihan</option>
-                                                    <option value="Buliran">Buliran</option>
-                                                    <option value="Callejon">Callejon</option>
-                                                    <option value="Corazon">Corazon</option>
-                                                    <option value="Del Valle">Del Valle</option>
-                                                    <option value="Loob">Loob</option>
-                                                    <option value="Magsaysay">Magsaysay</option>
-                                                    <option value="Matipunso">Matipunso</option>
-                                                    <option value="Niing">Niing</option>
-                                                    <option value="Poblacion">Poblacion</option>
-                                                    <option value="Pulo">Pulo</option>
-                                                    <option value="Pury">Pury</option>
-                                                    <option value="Sampaga">Sampaga</option>
-                                                    <option value="Sampaguita">Sampaguita</option>
-                                                    <option value="San Jose">San Jose</option>
-                                                    <option value="Sintorisan">Sintorisan</option>
-                                            </select>
-                                            <label>Year Level</label>
-                                            <select class="form-control" id="" required name="yearlevel">
+                                      </div>
+                                  </div>
+                                  <div class="card-body">
+                                      <div class="table-responsive">
+  
+  
+  
+  
+  
+                                      <table id="dataTable" class="table table-striped">
+  
+  <thead>
+      <tr>
+      <th scope="col">No</th>
+          <th scope="col">Full Name</th>
+          <th scope="col">Year</th>
+          <th scope="col">Barangay</th>
+          <th scope="col">Status</th>
+          <th>Action</th>
+  
+      </tr>
+  </thead>
+  <tbody>
+      <?php
+  
+      $query = " SELECT *, CONCAT(lastname, ', ', firstname, ' ' , midname, '.' ) AS fullname 
+      FROM student join studentcourse on student.studid=studentcourse.studid 
+  join application on studentcourse.courseid=application.courseid 
+  where application.educid=$recent and appstatus = 'Pending' ORDER BY brgy ASC, `year` ASC, lastname ASC";
+      $view_data = mysqli_query($conn, $query); // sending the query to the database
+  
+      $count =1;
+      // displaying all the data retrieved from the database using while loop
+      while ($row = mysqli_fetch_assoc($view_data)) {
+          $studid = $row['studid'];
+          $lastname = $row['lastname'];
+          $firstname = $row['firstname'];
+          $midname = $row['midname'];
+          $email = $row['email'];
+          $contact_no = $row['contact_no'];
+          $age = $row['age'];
+          $birthday = $row['birthday'];
+  
+          $gender = $row['gender'];
+          $brgy = $row['brgy'];
+          $municipality = $row['municipality'];
+          $province = $row['province'];
+          $street_name = $row['street_name'];
+          $validid = $row['validid'];
+          //$picture = $row['picture'];
+          $citizenship = $row['citizenship'];
+          $religion = $row['religion'];
+          $civilstatus = $row['civilstatus'];
+          $accstatus = $row['accstatus'];
+          $fullname = $row['fullname'];
+          $appstatus = $row['appstatus'];
+  
+          $year = $row['year'];
+          $school_name = $row['school_name'];
+          $appid = $row['appid'];
+  
+          $imagePath = $row['picture'];
+          if (empty($imagePath)) {
+              $imageUrl = '../applicants/assets/img/pic.jpg/';
+          } elseif (filter_var($imagePath, FILTER_VALIDATE_URL)) {
+              $imageUrl = $imagePath;
+          } else {
+              $imageUrl = '../applicants/assets/uploads/applicant_profile/' . $imagePath;
+          }
+          // $fullname = $lastname . ', ' . $firstname;
+      ?>
+          <tr>
+          <td><?php echo $count; ?></td>
+              <td><img src="<?php echo htmlspecialchars($imageUrl); ?>" alt="" class="avatar-img rounded-circle" style="height: 50px;width:50px;"> <?php echo htmlspecialchars($fullname); ?></td>
+              <td><?php echo htmlspecialchars($year); ?></td>
+              <td><?php echo htmlspecialchars($brgy); ?></td>
+              <td style="<?php
+                          if ($appstatus == 'Pending') {
+                              echo 'color: #FFC107'; // yellow-orange color for pending
+                          } elseif ($appstatus == 'Approved') {
+                              echo 'color: #4CAF50'; // green color for approved
+                          } elseif ($appstatus == 'Rejected') {
+                              echo 'color: #FF0000'; // red color for rejected
+                          }
+                          ?>">
+                  <?php echo htmlspecialchars($appstatus); ?>
+              </td>
+              <td>
+                  <a type="button" href="applicant_info.php?studid=<?php echo $studid; ?>&educid=<?php echo $recent; ?>&appid=<?php echo $appid; ?>" class="btn btn-link btn-info" title="Edit Data">
+                      <i class="fa fa-file"></i></a>
+  
+  
+  
+              </td>
+          </tr>
+       
+      <?php    $count++; } ?>
+  
+  </tbody>
+  
+  
+  </table>
+                                      </div>
+                                  </div>
+                              </div>
+                          </div>
+                      </div>
+                  </div>
+              </div>
+              
+               
+              <div class="modal fade" id="add" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+                      <div class="modal-dialog modal-md" role="document">
+                          <div class="modal-content">
+                              <div class="modal-header " >
+                                  <h5 class="modal-title" id="exampleModalLabel">Filter Options</h5>
+                                  <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                      <span aria-hidden="true">&times;</span>
+                                  </button>
+                              </div>
+                              <div class="modal-body">
+                                  <form method="POST" action="filterpending.php">
+                                    
+                                     
+                                    
+                                      <div class="form-group col-md-12">
                                          
-                                                    <option value="All Levels">All Levels</option>
-                                                    <option value="First Year">First Year</option>
-                                                    <option value="Second Year">Second Year</option>
-                                                    <option value="Third Year">Third Year</option>
-                                                    <option value="Fourth Year">Fourth Year</option>
-                                                    <option value="Fifth Year">Fifth Year</option>
+                                          <input type="hidden" value="<?php echo $recent ?>" name="recent">
+                                        
+                                              <label>Barangay</label>
+                                              <select class="form-control" id="" required name="brgy">
                                             
-                                            </select>
-                                        </div>
-                              
-                            </div>
-                            <div class="modal-footer">
-                                <!--  <input type="hidden" id="pos_id" name="id"> -->
-                                <button type="button" class="btn  btn-sm" data-dismiss="modal">Close</button>
-                                <button type="submit" class="btn btn-primary btn-sm" name="filter">Filter</button>
-                            </div>
-
-                        
-                            </form>
-                        </div>
-                    </div>
-                </div>		
-			 
-
-		
-
-			<!-- Main Footer -->
-			<?php include 'templates/main-footer.php' ?>
-			<!-- End Main Footer -->
-			
-		</div>
-		
-	</div>
-	<?php include 'templates/footer.php' ?>
-
-         <!-- alert for UPDATEEEEEEEEE -->
-         <?php if (isset($_SESSION['message'])) : ?> 
-                                <script>
-                                    Swal.fire({
-                                        title: '<?php echo $_SESSION['title']; ?>',
-                                        text: '<?php echo $_SESSION['message']; ?>',
-                                        icon: '<?php echo $_SESSION['success']; ?>',
-                                        confirmButtonText: 'OK'
-                                    });
-                                </script>
-                                <?php unset($_SESSION['message']);
-                                unset($_SESSION['success']);
-                                unset($_SESSION['title']);  ?>
-                            <?php endif; ?>
-
-                            <script>
-            $(document).ready(function() {
-                $('#dataTable').DataTable({
-                    "lengthMenu": [
-                        [10, 25, 50, -1],
-                        [10, 25, 50, "All"]
-                    ],
-                    "pageLength": 10,
-                    "lengthChange": true,
-                    "order": [
-                       
-                    ],
-                    "searching": true,
-                    "ordering": true,
-                    "language": {
-                        "search": "_INPUT_",
-                        "searchPlaceholder": "Search here",
-                        "lengthMenu": "_MENU_entries per page"
+                                                      <option value="Arawan">Arawan</option>
+                                                      <option value="Bagong Niing">Bagong Niing</option>
+                                                      <option value="Balat Atis">Balat Atis</option>
+                                                      <option value="Briones">Briones</option>
+                                                      <option value="Bulihan">Bulihan</option>
+                                                      <option value="Buliran">Buliran</option>
+                                                      <option value="Callejon">Callejon</option>
+                                                      <option value="Corazon">Corazon</option>
+                                                      <option value="Del Valle">Del Valle</option>
+                                                      <option value="Loob">Loob</option>
+                                                      <option value="Magsaysay">Magsaysay</option>
+                                                      <option value="Matipunso">Matipunso</option>
+                                                      <option value="Niing">Niing</option>
+                                                      <option value="Poblacion">Poblacion</option>
+                                                      <option value="Pulo">Pulo</option>
+                                                      <option value="Pury">Pury</option>
+                                                      <option value="Sampaga">Sampaga</option>
+                                                      <option value="Sampaguita">Sampaguita</option>
+                                                      <option value="San Jose">San Jose</option>
+                                                      <option value="Sintorisan">Sintorisan</option>
+                                              </select>
+                                              <label>Year Level</label>
+                                              <select class="form-control" id="" required name="yearlevel">
+                                           
+                                                      <option value="All Levels">All Levels</option>
+                                                      <option value="First Year">First Year</option>
+                                                      <option value="Second Year">Second Year</option>
+                                                      <option value="Third Year">Third Year</option>
+                                                      <option value="Fourth Year">Fourth Year</option>
+                                                      <option value="Fifth Year">Fifth Year</option>
+                                              
+                                              </select>
+                                          </div>
+                                
+                              </div>
+                              <div class="modal-footer">
+                                  <!--  <input type="hidden" id="pos_id" name="id"> -->
+                                  <button type="button" class="btn  btn-sm" data-dismiss="modal">Close</button>
+                                  <button type="submit" class="btn btn-primary btn-sm" name="filter">Filter</button>
+                              </div>
+  
+                          
+                              </form>
+                          </div>
+                      </div>
+                  </div>
+          
+                   <!--PRINT -->
+  
+                  <!-- Modal -->
+                  <div class="modal fade" id="printModal" tabindex="-1" role="dialog" aria-labelledby="printModalLabel"
+                      aria-hidden="true">
+                      <div class="modal-dialog modal-lg" role="document">
+                          <div class="modal-content">
+                              <div class="modal-header">
+                              <button type="button" class="btn btn-round btn-sm btn-danger"
+                                      onclick="printDiv('printModalBody')"><i class="fa fa-print"></i> Print</button>
+                            
+                                  <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                      <span aria-hidden="true">&times;</span>
+                                  </button>
+                              </div>
+                              <div class="modal-body" id="printModalBody">
+                                  <!-- Content to be printed will be injected here -->
+                              </div>
+                              <div class="modal-footer">
+                                  <button type="button" class="btn btn-round btn-secondary"
+                                      data-dismiss="modal">Close</button>
+                                  <button type="button" class="btn btn-round btn-danger"
+                                      onclick="printDiv('printModalBody')"><i class="fa fa-print"></i> Print</button>
+                              </div>
+                          </div>
+                      </div>
+                  </div>	
+  
+              <!-- Main Footer -->
+              <?php include 'templates/main-footer.php' ?>
+              <!-- End Main Footer -->
+              
+          </div>
+          
+      </div>
+      <?php include 'templates/footer.php' ?>
+  
+           <!-- alert for UPDATEEEEEEEEE -->
+           <?php if (isset($_SESSION['message'])) : ?> 
+                                  <script>
+                                      Swal.fire({
+                                          title: '<?php echo $_SESSION['title']; ?>',
+                                          text: '<?php echo $_SESSION['message']; ?>',
+                                          icon: '<?php echo $_SESSION['success']; ?>',
+                                          confirmButtonText: 'OK'
+                                      });
+                                  </script>
+                                  <?php unset($_SESSION['message']);
+                                  unset($_SESSION['success']);
+                                  unset($_SESSION['title']);  ?>
+                              <?php endif; ?>
+  
+                              <script>
+              $(document).ready(function() {
+                  $('#dataTable').DataTable({
+                      "lengthMenu": [
+                          [10, 25, 50, -1],
+                          [10, 25, 50, "All"]
+                      ],
+                      "pageLength": 10,
+                      "lengthChange": true,
+                      "order": [
+                         
+                      ],
+                      "searching": true,
+                      "ordering": true,
+                      "language": {
+                          "search": "_INPUT_",
+                          "searchPlaceholder": "Search here",
+                          "lengthMenu": "_MENU_entries per page"
+                      },
+                  });
+              });
+  
+                //PRINT 
+                function openPrintModal() {
+                
+                $.ajax({
+                    url: 'print_pending_current.php', // Create this PHP file to return HTML content
+                    type: 'GET',
+  
+                    success: function (response) {
+                        // Injecting the fetched content into the modal body
+                        document.getElementById('printModalBody').innerHTML = response;
+                        // Show the modal
+                        $('#printModal').modal('show');
                     },
+                    error: function () {
+                        alert('Error fetching report data.');
+                    }
                 });
-            });
-        </script>
-<script type="text/javascript" src="https://cdn.datatables.net/2.1.2/js/dataTables.min.js"></script>
-<script type="text/javascript" src="https://cdn.datatables.net/2.1.2/js/dataTables.bootstrap5.min.js"></script>
-</body>
-</html><?php }?>
+            }
+  
+            function printDiv(divName) {
+                var printContents = document.getElementById(divName).innerHTML;
+                var originalContents = document.body.innerHTML;
+  
+                // Replace body content with the content to print
+                document.body.innerHTML = printContents;
+  
+                // Trigger print dialog
+                window.print();
+  
+                // Restore original body content
+                document.body.innerHTML = originalContents;
+                location.reload();
+            }
+          </script>
+  <script type="text/javascript" src="https://cdn.datatables.net/2.1.2/js/dataTables.min.js"></script>
+  <script type="text/javascript" src="https://cdn.datatables.net/2.1.2/js/dataTables.bootstrap5.min.js"></script>
+  </body>
+  </html><?php }?>

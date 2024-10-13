@@ -59,7 +59,9 @@ if (!isset($_SESSION['staffid']) || strlen($_SESSION['staffid']) == 0 ||in_array
         <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.1.1/css/all.min.css" integrity="sha512-KfkfwYDsLkIlwQp6LFnl8zNdLGxu9YAA1QvwINks4PhcElQSvqcyVLLD9aMhXd13uQjoXtEKNosOWaZqXgel0g==" crossorigin="anonymous" referrerpolicy="no-referrer" />
    
        <style>
-
+.modal-body {
+    max-height: 70vh; /* Set a maximum height for the modal body */
+    overflow-y: auto;}
 
         </style>
 
@@ -101,7 +103,8 @@ if (!isset($_SESSION['staffid']) || strlen($_SESSION['staffid']) == 0 ||in_array
                                             <div class="card-title">SK Officials</div>
 
                                             <div class="card-tools">
-                                                <a href="viewstaff.php" class="btn btn-success btn-border btn-round btn-sm" title="view and print">
+                                            <a href="#" class="btn btn-success btn-border btn-round btn-sm"
+                                                    title="view and print" onclick="openPrintModal()">
                                                     <i class="fa fa-eye"></i>
                                                     View
                                                 </a>
@@ -122,6 +125,7 @@ if (!isset($_SESSION['staffid']) || strlen($_SESSION['staffid']) == 0 ||in_array
                                             <table id="myTable" class="table table-striped">
                                                 <thead>
                                                     <tr>
+                                                    <th >No</th>
                                                         <th scope="col">Staff</th>
                                                         <th scope="col">Position</th>
                                                         <th scope="col">Address</th>
@@ -142,6 +146,7 @@ if (!isset($_SESSION['staffid']) || strlen($_SESSION['staffid']) == 0 ||in_array
                                                     $view_data = mysqli_query($conn, $query); // sending the query to the database
 
                                                     // displaying all the data retrieved from the database using while loop
+                                                    $no =1;
                                                     while ($row = mysqli_fetch_assoc($view_data)) {
                                                         $staffid = $row['staffid'];
                                                         $lastname = $row['lastname'];
@@ -158,6 +163,7 @@ if (!isset($_SESSION['staffid']) || strlen($_SESSION['staffid']) == 0 ||in_array
                                                        // $fullname = $lastname . ', ' . $firstname;
                                                     ?>
                                                         <tr>
+                                                             <td><?php echo $no; ?></td>
                                                             <td><?php echo htmlspecialchars($fullname); ?></td>
                                                             <td><?php echo htmlspecialchars($position); ?></td>
                                                             <td><?php echo htmlspecialchars($address); ?></td>
@@ -193,7 +199,9 @@ if (!isset($_SESSION['staffid']) || strlen($_SESSION['staffid']) == 0 ||in_array
 </script>
                                                             </td>
                                                         </tr>
-                                                    <?php } ?>
+                                                    <?php
+                                                    $no++;
+                                                 } ?>
 
                                                 </tbody>
 
@@ -214,9 +222,9 @@ if (!isset($_SESSION['staffid']) || strlen($_SESSION['staffid']) == 0 ||in_array
                 <div class="modal fade" id="add" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
                     <div class="modal-dialog modal-lg" role="document">
                         <div class="modal-content">
-                            <div class="modal-header bg-success" style="border-radius: 3px;">
-                                <h5 class="modal-title" id="exampleModalLabel">Add New Staff</h5>
-                                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                            <div class="modal-header " style="border-radius: 3px;background-color:#B8001F;">
+                                <h5 class="modal-title" id="exampleModalLabel" style="color:azure">Add New Staff</h5>
+                                <button type="button" style="color: azure;" class="close" data-dismiss="modal" aria-label="Close">
                                     <span aria-hidden="true">&times;</span>
                                 </button>
                             </div>
@@ -321,6 +329,34 @@ if (!isset($_SESSION['staffid']) || strlen($_SESSION['staffid']) == 0 ||in_array
                     </div>
                 </div>
 
+     <!--PRINT -->
+
+                <!-- Modal -->
+                <div class="modal fade" id="printModal" tabindex="-1" role="dialog" aria-labelledby="printModalLabel"
+                    aria-hidden="true">
+                    <div class="modal-dialog modal-scrollable modal-lg" role="document">
+                        <div class="modal-content">
+                            <div class="modal-header">
+                            <button type="button" class="btn btn-round btn-sm btn-danger"
+                                    onclick="printDiv('printModalBody')"><i class="fa fa-print"></i> Print</button>
+                          
+                                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                    <span aria-hidden="true">&times;</span>
+                                </button>
+                            </div>
+                            <div class="modal-body" id="printModalBody">
+                                <!-- Content to be printed will be injected here -->
+                            </div>
+                            <div class="modal-footer">
+                                <button type="button" class="btn btn-round btn-secondary"
+                                    data-dismiss="modal">Close</button>
+                                <button type="button" class="btn btn-round btn-danger"
+                                    onclick="printDiv('printModalBody')"><i class="fa fa-print"></i> Print</button>
+                            </div>
+                        </div>
+                    </div>
+                </div>	
+
                     <!-- alert for UPDATEEEEEEEEE -->
                 <?php if (isset($_SESSION['alertmess'])) : ?> 
                                 <script>
@@ -383,6 +419,39 @@ if (!isset($_SESSION['staffid']) || strlen($_SESSION['staffid']) == 0 ||in_array
                     },
                 });
             });
+               //PRINT 
+               function openPrintModal() {
+              
+              $.ajax({
+                  url: 'viewstaff.php', // Create this PHP file to return HTML content
+                  type: 'GET',
+
+                  success: function (response) {
+                      // Injecting the fetched content into the modal body
+                      document.getElementById('printModalBody').innerHTML = response;
+                      // Show the modal
+                      $('#printModal').modal('show');
+                  },
+                  error: function () {
+                      alert('Error fetching report data.');
+                  }
+              });
+          }
+
+          function printDiv(divName) {
+              var printContents = document.getElementById(divName).innerHTML;
+              var originalContents = document.body.innerHTML;
+
+              // Replace body content with the content to print
+              document.body.innerHTML = printContents;
+
+              // Trigger print dialog
+              window.print();
+
+              // Restore original body content
+              document.body.innerHTML = originalContents;
+              location.reload();
+          }
         </script>
     </body>
 

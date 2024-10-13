@@ -42,7 +42,7 @@ if (isset($_POST['create'])){
             while ($row = $email_result->fetch_assoc()) {
                 $to = $row['email'];
                 $subject = "$title";  // Subject is the educational assistance title
-                $message = "$title for S.Y. $sy $sem is now $status.";  // Email body
+                $message = "Good day! <br>. $title for S.Y. $sy $sem is now $status.";  // Email body
 
                 // Build the email headers
                 $headers  = "From: " . $from_name . " <" . $from_email . ">\r\n";

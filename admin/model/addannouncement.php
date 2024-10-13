@@ -7,7 +7,8 @@ ini_set('display_errors', 1);
 if (strlen($_SESSION['id'] == 0)) {
     header('location:login.php');
     exit();
-}use PHPMailer\PHPMailer\PHPMailer;
+}
+use PHPMailer\PHPMailer\PHPMailer;
 use PHPMailer\PHPMailer\Exception;
 
 require '../../vendor/autoload.php';  // this is from PHPMailer
@@ -34,7 +35,7 @@ if (isset($_POST['create'])) {
         $_SESSION['success'] = 'success';
 
         // Fetch emails of all staff and students from the database
-        $email_query = "SELECT email FROM staff UNION SELECT email FROM student";
+        $email_query = "SELECT email FROM staff UNION SELECT email FROM student where is_activated = 1";
         $result = $conn->query($email_query);
 
         if ($result->num_rows > 0) {
