@@ -173,7 +173,8 @@ if (!isset($_SESSION['skid']) || strlen($_SESSION['skid']) == 0 || !in_array($_S
         <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11.12.3/dist/sweetalert2.all.min.js"></script>
         <link href="https://cdn.jsdelivr.net/npm/sweetalert2@11.12.3/dist/sweetalert2.min.css" rel="stylesheet">
         <link rel="stylesheet" type="text/css" href="https://cdn.datatables.net/2.1.2/css/dataTables.bootstrap5.min.css" />
-
+   <!-- jQuery -->
+   <script src="https://code.jquery.com/jquery-3.5.1.min.js"></script>
         <script type="text/javascript" src="https://www.gstatic.com/charts/loader.js"></script>
         <script type="text/javascript">
             // Load the Visualization API and the corechart package
@@ -566,9 +567,9 @@ if (!isset($_SESSION['skid']) || strlen($_SESSION['skid']) == 0 || !in_array($_S
                         <div class="row">
                             <div class="col-md-12">
                                 <div class="card">
-                                    <div class="card-header bg-success" style="border-radius: 8px;">
+                                    <div class="card-header" style="border-radius: 1px;">
                                         <div class="card-head-row">
-                                            <div class="card-title fw-regular " style="color:#ffffff">Educational Assistance for SY: <?= $sy ?> for <?= $sem ?> Report for <?= $skpos ?> </div>
+                                            <div class="card-title fw-regular">Educational Assistance for SY: <?= $sy ?> for <?= $sem ?> Report for <?= $skpos ?> </div>
                                         </div>
                                     </div>
                                     <div class="card-body">
@@ -614,15 +615,17 @@ if (!isset($_SESSION['skid']) || strlen($_SESSION['skid']) == 0 || !in_array($_S
                                                     <div class="card-header">
                                                         <div class="card-head-row">
                                                             <div class="card-title">
-                                                                <h2>All Pending Applicants</h2>
+                                                                <h2>All Approved Applicants</h2>
                                                             </div>
 
                                                             <div class="card-tools">
-                                                                <a href="printapprovedstudent.php" class="btn btn-danger btn-border btn-round btn-sm" title="view and print">
-                                                                    <i class="fa fa-print"></i>
-                                                                    Print
-                                                                </a>
-                                                                <a href="model/export_student_csv.php" class="btn btn-secondary btn-border btn-round btn-sm" title="Download">
+                                                              
+                                                                <a href="#" class="btn btn-success btn-border btn-round btn-sm"
+                                                    title="view and print" onclick="openPrintModal()">
+                                                    <i class="fa fa-eye"></i>
+                                                    View
+                                                </a>
+                                                                <a href="model/export_approvedcurrent.php?recent=<?= $recent?>" class="btn btn-secondary btn-border btn-round btn-sm" title="Download">
                                                                 <i class="fa-solid fa-file-arrow-down"></i>
                                                                     Export CSV
                                                                 </a>
@@ -714,7 +717,7 @@ if (!isset($_SESSION['skid']) || strlen($_SESSION['skid']) == 0 || !in_array($_S
                                                                                 <?php echo htmlspecialchars($appstatus); ?>
                                                                             </td>
                                                                             <td>
-                                                                                <a type="button" href="view_approved_application.php?studid=<?php echo $studid; ?>&educid=<?php echo $recent; ?>&appid=<?php echo $appid; ?>" class="btn btn-link btn-info" title="Edit Data">
+                                                                                <a type="button" href="view_application.php?studid=<?php echo $studid; ?>&educid=<?php echo $recent; ?>&appid=<?php echo $appid; ?>" class="btn btn-link btn-info" title="Edit Data">
                                                                                     <i class="fa fa-file"></i></a>
 
 
@@ -746,7 +749,28 @@ if (!isset($_SESSION['skid']) || strlen($_SESSION['skid']) == 0 || !in_array($_S
 
                     </div>
 
+        <!--PRINT -->
 
+                <!-- Modal -->
+                <div class="modal fade" id="printModal" tabindex="-1" role="dialog" aria-labelledby="printModalLabel"
+                    aria-hidden="true">
+                    <div class="modal-dialog modal-lg" role="document">
+                        <div class="modal-content">
+                            <div class="modal-header">
+                            <button type="button" class="btn btn-round btn-sm btn-danger"
+                                    onclick="printDiv('printModalBody')"><i class="fa fa-print"></i> Print</button>
+                          
+                                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                    <span aria-hidden="true">&times;</span>
+                                </button>
+                            </div>
+                            <div class="modal-body" id="printModalBody">
+                                <!-- Content to be printed will be injected here -->
+                            </div>
+
+                        </div>
+                    </div>
+                </div>	
 
 
 
@@ -817,6 +841,40 @@ if (!isset($_SESSION['skid']) || strlen($_SESSION['skid']) == 0 || !in_array($_S
                     },
                 });
             });
+
+                        //PRINT 
+                        function openPrintModal() {
+              
+              $.ajax({
+                  url: 'printapprovedstudent.php', // this is the file where data to display and print are located
+                  type: 'GET',
+
+                  success: function (response) {
+                      // Injecting the fetched content into the modal body
+                      document.getElementById('printModalBody').innerHTML = response;
+                      // Show the modal
+                      $('#printModal').modal('show');
+                  },
+                  error: function () {
+                      alert('Error fetching report data.');
+                  }
+              });
+          }
+
+          function printDiv(divName) {
+              var printContents = document.getElementById(divName).innerHTML;
+              var originalContents = document.body.innerHTML;
+
+              // Replace body content with the content to print
+              document.body.innerHTML = printContents;
+
+              // Trigger print dialog
+              window.print();
+
+              // Restore original body content
+              document.body.innerHTML = originalContents;
+              location.reload();
+          }
         </script>
 
         <!-- CODE FOR LINE CHART -->

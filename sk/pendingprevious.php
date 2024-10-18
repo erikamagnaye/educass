@@ -31,8 +31,8 @@ if (!isset($_SESSION['skid']) || strlen($_SESSION['skid']) == 0 || !in_array($_S
 } else {
     $skpos = $_SESSION['skpos'];
     $skid = $_SESSION['skid'];
-    $query         = "SELECT * FROM `staff` WHERE staffid= '$skid'";
-    $result     = $conn->query($query);
+    $query = "SELECT * FROM `staff` WHERE staffid= '$skid'";
+    $result = $conn->query($query);
 
     if ($result->num_rows) {
         while ($row = $result->fetch_assoc()) {
@@ -43,11 +43,9 @@ if (!isset($_SESSION['skid']) || strlen($_SESSION['skid']) == 0 || !in_array($_S
         }
     }
 
-    
+    $educreportid = mysqli_real_escape_string($conn, $_GET['educreportid']);
 
-    if (isset($_GET['educreportid'])) {
-        $educreportid = $_GET['educreportid'];
-    }
+
 
     //all applicants for recent assistance	
 
@@ -55,7 +53,7 @@ if (!isset($_SESSION['skid']) || strlen($_SESSION['skid']) == 0 || !in_array($_S
     $resultapp = $conn->query($app);
     $row = $resultapp->fetch_assoc();
     $totalapp = $row['COUNT(*)'];
-   
+
     //pending applicants    
     $query2 = "SELECT COUNT(*) FROM application  join student on application.studid =student.studid where educid = '$educreportid' AND brgy = '$skpos'  and appstatus ='Pending' ";
     $result2 = $conn->query($query2);
@@ -81,7 +79,7 @@ if (!isset($_SESSION['skid']) || strlen($_SESSION['skid']) == 0 || !in_array($_S
     $resultstud = $conn->query($stud);
     $data = $resultstud->fetch_assoc();
     $brgystudent = $data['COUNT(*)'];
-//announcement
+    //announcement
     $announce = "SELECT COUNT(*) FROM announcement ";
     $resultann = $conn->query($announce);
     $rows = $resultann->fetch_assoc();
@@ -106,8 +104,8 @@ if (!isset($_SESSION['skid']) || strlen($_SESSION['skid']) == 0 || !in_array($_S
     $sy = 'N/A';
     $sem = 'N/A';
 
-    $query1         = "SELECT * FROM `educ aids` where educid = $educreportid;";
-    $result5     = $conn->query($query1);
+    $query1 = "SELECT * FROM `educ aids` where educid = $educreportid;";
+    $result5 = $conn->query($query1);
 
     if ($result5->num_rows) {
         while ($row = $result5->fetch_assoc()) {
@@ -116,11 +114,11 @@ if (!isset($_SESSION['skid']) || strlen($_SESSION['skid']) == 0 || !in_array($_S
         }
     }
 
-  
 
 
 
-?>
+
+    ?>
 
 
     <!DOCTYPE html>
@@ -129,20 +127,17 @@ if (!isset($_SESSION['skid']) || strlen($_SESSION['skid']) == 0 || !in_array($_S
     <head>
         <?php include 'templates/header.php' ?>
         <title>Employee Dashboard</title>
-        <link rel="icon" href="assets/img/logo.png" type="image/x-icon" /> <!-- THIS IS THE CODE TO DISPLAY AN ICON IN THE BROWASER TAB-->
-        <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.1.1/css/all.min.css" integrity="sha512-KfkfwYDsLkIlwQp6LFnl8zNdLGxu9YAA1QvwINks4PhcElQSvqcyVLLD9aMhXd13uQjoXtEKNosOWaZqXgel0g==" crossorigin="anonymous" referrerpolicy="no-referrer" />
+        <link rel="icon" href="assets/img/logo.png" type="image/x-icon" />
+        <!-- THIS IS THE CODE TO DISPLAY AN ICON IN THE BROWASER TAB-->
+        <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.1.1/css/all.min.css"
+            integrity="sha512-KfkfwYDsLkIlwQp6LFnl8zNdLGxu9YAA1QvwINks4PhcElQSvqcyVLLD9aMhXd13uQjoXtEKNosOWaZqXgel0g=="
+            crossorigin="anonymous" referrerpolicy="no-referrer" />
         <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11.12.3/dist/sweetalert2.all.min.js"></script>
         <link href="https://cdn.jsdelivr.net/npm/sweetalert2@11.12.3/dist/sweetalert2.min.css" rel="stylesheet">
         <link rel="stylesheet" type="text/css" href="https://cdn.datatables.net/2.1.2/css/dataTables.bootstrap5.min.css" />
-      <!-- jQuery -->
-      <script src="https://code.jquery.com/jquery-3.5.1.min.js"></script>
+        <!-- jQuery -->
+        <script src="https://code.jquery.com/jquery-3.5.1.min.js"></script>
         <script type="text/javascript" src="https://www.gstatic.com/charts/loader.js"></script>
-     
-
-
-
-
-
 
         <style>
             .dashboard {
@@ -327,7 +322,7 @@ if (!isset($_SESSION['skid']) || strlen($_SESSION['skid']) == 0 || !in_array($_S
 
     <body>
         <? //php include 'templates/loading_screen.php' 
-        ?>
+            ?>
 
         <div class="wrapper">
             <!-- Main Header -->
@@ -353,48 +348,57 @@ if (!isset($_SESSION['skid']) || strlen($_SESSION['skid']) == 0 || !in_array($_S
                     </div>
 
                     <div class="page-inner mt--2">
- 
+
                         <br>
                         <div class="row">
                             <div class="col-md-12">
                                 <div class="card">
                                     <div class="card-header" style="border-radius: 1px;">
                                         <div class="card-head-row">
-                                            <div class="card-title fw-regular " >Educational Assistance for SY: <?= $sy ?> for <?= $sem ?> Report for <?= $skpos ?> </div>
+                                            <div class="card-title fw-regular ">Educational Assistance for SY: <?= $sy ?>
+                                                for <?= $sem ?> Report for <?= $skpos ?> </div>
                                         </div>
                                     </div>
                                     <div class="card-body">
                                         <div class="container-fluid mt-5">
-                                            
+
                                             <div class="dashboard">
                                                 <div class="card card-primary">
-                                                    <div class="card-icon" style="color: white;"> <i class="fa-solid fa-user-graduate"></i></div>
-                                                    <a href="#" class="btn">
-                                                        <h5 style="color:white;"><?= $totalapp ?>  <br>All Applicants</h5>
+                                                    <div class="card-icon" style="color: white;"> <i
+                                                            class="fa-solid fa-user-graduate"></i></div>
+                                                    <a href="educ_report.php?educreportid=<?php echo $educreportid; ?>"
+                                                        class="btn">
+                                                        <h5 style="color:white;"><?= $totalapp ?> <br>All Applicants</h5>
                                                     </a>
 
                                                 </div>
                                                 <div class="card card-warning">
-                                                    <div class="card-icon" style="color:white;"><i class="fa-solid fa-spinner fa-spin"></i></div>
-                                                    <a href="pendingprevious.php?educreportid=<?php echo $educreportid; ?>" class="btn">
+                                                    <div class="card-icon" style="color:white;"><i
+                                                            class="fa-solid fa-spinner fa-spin"></i></div>
+                                                    <a href="pendingprevious.php?educreportid=<?php echo $educreportid; ?>"
+                                                        class="btn">
                                                         <h5 style="color:white;"><?= $pendingapp ?> <br>Pending</h5>
                                                     </a>
 
                                                 </div>
                                                 <div class="card card-success">
-                                                    <div class="card-icon" style="color:white;"><i class="fa-regular fa-thumbs-up"></i></div>
-                                                    <a href="approvedprevious.php?educreportid=<?php echo $educreportid; ?>" class="btn">
+                                                    <div class="card-icon" style="color:white;"><i
+                                                            class="fa-regular fa-thumbs-up"></i></div>
+                                                    <a href="approvedprevious.php?educreportid=<?php echo $educreportid; ?>"
+                                                        class="btn">
                                                         <h5 style="color:white;"><?= $approved ?> <br>Approved</h5>
                                                     </a>
 
                                                 </div>
                                                 <div class="card card-danger">
-                                                    <div class="card-icon" style="color:white;"><i class="fa-regular fa-thumbs-down"></i></div>
-                                                    <a href="rejectedprevious.php?educreportid=<?php echo $educreportid; ?>" class="btn">
+                                                    <div class="card-icon" style="color:white;"><i
+                                                            class="fa-regular fa-thumbs-down"></i></div>
+                                                    <a href="rejectedprevious.php?educreportid=<?php echo $educreportid; ?>"
+                                                        class="btn">
                                                         <h5 style="color:white;"><?= $rejected ?><br> Rejected</h5>
                                                     </a>
                                                 </div>
-                                   
+
                                             </div>
 
                                         </div>
@@ -410,14 +414,17 @@ if (!isset($_SESSION['skid']) || strlen($_SESSION['skid']) == 0 || !in_array($_S
                                                             </div>
 
                                                             <div class="card-tools">
-                                                                
-                                                                <a href="#" class="btn btn-success btn-border btn-round btn-sm"
-                                                    title="view and print" onclick="openPrintModal()">
-                                                    <i class="fa fa-eye"></i>
-                                                    View
-                                                </a>
-                                                                <a href="model/export_previousall.php?educreportid=<?php echo $educreportid ?>" class="btn btn-secondary btn-border btn-round btn-sm" title="Download">
-                                                                <i class="fa-solid fa-file-arrow-down"></i>
+
+                                                                <a href="#"
+                                                                    class="btn btn-success btn-border btn-round btn-sm"
+                                                                    title="view and print" onclick="openPrintModal()">
+                                                                    <i class="fa fa-eye"></i>
+                                                                    View
+                                                                </a>
+                                                                <a href="model/export_previouspending.php?educreportid=<?php echo $educreportid ?>"
+                                                                    class="btn btn-secondary btn-border btn-round btn-sm"
+                                                                    title="Download">
+                                                                    <i class="fa-solid fa-file-arrow-down"></i>
                                                                     Export CSV
                                                                 </a>
 
@@ -433,7 +440,7 @@ if (!isset($_SESSION['skid']) || strlen($_SESSION['skid']) == 0 || !in_array($_S
 
                                                                 <thead>
                                                                     <tr>
-                                                                    <th scope="col">No</th>
+                                                                        <th scope="col">No</th>
                                                                         <th scope="col">Full Name</th>
                                                                         <th scope="col">Year</th>
                                                                         <th scope="col">School</th>
@@ -447,10 +454,10 @@ if (!isset($_SESSION['skid']) || strlen($_SESSION['skid']) == 0 || !in_array($_S
 
                                                                     $query = " SELECT *, CONCAT(lastname, ', ', firstname, ' ' , midname, '.' ) AS fullname FROM student join studentcourse on student.studid=studentcourse.studid 
                                                     join application on studentcourse.courseid=application.courseid 
-                                                    where application.educid=$educreportid and brgy = '$skpos' ORDER BY lastname ASC";
+                                                    where application.educid=$educreportid and brgy = '$skpos' and application.appstatus = 'Pending' ORDER BY lastname ASC";
                                                                     $view_data = mysqli_query($conn, $query); // sending the query to the database
-
-                                                                    $count =1;
+                                                                
+                                                                    $count = 1;
                                                                     // displaying all the data retrieved from the database using while loop
                                                                     while ($row = mysqli_fetch_assoc($view_data)) {
                                                                         $studid = $row['studid'];
@@ -469,8 +476,9 @@ if (!isset($_SESSION['skid']) || strlen($_SESSION['skid']) == 0 || !in_array($_S
                                                                         $street_name = $row['street_name'];
                                                                         $validid = $row['validid'];
                                                                         //$picture = $row['picture'];
-                                                                        
-                                                                   
+                                                                        $citizenship = $row['citizenship'];
+                                                                        $religion = $row['religion'];
+                                                                        $civilstatus = $row['civilstatus'];
                                                                         $accstatus = $row['accstatus'];
                                                                         $fullname = $row['fullname'];
                                                                         $appstatus = $row['appstatus'];
@@ -478,7 +486,6 @@ if (!isset($_SESSION['skid']) || strlen($_SESSION['skid']) == 0 || !in_array($_S
                                                                         $year = $row['year'];
                                                                         $school_name = $row['school_name'];
                                                                         $appid = $row['appid'];
-                                                                       
 
                                                                         $imagePath = $row['picture'];
                                                                         if (empty($imagePath)) {
@@ -489,33 +496,41 @@ if (!isset($_SESSION['skid']) || strlen($_SESSION['skid']) == 0 || !in_array($_S
                                                                             $imageUrl = '../applicants/assets/uploads/applicant_profile/' . $imagePath;
                                                                         }
                                                                         // $fullname = $lastname . ', ' . $firstname;
-                                                                    ?>
+                                                                        ?>
                                                                         <tr>
-                                                                        <td><?php echo $count; ?></td>
-                                                                            <td><img src="<?php echo htmlspecialchars($imageUrl); ?>" alt="" class="avatar-img rounded-circle" style="height: 50px;width:50px;"> <?php echo htmlspecialchars($fullname); ?></td>
+                                                                            <td><?php echo $count; ?></td>
+                                                                            <td><img src="<?php echo htmlspecialchars($imageUrl); ?>"
+                                                                                    alt="" class="avatar-img rounded-circle"
+                                                                                    style="height: 50px;width:50px;">
+                                                                                <?php echo htmlspecialchars($fullname); ?></td>
                                                                             <td><?php echo htmlspecialchars($year); ?></td>
-                                                                            <td><?php echo htmlspecialchars($school_name); ?></td>
+                                                                            <td><?php echo htmlspecialchars($school_name); ?>
+                                                                            </td>
                                                                             <td style="<?php
-                                                                                        if ($appstatus == 'Pending') {
-                                                                                            echo 'color: #FFC107'; // yellow-orange color for pending
-                                                                                        } elseif ($appstatus == 'Approved') {
-                                                                                            echo 'color: #4CAF50'; // green color for approved
-                                                                                        } elseif ($appstatus == 'Rejected') {
-                                                                                            echo 'color: #FF0000'; // red color for rejected
-                                                                                        }
-                                                                                        ?>">
+                                                                            if ($appstatus == 'Pending') {
+                                                                                echo 'color: #FFC107'; // yellow-orange color for pending
+                                                                            } elseif ($appstatus == 'Approved') {
+                                                                                echo 'color: #4CAF50'; // green color for approved
+                                                                            } elseif ($appstatus == 'Rejected') {
+                                                                                echo 'color: #FF0000'; // red color for rejected
+                                                                            }
+                                                                            ?>">
                                                                                 <?php echo htmlspecialchars($appstatus); ?>
                                                                             </td>
                                                                             <td>
-                                                                                <a type="button" href="view_application.php?studid=<?php echo $studid; ?>&educid=<?php echo $educreportid; ?>&appid=<?php echo $appid; ?>" class="btn btn-link btn-info" title="Edit Data">
+                                                                                <a type="button"
+                                                                                    href="view_application.php?studid=<?php echo $studid; ?>&educid=<?php echo $educreportid; ?>&appid=<?php echo $appid; ?>"
+                                                                                    class="btn btn-link btn-info"
+                                                                                    title="Edit Data">
                                                                                     <i class="fa fa-file"></i></a>
 
 
 
                                                                             </td>
                                                                         </tr>
-                                                                     
-                                                                    <?php    $count++; } ?>
+
+                                                                        <?php $count++;
+                                                                    } ?>
 
                                                                 </tbody>
 
@@ -540,28 +555,27 @@ if (!isset($_SESSION['skid']) || strlen($_SESSION['skid']) == 0 || !in_array($_S
 
                     </div>
 
-		                 <!--PRINT -->
+                    <!--PRINT -->
 
-                <!-- Modal -->
-                <div class="modal fade" id="printModal" tabindex="-1" role="dialog" aria-labelledby="printModalLabel"
-                    aria-hidden="true">
-                    <div class="modal-dialog modal-lg" role="document">
-                        <div class="modal-content">
-                            <div class="modal-header">
-                            <button type="button" class="btn btn-round btn-sm btn-danger"
-                                    onclick="printDiv('printModalBody')"><i class="fa fa-print"></i> Print</button>
-                          
-                                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                                    <span aria-hidden="true">&times;</span>
-                                </button>
+                    <!-- Modal -->
+                    <div class="modal fade" id="printModal" tabindex="-1" role="dialog" aria-labelledby="printModalLabel"
+                        aria-hidden="true">
+                        <div class="modal-dialog modal-scrollable modal-lg" role="document">
+                            <div class="modal-content">
+                                <div class="modal-header">
+                                    <button type="button" class="btn btn-round btn-sm btn-danger"
+                                        onclick="printDiv('printModalBody')"><i class="fa fa-print"></i> Print</button>
+                                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                        <span aria-hidden="true">&times;</span>
+                                    </button>
+                                </div>
+                                <div class="modal-body" id="printModalBody">
+                                    <!-- Content to be printed will be injected here -->
+                                </div>
+
                             </div>
-                            <div class="modal-body" id="printModalBody">
-                                <!-- Content to be printed will be injected here -->
-                            </div>
-                          
                         </div>
                     </div>
-                </div>	
 
 
 
@@ -579,7 +593,7 @@ if (!isset($_SESSION['skid']) || strlen($_SESSION['skid']) == 0 || !in_array($_S
 
         </div>
         <!-- alert for UPDATEEEEEEEEE -->
-        <?php if (isset($_SESSION['message'])) : ?>
+        <?php if (isset($_SESSION['message'])): ?>
             <script>
                 Swal.fire({
                     title: '<?php echo $_SESSION['title']; ?>',
@@ -612,7 +626,7 @@ if (!isset($_SESSION['skid']) || strlen($_SESSION['skid']) == 0 || !in_array($_S
             }
         </script>
         <script>
-            $(document).ready(function() {
+            $(document).ready(function () {
                 $('#dataTable').DataTable({
                     "lengthMenu": [
                         [10, 25, 50, -1],
@@ -632,38 +646,41 @@ if (!isset($_SESSION['skid']) || strlen($_SESSION['skid']) == 0 || !in_array($_S
                     },
                 });
             });
-                         //PRINT 
-                         function openPrintModal() {
-                            var educreportid = <?php echo json_encode($educreportid); ?>; // Get educreportid from PHP
-              $.ajax({
-                  url: 'print_allprevious.php', // this is the file where data to display and print are located
-                  type: 'GET',
-data: { educreportid: educreportid},
-                  success: function (response) {
-                      // Injecting the fetched content into the modal body
-                      document.getElementById('printModalBody').innerHTML = response;
-                      // Show the modal
-                      $('#printModal').modal('show');
-                  },
-                  error: function () {
-                      alert('Error fetching report data.');
-                  }
-              });
-          }
-          function printDiv(divName) {
-              var printContents = document.getElementById(divName).innerHTML;
-              var originalContents = document.body.innerHTML;
 
-              // Replace body content with the content to print
-              document.body.innerHTML = printContents;
+            //PRINT 
+            function openPrintModal() {
+                // Fetching content from the server using AJAX or PHP
+                var educreportid = <?php echo json_encode($educreportid); ?>; // Get educreportid from PHP
+                $.ajax({
+                    url: 'print_pendingprevious.php', // Create this PHP file to return HTML content
+                    type: 'GET',
+                    data: { educreportid: educreportid },
+                    success: function (response) {
+                        // Injecting the fetched content into the modal body
+                        document.getElementById('printModalBody').innerHTML = response;
+                        // Show the modal
+                        $('#printModal').modal('show');
+                    },
+                    error: function () {
+                        alert('Error fetching report data.');
+                    }
+                });
+            }
 
-              // Trigger print dialog
-              window.print();
+            function printDiv(divName) {
+                var printContents = document.getElementById(divName).innerHTML;
+                var originalContents = document.body.innerHTML;
 
-              // Restore original body content
-              document.body.innerHTML = originalContents;
-              location.reload();
-          }
+                // Replace body content with the content to print
+                document.body.innerHTML = printContents;
+
+                // Trigger print dialog
+                window.print();
+
+                // Restore original body content
+                document.body.innerHTML = originalContents;
+                location.reload();
+            }
         </script>
 
         <!-- CODE FOR LINE CHART -->

@@ -32,7 +32,7 @@ if (isset($_POST['create'])){
         $_SESSION['success'] = 'success';
 
         // Fetch emails of all staff and students from the database
-        $email_query = "SELECT email FROM staff UNION SELECT email FROM student";
+        $email_query = "SELECT email FROM staff UNION SELECT email FROM student where is_activated = 1";
         $email_result = $conn->query($email_query);
 
         if ($email_result->num_rows > 0) {

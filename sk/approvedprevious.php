@@ -43,11 +43,9 @@ if (!isset($_SESSION['skid']) || strlen($_SESSION['skid']) == 0 || !in_array($_S
         }
     }
 
-    
+    $educreportid = mysqli_real_escape_string($conn, $_GET['educreportid']);
 
-    if (isset($_GET['educreportid'])) {
-        $educreportid = $_GET['educreportid'];
-    }
+
 
     //all applicants for recent assistance	
 
@@ -138,12 +136,6 @@ if (!isset($_SESSION['skid']) || strlen($_SESSION['skid']) == 0 || !in_array($_S
       <script src="https://code.jquery.com/jquery-3.5.1.min.js"></script>
         <script type="text/javascript" src="https://www.gstatic.com/charts/loader.js"></script>
      
-
-
-
-
-
-
         <style>
             .dashboard {
                 display: grid;
@@ -369,7 +361,7 @@ if (!isset($_SESSION['skid']) || strlen($_SESSION['skid']) == 0 || !in_array($_S
                                             <div class="dashboard">
                                                 <div class="card card-primary">
                                                     <div class="card-icon" style="color: white;"> <i class="fa-solid fa-user-graduate"></i></div>
-                                                    <a href="#" class="btn">
+                                                    <a href="educ_report.php?educreportid=<?php echo $educreportid; ?>" class="btn">
                                                         <h5 style="color:white;"><?= $totalapp ?>  <br>All Applicants</h5>
                                                     </a>
 
@@ -384,7 +376,7 @@ if (!isset($_SESSION['skid']) || strlen($_SESSION['skid']) == 0 || !in_array($_S
                                                 <div class="card card-success">
                                                     <div class="card-icon" style="color:white;"><i class="fa-regular fa-thumbs-up"></i></div>
                                                     <a href="approvedprevious.php?educreportid=<?php echo $educreportid; ?>" class="btn">
-                                                        <h5 style="color:white;"><?= $approved ?> <br>Approved</h5>
+                                                        <h5 style="color:white;" ><?= $approved ?> <br>Approved</h5>
                                                     </a>
 
                                                 </div>
@@ -410,13 +402,13 @@ if (!isset($_SESSION['skid']) || strlen($_SESSION['skid']) == 0 || !in_array($_S
                                                             </div>
 
                                                             <div class="card-tools">
-                                                                
+                                                               
                                                                 <a href="#" class="btn btn-success btn-border btn-round btn-sm"
                                                     title="view and print" onclick="openPrintModal()">
                                                     <i class="fa fa-eye"></i>
                                                     View
                                                 </a>
-                                                                <a href="model/export_previousall.php?educreportid=<?php echo $educreportid ?>" class="btn btn-secondary btn-border btn-round btn-sm" title="Download">
+                                                                <a href="model/export_previousapproved.php?educreportid=<?php echo $educreportid ?>" class="btn btn-secondary btn-border btn-round btn-sm" title="Download">
                                                                 <i class="fa-solid fa-file-arrow-down"></i>
                                                                     Export CSV
                                                                 </a>
@@ -447,7 +439,7 @@ if (!isset($_SESSION['skid']) || strlen($_SESSION['skid']) == 0 || !in_array($_S
 
                                                                     $query = " SELECT *, CONCAT(lastname, ', ', firstname, ' ' , midname, '.' ) AS fullname FROM student join studentcourse on student.studid=studentcourse.studid 
                                                     join application on studentcourse.courseid=application.courseid 
-                                                    where application.educid=$educreportid and brgy = '$skpos' ORDER BY lastname ASC";
+                                                    where application.educid=$educreportid and brgy = '$skpos' and application.appstatus = 'Approved' ORDER BY lastname ASC";
                                                                     $view_data = mysqli_query($conn, $query); // sending the query to the database
 
                                                                     $count =1;
@@ -469,8 +461,9 @@ if (!isset($_SESSION['skid']) || strlen($_SESSION['skid']) == 0 || !in_array($_S
                                                                         $street_name = $row['street_name'];
                                                                         $validid = $row['validid'];
                                                                         //$picture = $row['picture'];
-                                                                        
-                                                                   
+                                                                        $citizenship = $row['citizenship'];
+                                                                        $religion = $row['religion'];
+                                                                        $civilstatus = $row['civilstatus'];
                                                                         $accstatus = $row['accstatus'];
                                                                         $fullname = $row['fullname'];
                                                                         $appstatus = $row['appstatus'];
@@ -478,7 +471,6 @@ if (!isset($_SESSION['skid']) || strlen($_SESSION['skid']) == 0 || !in_array($_S
                                                                         $year = $row['year'];
                                                                         $school_name = $row['school_name'];
                                                                         $appid = $row['appid'];
-                                                                       
 
                                                                         $imagePath = $row['picture'];
                                                                         if (empty($imagePath)) {
@@ -540,17 +532,16 @@ if (!isset($_SESSION['skid']) || strlen($_SESSION['skid']) == 0 || !in_array($_S
 
                     </div>
 
-		                 <!--PRINT -->
+<!--PRINT -->
 
                 <!-- Modal -->
                 <div class="modal fade" id="printModal" tabindex="-1" role="dialog" aria-labelledby="printModalLabel"
                     aria-hidden="true">
-                    <div class="modal-dialog modal-lg" role="document">
+                    <div class="modal-dialog modal-scrollable modal-lg" role="document">
                         <div class="modal-content">
                             <div class="modal-header">
-                            <button type="button" class="btn btn-round btn-sm btn-danger"
+                                <button type="button" class="btn btn-round btn-sm btn-danger"
                                     onclick="printDiv('printModalBody')"><i class="fa fa-print"></i> Print</button>
-                          
                                 <button type="button" class="close" data-dismiss="modal" aria-label="Close">
                                     <span aria-hidden="true">&times;</span>
                                 </button>
@@ -558,10 +549,10 @@ if (!isset($_SESSION['skid']) || strlen($_SESSION['skid']) == 0 || !in_array($_S
                             <div class="modal-body" id="printModalBody">
                                 <!-- Content to be printed will be injected here -->
                             </div>
-                          
+
                         </div>
                     </div>
-                </div>	
+                </div>
 
 
 
@@ -632,38 +623,41 @@ if (!isset($_SESSION['skid']) || strlen($_SESSION['skid']) == 0 || !in_array($_S
                     },
                 });
             });
-                         //PRINT 
-                         function openPrintModal() {
-                            var educreportid = <?php echo json_encode($educreportid); ?>; // Get educreportid from PHP
-              $.ajax({
-                  url: 'print_allprevious.php', // this is the file where data to display and print are located
-                  type: 'GET',
-data: { educreportid: educreportid},
-                  success: function (response) {
-                      // Injecting the fetched content into the modal body
-                      document.getElementById('printModalBody').innerHTML = response;
-                      // Show the modal
-                      $('#printModal').modal('show');
-                  },
-                  error: function () {
-                      alert('Error fetching report data.');
-                  }
-              });
-          }
-          function printDiv(divName) {
-              var printContents = document.getElementById(divName).innerHTML;
-              var originalContents = document.body.innerHTML;
+            
+            //PRINT 
+            function openPrintModal() {
+                // Fetching content from the server using AJAX or PHP
+                var educreportid = <?php echo json_encode($educreportid); ?>; // Get educreportid from PHP
+                $.ajax({
+                    url: 'print_approvedprevious.php', // Create this PHP file to return HTML content
+                    type: 'GET',
+                    data: { educreportid: educreportid },
+                    success: function (response) {
+                        // Injecting the fetched content into the modal body
+                        document.getElementById('printModalBody').innerHTML = response;
+                        // Show the modal
+                        $('#printModal').modal('show');
+                    },
+                    error: function () {
+                        alert('Error fetching report data.');
+                    }
+                });
+            }
 
-              // Replace body content with the content to print
-              document.body.innerHTML = printContents;
+            function printDiv(divName) {
+                var printContents = document.getElementById(divName).innerHTML;
+                var originalContents = document.body.innerHTML;
 
-              // Trigger print dialog
-              window.print();
+                // Replace body content with the content to print
+                document.body.innerHTML = printContents;
 
-              // Restore original body content
-              document.body.innerHTML = originalContents;
-              location.reload();
-          }
+                // Trigger print dialog
+                window.print();
+
+                // Restore original body content
+                document.body.innerHTML = originalContents;
+                location.reload();
+            }
         </script>
 
         <!-- CODE FOR LINE CHART -->

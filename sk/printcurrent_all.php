@@ -1,46 +1,17 @@
-<?php include 'server/server.php' ?>
+<?php include 'server/server.php';
+session_start();
+error_reporting(E_ALL);
+ini_set('display_errors', 1); ?>
 
 <?php 
-
-session_start(); 
-error_reporting(E_ALL);
-ini_set('display_errors', 1);
-$skTypes = array(
-    'SK-Arawan',
-    'SK-Bagong Niing',
-    'SK-Balat Atis',
-    'SK-Briones',
-    'SK-Bulihan',
-    'SK-Buliran',
-    'SK-Callejon',
-    'SK-Corazon',
-    'SK-Del Valle',
-    'SK-Loob',
-    'SK-Magsaysay',
-    'SK-Matipunso',
-    'SK-Niing',
-    'SK-Poblacion',
-    'SK-Pulo',
-    'SK-Pury',
-    'SK-Sampaga',
-    'SK-Sampaguita',
-    'SK-San Jose',
-    'SK-Sinturisan'
-);
-if (!isset($_SESSION['skid']) || strlen($_SESSION['skid']) == 0 || !in_array($_SESSION['role'], $skTypes)||!isset($_SESSION['skpos'])) {
-    header('location:index.php');
-    exit();
-}
-
-else {
-
+$skpos = $_SESSION['skpos'];
         //get the recent educational
         $query = "SELECT educid FROM `educ aids` ORDER BY date DESC LIMIT 1";
         $result = $conn->query($query);
         $row = $result->fetch_assoc();
         $recent = $row['educid'];
 
-        $skpos = $_SESSION['skpos'];
+        
 ?>
 <!DOCTYPE html>
 <html lang="en">
@@ -73,9 +44,7 @@ else {
         .card-body {
             padding: 1rem;
         }
-        .table-responsive {
-            overflow-x: auto;
-        }
+  
         .table {
             font-size: 12px;
         }
@@ -96,9 +65,7 @@ else {
         .card-body {
             padding: 0.5rem;
         }
-        .table-responsive {
-            overflow-x: auto;
-        }
+    
         .table {
             font-size: 10px;
         }
@@ -113,21 +80,22 @@ else {
          height: auto;
 }
     }
+
+
 </style>
 
 </head>
 <body>
-
                                     <div class="d-flex flex-wrap justify-content-around" style="border-bottom:1px solid green">
                                         <div class="text-center">
                                             <img src="assets/img/logo.png" class="img-fluid" width="100">
 										</div>
 
                                         <?php
-        $sql =  " SELECT *, CONCAT(lastname, ', ', firstname, ' ' , midname, '.' ) AS fullname 
-        FROM student join studentcourse on student.studid=studentcourse.studid 
-        join application on studentcourse.courseid=application.courseid 
-        where application.educid=$recent and brgy = '$skpos' AND appstatus='Approved' ORDER BY lastname ASC, year asc";
+        $sql =  "SELECT *, CONCAT(lastname, ', ', firstname, ' ' , midname, '.' ) AS fullname 
+    FROM student join studentcourse on student.studid=studentcourse.studid 
+join application on studentcourse.courseid=application.courseid 
+where application.educid=$recent  and brgy = '$skpos' ORDER BY brgy ASC, `year` ASC, lastname ASC";
          $result = mysqli_query($conn, $sql); 
     ?>
 
@@ -144,7 +112,7 @@ else {
                                     <div class="row mt-2">
                                         <div class="col-md-12">
                                             <div class="text-center mt-5">
-                                                <h3 class="mt-4 fw-bold">Educational Assistance Applicants for Barangay <?php echo $skpos?></h3>
+                                                <h3 class="mt-4 fw-bold">Educational Assistance Applicants for San Antonio</h3>
                                             </div>
                                             <br>
                                             <div class="table-responsive">
@@ -189,5 +157,6 @@ else {
                                     </div>
 								</div>
 							
+
 </body>
-</html><?php }?>
+</html>

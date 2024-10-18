@@ -24,7 +24,7 @@ if (isset($_POST['create'])) {
 
     $insertQuery = "INSERT INTO `staff` (`lastname`, `firstname`, `email`, `password`, `contact_no`, `age`, `birthday`, `address`, `position`, `gender`) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?)";
     $stmt = $conn->prepare($insertQuery);
-    $stmt->bind_param("sssssisssss", $lname, $fname, $email, $password, $contact_no, $age, $bday, $address, $position, $gender);
+    $stmt->bind_param("sssssissss", $lname, $fname, $email, $password, $contact_no, $age, $bday, $address, $position, $gender);
     if ($stmt->execute()) {
         $_SESSION['display'] = 'Successfully added a new staff!';
         $_SESSION['title'] = 'Good Job';

@@ -172,6 +172,8 @@ if (!isset($_SESSION['skid']) || strlen($_SESSION['skid']) == 0 || !in_array($_S
         <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11.12.3/dist/sweetalert2.all.min.js"></script>
         <link href="https://cdn.jsdelivr.net/npm/sweetalert2@11.12.3/dist/sweetalert2.min.css" rel="stylesheet">
         <link rel="stylesheet" type="text/css" href="https://cdn.datatables.net/2.1.2/css/dataTables.bootstrap5.min.css" />
+           <!-- jQuery -->
+           <script src="https://code.jquery.com/jquery-3.5.1.min.js"></script>
 
         <script type="text/javascript" src="https://www.gstatic.com/charts/loader.js"></script>
         <script type="text/javascript">
@@ -465,34 +467,7 @@ if (!isset($_SESSION['skid']) || strlen($_SESSION['skid']) == 0 || !in_array($_S
                     </div>
 
                     <div class="page-inner mt--2">
-                        <!--   <div class="container-fluid mt-5">
-                <div class="dashboard" >
-        <div class="card">
-            <div class="card-icon"><i class="fas fa-user"></i></div>
-          <a href="applications.php" class="btn">  <h5><?= $vacc ?> <br>Verified Account</h5></a>
-          
-        </div>
-        <div class="card">
-            <div class="card-icon"><i class="fas fa-chart-line"></i></div>
-			<a href="applications.php" class="btn"><h5><?= $notvacc ?> <br>Not Verified Account</h5></a>
-         
-        </div>
-        <div class="card">
-            <div class="card-icon"><i class="fas fa-cogs"></i></div>
-			<a href="applications.php" class="btn"><h5><?= $complaints ?> <br>Complaints</h5></a>
-     
-        </div>
-        <div class="card">
-            <div class="card-icon"><i class="fas fa-comments"></i></div>
-			<a href="staff.php" class="btn"> <h5><?= $staffcount ?><br> staff</h5></a>
-           
-        </div> <div class="card">
-            <div class="card-icon"><i class="fas fa-comments"></i></div>
-			<a href="educaids.php" class="btn"> <h5><?= $totaleduc ?><br> Educational Assistance</h5></a>      
-        </div>
-	
-    </div>
-    </div>-->
+    
                         <div class="row">
                             <div class="col-md-12">
                                 <div class="card" style="padding:0px; margin:0px;background-color:#F5F7F8;">
@@ -576,7 +551,7 @@ if (!isset($_SESSION['skid']) || strlen($_SESSION['skid']) == 0 || !in_array($_S
                                             <div class="dashboard">
                                                 <div class="card card-primary">
                                                     <div class="card-icon" style="color: white;"> <i class="fa-solid fa-user-graduate"></i></div>
-                                                    <a href="skdashboard.php" class="btn">
+                                                    <a href="#" class="btn">
                                                         <h5 style="color:white;"><?= $totalapp ?>  <br>All Applicants</h5>
                                                     </a>
 
@@ -617,11 +592,13 @@ if (!isset($_SESSION['skid']) || strlen($_SESSION['skid']) == 0 || !in_array($_S
                                                             </div>
 
                                                             <div class="card-tools">
-                                                                <a href="viewstudent.php" class="btn btn-danger btn-border btn-round btn-sm" title="view and print">
-                                                                    <i class="fa fa-print"></i>
-                                                                   Print
-                                                                </a>
-                                                                <a href="model/export_student_csv.php" class="btn btn-secondary btn-border btn-round btn-sm" title="Download">
+                                                              
+                                                                <a href="#" class="btn btn-success btn-border btn-round btn-sm"
+                                                    title="view and print" onclick="openPrintModal()">
+                                                    <i class="fa fa-eye"></i>
+                                                    View
+                                                </a>
+                                                                <a href="model/export_currentall.php?recent=<?= $recent?>" class="btn btn-secondary btn-border btn-round btn-sm" title="Download">
                                                                 <i class="fa-solid fa-file-arrow-down"></i>
                                                                     Export CSV
                                                                 </a>
@@ -745,7 +722,28 @@ if (!isset($_SESSION['skid']) || strlen($_SESSION['skid']) == 0 || !in_array($_S
 
                     </div>
 
+           <!--PRINT -->
 
+                <!-- Modal -->
+                <div class="modal fade" id="printModal" tabindex="-1" role="dialog" aria-labelledby="printModalLabel"
+                    aria-hidden="true">
+                    <div class="modal-dialog modal-lg" role="document">
+                        <div class="modal-content">
+                            <div class="modal-header">
+                            <button type="button" class="btn btn-round btn-sm btn-danger"
+                                    onclick="printDiv('printModalBody')"><i class="fa fa-print"></i> Print</button>
+                          
+                                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                    <span aria-hidden="true">&times;</span>
+                                </button>
+                            </div>
+                            <div class="modal-body" id="printModalBody">
+                                <!-- Content to be printed will be injected here -->
+                            </div>
+                           
+                        </div>
+                    </div>
+                </div>	
 
 
 
@@ -816,6 +814,40 @@ if (!isset($_SESSION['skid']) || strlen($_SESSION['skid']) == 0 || !in_array($_S
                     },
                 });
             });
+
+             //PRINT 
+             function openPrintModal() {
+              
+              $.ajax({
+                  url: 'printcurrent_all.php', // this is the file where data to display and print are located
+                  type: 'GET',
+
+                  success: function (response) {
+                      // Injecting the fetched content into the modal body
+                      document.getElementById('printModalBody').innerHTML = response;
+                      // Show the modal
+                      $('#printModal').modal('show');
+                  },
+                  error: function () {
+                      alert('Error fetching report data.');
+                  }
+              });
+          }
+
+          function printDiv(divName) {
+              var printContents = document.getElementById(divName).innerHTML;
+              var originalContents = document.body.innerHTML;
+
+              // Replace body content with the content to print
+              document.body.innerHTML = printContents;
+
+              // Trigger print dialog
+              window.print();
+
+              // Restore original body content
+              document.body.innerHTML = originalContents;
+              location.reload();
+          }
         </script>
 
         <!-- CODE FOR LINE CHART -->

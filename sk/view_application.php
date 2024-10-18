@@ -31,7 +31,7 @@ if (!isset($_SESSION['skid']) || strlen($_SESSION['skid']) == 0 || !in_array($_S
     header('location:index.php');
     exit();
 } else {
-    //$studid = $_GET['studidid'];
+
     if (isset($_GET['appid']) && isset($_GET['educid'])&& isset($_GET['studid'])) {
         $appid = $_GET['appid'];
         $educid = $_GET['educid'];
@@ -42,7 +42,6 @@ FROM `application`
 JOIN `student` ON `application`.`studid` = `student`.`studid`
 JOIN `studentcourse` ON `application`.`courseid` = `studentcourse`.`courseid` and `application`.educid=`studentcourse`.educid
 JOIN `parentinfo` ON `application`.`studid` = `parentinfo`.`studid`
-JOIN `requirements` ON `application`.`studid` = `requirements`.`studid` and `application`.educid=`requirements`.educid and application.reqid=requirements.reqid
 JOIN (
   SELECT * FROM `educ aids` WHERE `educid` = $educid
 ) AS `educ aids` ON `application`.`educid` = `educ aids`.`educid`
@@ -65,14 +64,13 @@ WHERE `application`.`appid` = $appid AND `application`.`educid` = $educid AND `a
             $street_name = $row['street_name'];
             $validid = $row['validid'];
             $picture = $row['picture'];
-            $citizenship = $row['citizenship'];
-            $religion = $row['religion'];
-            $civilstatus = $row['civilstatus'];
+          
             $accstatus = $row['accstatus'];
 
             $appstatus = $row['appstatus'];
             $appdate = $row['appdate'];
             $reviewedby = $row['reviewedby'];
+            $appremark = $row['appremark'];
 
             //calculate the age based on their application date because the age is updatable
             $birthday_date = date_create($birthday);
@@ -101,18 +99,28 @@ WHERE `application`.`appid` = $appid AND `application`.`educid` = $educid AND `a
             $parent_address = $row['parent_address'];
             $parent_contact = $row['parent_contact'];
 
-            $letter = $row['letter'];
-            $schoolid = $row['schoolid'];
-            $cor = $row['cor'];
-            $indigency = $row['indigency'];
-            $grades = $row['grades'];
+
+         
         } else {
             $_SESSION['title'] = 'Error!';
-            $_SESSION['message'] = 'Something went Wrong. Please, Try again!';
+           $_SESSION['message'] = 'Something went Wrong. Please, Try again!.';
             $_SESSION['success'] = 'error';
-            header("Location: skdashboard.php");
+           header("Location: skdashboard.php");
             exit();
+        
         }
+        $req="SELECT *
+        FROM `requirements` join application on requirements.reqid= application.reqid WHERE `application`.`appid` = $appid AND `requirements`.`educid` = $educid AND `requirements`.`studid` = $studid"; ;
+         $viewreq = mysqli_query($conn, $req);
+        
+         if ($rowreq = mysqli_fetch_assoc($viewreq)) {
+            $letter = $rowreq['letter'];
+            $schoolid = $rowreq['schoolid'];
+            $cor = $rowreq['cor'];
+            $indigency = $rowreq['indigency'];
+            $grades = $rowreq['grades'];
+         }
+
     }
 
 ?>
@@ -217,8 +225,6 @@ WHERE `application`.`appid` = $appid AND `application`.`educid` = $educid AND `a
 
                                                 <br>
 
-
-
                                                 <table class="table table-bordered ">
                                                     <tr>
                                                         <th colspan="4" style="text-align: center;">
@@ -231,7 +237,7 @@ WHERE `application`.`appid` = $appid AND `application`.`educid` = $educid AND `a
                                                                 <img src="<?= preg_match('/data:image/i', $picture) ? $picture : '../applicants/assets/uploads/applicant_profile/' . $picture ?>" alt="Picture"
                                                                     class="avatar-img rounded-circle" style="height: 70px;width:70px;">
                                                             <?php else: ?>
-                                                                <img src="assets/img/logo.png" alt="Picture" class="avatar-img rounded-circle">
+                                                                <img src="assets/img/logo.png" alt="Picture" class="avatar-img rounded-circle" style="height: 70px;width:70px;">
                                                             <?php endif ?>
                                                         </th>
                                                         <td style="text-transform: uppercase;font-weight:bold;"><?php echo $firstname . ' ' . $midname . '  ' . $lastname; ?></td>
@@ -275,48 +281,44 @@ WHERE `application`.`appid` = $appid AND `application`.`educid` = $educid AND `a
                                                         <td style="height: 30px;"><?php echo $parent_status; ?></td>
                                                     </tr>
                                                     <tr>
-                                                        <th style="height: 30px;">Citizenship:</th>
-                                                        <td style="height: 30px;"><?php echo $citizenship;; ?></td>
-                                                        <th style="height: 30px;">Educational attainment</th>
-                                                        <td style="height: 30px;"><?php echo $parent_educattain; ?></td>
+                                                     
+                                                       
                                                     </tr>
                                                     <tr>
-                                                        <th style="height: 30px;">Religion:</th>
-                                                        <td style="height: 30px;"><?php echo $religion; ?></td>
+                                                    <th style="height: 30px;">Gender</th>
+                                                        <td style="height: 30px;"><?php echo $gender; ?></td>
                                                         <th style="height: 30px;">Address</th>
                                                         <td style="height: 30px;"><?php echo $parent_address; ?></td>
                                                     </tr>
                                                     <tr>
-                                                        <th style="height: 30px;">Civil Status:</th>
-                                                        <td style="height: 30px;"><?php echo $civilstatus; ?></td>
+                                                    <th colspan="2" style="height: 30px;"></th>
                                                         <th style="height: 30px;">Contact No</th>
                                                         <td style="height: 30px;"><?php echo $parent_contact; ?></td>
                                                     </tr>
+                                                  
                                                     <tr>
-                                                        <th style="height: 30px;">Gender</th>
-                                                        <td style="height: 30px;"><?php echo $gender; ?></td>
+                                                    <th colspan="2" style="height: 30px;">REQUIREMENTS</th>
                                                         <th colspan="2" style="height: 30px;"></th>
-                                                        
+                                                                          
                                                     </tr>
                                                     <tr>
-                                                        <th colspan="2" style="height: 30px;"></th>
-                                                        <th colspan="2" style="height: 30px;"> COURSE INFORMATION</th>                    
-                                                    </tr>
-                                                    <tr>
-                                                        <th colspan="2" style="height: 30px;">REQUIREMENTS</th>
-                                                        
-                                                        <th style="height: 30px;">Course</th>
-                                                        <td style="height: 30px;"><?php echo $course; ?></td>
-                                                    </tr>
-                                                    <tr>
-                                                        <th style="height: 30px;">School ID</th>
+                                                  
+                                                    <th style="height: 30px;">School ID</th>
                                                         <td style="height: 30px;"><?php if (!empty($schoolid)): ?>
                                                                 <a href="<?= '../applicants/assets/uploads/requirements/schoolid/' . $schoolid ?>" target="_blank"><?php echo $schoolid ?></a>
                                                             <?php else: ?>
-                                                                No letter submitted
+                                                                No School ID submitted
                                                             <?php endif ?></td>
-                                                        <th style="height: 30px;">Major</th>
-                                                        <td style="height: 30px;"><?php echo $major; ?></td>
+                                                        <th colspan="2" style="height: 30px;"> COURSE INFORMATION</th>                    
+                                                    </tr>
+                                                    <tr>
+                                                       
+                                                        
+                                                      
+                                                    </tr>
+                                                    <tr>
+                                                       
+                                                        
                                                     </tr>
                                                     <tr>
                                                         <th style="height: 30px;">Enrollment Form</th>
@@ -325,8 +327,9 @@ WHERE `application`.`appid` = $appid AND `application`.`educid` = $educid AND `a
                                                             <?php else: ?>
                                                                 No Enrollment form submitted
                                                             <?php endif ?></td>
-                                                        <th style="height: 30px;">Year Level</th>
-                                                        <td style="height: 30px;"><?php echo $year; ?></td>
+                                                            <th style="height: 30px;">Course</th>
+                                                        <td style="height: 30px;"><?php echo $course; ?></td>
+                                                       
                                                     </tr>
                                                     <tr>
                                                         <th style="height: 30px;">Grades</th>
@@ -335,8 +338,9 @@ WHERE `application`.`appid` = $appid AND `application`.`educid` = $educid AND `a
                                                             <?php else: ?>
                                                                 No grades submitted
                                                             <?php endif ?></td>
-                                                        <th style="height: 30px;">School</th>
-                                                        <td style="height: 30px;"><?php echo $school_name; ?></td>
+                                                            <th style="height: 30px;">Major</th>
+                                                        <td style="height: 30px;"><?php echo $major; ?></td>
+                                                       
                                                     </tr>
                                                     <tr>
                                                         <th style="height: 30px;">Barangay Indigent</th>
@@ -345,8 +349,9 @@ WHERE `application`.`appid` = $appid AND `application`.`educid` = $educid AND `a
                                                             <?php else: ?>
                                                                 No barangay indigent submitted
                                                             <?php endif ?></td>
-                                                        <th style="height: 30px;">School Address</th>
-                                                        <td style="height: 30px;"><?php echo $school_address; ?></td>
+                                                            <th style="height: 30px;">Year Level</th>
+                                                        <td style="height: 30px;"><?php echo $year . ' S.Y ' .$sy; ?></td>
+                                                   
                                                     </tr>
                                                     <tr>
                                                         <th style="height: 30px;">Letter</th>
@@ -355,21 +360,27 @@ WHERE `application`.`appid` = $appid AND `application`.`educid` = $educid AND `a
                                                             <?php else: ?>
                                                                 No letter submitted
                                                             <?php endif ?></td>
-                                                        <th style="height: 30px;">Semester</th>
-                                                        <td style="height: 30px;"><?php echo $sem; ?></td>
+                                                            <th style="height: 30px;">School</th>
+                                                        <td style="height: 30px;"><?php echo $school_name; ?></td>
                                                     </tr>
                                                     <tr>
-                                                    <th style="height: 30px;">Valid ID</th>
+                                                    <th colspan="2" style="height: 30px;text-align:center">Remarks</th>
+                                                   <!-- <th style="height: 30px;">Valid ID</th>
                                                         <td style="height: 30px;"> <?php if (!empty($validid)): ?>
                                                                 <a href="<?= '../applicants/assets/uploads/validid_file/' . $validid ?>" target="_blank"><?php echo $validid ?></a>
                                                             <?php else: ?>
                                                                 No Valid ID available
                                                             <?php endif ?>
-                                                        </td>
-                                                          <th style="height: 30px;">School Year</th>
-                                                        <td style="height: 30px;"><?php echo $sy; ?></td>
+                                                        </td>-->
+                                                        <th style="height: 30px;">School Address</th>
+                                                        <td style="height: 30px;"><?php echo $school_address; ?></td>
+                                                    </tr> 
+                                                    <tr>
+                                                        
+                                                        <td colspan="2" style="height: 30px;text-align:center;"> <?php echo $appremark; ?></td>   
+                                                        <th style="height: 30px;">Semester</th>
+                                                        <td style="height: 30px;"><?php echo $sem; ?></td>                 
                                                     </tr>
-                                                
                                                     <tr>
                                                         <th colspan="4" style="height: 30px;text-transform: uppercase;text-align:center;<?php
                                                                                         if ($appstatus == 'Pending') {
@@ -389,6 +400,8 @@ WHERE `application`.`appid` = $appid AND `application`.`educid` = $educid AND `a
 
                                                 </table>
 
+   
+
 
                                                 <p class="ml-3 text-center"><i>&copy Web Based Educational Assistance Application System for San Antonio, Quezon</i></p>
 
@@ -405,7 +418,7 @@ WHERE `application`.`appid` = $appid AND `application`.`educid` = $educid AND `a
                     </div>
           <!-- MODAL TO UPDATE Application  -->
                     <div class="modal fade" id="add" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
-                    <div class="modal-dialog modal-sm" role="document">
+                    <div class="modal-dialog modal-md" role="document">
                         <div class="modal-content">
                             <div class="modal-header " >
                                 <h5 class="modal-title" id="exampleModalLabel">Update Application Status</h5>
@@ -430,7 +443,13 @@ WHERE `application`.`appid` = $appid AND `application`.`educid` = $educid AND `a
                                                 <option value="Rejected">Rejected</option>
                                             </select>
                                         </div>
-                              
+                                        <div class="form-group col-md-12">
+                                       
+                                       <label>Remarks</label>
+                                   
+                                       <textarea class="form-control" id="validationTextarea" rows="2"  name="appremarks" required></textarea>
+
+                                   </div>
                             </div>
                             <div class="modal-footer">
                                 <!--  <input type="hidden" id="pos_id" name="id"> -->

@@ -32,7 +32,7 @@ if (!isset($_SESSION['skid']) || strlen($_SESSION['skid']) == 0 || !in_array($_S
     exit();
 } else {
     $skpos = $_SESSION['skpos'];
-
+    $position =$_SESSION['role'];
 ?>
     <!DOCTYPE html>
     <html lang="en">
@@ -70,7 +70,7 @@ if (!isset($_SESSION['skid']) || strlen($_SESSION['skid']) == 0 || !in_array($_S
                         <div class="page-inner">
                             <div class="d-flex align-items-left align-items-md-center flex-column flex-md-row">
                                 <div>
-                                    <h2 class="text-black fw-bold">Admin</h2>
+                                    <h2 class="text-black fw-bold"><?php echo $position; ?> Dashboard</h2>
                                 </div>
                             </div>
                         </div>
