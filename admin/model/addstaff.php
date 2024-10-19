@@ -22,6 +22,22 @@ if (isset($_POST['create'])) {
     $bday= $_POST['bday'];
     $password = password_hash($_POST['password'], PASSWORD_DEFAULT);
 
+      // Check if the email already exists
+      $checkEmailQuery = "SELECT * FROM staff WHERE email = ?";
+      $checkStmt = $conn->prepare($checkEmailQuery);
+      $checkStmt->bind_param("s", $email);
+      $checkStmt->execute();
+      $checkResult = $checkStmt->get_result();
+  
+      if ($checkResult->num_rows > 0) {
+          // Email already exists
+          $_SESSION['display'] = 'Email is already in use!';
+          $_SESSION['title'] = 'Error';
+          $_SESSION['success'] = 'error';
+          header("Location: ../staff.php");
+          exit();
+      } else {
+
     $insertQuery = "INSERT INTO `staff` (`lastname`, `firstname`, `email`, `password`, `contact_no`, `age`, `birthday`, `address`, `position`, `gender`) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?)";
     $stmt = $conn->prepare($insertQuery);
     $stmt->bind_param("sssssissss", $lname, $fname, $email, $password, $contact_no, $age, $bday, $address, $position, $gender);
@@ -34,6 +50,7 @@ if (isset($_POST['create'])) {
         $_SESSION['title'] = 'Error';
         $_SESSION['success'] = 'error';
     }
+}
 }
 
 header("Location: ../staff.php");

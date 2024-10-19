@@ -12,18 +12,17 @@ if (strlen($_SESSION['id']) == 0) {
 
 $role = $_SESSION['role'];
 $id = $_SESSION['id'];
-
+$email = $_SESSION['email'];
 if (!empty($_POST['cur_pass']) && !empty($_POST['new_pass']) && !empty($_POST['con_pass'])) {
     $cur_pass = $_POST['cur_pass'];
     $new_pass = password_hash($_POST['new_pass'], PASSWORD_DEFAULT);
     $con_pass = $_POST['con_pass'];
 
     if ($con_pass == $_POST['new_pass']) {
-        $checkQuery = "SELECT * FROM admin 
-                      JOIN staff ON admin.empid = staff.staffid 
-                      WHERE staff.position = ? AND admin.adminid = ?";
+        $checkQuery = "SELECT * FROM  staff  
+                      WHERE staffid = ? AND email = ?";
         $stmt = $conn->prepare($checkQuery);
-        $stmt->bind_param("si", $role, $id);
+        $stmt->bind_param("is", $id, $email);
         $stmt->execute();
         $result = $stmt->get_result();
 

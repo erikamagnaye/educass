@@ -5,7 +5,7 @@
 session_start(); 
 error_reporting(E_ALL);
 ini_set('display_errors', 1);
-if (!isset($_SESSION['id']) || strlen($_SESSION['id']) == 0 || $_SESSION['role'] !== 'admin') {
+if (!isset($_SESSION['id']) || strlen($_SESSION['id']) == 0 || $_SESSION['role'] !== 'Admin') {
 	header('location:login.php');
     exit();
 }
@@ -168,7 +168,7 @@ where application.educid=$recent  ORDER BY brgy ASC, `year` ASC, lastname ASC";
     ?>
         <tr>
         <td><?php echo $count; ?></td>
-            <td><img src="<?php echo htmlspecialchars($imageUrl); ?>" alt="" class="avatar-img rounded-circle" style="height: 50px;width:50px;"> <?php echo htmlspecialchars($fullname); ?></td>
+            <td><img src="<?php echo htmlspecialchars($imageUrl); ?>" alt="" class="avatar-img rounded-circle" style="height: 50px;width:50px;"> <?php echo ucfirst (htmlspecialchars($fullname)); ?></td>
             <td><?php echo htmlspecialchars($year); ?></td>
             <td><?php echo htmlspecialchars($brgy); ?></td>
             <td style="<?php
@@ -185,6 +185,9 @@ where application.educid=$recent  ORDER BY brgy ASC, `year` ASC, lastname ASC";
             <td>
                 <a type="button" href="applicant_info.php?studid=<?php echo $studid; ?>&educid=<?php echo $recent; ?>&appid=<?php echo $appid; ?>" class="btn btn-link btn-info" title="Edit Data">
                     <i class="fa fa-file"></i></a>
+
+        
+
 
 
 
@@ -301,6 +304,8 @@ where application.educid=$recent  ORDER BY brgy ASC, `year` ASC, lastname ASC";
                     </div>
                 </div>	
 
+  
+
 			<!-- Main Footer -->
 			<?php include 'templates/main-footer.php' ?>
 			<!-- End Main Footer -->
@@ -380,7 +385,11 @@ where application.educid=$recent  ORDER BY brgy ASC, `year` ASC, lastname ASC";
               document.body.innerHTML = originalContents;
               location.reload();
           }
-        </script>
+
+              //APPLICANT INFO
+        
+       </script>
+  
 <script type="text/javascript" src="https://cdn.datatables.net/2.1.2/js/dataTables.min.js"></script>
 <script type="text/javascript" src="https://cdn.datatables.net/2.1.2/js/dataTables.bootstrap5.min.js"></script>
 </body>

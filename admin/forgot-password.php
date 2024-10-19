@@ -4,16 +4,14 @@ include ('server/server.php');
 
 if (isset($_POST['reset'])) {
     $email = $_POST['email'];
-    $username = $_POST['username'];
     $newpass = password_hash($_POST['newpassword'], PASSWORD_DEFAULT);
 
-    if (!empty($email) && !empty($username) && !empty($newpass)) {
-        // Join admin and staff tables to check for email and username
-        $query = "SELECT admin.*, staff.* FROM admin 
-                  JOIN staff ON staff.staffid = admin.empid 
-                  WHERE staff.email = ? AND admin.username = ?";
+    if (!empty($email) && !empty($newpass)) {
+       
+        $query = "SELECT  * FROM  staff 
+                  WHERE email = ? ";
         $stmt = $conn->prepare($query);
-        $stmt->bind_param("ss", $email, $username);
+        $stmt->bind_param("s", $email);
         $stmt->execute();
         $result = $stmt->get_result();
 
@@ -75,10 +73,7 @@ if (isset($_POST['reset'])) {
                         <input id="email" name="email" type="email" class="form-control input-border-bottom" required>
                         <label for="email" class="placeholder">Email</label>
                     </div>
-                    <div class="form-group form-floating-label">
-                        <input id="username" name="username" type="text" class="form-control input-border-bottom" required>
-                        <label for="username" class="placeholder">Username</label>
-                    </div>
+                  
                     <div class="form-group form-floating-label">
                         <input id="password" name="newpassword" type="password" class="form-control input-border-bottom" required>
                         <label for="password" class="placeholder">New Password</label>

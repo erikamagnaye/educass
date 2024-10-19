@@ -3,20 +3,20 @@
 session_start();
 error_reporting(E_ALL);
 ini_set('display_errors', 1);
-if (!isset($_SESSION['id']) || strlen($_SESSION['id']) == 0 || $_SESSION['role'] !== 'admin') {
+if (!isset($_SESSION['id']) || strlen($_SESSION['id']) == 0 || $_SESSION['role'] !== 'Admin') {
     header('location:login.php');
     exit();
 } else {
 
 
     $id = $_SESSION['id'];
-    $query = "SELECT * FROM `admin` join staff on staff.staffid=admin.empid WHERE adminid= '$id'";
+    $query = "SELECT * FROM  staff  WHERE staffid= '$id'";
     $result = $conn->query($query);
 
     if ($result->num_rows) {
         while ($row = $result->fetch_assoc()) {
-            $adminid = $row['adminid'];
-            $username = $row['username'];
+            $adminid = $row['staffid'];
+            $username = $row['firstname'];
             $role = $row['position'];
         }
     }

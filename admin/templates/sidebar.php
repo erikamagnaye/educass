@@ -1,12 +1,12 @@
 <?php // function to get the current page name
 //session_start();
-if (!isset($_SESSION['id']) || strlen($_SESSION['id']) == 0 || $_SESSION['role'] !== 'admin') {
+if (!isset($_SESSION['id']) || strlen($_SESSION['id']) == 0 || $_SESSION['role'] !== 'Admin') {
 	header('location:login.php');
     exit();
 }
 else {
 $id = $_SESSION['id'] ;
-		$query 		= "SELECT * FROM `admin` join staff on staff.staffid=admin.empid WHERE adminid= '$id'";
+		$query 		= "SELECT * FROM  staff  WHERE staffid= '$id'";
 		$result 	= $conn->query($query);
         
         if (!$result) {
@@ -16,8 +16,8 @@ $id = $_SESSION['id'] ;
         }		
 		if($result->num_rows){
 			while ($row = $result->fetch_assoc()) {
-				$adminid = $row['adminid'];
-				$username = $row['username'];
+				$adminid = $row['staffid'];
+				$username = $row['firstname'];
 				$role = $row['position'];
 			}
 			}
@@ -43,14 +43,14 @@ $current_page = PageName();
             <div class="user">
                 <div class="avatar-sm float-left mr-2">
                     <?php if(!empty($_SESSION['avatar'])): ?>
-                        <img src="<?= preg_match('/data:image/i', $_SESSION['avatar']) ? $_SESSION['avatar'] : 'assets/uploads/avatar/'.$_SESSION['avatar'] ?>" alt="..." class="avatar-img rounded-circle">
+                        <img src="<?= preg_match('/data:image/i', $_SESSION['avatar']) ? $_SESSION['avatar'] : '../staff/assets/uploads/avatar/'.$_SESSION['avatar'] ?>" alt="..." class="avatar-img rounded-circle">
                     <?php else: ?>
-                        <img src="assets/img/person.png" alt="..." class="avatar-img rounded-circle">
+                        <img src="assets/img/pic.jpg" alt="..." class="avatar-img rounded-circle">
                     <?php endif ?>
                    
                 </div>
                 <div class="info">
-                <a data-toggle="collapse" href="<?= $role == 'admin' ? '#collapseExample' : 'javascript:void(0)' ?>" aria-expanded="true">
+                <a data-toggle="collapse" href="<?= $role == 'Admin' ? '#collapseExample' : 'javascript:void(0)' ?>" aria-expanded="true">
                         <span>
                             <?php echo ucfirst($username); ?>
                             <span class="user-level"><?php echo ucfirst($role); ?></span>

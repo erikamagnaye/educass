@@ -5,7 +5,7 @@
 session_start();
 error_reporting(E_ALL);
 ini_set('display_errors', 1);
-if (!isset($_SESSION['id']) || strlen($_SESSION['id']) == 0 || $_SESSION['role'] !== 'admin') {
+if (!isset($_SESSION['id']) || strlen($_SESSION['id']) == 0 || $_SESSION['role'] !== 'Admin') {
 	header('location:login.php');
     exit();
 } else {
@@ -198,7 +198,7 @@ if (!isset($_SESSION['id']) || strlen($_SESSION['id']) == 0 || $_SESSION['role']
 
                 </div>
 
-                <!-- Modal ADD NEW STAFF FOR EDUCATIONAL ASSISTANCE -->
+                <!-- Modal ADD NEW STAFF -->
                 <div class="modal fade" id="add" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
                     <div class="modal-dialog modal-lg" role="document">
                         <div class="modal-content">
@@ -229,6 +229,7 @@ if (!isset($_SESSION['id']) || strlen($_SESSION['id']) == 0 || $_SESSION['role']
                                             <label>Position</label>
                                             <input type="text" class="form-control" placeholder="Enter Position" name="position" list="posOptions" required>
                                             <datalist id="posOptions">
+                                            <option value="Admin">
                                             <option value="SK-Arawan">
                                                 <option value="SK-Bagong Niing">
                                                 <option value="SK-Balat Atis">

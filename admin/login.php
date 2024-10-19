@@ -48,8 +48,8 @@
                                     <h1 class="card-title text-center mt-3" style="font-weight: bold;">Admin Login</h1><br>
                                     <form method="POST" action="model/login.php">
                                         <div class="form-floating mb-3">
-                                            <input type="text" class="form-control" id="floatingInput" name="username" placeholder="username" required>
-                                            <label for="floatingInput">Username</label>
+                                            <input type="email" class="form-control" id="floatingInput" name="username" placeholder="Email" required>
+                                            <label for="floatingInput">Email</label>
                                         </div>
                                         <div class="form-floating">
                                             <input type="password" id="password" name="password" class="form-control" id="floatingPassword" placeholder="Password">

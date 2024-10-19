@@ -50,7 +50,7 @@ $current_page = PageName();
                     <?php if(!empty($_SESSION['avatar'])): ?>
                         <img src="<?= preg_match('/data:image/i', $_SESSION['avatar']) ? $_SESSION['avatar'] : 'assets/uploads/avatar/'.$_SESSION['avatar'] ?>" alt="..." class="avatar-img rounded-circle">
                     <?php else: ?>
-                        <img src="assets/img/logo.png" alt="..." class="avatar-img rounded-circle">
+                        <img src="assets/img/pic.jpg" alt="..." class="avatar-img rounded-circle">
                     <?php endif ?>
                    
                 </div>

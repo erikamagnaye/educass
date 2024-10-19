@@ -1,6 +1,6 @@
 <?php //include 'model/fetch_brgy_info.php'
 //session_start();
-if (!isset($_SESSION['id']) || strlen($_SESSION['id']) == 0 || $_SESSION['role'] !== 'admin') {
+if (!isset($_SESSION['id']) || strlen($_SESSION['id']) == 0 || $_SESSION['role'] !== 'Admin') {
 	header('location:login.php');
     exit();
 }

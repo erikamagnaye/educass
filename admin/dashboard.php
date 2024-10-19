@@ -3,18 +3,18 @@
 session_start();
 error_reporting(E_ALL);
 ini_set('display_errors', 1);
-if (!isset($_SESSION['id']) || strlen($_SESSION['id']) == 0 || $_SESSION['role'] !== 'admin') {
+if (!isset($_SESSION['id']) || strlen($_SESSION['id']) == 0 || $_SESSION['role'] !== 'Admin') {
     header('location:login.php');
     exit();
 } else {
     $id = $_SESSION['id'];
-    $query         = "SELECT * FROM `admin` join staff on staff.staffid=admin.empid WHERE adminid= '$id'";
+    $query         = "SELECT * FROM  staff  WHERE staffid= '$id'";
     $result     = $conn->query($query);
 
     if ($result->num_rows) {
         while ($row = $result->fetch_assoc()) {
-            $adminid = $row['adminid'];
-            $username = $row['username'];
+            $adminid = $row['staffid'];
+            $username = $row['firstname'];
             $role = $row['position'];
         }
     }
@@ -469,7 +469,7 @@ if (!isset($_SESSION['id']) || strlen($_SESSION['id']) == 0 || $_SESSION['role']
 
             .stats-card {
                 background: #ffffff;
-                border-radius: 10px;
+                border-radius: 8px;
                 box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
                 padding: 5px;
                 text-align: center;
@@ -765,26 +765,26 @@ if (!isset($_SESSION['id']) || strlen($_SESSION['id']) == 0 || $_SESSION['role']
                                             <div class="stats-dashboard">
                                                 <div class="stats-card bg-primary mb-2">
                                                     <div class="stats-card-icon" style="color: white;"><i class="fa-solid fa-user-graduate"></i></div>
-                                                    <a href="all_current_applicants.php" class="btn">
-                                                        <h5 style="color: white;"><?= $totalapp ?> <br>Applicants</h5>
-                                                    </a>
+                                                  <a href="all_current_applicants.php" class="btn">
+                                                        <h2 style="color: white;"><?= $totalapp ?> </h2><h5 style="color: white;">Applicants</h5>
+        </a>
                                                 </div>
                                                 <div class="stats-card bg-warning mb-2">
                                                     <div class="stats-card-icon" style="color: white;"><i class="fa-solid fa-spinner fa-spin"></i></div>
                                                     <a href="pending_current_applicants.php" class="btn">
-                                                        <h5 style="color: white;"><?= $pending ?> <br> Pending</h5>
+                                                        <h2 style="color: white;"><?= $pending ?> </h2><h5 style="color: white;"> Pending</h5>
                                                     </a>
                                                 </div>
                                                 <div class="stats-card bg-success mb-2">
                                                     <div class="stats-card-icon" style="color: white;"><i class="fa-regular fa-thumbs-up"></i></div>
                                                     <a href="approved_current_applicants.php" class="btn">
-                                                        <h5 style="color: white;"><?= $approved ?> <br> Approved</h5>
+                                                        <h2 style="color: white;"><?= $approved ?></h2><h5 style="color: white;"> Approved</h5>
                                                     </a>
                                                 </div>
                                                 <div class="stats-card bg-danger mb-2">
                                                     <div class="stats-card-icon" style="color: white;"><i class="fa-regular fa-thumbs-down"></i></div>
                                                     <a href="rejected_current_applicants.php" class="btn">
-                                                        <h5 style="color: white;"><?= $rejected ?> <br> Rejected</h5>
+                                                        <h2 style="color: white;"><?= $rejected ?> </h2><h5 style="color: white;"> Rejected</h5>
                                                     </a>
                                                 </div>
                                             </div>

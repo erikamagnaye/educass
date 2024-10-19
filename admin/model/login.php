@@ -6,7 +6,7 @@ $username = $_POST['username'];
 $password = $_POST['password'];
 
 if (!empty($username) && !empty($password)) {
-    $query = "SELECT * FROM `admin` JOIN staff ON staff.staffid = admin.empid WHERE username = ?";
+    $query = "SELECT * FROM  staff WHERE email = ?";
     $stmt = $conn->prepare($query);
     $stmt->bind_param("s", $username);
     $stmt->execute();
@@ -15,9 +15,9 @@ if (!empty($username) && !empty($password)) {
     if ($result->num_rows) {
         $adminData = $result->fetch_assoc();
         if (password_verify($password, $adminData['password'])) {
-            if ($adminData['position'] == 'admin') {
-                $_SESSION['id'] = $adminData['adminid'];
-                $_SESSION['username'] = $adminData['username'];
+            if ($adminData['position'] == 'Admin') {
+                $_SESSION['id'] = $adminData['staffid'];
+                $_SESSION['username'] = $adminData['firstname'];
                 $_SESSION['role'] = $adminData['position'];
                 $_SESSION['avatar'] = $adminData['image'];
                 $_SESSION['email'] = $adminData['email'];

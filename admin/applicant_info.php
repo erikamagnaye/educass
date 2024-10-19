@@ -5,7 +5,7 @@
 session_start();
 error_reporting(E_ALL);
 ini_set('display_errors', 1);
-if (!isset($_SESSION['id']) || strlen($_SESSION['id']) == 0 || $_SESSION['role'] !== 'admin') {
+if (!isset($_SESSION['id']) || strlen($_SESSION['id']) == 0 || $_SESSION['role'] !== 'Admin') {
 	header('location:login.php');
     exit();
 } else {
@@ -217,7 +217,7 @@ WHERE `application`.`appid` = $appid AND `application`.`educid` = $educid AND `a
                                                                 <img src="<?= preg_match('/data:image/i', $picture) ? $picture : '../applicants/assets/uploads/applicant_profile/' . $picture ?>" alt="Picture"
                                                                     class="avatar-img rounded-circle" style="height: 70px;width:70px;">
                                                             <?php else: ?>
-                                                                <img src="assets/img/logo.png" alt="Picture" class="avatar-img rounded-circle">
+                                                                <img src="assets/img/pic.jpg" alt="Picture" class="avatar-img rounded-circle" style="height: 70px;width:70px;">
                                                             <?php endif ?>
                                                         </th>
                                                         <td style="text-transform: uppercase;font-weight:bold;"><?php echo $firstname . ' ' . $midname . '  ' . $lastname; ?></td>
