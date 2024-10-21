@@ -4,7 +4,7 @@
 
 
     if (isset($_POST['update'])) {
-        $studid = $_SESSION['id'];
+        $studid = $_SESSION['studentid'];
             
 
             $religion = $_POST['religion'];

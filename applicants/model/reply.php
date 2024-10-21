@@ -5,7 +5,7 @@ error_reporting(E_ALL);
 ini_set('display_errors', 1);
 
 if (isset($_POST['reply'])) {
-    $studid=$_SESSION['id'];
+    $studid=$_SESSION['studentid'];
     $concernid = $_POST['concernid'];
     $message = $_POST['message'];
     date_default_timezone_set('Asia/Manila');

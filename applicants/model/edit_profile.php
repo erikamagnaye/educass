@@ -4,7 +4,7 @@
     session_start(); 
     error_reporting(E_ALL);
     ini_set('display_errors', 1);
-    if (strlen($_SESSION['id'] == 0) || !isset($_SESSION['id']) || !isset($_SESSION['email'])) {
+    if (strlen($_SESSION['studentid'] == 0) || !isset($_SESSION['studentid']) || !isset($_SESSION['email'])) {
         header('location:login.php');
         exit();
     }
@@ -14,7 +14,7 @@
        // }
     //}
 
-    $id = $_SESSION['id'];   // Get the current stud ID from the session
+    $id = $_SESSION['studentid'];   // Get the current stud ID from the session
 	//$id 	= $conn->real_escape_string($_POST['id']);
     $profile 	= $conn->real_escape_string($_POST['profileimg']); // base 64 image
 	$profile2 	= $_FILES['img']['name'];

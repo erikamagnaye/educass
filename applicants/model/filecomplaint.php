@@ -5,7 +5,7 @@ error_reporting(E_ALL);
 ini_set('display_errors', 1);
 
 if (isset($_POST['send'])) {
-    $id = $_SESSION['id'];
+    $id = $_SESSION['studentid'];
     $title = $conn->real_escape_string($_POST['title']);
     $description = $conn->real_escape_string($_POST['description']);
 

@@ -110,7 +110,7 @@
                  <h3>Contact Information</h3>
                  <p>If you have any questions or concerns about these Terms of Use, please contact us at: 
                     <br> Municipality Office of San Antonio, Quezon <br>
-                 Email: erikariyamagnaye@gmail.com 
+                 Email: educationalassistancesaq@gmail.com 
                  <br>Phone Number: 09123456789</p>
                  <p style=" text-align:center">&copy Web Based Educational Assistance Application System 2024</p>
                 

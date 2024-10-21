@@ -5,13 +5,13 @@ session_start();
 error_reporting(E_ALL);
 ini_set('display_errors', 1);
 
-if (strlen($_SESSION['id']) == 0) {
-    header('location:login.php');
+if (strlen($_SESSION['studentid'] == 0) || !isset($_SESSION['studentid']) || !isset($_SESSION['email'])) {
+	header('location:login.php');
     exit();
 }
 
 $email = $_SESSION['email'];
-$studid = $_SESSION['id'];
+$studid = $_SESSION['studentid'];
 
 if (!empty($_POST['cur_pass']) && !empty($_POST['new_pass']) && !empty($_POST['con_pass'])) {
     $cur_pass = $_POST['cur_pass'];
