@@ -46,107 +46,9 @@ if (!isset($_SESSION['id']) || strlen($_SESSION['id']) == 0 || $_SESSION['role']
     $row = $result4->fetch_assoc();
     $rejected = $row['COUNT(*)'];
 
-    //count all approved applicants per brgy
-    $stmt = $conn->prepare("
-    SELECT brgy, COUNT(*) AS approved_count 
-    FROM student 
-    JOIN application ON student.studid = application.studid 
-    WHERE application.appstatus = 'Approved'
-    GROUP BY brgy
-");
-    $stmt->execute();
-    $result = $stmt->get_result();
 
-    // Initialize variables for each barangay with a default value of 0
-    $arawan = 0;
-    $bagong_niing = 0;
-    $balat_atis = 0;
-    $briones = 0;
-    $bulihan = 0;
-    $buliran = 0;
-    $callejon = 0;
-    $corazon = 0;
-    $del_valle = 0;
-    $loob= 0;
-    $magsaysay = 0;
-    $matipunso = 0;
-    $niing = 0;
-    $poblacion = 0;
-    $pulo = 0;
-    $pury = 0;
-    $sampaga = 0;
-    $sampaguita = 0;
-    $san_jose = 0;
-    $sintorisan = 0;
 
-    // Fetch the approved counts and assign them to the corresponding variables
-    while ($row = $result->fetch_assoc()) {
-        switch ($row['brgy']) {
-            case 'Arawan':
-                $arawan = $row['approved_count'];
-                break;
-            case 'Bagong Niing':
-                $bagong_niing = $row['approved_count'];
-                break;
-            case 'Balat Atis':
-                $balat_atis = $row['approved_count'];
-                break;
-            case 'Briones':
-                $briones = $row['approved_count'];
-                break;
-            case 'Bulihan':
-                $bulihan = $row['approved_count'];
-                break;
-            case 'Buliran':
-                $buliran = $row['approved_count'];
-                break;
-            case 'Callejon':
-                $callejon = $row['approved_count'];
-                break;
-            case 'Corazon':
-                $corazon = $row['approved_count'];
-                break;
-            case 'Del Valle':
-                $del_valle = $row['approved_count'];
-                break;
-            case 'Loob':
-                $loob = $row['approved_count'];
-                break;
-            case 'Magsaysay':
-                $magsaysay = $row['approved_count'];
-                break;
-            case 'Matipunso':
-                $matipunso = $row['approved_count'];
-                break;
-            case 'Niing':
-                $niing = $row['approved_count'];
-                break;
-            case 'Poblacion':
-                $poblacion = $row['approved_count'];
-                break;
-            case 'Pulo':
-                $pulot = $row['approved_count'];
-                break;
-            case 'Pury':
-                $pury = $row['approved_count'];
-                break;
-            case 'Sampaga':
-                $sampaga = $row['approved_count'];
-                break;
-            case 'Sampaguita':
-                $sampaguita = $row['approved_count'];
-                break;
-            case 'San Jose':
-                $san_jose = $row['approved_count'];
-                break;
-            case 'Sintorisan':
-                $sintorisan = $row['approved_count'];
-                break;
-            default:
-                // If the barangay doesn't match any of the cases, do nothing
-                break;
-        }
-    }
+
     ?>
     <!DOCTYPE html>
     <html lang="en">
@@ -154,7 +56,10 @@ if (!isset($_SESSION['id']) || strlen($_SESSION['id']) == 0 || $_SESSION['role']
     <head>
         <?php include 'templates/header.php' ?>
         <title>Educational Assistance</title>
-
+        <link rel="icon" href="assets/img/logo.png" type="image/x-icon" /> <!-- THIS IS THE CODE TO DISPLAY AN ICON IN THE BROWASER TAB-->
+        <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.1.1/css/all.min.css" integrity="sha512-KfkfwYDsLkIlwQp6LFnl8zNdLGxu9YAA1QvwINks4PhcElQSvqcyVLLD9aMhXd13uQjoXtEKNosOWaZqXgel0g==" crossorigin="anonymous" referrerpolicy="no-referrer" />
+        <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11.12.3/dist/sweetalert2.all.min.js"></script>
+        <link href="https://cdn.jsdelivr.net/npm/sweetalert2@11.12.3/dist/sweetalert2.min.css" rel="stylesheet">
         <style>
             body {
                 font-family: Arial, sans-serif;
@@ -291,7 +196,7 @@ if (!isset($_SESSION['id']) || strlen($_SESSION['id']) == 0 || $_SESSION['role']
                                 <div class="card">
                                     <div class="card-header">
                                         <div class="card-head-row">
-                                            <div class="card-title">Educational Assistance</div>
+                                            <div class="card-title">Report</div>
                                             <div class="card-tools">
                                                 <button class="btn btn-info btn-border btn-round btn-sm"
                                                     onclick="printDiv('printThis')">
@@ -323,9 +228,10 @@ if (!isset($_SESSION['id']) || strlen($_SESSION['id']) == 0 || $_SESSION['role']
                                                     <h3 class="mt-4 fw-bold">
                                                         <?php echo $educname . ' for ' . $sem . ' ' . $sy . ' '; ?> for San
                                                         Antonio, Quezon</h3>
+                                                        <h6>Approved</h6>
                                                 </div>
                                                 <br>
-                                                <div class="text-center mt-5">
+                                             <!--   <div class="text-center mt-5">
                                            
                                                     <table class="table table-borderless">
   <t>
@@ -335,87 +241,110 @@ if (!isset($_SESSION['id']) || strlen($_SESSION['id']) == 0 || $_SESSION['role']
   <td>Approved : <span><?php echo $approved; ?></td>
   <td>Rejected: <span><?php echo $rejected; ?></td></tr>
 </table>
-                                                </div><br>
+                                                </div><br>-->
 
                                                 <div class="col-md-12 table-responsive">
+                                                <div>
+<h6 style="text-align:justify; margin-left:10px"><bold> Total Applicants :<span><?php echo $totalapp;?></span></bold></h6>
+</div>
+<?php
+                                    // Count all approved applicants per brgy with year level and gender 
+$stmt = $conn->prepare("
+SELECT 
+    student.brgy,
+    COUNT(*) AS approved_count,
+    SUM(CASE WHEN student.gender = 'Male' THEN 1 ELSE 0 END) AS male_count,
+    SUM(CASE WHEN student.gender = 'Female' THEN 1 ELSE 0 END) AS female_count,
+    SUM(CASE WHEN studentcourse.year = 'First Year' THEN 1 ELSE 0 END) AS first_year_count,
+    SUM(CASE WHEN studentcourse.year = 'Second Year' THEN 1 ELSE 0 END) AS second_year_count,
+    SUM(CASE WHEN studentcourse.year = 'Third Year' THEN 1 ELSE 0 END) AS third_year_count,
+    SUM(CASE WHEN studentcourse.year = 'Fourth Year' THEN 1 ELSE 0 END) AS fourth_year_count
+FROM student 
+JOIN studentcourse ON student.studid = studentcourse.studid
+JOIN application ON student.studid = application.studid 
+WHERE application.appstatus = 'Approved' AND application.educid = ?
+GROUP BY student.brgy
+");
+$stmt->bind_param("i", $recenteduc);
+$stmt->execute();
+$result = $stmt->get_result();
 
-                                                    <br>
+// Initialize an array to hold counts for each barangay
+$applicantData = [];
 
-                                               
+// Fetch and store counts into the array
+while ($row = $result->fetch_assoc()) {
+    $applicantData[$row['brgy']] = [
+        'approved_count' => $row['approved_count'],
+        'male_count' => $row['male_count'],
+        'female_count' => $row['female_count'],
+        'first_year_count' => $row['first_year_count'],
+        'second_year_count' => $row['second_year_count'],
+        'third_year_count' => $row['third_year_count'],
+        'fourth_year_count' => $row['fourth_year_count'],
+    ];
+}
 
-                                                    <table class="table table-bordered ">
-                                                    <tr>
-                                                            
-                                                            <th colspan="4" style="height: 30px;text-align:center;"><h3>Approved Applicants per barangay</h3></th>
-                                                        </tr>
-                                                        <tr>
-                                                            <th style="height: 30px;">Arawan</th>
-                                                            <td style="height: 30px;"><?php echo $arawan; ?></td>
-                                                            <th style="height: 30px;">Magsaysay</th>
-                                                            <td style="height: 30px;"><?php echo $magsaysay; ?></td>
-                                                        </tr>
-                                                        <tr>
-                                                            <th style="height: 30px;">Bagong Niing</th>
-                                                            <td style="height: 30px;"><?php echo $bagong_niing; ?></td>
-                                                            <th style="height: 30px;">Matipunso</th>
-                                                            <td style="height: 30px;"><?php echo $matipunso; ?></td>
-                                                        </tr>
-                                                         <tr>
-                                                            <th style="height: 30px;">Balat Atis</th>
-                                                            <td style="height: 30px;"><?php echo $balat_atis; ?></td>
-                                                            <th style="height: 30px;">Niing</th>
-                                                            <td style="height: 30px;"><?php echo $niing; ?></td>
-                                                        </tr>
-                                                        <tr>
-                                                            <th style="height: 30px;">Briones</th>
-                                                            <td style="height: 30px;"><?php echo $briones; ?></td>
-                                                            <th style="height: 30px;">Poblacion</th>
-                                                            <td style="height: 30px;"><?php echo $poblacion; ?></td>
-                                                        </tr>
-                                                        <tr>
-                                                            <th style="height: 30px;">Bulihan</th>
-                                                            <td style="height: 30px;"><?php echo $bulihan; ?></td>
-                                                            <th style="height: 30px;">Pulo</th>
-                                                            <td style="height: 30px;"><?php echo $pulo; ?></td>
-                                                        </tr>
-                                                        <tr>
-                                                            <th style="height: 30px;">Buliran</th>
-                                                            <td style="height: 30px;"><?php echo $buliran; ?></td>
-                                                            <th style="height: 30px;">Pury</th>
-                                                            <td style="height: 30px;"><?php echo $pury; ?></td>
-                                                        </tr>
-                                                        <tr>
-                                                            <th style="height: 30px;">Callejon</th>
-                                                            <td style="height: 30px;"><?php echo $callejon; ?></td>
-                                                            <th style="height: 30px;">Sampaga</th>
-                                                            <td style="height: 30px;"><?php echo $sampaga; ?></td>
-                                                        </tr>
-                                                        <tr>
-                                                            <th style="height: 30px;">Corazon</th>
-                                                            <td style="height: 30px;"><?php echo $corazon; ?></td>
-                                                            <th style="height: 30px;">Sampaguita</th>
-                                                            <td style="height: 30px;"><?php echo $sampaguita; ?></td>
-                                                        </tr>
-                                                        <tr>
-                                                            <th style="height: 30px;">Del Valle</th>
-                                                            <td style="height: 30px;"><?php echo $del_valle; ?></td>
-                                                            <th style="height: 30px;">San Jose</th>
-                                                            <td style="height: 30px;"><?php echo $san_jose; ?></td>
-                                                        </tr>
-                                                        <tr>
-                                                            <th style="height: 30px;">loob</th>
-                                                            <td style="height: 30px;"><?php echo $loob; ?></td>
-                                                            <th style="height: 30px;">Sinturisan</th>
-                                                            <td style="height: 30px;"><?php echo $sintorisan; ?></td>
-                                                        </tr>
-                                                        
-                                                    </table>
+// Access data for each barangay in your table
+$barangays = ['Arawan', 'Bagong Niing', 'Balat Atis', 'Briones', 'Bulihan', 'Buliran', 'Callejon', 'Corazon', 'Del Valle', 'Loob', 'Magsaysay', 'Matipunso', 'Niing', 'Poblacion', 'Pulo', 'Pury', 'Sampaga', 'Sampaguita', 'San Jose', 'Sintorisan'];
+?>
+
+<div class="col-md-12 table-responsive">
+    <table class="table table-borderless">
+        <thead>
+            <tr>
+                <th scope="col">Barangay</th>
+                <th scope="col">No. of Applicants</th>
+                <th scope="col">Male</th>
+                <th scope="col">Female</th>
+                <th scope="col">1st Year</th>
+                <th scope="col">2nd Year</th>
+                <th scope="col">3rd Year</th>
+                <th scope="col">4th Year</th>
+            </tr>
+        </thead>
+        <tbody>
+            <?php
+            foreach ($barangays as $barangay) {
+                $data = $applicantData[$barangay] ?? [
+                    'approved_count' => 0,
+                    'male_count' => 0,
+                    'female_count' => 0,
+                    'first_year_count' => 0,
+                    'second_year_count' => 0,
+                    'third_year_count' => 0,
+                    'fourth_year_count' => 0
+                ];
+                echo "<tr>
+                    <th style='height:40px;'>{$barangay}</th>
+                    <td style='height:40px;'>{$data['approved_count']}</td>
+                    <td style='height:40px;'>{$data['male_count']}</td>
+                    <td style='height:40px;'>{$data['female_count']}</td>
+                    <td style='height:40px;'>{$data['first_year_count']}</td>
+                    <td style='height:40px;'>{$data['second_year_count']}</td>
+                    <td style='height:40px;'>{$data['third_year_count']}</td>
+                    <td style='height:40px;'>{$data['fourth_year_count']}</td>
+                </tr>";
+            }
+            ?>
+        </tbody>
+    </table>
+
+                                                 
                                                 </div>
                                                 <p class="ml-3 text-center"><i>&copy Web Based Educational Assistance
                                                         Application System for San Antonio, Quezon</i></p>
                                             </div>
                                         </div>
                                     </div>
+
+
+</div>
+
+
+                                 
+
+
                                 </div>
                             </div>
                         </div>
