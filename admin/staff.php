@@ -230,6 +230,7 @@ if (!isset($_SESSION['id']) || strlen($_SESSION['id']) == 0 || $_SESSION['role']
                                             <input type="text" class="form-control" placeholder="Enter Position" name="position" list="posOptions" required>
                                             <datalist id="posOptions">
                                             <option value="Admin">
+                                            <option value="Staff">
                                             <option value="SK-Arawan">
                                                 <option value="SK-Bagong Niing">
                                                 <option value="SK-Balat Atis">

@@ -453,7 +453,7 @@ label {
                                 </div>
                             </div>  
                         <div class="modal-footer">
-                            <button type="button" class="btn btn-danger" onclick="window.location.href='login.php'" >Close</button>
+                            <button type="button" class="btn btn-danger" onclick="window.location.href='../index.php'" >Close</button>
                             <button type="submit" class="btn btn-primary" name="save">Save</button>
                         </div>
                         </div>

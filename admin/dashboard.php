@@ -4,7 +4,7 @@ session_start();
 error_reporting(E_ALL);
 ini_set('display_errors', 1);
 if (!isset($_SESSION['id']) || strlen($_SESSION['id']) == 0 || $_SESSION['role'] !== 'Admin') {
-    header('location:login.php');
+    header('location:../login.php');
     exit();
 } else {
     $id = $_SESSION['id'];
