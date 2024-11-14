@@ -143,6 +143,83 @@ WHERE `application`.`appid` = $appid AND `application`.`educid` = $educid AND `a
     height: 40px;
   }
 }
+@page {
+        margin: 0;
+    }
+            
+             @media print {
+                    body * {
+            visibility: visible !important;
+        }
+                     @media (max-width: 768px) {
+        body * {
+            visibility: hidden; /* Hide all elements */
+        }
+     
+           .wrapper {
+        display: flex;
+        justify-content: center;
+    }
+     .sidebar {
+        display: none !important;
+    }
+   .main-header {
+        display: none !important;
+    }
+     .main-footer {
+        display: none !important;
+    }
+     .panel-header {
+        display: none !important;
+    }
+     .card-header {
+        display: none !important;
+    }
+     .footer {
+        display: none !important;
+    }
+      .card-title {
+        display: none !important;
+    }
+    .main-panel {
+        margin-left: 0 !important;
+        width: 100% !important;
+    }
+    .main-panel .content .card-body {
+        visibility: visible;
+        width: 100%;
+        padding: 0;
+        margin: 0;
+    }
+    
+    /* Adjust margins and alignment */
+    .card-body {
+        margin: 0 auto;
+        padding: 0;
+    }
+        
+        /* card body only */
+        #printThis, #printThis * {
+            visibility: visible;
+        }
+
+        /* */
+        #printThis {
+       position: absolute;
+            top: 0;
+            left: 0;
+            margin: 0;
+            padding: 0;
+            width: 100%; 
+            height: auto;
+            font-size: 100%;
+
+        /* Additional styling for mobile-friendly appearance */
+        .wrapper, .main-panel, .content {
+            padding: 0;  /* Removes any excess padding for clean alignment */
+        }
+    }
+}
         </style>
 
     </head>
